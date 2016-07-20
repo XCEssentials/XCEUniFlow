@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		942E97071D403CE9002E76B4 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942E97061D403CE9002E76B4 /* Main.swift */; };
 		947ABDB41C6A7DDB0030F618 /* MKHUniFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 947ABDB31C6A7DDB0030F618 /* MKHUniFlow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		947ABDBB1C6A7DDB0030F618 /* MKHUniFlow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 947ABDB01C6A7DDB0030F618 /* MKHUniFlow.framework */; };
 		947ABDC01C6A7DDB0030F618 /* MKHUniFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947ABDBF1C6A7DDB0030F618 /* MKHUniFlowTests.swift */; };
-		947ABDEB1C6A83660030F618 /* UFLMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947ABDEA1C6A83660030F618 /* UFLMain.swift */; };
-		947ABDF01C6BC3F70030F618 /* UFLUIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947ABDEF1C6BC3F70030F618 /* UFLUIKit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,14 +24,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		942E97061D403CE9002E76B4 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		947ABDB01C6A7DDB0030F618 /* MKHUniFlow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		947ABDB31C6A7DDB0030F618 /* MKHUniFlow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MKHUniFlow.h; sourceTree = "<group>"; };
 		947ABDB51C6A7DDB0030F618 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		947ABDBA1C6A7DDB0030F618 /* MKHUniFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MKHUniFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		947ABDBF1C6A7DDB0030F618 /* MKHUniFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKHUniFlowTests.swift; sourceTree = "<group>"; };
 		947ABDC11C6A7DDB0030F618 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		947ABDEA1C6A83660030F618 /* UFLMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UFLMain.swift; sourceTree = "<group>"; };
-		947ABDEF1C6BC3F70030F618 /* UFLUIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UFLUIKit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +76,6 @@
 				947ABDB31C6A7DDB0030F618 /* MKHUniFlow.h */,
 				947ABDB51C6A7DDB0030F618 /* Info.plist */,
 				947ABDCA1C6A81CA0030F618 /* Common */,
-				947ABDCB1C6A81D70030F618 /* Specific */,
 			);
 			path = MKHUniFlow;
 			sourceTree = "<group>";
@@ -95,19 +92,10 @@
 		947ABDCA1C6A81CA0030F618 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				947ABDEA1C6A83660030F618 /* UFLMain.swift */,
+				942E97061D403CE9002E76B4 /* Main.swift */,
 			);
 			name = Common;
 			path = ../../../Src/Common;
-			sourceTree = "<group>";
-		};
-		947ABDCB1C6A81D70030F618 /* Specific */ = {
-			isa = PBXGroup;
-			children = (
-				947ABDEF1C6BC3F70030F618 /* UFLUIKit.swift */,
-			);
-			name = Specific;
-			path = ../../../Src/iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,7 +154,7 @@
 		947ABDA71C6A7DDB0030F618 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Maxim Khatskevich";
 				TargetAttributes = {
@@ -218,8 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				947ABDF01C6BC3F70030F618 /* UFLUIKit.swift in Sources */,
-				947ABDEB1C6A83660030F618 /* UFLMain.swift in Sources */,
+				942E97071D403CE9002E76B4 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
