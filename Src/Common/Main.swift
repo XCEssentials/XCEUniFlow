@@ -392,6 +392,7 @@ class UFLDispatcher: NSObject
 
 //=== MARK: - ObjC compatibility
 
+public
 extension UFLDispatcher
 {
     @objc
