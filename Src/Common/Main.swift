@@ -270,7 +270,10 @@ class UFLDispatcher: NSObject
     
     //=== MARK: Public members
     
+    public
     var onActionProcessed: OnActionProcessed?
+    
+    public
     var onActionRejected: OnActionRejected?
     
     //=== MARK: Public functions
