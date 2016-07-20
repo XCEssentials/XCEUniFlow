@@ -67,11 +67,15 @@ extension UFLAction
 public
 struct UFLActionRejected: ErrorType
 {
+    public
     let action: UFLAction
+    
+    public
     let reason: String
     
     //===
     
+    public
     init(action: UFLAction, reason: String? = nil)
     {
         self.action = action
