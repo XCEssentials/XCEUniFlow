@@ -9,6 +9,7 @@ Motivation
 ===
 
 A framework like this should be a tool that helps and inspire to:
+
 1. make the app completely predictable at any moment of (execution) time;
 2. effectivly exchange/share data between different scopes (without having to store and maintain direct cross-references in many-to-many style) so all parts of the app (including all UIs) stay consistent all the time;
 3. eliminate implicit [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)) in application source code;
