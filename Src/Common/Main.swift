@@ -16,7 +16,7 @@ protocol UFLModel { }
 //=== MARK: - Update State
 
 public
-typealias UFLUpdateState = (inout state: UFLModel) -> Void
+typealias UFLUpdateState = (_ /*state*/: inout UFLModel) -> Void
 
 //=== MARK: - Action
 
@@ -65,7 +65,7 @@ extension UFLAction
 //===
 
 public
-struct UFLActionRejected: ErrorType
+struct UFLActionRejected: Error
 {
     public
     let action: UFLAction
@@ -99,11 +99,11 @@ extension UFLTrigger
 {
     func main(dispatcher: UFLDispatcher, state: UFLModel) throws -> UFLUpdateState
     {
-        try main(dispatcher, state: state)
+        try main(dispatcher: dispatcher, state: state)
         
         //===
         
-        return { $0 /* do nothing */ }
+        return { (_) in /* do nothing */ }
     }
 }
 
@@ -125,7 +125,7 @@ extension UFLNotification
         
         //===
         
-        return { $0 /* do nothing */ }
+        return { (_) in /* do nothing */ }
     }
 }
 
@@ -160,7 +160,7 @@ class UFLDispatcher: NSObject
     var globalObservers: [AnyObject] = []
     
     private
-    var subscriptions = NSMapTable(keyOptions: .WeakMemory, valueOptions: .StrongMemory)
+    var subscriptions = NSMapTable<AnyObject, UFLSubscription>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     //=== MARK: Private types
     
@@ -171,7 +171,7 @@ class UFLDispatcher: NSObject
         let modelConverter: UFLModelConverter
         let updateHandler: UFLUpdateHandler
         
-        init(_ modelConverter: UFLModelConverter, _ updateHandler: UFLUpdateHandler)
+        init(_ modelConverter: @escaping UFLModelConverter, _ updateHandler: @escaping UFLUpdateHandler)
         {
             self.modelConverter = modelConverter
             self.updateHandler = updateHandler
@@ -192,37 +192,37 @@ class UFLDispatcher: NSObject
     struct InitialUpdate: UFLNotification { }
     
     public
-    typealias UFLActionBlock = (dispatcher: UFLDispatcher, state: UFLModel) throws -> UFLUpdateState
+    typealias UFLActionBlock = (_ /*dispatcher*/: UFLDispatcher, _ /*state*/: UFLModel) throws -> UFLUpdateState
     
     public
-    typealias UFLModelConverter = (globalModel: UFLModel) -> Any? // return SubModel
+    typealias UFLModelConverter = (_ /*globalModel*/: UFLModel) -> Any? // return SubModel
     
     public
-    typealias UFLUpdateHandler = (state: Any, action: UFLAction) -> Void
+    typealias UFLUpdateHandler = (_ /*state*/: Any, _ /*action*/: UFLAction) -> Void
     
     public
     struct UFLPendingSubscription
     {
-        private
+        fileprivate
         let key: AnyObject
         
-        private
+        fileprivate
         let dispatcher: UFLDispatcher
         
-        private
+        fileprivate
         let modelConverter: UFLModelConverter
         
-        private
+        fileprivate
         let updateHandler: UFLUpdateHandler
         
         public
         func onConvertModel<GlobalModelType, SubModelType>(
-            customModelConverter: (globalModel: GlobalModelType) -> SubModelType?
+            _ customModelConverter: @escaping (_ /*globalModel*/: GlobalModelType) -> SubModelType?
             ) -> UFLPendingSubscription
         {
             let converter: UFLModelConverter = { model in
                 
-                return customModelConverter(globalModel: model as! GlobalModelType)
+                return customModelConverter(model as! GlobalModelType)
             }
             
             //===
@@ -237,12 +237,12 @@ class UFLDispatcher: NSObject
         
         public
         func onUpdate<SubModelType: Any>(
-            customUpdateHandler: (state: SubModelType, action: UFLAction) -> Void
+            _ customUpdateHandler: @escaping (_ /*state*/: SubModelType, _ /*action*/: UFLAction) -> Void
             ) -> UFLPendingSubscription
         {
             let handler: UFLUpdateHandler = { state, action in
                 
-                return customUpdateHandler(state: state as! SubModelType, action: action)
+                return customUpdateHandler(state as! SubModelType, action)
             }
             
             //===
@@ -260,17 +260,17 @@ class UFLDispatcher: NSObject
         {
             dispatcher
                 .subscribe(
-                    key,
+                    observer: key,
                     subscription: UFLSubscription(modelConverter, updateHandler),
                     initialUpdate: initialUpdate)
         }
     }
     
     public
-    typealias OnActionProcessed = (action: UFLAction) -> Void
+    typealias OnActionProcessed = (_ /*action*/: UFLAction) -> Void
     
     public
-    typealias OnActionRejected = (action: UFLAction, error: ErrorType) -> Void
+    typealias OnActionRejected = (_ /*action*/: UFLAction, _ /*error*/: Error) -> Void
     
     //=== MARK: Public members
     
@@ -289,14 +289,14 @@ class UFLDispatcher: NSObject
             UFLPendingSubscription(
                 key: observer,
                 dispatcher: self,
-                modelConverter: { $0 },
-                updateHandler: { $0 })
+                modelConverter: { $0 /*just return what we got as input*/ },
+                updateHandler: { (_) in /*do nothing*/ })
     }
     
     public
     func unsubscribe(observer: AnyObject)
     {
-        subscriptions.removeObjectForKey(observer)
+        subscriptions.removeObject(forKey: observer)
     }
     
     public
@@ -308,11 +308,11 @@ class UFLDispatcher: NSObject
     //=== MARK: Private functions
     
     private
-    func submit(action: UFLAction, actionBlock: UFLActionBlock)
+    func submit(_ action: UFLAction, actionBlock: @escaping UFLActionBlock)
     {
-        NSOperationQueue
-            .mainQueue()
-            .addOperationWithBlock {
+        OperationQueue
+            .main
+            .addOperation {
                 
                 // we add this action to queue async-ly,
                 // to make sure it will be processed AFTER
@@ -325,26 +325,26 @@ class UFLDispatcher: NSObject
     }
     
     private
-    func process(action: UFLAction, actionBlock: UFLActionBlock)
+    func process(_ action: UFLAction, actionBlock: UFLActionBlock)
     {
         do
         {
-            try actionBlock(dispatcher: self, state: state)(state: &state)
+            try actionBlock(self, state)(&state)
             
             //===
             
-            action.onSuccess(self, state: state)
+            action.onSuccess(dispatcher: self, state: state)
             
             //===
             
-            notifySubscriptions(action)
+            notifySubscriptions(action: action)
             
             //===
             
             if
                 let handler = onActionProcessed
             {
-                handler(action: action)
+                handler(action)
             }
         }
         catch
@@ -356,7 +356,7 @@ class UFLDispatcher: NSObject
             if
                 let handler = onActionRejected
             {
-                handler(action: action, error: error)
+                handler(action, error)
             }
         }
     }
@@ -370,17 +370,17 @@ class UFLDispatcher: NSObject
         
         if initialUpdate
         {
-            notifySubscription(subscription, action: InitialUpdate())
+            notifySubscription(subscription: subscription, action: InitialUpdate())
         }
     }
     
     private
     func notifySubscriptions(action: UFLAction)
     {
-        for key in subscriptions.keyEnumerator().allObjects
+        for key in subscriptions.keyEnumerator().allObjects as [AnyObject]
         {
             notifySubscription(
-                subscriptions.objectForKey(key) as! UFLSubscription,
+                subscription: subscriptions.object(forKey: key)!,
                 action: action)
         }
     }
@@ -389,10 +389,10 @@ class UFLDispatcher: NSObject
     func notifySubscription(subscription: UFLSubscription, action: UFLAction)
     {
         if
-            let subModel = subscription.modelConverter(globalModel: state)
+            let subModel = subscription.modelConverter(state)
         {
             subscription
-                .updateHandler(state: subModel, action: action)
+                .updateHandler(subModel, action)
         }
     }
 }
@@ -402,18 +402,31 @@ class UFLDispatcher: NSObject
 public
 extension UFLDispatcher
 {
+    private
+    enum Helper
+    {
+        static
+        func name(ofAction action: UFLAction) -> String
+        {
+            return
+                String(describing: type(of: action))
+                    .components(separatedBy: ".")
+                    .first!
+        }
+    }
+    
     @objc
     public
     func subscribeWithObserver(
         observer: AnyObject,
-        onPrepare: (globalModel: AnyObject) -> AnyObject?,
-        onUpdate: (state: AnyObject, actionName: String) -> Void)
+        onPrepare: @escaping (_ /*globalModel*/: AnyObject) -> AnyObject?,
+        onUpdate: @escaping (_ /*state*/: AnyObject, _ /*actionName*/: String) -> Void)
     {
-        prepareSubscription(observer)
+        prepareSubscription(observer: observer)
             .onConvertModel(onPrepare)
             .onUpdate({ (state, action) in
                 
-                onUpdate(state: state, actionName: String(reflecting: action.dynamicType.self))
+                onUpdate(state, Helper.name(ofAction: action))
             })
             .activate()
     }
@@ -422,13 +435,13 @@ extension UFLDispatcher
     public
     func subscribeWithObserver(
         observer: AnyObject,
-        onUpdate: (state: AnyObject, actionName: String) -> Void)
+        onUpdate: @escaping (_ /*state*/: AnyObject, _ /*actionName*/: String) -> Void)
     {
-        prepareSubscription(observer)
+        prepareSubscription(observer: observer)
             .onConvertModel({ $0 as AnyObject })
             .onUpdate({ (state, action) in
 
-                onUpdate(state: state, actionName: String(reflecting: action.dynamicType.self))
+                onUpdate(state, Helper.name(ofAction: action))
             })
             .activate()
     }
