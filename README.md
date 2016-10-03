@@ -1,12 +1,10 @@
-Introduction
-===
+# Introduction
 
 **UniFlow** is a predictable state container for iOS and macOS apps.
 
 This framework implements so-called 'Unidirectional Data Flow' paradigm for developing applications for iOS and macOS platforms. The key idea behind it is just [state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
 
-Motivation
-===
+# Motivation
 
 A framework like this should be a tool that helps and inspire to:
 
@@ -21,16 +19,14 @@ A framework like this should be a tool that helps and inspire to:
 9. keep developer written source code minimal and compact (make it look like specifications);
 10. keep library overhead as low as possible (no run-time "magic" should be involved). 
 
-Inspiration
-===
+# Inspiration
 
 Thanks to:
 - [Facebook](facebook.com) and their [Flux](https://facebook.github.io/flux/) framework for web development, where the idea originally comes from;
 - [Redux](https://github.com/reactjs/redux) JavaScript framework.
 - [ReSwift](https://github.com/ReSwift/ReSwift) which is the most similar implementation of the idea for Apple platforms.
 
-Key concepts
-===
+# Key concepts
 
 The whole state of the app is stored in a single object called `GlobalModel`. After initialization, `GlobalModel` is being passed as input parameter into `Dispatcher` initialization function and being stored inside `Dispatcher`, isolated from the rest of the world. Developer has NO direct access to `GlobalModel` anymore. 
 
@@ -64,8 +60,7 @@ If an object in the app needs to have access to current app state (`GlobalModel`
 - process actions;
 - maintain (create, store, notify and remove) subscriptions.
 
-The key differences
-===
+# The key differences
 
 In comparison with traditional programming, instead of mutating the app state directly, you specify the mutations you want to happen in simple objects called *actions*. Also, to maintain consistency across entire app, developer does not need to do anything special, just refresh every observer with every update from `Dispatcher` based on current values of the part of `GlobalModel` that this observer is concerned about. This enforces developer to use "functional" approach on configuring observers - configuration logic becomes just a pure function of current state (represented by `GlobalModel`).
 
@@ -73,8 +68,7 @@ It's important that everything is stored in one single object that represents wh
 
 As the app grows, developer just need to extend `GlobalModel` to support the new features and behviours, as well as define new actions to implement new functionality and maintain new parts of `GlobalModel`.
 
-Why ReSwift is NOT good enough?
-===
+# Why ReSwift is NOT good enough?
 
 Below are the weak points of [ReSwift](https://github.com/ReSwift/ReSwift).
 
@@ -96,9 +90,12 @@ The subscription mechanism requires:
 
 *Middleware* seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
 
-Extra benefits from using UniFlow
-===
+# Extra benefits from using UniFlow
 
 - every mutation of app state is easy to track and debug;
 - it encourages developer to better design architectural solutions before writing code;
 - allows significantly improve precision of estimations on development time.
+
+# Swift 3
+
+Starting from [version 0.7.0](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.0), this library supports Swift 3. For compatibility with Swift 2.2 and Swift 2.3 use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
