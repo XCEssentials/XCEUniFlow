@@ -98,4 +98,4 @@ The subscription mechanism requires:
 
 # Swift 3
 
-Starting from [version 0.7.0](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.0), this library supports Swift 3. For compatibility with Swift 2.2 and Swift 2.3 use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
+Starting from [version 1.1.0](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.0), this library supports Swift 3. For compatibility with Swift 2.2 and Swift 2.3 use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
