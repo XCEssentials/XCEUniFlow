@@ -96,6 +96,10 @@ The subscription mechanism requires:
 - it encourages developer to better design architectural solutions before writing code;
 - allows significantly improve precision of estimations on development time.
 
-# Swift 3
+# Swift 3 + Objective-C
 
-Starting from [version 1.1.0](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.0), this library supports Swift 3. For compatibility with Swift 2.2 and Swift 2.3 use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
+For mixed environment Swift 3 + Objective-C use [version 1.1.1](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.1). For compatibility with Swift 2.2 and Swift 2.3 (as well as Objective-C) use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
+
+# Plans for future
+
+Next major library update (v.2.*) will introduce significant change in how whole library works and supposed to be used. Also Objective-C support will be dropped (but it may be added later in future again).
