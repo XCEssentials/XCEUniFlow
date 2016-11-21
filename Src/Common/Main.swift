@@ -409,9 +409,7 @@ extension UFLDispatcher
         func name(ofAction action: UFLAction) -> String
         {
             return
-                String(describing: type(of: action))
-                    .components(separatedBy: ".")
-                    .first!
+                String(reflecting: type(of:action))
         }
     }
     
