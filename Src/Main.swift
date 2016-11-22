@@ -1,314 +1,208 @@
 //
-//  UniFlow.swift
-//  Vango
+//  Main.swift
+//  MKHUniFlow
 //
-//  Created by Maxim Khatskevich on 2/10/16.
+//  Created by Maxim Khatskevich on 10/20/16.
 //  Copyright © 2016 Maxim Khatskevich. All rights reserved.
 //
 
 import Foundation
 
-//=== MARK: GlobalModel
+//===
 
 public
 protocol UFLModel { }
 
-//=== MARK: - Update State
+//===
 
 public
-typealias UFLUpdateState = (_ /*state*/: inout UFLModel) -> Void
-
-//=== MARK: - Action
+typealias UFLStateMutation<Model: UFLModel> = (_ state: inout Model) -> Void
 
 public
-protocol UFLAction
+func UFLNoStateMutation<Model: UFLModel>() -> UFLStateMutation<Model>
 {
-    func main(dispatcher: UFLDispatcher, state: UFLModel) throws -> UFLUpdateState
-    func onSuccess(dispatcher: UFLDispatcher, state: UFLModel) -> Void
-}
-
-public
-extension UFLAction
-{
-    func rejected(reason: String? = nil) -> UFLActionRejected
-    {
-        // 'throw' result of this function
-        // when current state does not satisfy pre-conditions
-        
-        return UFLActionRejected(action: self, reason: reason)
-    }
-    
-    func onSuccess(dispatcher: UFLDispatcher, state: UFLModel) -> Void
-    {
-        // this is called after 'perform...'
-        // ONLY if 'perform' has NOT been rejected,
-        // when all changes from this Action
-        // are already applied to (global) 'state'
-        
-        //===
-        
-        // this function doesn't do anything by default
-        
-        // override this function in a custom Action
-        // to implement any kind of explicit side effect
-        // logically related to this specific Action,
-        // instead of observing for this Action
-        // in a global observer
-        
-        //===
-        
-        // REMEMBER: Action is implicitly defined by context,
-        // all Action input params (internal members) are availalbe.
-    }
+    return { _ in /* do nothing*/ }
 }
 
 //===
 
 public
-struct UFLActionRejected: Error
+struct UFLNoInput { }
+
+//===
+
+public
+typealias UFLAction<Model: UFLModel, Input> =
+    (
+    _ input: Input,
+    _ currentState: Model,
+    _ dispatcher: UFLDispatcher<Model>
+    )
+    throws -> UFLStateMutation<Model>
+
+//===
+
+public
+typealias UFLActionShort<Model: UFLModel> =
+    (
+    _ currentState: Model,
+    _ dispatcher: UFLDispatcher<Model>
+    )
+    throws -> UFLStateMutation<Model>
+
+//===
+
+public
+typealias UFLTrigger<Model: UFLModel, Input> =
+    (
+    _ input: Input,
+    _ currentState: Model,
+    _ dispatcher: UFLDispatcher<Model>
+    )
+    throws -> Void
+
+//===
+
+public
+typealias UFLTriggerShort<Model: UFLModel> =
+    (
+    _ currentState: Model,
+    _ dispatcher: UFLDispatcher<Model>
+    )
+    throws -> Void
+
+//===
+
+public
+typealias UFLModelConverter<Model: UFLModel> = (_ globalModel: Model) -> Any?
+
+//===
+
+public
+typealias UFLUpdateHandler = (_ state: Any) -> Void
+
+//===
+
+public
+struct UFLPendingSubscription<Model: UFLModel>
 {
-    public
-    let action: UFLAction
+    fileprivate
+    let observer: AnyObject
+    
+    fileprivate
+    let dispatcher: UFLDispatcher<Model>
+    
+    fileprivate
+    let modelConverter: UFLModelConverter<Model>
+    
+    fileprivate
+    let updateHandler: UFLUpdateHandler
     
     public
-    let reason: String
-    
-    //===
-    
-    public
-    init(action: UFLAction, reason: String? = nil)
+    func onConvertModel<SubModel>(
+        _ converter: @escaping (_ globalModel: Model) -> SubModel?
+        ) -> UFLPendingSubscription
     {
-        self.action = action
-        self.reason = (reason ?? "State did not satisfy pre-conditions.")
+        return
+            UFLPendingSubscription(
+                observer: observer,
+                dispatcher: dispatcher,
+                modelConverter: converter,
+                updateHandler: updateHandler)
+    }
+    
+    public
+    func onUpdate<SubModel>(
+        _ handler: @escaping (_ state: SubModel) -> Void
+        ) -> UFLPendingSubscription
+    {
+        return
+            UFLPendingSubscription(
+                observer: observer,
+                dispatcher: dispatcher,
+                modelConverter: modelConverter,
+                updateHandler: { handler($0 as! SubModel) })
+    }
+    
+    public
+    func activate(initialUpdate: Bool = true)
+    {
+        dispatcher
+            .subscribe(
+                observer,
+                subscription: UFLSubscription(modelConverter, updateHandler),
+                initialUpdate: initialUpdate)
     }
 }
 
 //===
 
-public
-protocol UFLTrigger: UFLAction
+private
+final
+class UFLSubscription<Model: UFLModel> // must be an object (class) to work with NSMapTable
 {
-    // This kind of actions supposed to just trigger other actions
-    // using dispatcher, without any changes to current state.
+    let modelConverter: UFLModelConverter<Model>
+    let updateHandler: UFLUpdateHandler
     
-    func main(dispatcher: UFLDispatcher, state: UFLModel) throws
-}
-
-public
-extension UFLTrigger
-{
-    func main(dispatcher: UFLDispatcher, state: UFLModel) throws -> UFLUpdateState
+    init(_ modelConverter: @escaping UFLModelConverter<Model>, _ updateHandler: @escaping UFLUpdateHandler)
     {
-        try main(dispatcher: dispatcher, state: state)
-        
-        //===
-        
-        return { (_) in /* do nothing */ }
+        self.modelConverter = modelConverter
+        self.updateHandler = updateHandler
     }
 }
 
 //===
-
-public
-protocol UFLNotification: UFLAction
-{
-    // This kind of actions supposed to just notify observers about somthing,
-    // without any changes to current state.
-}
-
-public
-extension UFLNotification
-{
-    func main(dispatcher: UFLDispatcher, state: UFLModel) throws -> UFLUpdateState
-    {
-        /* do nothing */
-        
-        //===
-        
-        return { (_) in /* do nothing */ }
-    }
-}
-
-//=== MARK: - UFLDispatcherAware
-
-public
-protocol UFLDispatcherBindable: class
-{
-    func bind(dispatcher: UFLDispatcher) -> Self
-}
-
-//=== MARK: - UFLDispatcherInitializable
-
-public
-protocol UFLDispatcherInitializable: class
-{
-    init(dispatcher: UFLDispatcher)
-}
-
-//=== MARK: - Dispatcher
 
 public
 final
-class UFLDispatcher: NSObject
+class UFLDispatcher<Model: UFLModel>
 {
     //=== MARK: Private members
     
     private
-    var state: UFLModel
-    
-    private
-    var globalObservers: [AnyObject] = []
-    
-    private
-    var subscriptions = NSMapTable<AnyObject, UFLSubscription>(keyOptions: .weakMemory, valueOptions: .strongMemory)
-    
-    //=== MARK: Private types
-    
-    private
-    final
-    class UFLSubscription
-    {
-        let modelConverter: UFLModelConverter
-        let updateHandler: UFLUpdateHandler
-        
-        init(_ modelConverter: @escaping UFLModelConverter, _ updateHandler: @escaping UFLUpdateHandler)
-        {
-            self.modelConverter = modelConverter
-            self.updateHandler = updateHandler
-        }
-    }
-    
-    //=== Initializer
-    
-    public
-    init(initialState: UFLModel)
-    {
-        state = initialState
-    }
+    var state: Model
     
     //=== MARK: Public types
     
     public
-    struct InitialUpdate: UFLNotification { }
-    
-    public
-    typealias UFLActionBlock = (_ /*dispatcher*/: UFLDispatcher, _ /*state*/: UFLModel) throws -> UFLUpdateState
-    
-    public
-    typealias UFLModelConverter = (_ /*globalModel*/: UFLModel) -> Any? // return SubModel
-    
-    public
-    typealias UFLUpdateHandler = (_ /*state*/: Any, _ /*action*/: UFLAction) -> Void
-    
-    public
-    struct UFLPendingSubscription
-    {
-        fileprivate
-        let key: AnyObject
-        
-        fileprivate
-        let dispatcher: UFLDispatcher
-        
-        fileprivate
-        let modelConverter: UFLModelConverter
-        
-        fileprivate
-        let updateHandler: UFLUpdateHandler
-        
-        public
-        func onConvertModel<GlobalModelType, SubModelType>(
-            _ customModelConverter: @escaping (_ /*globalModel*/: GlobalModelType) -> SubModelType?
-            ) -> UFLPendingSubscription
-        {
-            let converter: UFLModelConverter = { model in
-                
-                return customModelConverter(model as! GlobalModelType)
-            }
-            
-            //===
-            
-            return
-                UFLPendingSubscription(
-                    key: key,
-                    dispatcher: dispatcher,
-                    modelConverter: converter,
-                    updateHandler: updateHandler)
-        }
-        
-        public
-        func onUpdate<SubModelType: Any>(
-            _ customUpdateHandler: @escaping (_ /*state*/: SubModelType, _ /*action*/: UFLAction) -> Void
-            ) -> UFLPendingSubscription
-        {
-            let handler: UFLUpdateHandler = { state, action in
-                
-                return customUpdateHandler(state as! SubModelType, action)
-            }
-            
-            //===
-            
-            return
-                UFLPendingSubscription(
-                    key: key,
-                    dispatcher: dispatcher,
-                    modelConverter: modelConverter,
-                    updateHandler: handler)
-        }
-        
-        public
-        func activate(initialUpdate: Bool = true)
-        {
-            dispatcher
-                .subscribe(
-                    observer: key,
-                    subscription: UFLSubscription(modelConverter, updateHandler),
-                    initialUpdate: initialUpdate)
-        }
-    }
-    
-    public
-    typealias OnActionProcessed = (_ /*action*/: UFLAction) -> Void
-    
-    public
-    typealias OnActionRejected = (_ /*action*/: UFLAction, _ /*error*/: Error) -> Void
+    typealias UFLOnActionRejected = (_ error: Error) -> Void
     
     //=== MARK: Public members
     
     public
-    var onActionProcessed: OnActionProcessed?
+    var onActionRejected: UFLOnActionRejected?
+    
+    //=== Initializer
     
     public
-    var onActionRejected: OnActionRejected?
+    required
+    init(_ initialState: Model)
+    {
+        state = initialState
+    }
     
     //=== MARK: Public functions
     
     public
-    func prepareSubscription(observer: AnyObject) -> UFLPendingSubscription
+    func prepareSubscription(_ observer: AnyObject) -> UFLPendingSubscription<Model>
     {
         return
             UFLPendingSubscription(
-                key: observer,
+                observer: observer,
                 dispatcher: self,
                 modelConverter: { $0 /*just return what we got as input*/ },
                 updateHandler: { (_) in /*do nothing*/ })
     }
     
     public
-    func unsubscribe(observer: AnyObject)
+    func unsubscribe(_ observer: AnyObject)
     {
-        subscriptions.removeObject(forKey: observer)
+        subscriptions
+            .removeObject(forKey: observer)
     }
     
     public
-    func submit(action: UFLAction)
-    {
-        self.submit(action, actionBlock: action.main)
-    }
-    
-    //=== MARK: Private functions
-    
-    private
-    func submit(_ action: UFLAction, actionBlock: @escaping UFLActionBlock)
+    func submit<Input>(_ action: @escaping UFLAction<Model, Input>, with input: Input)
     {
         OperationQueue
             .main
@@ -320,32 +214,91 @@ class UFLDispatcher: NSObject
                 // that even allows from an Action handler
                 // to submit another Action
                 
-                self.process(action, actionBlock: actionBlock)
+                self.process(action, input: input)
         }
     }
     
+    public
+    func submit(_ actionShort: @escaping UFLActionShort<Model>)
+    {
+        let action: UFLAction<Model, UFLNoInput> = {
+            
+            return try actionShort($1, $2)
+        }
+        
+        //===
+        
+        submit(action, with: UFLNoInput())
+    }
+    
+    public
+    func submit<Input>(_ trigger: @escaping UFLTrigger<Model, Input>, with input: Input)
+    {
+        let action: UFLAction<Model, Input> = {
+            
+            try trigger($0, $1, $2)
+            
+            //===
+            
+            return UFLNoStateMutation()
+        }
+        
+        //===
+        
+        submit(action, with: input)
+    }
+    
+    public
+    func submit(_ triggerShort: @escaping UFLTriggerShort<Model>)
+    {
+        let action: UFLAction<Model, UFLNoInput> = {
+            
+            try triggerShort($1, $2)
+            
+            //===
+            
+            return UFLNoStateMutation()
+        }
+        
+        //===
+        
+        submit(action, with: UFLNoInput())
+    }
+    
+    public
+    func submit(directly mutation: @escaping UFLStateMutation<Model>)
+    {
+        let action: UFLAction<Model, UFLNoInput> = { _, _, _ in
+            
+            return mutation
+        }
+        
+        //===
+        
+        submit(action, with: UFLNoInput())
+    }
+    
+    //=== MARK: Private members
+    
     private
-    func process(_ action: UFLAction, actionBlock: UFLActionBlock)
+    var subscriptions =
+        NSMapTable<AnyObject, UFLSubscription<Model>>(keyOptions: .weakMemory,
+                                                      valueOptions: .strongMemory)
+    
+    //=== MARK: Private functions
+    
+    private
+    func process<Input>(_ action: @escaping UFLAction<Model, Input>, input: Input)
     {
         do
         {
-            try actionBlock(self, state)(&state)
+            let mutation = try action(input, state, self)
+            
+            mutation(&state)
             
             //===
             
-            action.onSuccess(dispatcher: self, state: state)
-            
-            //===
-            
-            notifySubscriptions(action: action)
-            
-            //===
-            
-            if
-                let handler = onActionProcessed
-            {
-                handler(action)
-            }
+            notifySubscriptions()
         }
         catch
         {
@@ -353,94 +306,167 @@ class UFLDispatcher: NSObject
             // will NOT notify subscribers
             // about attempt to process this action
             
-            if
-                let handler = onActionRejected
-            {
-                handler(action, error)
-            }
+            onActionRejected.map { $0(error) }
         }
     }
     
-    private
-    func subscribe(observer: AnyObject, subscription: UFLSubscription, initialUpdate: Bool = true)
+    fileprivate
+    func subscribe(_ observer: AnyObject,
+                   subscription: UFLSubscription<Model>,
+                   initialUpdate: Bool = true)
     {
-        subscriptions.setObject(subscription, forKey: observer)
+        subscriptions
+            .setObject(subscription, forKey: observer)
         
         //===
         
         if initialUpdate
         {
-            notifySubscription(subscription: subscription, action: InitialUpdate())
+            notifySubscription(subscription)
         }
     }
     
     private
-    func notifySubscriptions(action: UFLAction)
+    func notifySubscriptions()
     {
-        for key in subscriptions.keyEnumerator().allObjects as [AnyObject]
-        {
-            notifySubscription(
-                subscription: subscriptions.object(forKey: key)!,
-                action: action)
-        }
+        _ = subscriptions
+            .objectEnumerator()?
+            .allObjects
+            .flatMap({ $0 as? UFLSubscription })
+            .map(notifySubscription)
     }
     
     private
-    func notifySubscription(subscription: UFLSubscription, action: UFLAction)
+    func notifySubscription(_ subscription: UFLSubscription<Model>)
     {
-        if
-            let subModel = subscription.modelConverter(state)
-        {
-            subscription
-                .updateHandler(subModel, action)
-        }
+        subscription
+            .modelConverter(state)
+            .map(subscription.updateHandler)
     }
 }
 
-//=== MARK: - ObjC compatibility
+//=== MARK: - UFLFeature
+
+public
+protocol UFLFeature { }
+
+//=== MARK: - UFLContext
+
+public
+protocol UFLContext { }
+
+//=== MARK: - UFLDelegate
+
+public
+protocol UFLDelegate
+{
+    associatedtype Model: UFLModel
+    associatedtype SubModel
+    associatedtype Context: UFLContext
+    
+    init(dispatcher: UFLDispatcher<Model>, context: Context?)
+    
+    func subscribe(
+        _ observer: AnyObject,
+        onUpdate handler: @escaping (_ state: SubModel) -> Void)
+    
+    func unsubscribe(_ observer: AnyObject)
+}
+
+//=== MARK: - UFLConfigurable
+
+public
+protocol UFLConfigurable // potential subscriber/observer
+{
+    associatedtype Delegate: UFLDelegate
+    
+    typealias SubModel = Delegate.SubModel
+    
+    init(delegate: Delegate)
+    func configure(with model: SubModel)
+}
+
+//=== MARK: - UFLDispatcherBindable
+
+public
+protocol UFLDispatcherBindable: class
+{
+    associatedtype Model: UFLModel
+    
+    func bind(with dispatcher: UFLDispatcher<Model>) -> Self
+}
+
+//=== MARK: - UFLDispatcherInitializable
+
+public
+protocol UFLDispatcherInitializable: class
+{
+    associatedtype Model: UFLModel
+    
+    init(with dispatcher: UFLDispatcher<Model>)
+}
+
+//===
+
+public
+struct UFLActionRejected: Error
+{
+    public
+    let action: String
+    
+    public
+    let reason: String
+    
+    //===
+    
+    public
+    init(action: String, because reason: String? = nil)
+    {
+        self.action = action
+        self.reason = (reason ?? "State did not satisfy pre-conditions.")
+    }
+}
+
+//===
+
+public
+func UFLReject(because reason: String? = nil,
+               actionNameFull: String = #function) -> UFLActionRejected
+{
+    return UFLActionRejected(action: Helpers.actionName(from: actionNameFull),
+                             because: reason)
+}
+
+//===
+
+enum Helpers
+{
+    static
+        func actionName(from fullName: String) -> String
+    {
+        return fullName.components(separatedBy: "(").first ?? ""
+    }
+}
+
+//===
 
 public
 extension UFLDispatcher
 {
-    private
-    enum Helper
+    public
+    func enableDefaultReporting()
     {
-        static
-        func name(ofAction action: UFLAction) -> String
-        {
-            return
-                String(reflecting: type(of:action))
+        onActionRejected = { (err: Error) in
+            
+            if
+                let err = err as? UFLActionRejected
+            {
+                print("MKHUniFlow: [-] Action '\(err.action)'  REJECTED, reason: \(err.reason)")
+            }
+            else
+            {
+                print("MKHUniFlow: [-] Action REJECTED, error: \(err)")
+            }
         }
-    }
-    
-    @objc
-    public
-    func subscribeWithObserver(
-        observer: AnyObject,
-        onPrepare: @escaping (_ /*globalModel*/: AnyObject) -> AnyObject?,
-        onUpdate: @escaping (_ /*state*/: AnyObject, _ /*actionName*/: String) -> Void)
-    {
-        prepareSubscription(observer: observer)
-            .onConvertModel(onPrepare)
-            .onUpdate({ (state, action) in
-                
-                onUpdate(state, Helper.name(ofAction: action))
-            })
-            .activate()
-    }
-
-    @objc
-    public
-    func subscribeWithObserver(
-        observer: AnyObject,
-        onUpdate: @escaping (_ /*state*/: AnyObject, _ /*actionName*/: String) -> Void)
-    {
-        prepareSubscription(observer: observer)
-            .onConvertModel({ $0 as AnyObject })
-            .onUpdate({ (state, action) in
-
-                onUpdate(state, Helper.name(ofAction: action))
-            })
-            .activate()
     }
 }
