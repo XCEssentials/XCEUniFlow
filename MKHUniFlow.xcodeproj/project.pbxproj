@@ -7,92 +7,92 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA63C2BF3E3636DCE5ED7AEA /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8445542199D45E8AEE68F359 /* Main.swift */; };
-		AF01AAD3A7DDE9081E305EBD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DB099743041CE0153D4E687 /* Foundation.framework */; };
-		C417322AD2E16D1B0B968A4C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EEECAB66592ED4470774398 /* UIKit.framework */; };
+		2EBBE81166414E1349CBCE96 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 924FAFD6398FFEDE5130D32B /* UIKit.framework */; };
+		9A59AADA0E152089AF30A828 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2AC4C942B75E67174EB9CD8 /* Main.swift */; };
+		C0F59C22AF80157FB3BBF17B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6623B310D65B303AEC70C059 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4DB099743041CE0153D4E687 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		515ECC9689B8B7CA0DA09A36 /* MKHUniFlow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7EEECAB66592ED4470774398 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		8445542199D45E8AEE68F359 /* Main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
-		D8D826A71D12092A5D8369A3 /* MKHUniFlow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MKHUniFlow.h; sourceTree = "<group>"; };
+		6623B310D65B303AEC70C059 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		924FAFD6398FFEDE5130D32B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		9EF99DBE086011C15F2AB5A7 /* MKHUniFlow. */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = MKHUniFlow.; path = MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AC4C942B75E67174EB9CD8 /* Main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		FF10213460835FB3F759E545 /* MKHUniFlow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MKHUniFlow.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F3D3DCB48F4235D33405ECEF /* Frameworks */ = {
+		0CEEEFB28D6773D6B49D0F2C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF01AAD3A7DDE9081E305EBD /* Foundation.framework in Frameworks */,
-				C417322AD2E16D1B0B968A4C /* UIKit.framework in Frameworks */,
+				C0F59C22AF80157FB3BBF17B /* Foundation.framework in Frameworks */,
+				2EBBE81166414E1349CBCE96 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3FB724130B0BB89FC653DCA4 = {
+		23AF613F76BD1DF1F068C390 = {
 			isa = PBXGroup;
 			children = (
-				E592BA23728027BDB65F5DB8 /* Products */,
-				B2902F581FF916090ABA882C /* Frameworks */,
-				A233FFDB026B0BE0D72CC840 /* Src */,
-				B67A2F0E9C3C1F041EBF5873 /* Src-Extra */,
+				B1A824A36A003657EE22291F /* Products */,
+				F13D2B9C721E7B220AB21CD6 /* Frameworks */,
+				3D44BBFFFA4955970934619B /* Src */,
+				6FF982EA8BB53BAB335129D7 /* Src-Extra */,
 			);
 			sourceTree = "<group>";
 		};
-		A233FFDB026B0BE0D72CC840 /* Src */ = {
+		3D44BBFFFA4955970934619B /* Src */ = {
 			isa = PBXGroup;
 			children = (
-				8445542199D45E8AEE68F359 /* Main.swift */,
+				D2AC4C942B75E67174EB9CD8 /* Main.swift */,
 			);
 			path = Src;
 			sourceTree = "<group>";
 		};
-		B2902F581FF916090ABA882C /* Frameworks */ = {
+		6FF982EA8BB53BAB335129D7 /* Src-Extra */ = {
 			isa = PBXGroup;
 			children = (
-				C12C492CB04D5421953CD22D /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B67A2F0E9C3C1F041EBF5873 /* Src-Extra */ = {
-			isa = PBXGroup;
-			children = (
-				D8D826A71D12092A5D8369A3 /* MKHUniFlow.h */,
+				FF10213460835FB3F759E545 /* MKHUniFlow.h */,
 			);
 			path = "Src-Extra";
 			sourceTree = "<group>";
 		};
-		C12C492CB04D5421953CD22D /* iOS */ = {
+		A3BA03F8F5CFA6FDC979638F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				4DB099743041CE0153D4E687 /* Foundation.framework */,
-				7EEECAB66592ED4470774398 /* UIKit.framework */,
+				6623B310D65B303AEC70C059 /* Foundation.framework */,
+				924FAFD6398FFEDE5130D32B /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		E592BA23728027BDB65F5DB8 /* Products */ = {
+		B1A824A36A003657EE22291F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				515ECC9689B8B7CA0DA09A36 /* MKHUniFlow.framework */,
+				9EF99DBE086011C15F2AB5A7 /* MKHUniFlow. */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F13D2B9C721E7B220AB21CD6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A3BA03F8F5CFA6FDC979638F /* iOS */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0FC66889859B1F0A88035130 /* MKHUniFlow */ = {
+		2DCC0AB9E8468F2846150A46 /* MKHUniFlow */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FE4C9875574DBCF9E798F3C2 /* Build configuration list for PBXNativeTarget "MKHUniFlow" */;
+			buildConfigurationList = 20CC6D02400A18B3913783F9 /* Build configuration list for PBXNativeTarget "MKHUniFlow" */;
 			buildPhases = (
-				F3D3DCB48F4235D33405ECEF /* Frameworks */,
-				1535E2479915C6C6B35D8498 /* Sources */,
+				0CEEEFB28D6773D6B49D0F2C /* Frameworks */,
+				F6F67E24DF542AFF2C684678 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -100,55 +100,84 @@
 			);
 			name = MKHUniFlow;
 			productName = MKHUniFlow;
-			productReference = 515ECC9689B8B7CA0DA09A36 /* MKHUniFlow.framework */;
+			productReference = 9EF99DBE086011C15F2AB5A7 /* MKHUniFlow. */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		CC65F4B40B06F4DEF2CFED34 /* Project object */ = {
+		67C4C29A20180131FC642B9D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = UFL;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Maxim Khatskevich";
 				TargetAttributes = {
-					0FC66889859B1F0A88035130 = {
+					2DCC0AB9E8468F2846150A46 = {
 						DevelopmentTeam = UJA88X59XP;
 					};
 				};
 			};
-			buildConfigurationList = 11465CE0CFB26276BFE1D0CF /* Build configuration list for PBXProject "MKHUniFlow" */;
+			buildConfigurationList = 77C4B265C2AF3FD38B6F64FD /* Build configuration list for PBXProject "MKHUniFlow" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 3FB724130B0BB89FC653DCA4;
-			productRefGroup = E592BA23728027BDB65F5DB8 /* Products */;
+			mainGroup = 23AF613F76BD1DF1F068C390;
+			productRefGroup = B1A824A36A003657EE22291F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0FC66889859B1F0A88035130 /* MKHUniFlow */,
+				2DCC0AB9E8468F2846150A46 /* MKHUniFlow */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1535E2479915C6C6B35D8498 /* Sources */ = {
+		F6F67E24DF542AFF2C684678 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA63C2BF3E3636DCE5ED7AEA /* Main.swift in Sources */,
+				9A59AADA0E152089AF30A828 /* Main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		0F3BDF5D713095EB8CB66A7E /* Debug */ = {
+		3482C9A82D554379137B5FF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = UJA88X59XP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Info/MKHUniFlow.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = khatskevich.maxim.MKHUniFlow;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		453851D6ABEE2ECE5698213B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -168,9 +197,9 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1.1.1.1;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -189,7 +218,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -198,66 +227,7 @@
 			};
 			name = Debug;
 		};
-		A78A060084176ACEE068953A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 1.1.1.1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = UJA88X59XP;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1.1.1.1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = Info/MKHUniFlow.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = khatskevich.maxim.MKHUniFlow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		D986D2A06415D2AC958E1367 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 1.1.1.1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = UJA88X59XP;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1.1.1.1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = Info/MKHUniFlow.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = khatskevich.maxim.MKHUniFlow;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		DD920A13772C54C78BE72255 /* Release */ = {
+		5570BFAF9637F9E6A850DA40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -277,9 +247,9 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1.1.1.1;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -291,7 +261,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -300,28 +270,58 @@
 			};
 			name = Release;
 		};
+		F985CC40E6F453CF16EA39A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = UJA88X59XP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Info/MKHUniFlow.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = khatskevich.maxim.MKHUniFlow;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		11465CE0CFB26276BFE1D0CF /* Build configuration list for PBXProject "MKHUniFlow" */ = {
+		20CC6D02400A18B3913783F9 /* Build configuration list for PBXNativeTarget "MKHUniFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0F3BDF5D713095EB8CB66A7E /* Debug */,
-				DD920A13772C54C78BE72255 /* Release */,
+				F985CC40E6F453CF16EA39A0 /* Debug */,
+				3482C9A82D554379137B5FF8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FE4C9875574DBCF9E798F3C2 /* Build configuration list for PBXNativeTarget "MKHUniFlow" */ = {
+		77C4B265C2AF3FD38B6F64FD /* Build configuration list for PBXProject "MKHUniFlow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D986D2A06415D2AC958E1367 /* Debug */,
-				A78A060084176ACEE068953A /* Release */,
+				453851D6ABEE2ECE5698213B /* Debug */,
+				5570BFAF9637F9E6A850DA40 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = CC65F4B40B06F4DEF2CFED34 /* Project object */;
+	rootObject = 67C4C29A20180131FC642B9D /* Project object */;
 }
