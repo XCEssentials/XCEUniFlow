@@ -1,6 +1,6 @@
 # Introduction
 
-**UniFlow** is a predictable state container for iOS and macOS apps.
+**UniFlow** is a predictable state container for Cocoa and Cocoa Touch.
 
 This framework implements so-called 'Unidirectional Data Flow' paradigm for developing applications for iOS and macOS platforms. The key idea behind it is just [state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
 
