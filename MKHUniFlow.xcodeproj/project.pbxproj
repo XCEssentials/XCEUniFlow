@@ -10,6 +10,9 @@
 		08E44A55F046F787C10A9F0C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0200970809C5EB932CB78C24 /* UIKit.framework */; };
 		80D73444F4F9CB95BF7E6F8D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4145FDD25AE87D4ABC3A1A52 /* Foundation.framework */; };
 		87F8A2CFFC441CEE56FD700E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4145FDD25AE87D4ABC3A1A52 /* Foundation.framework */; };
+		94BDC5C71E0B38AD008EDFF0 /* Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BDC5C61E0B38AD008EDFF0 /* Extra.swift */; };
+		94E5DC8B1E0B333000D305A1 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E5DC8A1E0B333000D305A1 /* Helpers.swift */; };
+		94E5DC8D1E0B34E700D305A1 /* Declarations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E5DC8C1E0B34E700D305A1 /* Declarations.swift */; };
 		973C69EEC0746F46204FE4D8 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C0F74F7BD2F6F179158E98 /* Main.swift */; };
 		9C1D4AF6A3FCD2DCF10BE59C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0200970809C5EB932CB78C24 /* UIKit.framework */; };
 /* End PBXBuildFile section */
@@ -19,6 +22,9 @@
 		2B4371473AC95479CF9716C9 /* MKHUniFlow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MKHUniFlow.h; sourceTree = "<group>"; };
 		4145FDD25AE87D4ABC3A1A52 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		92F1903D0740DE367E053495 /* MKHUniFlow. */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = MKHUniFlow.; path = MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		94BDC5C61E0B38AD008EDFF0 /* Extra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extra.swift; sourceTree = "<group>"; };
+		94E5DC8A1E0B333000D305A1 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		94E5DC8C1E0B34E700D305A1 /* Declarations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Declarations.swift; sourceTree = "<group>"; };
 		B4069CCE2E9D576E6F9B377A /* MKHUniFlowTst.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MKHUniFlowTst.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C0F74F7BD2F6F179158E98 /* Main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -49,6 +55,9 @@
 			isa = PBXGroup;
 			children = (
 				B8C0F74F7BD2F6F179158E98 /* Main.swift */,
+				94E5DC8A1E0B333000D305A1 /* Helpers.swift */,
+				94E5DC8C1E0B34E700D305A1 /* Declarations.swift */,
+				94BDC5C61E0B38AD008EDFF0 /* Extra.swift */,
 			);
 			path = Src;
 			sourceTree = "<group>";
@@ -173,7 +182,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94E5DC8D1E0B34E700D305A1 /* Declarations.swift in Sources */,
 				973C69EEC0746F46204FE4D8 /* Main.swift in Sources */,
+				94BDC5C71E0B38AD008EDFF0 /* Extra.swift in Sources */,
+				94E5DC8B1E0B333000D305A1 /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +297,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";

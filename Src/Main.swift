@@ -11,11 +11,6 @@ import Foundation
 //===
 
 public
-protocol UFLModel { }
-
-//===
-
-public
 typealias UFLStateMutation<Model: UFLModel> = (_ state: inout Model) -> Void
 
 public
@@ -23,11 +18,6 @@ func UFLNoStateMutation<Model: UFLModel>() -> UFLStateMutation<Model>
 {
     return { _ in /* do nothing*/ }
 }
-
-//===
-
-public
-struct UFLNoInput { }
 
 //===
 
@@ -215,20 +205,24 @@ class UFLDispatcher<Model: UFLModel>
                 // to submit another Action
                 
                 self.process(action, input: input)
-        }
+            }
     }
     
     public
     func submit(_ actionShort: @escaping UFLActionShort<Model>)
     {
-        let action: UFLAction<Model, UFLNoInput> = {
-            
-            return try actionShort($1, $2)
+        OperationQueue
+            .main
+            .addOperation {
+                
+                // we add this action to queue async-ly,
+                // to make sure it will be processed AFTER
+                // current execution is completes,
+                // that even allows from an Action handler
+                // to submit another Action
+                
+                self.process(actionShort)
         }
-        
-        //===
-        
-        submit(action, with: UFLNoInput())
     }
     
     public
@@ -251,9 +245,9 @@ class UFLDispatcher<Model: UFLModel>
     public
     func submit(_ triggerShort: @escaping UFLTriggerShort<Model>)
     {
-        let action: UFLAction<Model, UFLNoInput> = {
+        let actionShort: UFLActionShort<Model> = {
             
-            try triggerShort($1, $2)
+            try triggerShort($0, $1)
             
             //===
             
@@ -262,20 +256,20 @@ class UFLDispatcher<Model: UFLModel>
         
         //===
         
-        submit(action, with: UFLNoInput())
+        submit(actionShort)
     }
     
     public
     func submit(directly mutation: @escaping UFLStateMutation<Model>)
     {
-        let action: UFLAction<Model, UFLNoInput> = { _, _, _ in
+        let actionShort: UFLActionShort<Model> = { (_, _) in
             
             return mutation
         }
         
         //===
         
-        submit(action, with: UFLNoInput())
+        submit(actionShort)
     }
     
     //=== MARK: Private members
@@ -306,7 +300,30 @@ class UFLDispatcher<Model: UFLModel>
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onActionRejected.map { $0(error) }
+            onActionRejected?(error)
+        }
+    }
+    
+    private
+    func process(_ actionShort: @escaping UFLActionShort<Model>)
+    {
+        do
+        {
+            let mutation = try actionShort(state, self)
+            
+            mutation(&state)
+            
+            //===
+            
+            notifySubscriptions()
+        }
+        catch
+        {
+            // action has thrown,
+            // will NOT notify subscribers
+            // about attempt to process this action
+            
+            onActionRejected?(error)
         }
     }
     
@@ -345,128 +362,117 @@ class UFLDispatcher<Model: UFLModel>
     }
 }
 
-//=== MARK: - UFLFeature
+////=== MARK: - UFLFeature
+//
+//public
+//protocol UFLFeature { }
+//
+////=== MARK: - UFLContext
+//
+//public
+//protocol UFLContext { }
+//
+////=== MARK: - UFLDelegate
+//
+//public
+//protocol UFLDelegate
+//{
+//    associatedtype Model: UFLModel
+//    associatedtype SubModel
+//    associatedtype Context: UFLContext
+//    
+//    init(dispatcher: UFLDispatcher<Model>, context: Context?)
+//    
+//    func subscribe(
+//        _ observer: AnyObject,
+//        onUpdate handler: @escaping (_ state: SubModel) -> Void)
+//    
+//    func unsubscribe(_ observer: AnyObject)
+//}
+//
+////=== MARK: - UFLConfigurable
+//
+//public
+//protocol UFLConfigurable // potential subscriber/observer
+//{
+//    associatedtype Delegate: UFLDelegate
+//    
+//    typealias SubModel = Delegate.SubModel
+//    
+//    init(delegate: Delegate)
+//    func configure(with model: SubModel)
+//}
+//
+////=== MARK: - UFLDispatcherBindable
+//
+//public
+//protocol UFLDispatcherBindable: class
+//{
+//    associatedtype Model: UFLModel
+//    
+//    func bind(with dispatcher: UFLDispatcher<Model>) -> Self
+//}
+//
+////=== MARK: - UFLDispatcherInitializable
+//
+//public
+//protocol UFLDispatcherInitializable: class
+//{
+//    associatedtype Model: UFLModel
+//    
+//    init(with dispatcher: UFLDispatcher<Model>)
+//}
+//
+////===
+//
+//public
+//struct UFLActionRejected: Error
+//{
+//    public
+//    let action: String
+//    
+//    public
+//    let reason: String
+//    
+//    //===
+//    
+//    public
+//    init(action: String, because reason: String? = nil)
+//    {
+//        self.action = action
+//        self.reason = (reason ?? "State did not satisfy pre-conditions.")
+//    }
+//}
+//
+////===
+//
+//public
+//func UFLReject(because reason: String? = nil,
+//               actionNameFull: String = #function) -> UFLActionRejected
+//{
+//    return UFLActionRejected(action: Helpers.actionName(from: actionNameFull),
+//                             because: reason)
+//}
 
-public
-protocol UFLFeature { }
-
-//=== MARK: - UFLContext
-
-public
-protocol UFLContext { }
-
-//=== MARK: - UFLDelegate
-
-public
-protocol UFLDelegate
-{
-    associatedtype Model: UFLModel
-    associatedtype SubModel
-    associatedtype Context: UFLContext
-    
-    init(dispatcher: UFLDispatcher<Model>, context: Context?)
-    
-    func subscribe(
-        _ observer: AnyObject,
-        onUpdate handler: @escaping (_ state: SubModel) -> Void)
-    
-    func unsubscribe(_ observer: AnyObject)
-}
-
-//=== MARK: - UFLConfigurable
-
-public
-protocol UFLConfigurable // potential subscriber/observer
-{
-    associatedtype Delegate: UFLDelegate
-    
-    typealias SubModel = Delegate.SubModel
-    
-    init(delegate: Delegate)
-    func configure(with model: SubModel)
-}
-
-//=== MARK: - UFLDispatcherBindable
-
-public
-protocol UFLDispatcherBindable: class
-{
-    associatedtype Model: UFLModel
-    
-    func bind(with dispatcher: UFLDispatcher<Model>) -> Self
-}
-
-//=== MARK: - UFLDispatcherInitializable
-
-public
-protocol UFLDispatcherInitializable: class
-{
-    associatedtype Model: UFLModel
-    
-    init(with dispatcher: UFLDispatcher<Model>)
-}
-
-//===
-
-public
-struct UFLActionRejected: Error
-{
-    public
-    let action: String
-    
-    public
-    let reason: String
-    
-    //===
-    
-    public
-    init(action: String, because reason: String? = nil)
-    {
-        self.action = action
-        self.reason = (reason ?? "State did not satisfy pre-conditions.")
-    }
-}
-
-//===
-
-public
-func UFLReject(because reason: String? = nil,
-               actionNameFull: String = #function) -> UFLActionRejected
-{
-    return UFLActionRejected(action: Helpers.actionName(from: actionNameFull),
-                             because: reason)
-}
-
-//===
-
-enum Helpers
-{
-    static
-        func actionName(from fullName: String) -> String
-    {
-        return fullName.components(separatedBy: "(").first ?? ""
-    }
-}
-
-//===
-
-public
-extension UFLDispatcher
-{
-    public
-    func enableDefaultReporting()
-    {
-        onActionRejected = { (err: Error) in
-            
-            if
-                let err = err as? UFLActionRejected
-            {
-                print("MKHUniFlow: [-] Action '\(err.action)'  REJECTED, reason: \(err.reason)")
-            }
-            else
-            {
-                print("MKHUniFlow: [-] Action REJECTED, error: \(err)")
-            }
-        }
-    }
-}
+////===
+//
+//public
+//extension UFLDispatcher
+//{
+//    public
+//    func enableDefaultReporting()
+//    {
+//        onActionRejected = { (err: Error) in
+//            
+//            if
+//                let err = err as? UFLActionRejected
+//            {
+//                print("MKHUniFlow: [-] Action '\(err.action)'  REJECTED, reason: \(err.reason)")
+//            }
+//            else
+//            {
+//                print("MKHUniFlow: [-] Action REJECTED, error: \(err)")
+//            }
+//        }
+//    }
+//}
