@@ -454,25 +454,17 @@ class UFLDispatcher<Model: UFLModel>
 //                             because: reason)
 //}
 
-////===
-//
-//public
-//extension UFLDispatcher
-//{
-//    public
-//    func enableDefaultReporting()
-//    {
-//        onActionRejected = { (err: Error) in
-//            
-//            if
-//                let err = err as? UFLActionRejected
-//            {
-//                print("MKHUniFlow: [-] Action '\(err.action)'  REJECTED, reason: \(err.reason)")
-//            }
-//            else
-//            {
-//                print("MKHUniFlow: [-] Action REJECTED, error: \(err)")
-//            }
-//        }
-//    }
-//}
+//===
+
+public
+extension UFLDispatcher
+{
+    public
+    func enableDefaultReporting()
+    {
+        onActionRejected = { (err: Error) in
+            
+            print("MKHUniFlow: [-] Action REJECTED, error: \(err)")
+        }
+    }
+}

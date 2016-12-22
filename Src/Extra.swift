@@ -13,7 +13,7 @@ import Foundation
 public
 enum Pre
 {
-    struct PreconditionFailed: Error
+    struct VerificationFailed: Error
     {
         let msg: String
         
@@ -21,7 +21,7 @@ enum Pre
         
         init(_ msg: String)
         {
-            self.msg = "Precondition [ " + msg + " ] failed."
+            self.msg = "Verification [ " + msg + " ] failed."
         }
     }
     
@@ -35,7 +35,7 @@ enum Pre
             let result = op()
         else
         {
-            throw PreconditionFailed(title)
+            throw VerificationFailed(title)
         }
         
         //===
@@ -50,7 +50,7 @@ enum Pre
         if
             !op()
         {
-            throw PreconditionFailed(title)
+            throw VerificationFailed(title)
         }
     }
 }
