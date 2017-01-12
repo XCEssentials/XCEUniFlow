@@ -2,8 +2,8 @@
 //  MKHUniFlow.h
 //  MKHUniFlow
 //
-//  Created by Maxim Khatskevich on 2/10/16.
-//  Copyright © 2016 Maxim Khatskevich. All rights reserved.
+//  Created by Maxim Khatskevich on 1/12/17.
+//  Copyright © 2017 Maxim Khatskevich. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

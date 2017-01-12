@@ -64,6 +64,18 @@ platform :ios do
       message: 'Version Bump to ' + newVersionNumber + ' (' + newBuildNumber + ')'
     )
 
+    # ===
+
+    version_bump_podspec(
+      path: './' + projName + '.podspec',
+      version_number: newVersionNumber
+    )
+
+    git_commit(
+      path: './' + projName + '.podspec',
+      message: 'Version Bump to ' + newVersionNumber + ' in Podspec file'
+    )
+
   end
 
   # ===

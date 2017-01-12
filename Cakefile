@@ -74,7 +74,7 @@ target do |target|
 
         #  configuration.settings["CODE_SIGN_IDENTITY[sdk=iphoneos*]"] = nil
 
-        # Xcode 8 automati c signing support
+        # Xcode 8 automatic code signing support
         configuration.settings["CODE_SIGN_IDENTITY[sdk=iphoneos*]"] = ""
         configuration.settings["DEVELOPMENT_TEAM"] = developmentTeamId
 
