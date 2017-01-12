@@ -1,0 +1,142 @@
+# Customise this file, documentation can be found here:
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# By default, fastlane will send which actions are used
+# No personal data is shared, more information on https://github.com/fastlane/enhancer
+# Uncomment the following line to opt out
+# opt_out_usage
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version '1.100.0'
+
+default_platform :ios
+
+#===
+
+projName = 'MKHUniFlow'
+projFileName = projName + '.xcodeproj'
+
+#===
+
+platform :ios do
+
+  lane :inc_version_and_commit do
+
+    ensure_git_status_clean
+
+    # ===
+
+    buildNumber = get_build_number(xcodeproj: projFileName)
+    versionNumber = get_version_number(xcodeproj: projFileName)
+
+    # === Request target version/build number
+
+    puts 'Current VERSION number: ' + versionNumber
+    newVersionNumber = prompt(text: 'New VERSION number:')
+
+    puts 'Current BUILD number: ' + buildNumber
+    newBuildNumber = prompt(text: 'New BUILD number:')
+
+    # === Set new numbers
+
+    increment_version_number(
+      xcodeproj: projFileName,
+      version_number: newVersionNumber
+    )
+
+    increment_build_number(
+      xcodeproj: projFileName,
+      build_number: newBuildNumber
+    )
+
+    # ===
+
+    commit_version_bump( # it will fail if more than version bump
+      message: 'Version Bump to ' + newVersionNumber + ' (' + newBuildNumber + ')'
+    )
+
+    # ===
+
+    version_bump_podspec(
+      path: './' + projName + '.podspec',
+      version_number: newVersionNumber
+    )
+
+    git_commit(
+      path: './' + projName + '.podspec',
+      message: 'Version Bump to ' + newVersionNumber + ' in Podspec file'
+    )
+
+  end
+
+  # ===
+
+  lane :regenerate_project do
+
+    # === Remember current version and build numbers
+
+    versionNumber = get_version_number(xcodeproj: projFileName)
+    buildNumber = get_build_number(xcodeproj: projFileName)
+
+    # === Remove completely current project file/folder
+    
+    sh 'cd ./.. && rm -r ./' + projFileName
+
+    # === Regenerate project
+
+    # default initial location for any command
+    # is inside 'Fastlane' folder
+
+    sh 'cd ./.. && xcake make'
+
+    # === Set proper current version and build numbers
+
+    increment_version_number(
+      xcodeproj: projFileName,
+      version_number: versionNumber
+    )
+
+    increment_build_number(
+      xcodeproj: projFileName,
+      build_number: buildNumber
+    )
+
+  end
+
+  # ===
+
+  lane :generate_project do
+
+    # === Generate project from scratch
+
+    # default initial location for any command
+    # is inside 'Fastlane' folder
+
+    sh 'cd ./.. && xcake make'
+
+    # === Set proper build number (proper version number is stored in the Info file)
+
+    newBuildNumber = prompt(text: 'Desired BUILD number:')
+
+    increment_build_number(
+      xcodeproj: projFileName,
+      build_number: newBuildNumber
+    )
+
+  end
+
+end
+
+
+
+# More information about multiple platforms in fastlane: https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
