@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name                      = 'MKHUniFlow'
-  s.version                   = '1.1.1'
+  s.version                   = '2.0.0'
   s.summary                   = 'Unidirectional data flow manager (state machine) for Cocoa and Cocoa Touch.'
   s.homepage                  = 'https://github.com/maximkhatskevich/#{s.name}'
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
