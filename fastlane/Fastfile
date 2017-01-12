@@ -29,22 +29,11 @@ projFileName = projName + '.xcodeproj'
 
 platform :ios do
 
-  lane :regenerate_project do
-
-    # default initial location for any command
-    # is inside 'Fastlane' folder
-
-    sh 'cd ./.. && xcake make' # && pod update --no-repo-update'
-
-  end
-
-  # ===
-
-  lane :inc_version do
+  lane :inc_version_and_commit do
 
     ensure_git_status_clean
 
-    # === Set basic parameters
+    # ===
 
     buildNumber = get_build_number(xcodeproj: projFileName)
     versionNumber = get_version_number(xcodeproj: projFileName)
@@ -57,7 +46,7 @@ platform :ios do
     puts 'Current BUILD number: ' + buildNumber
     newBuildNumber = prompt(text: 'New BUILD number:')
 
-    # === version bump
+    # === Set new numbers
 
     increment_version_number(
       xcodeproj: projFileName,
@@ -69,7 +58,79 @@ platform :ios do
       build_number: newBuildNumber
     )
 
-    commit_version_bump # it will fail if more than version bump
+    # ===
+
+    commit_version_bump( # it will fail if more than version bump
+      message: 'Version Bump to ' + newVersionNumber + ' (' + newBuildNumber + ')'
+    )
+
+    # ===
+
+    version_bump_podspec(
+      path: './' + projName + '.podspec',
+      version_number: newVersionNumber
+    )
+
+    git_commit(
+      path: './' + projName + '.podspec',
+      message: 'Version Bump to ' + newVersionNumber + ' in Podspec file'
+    )
+
+  end
+
+  # ===
+
+  lane :regenerate_project do
+
+    # === Remember current version and build numbers
+
+    versionNumber = get_version_number(xcodeproj: projFileName)
+    buildNumber = get_build_number(xcodeproj: projFileName)
+
+    # === Remove completely current project file/folder
+    
+    sh 'cd ./.. && rm -r ./' + projFileName
+
+    # === Regenerate project
+
+    # default initial location for any command
+    # is inside 'Fastlane' folder
+
+    sh 'cd ./.. && xcake make'
+
+    # === Set proper current version and build numbers
+
+    increment_version_number(
+      xcodeproj: projFileName,
+      version_number: versionNumber
+    )
+
+    increment_build_number(
+      xcodeproj: projFileName,
+      build_number: buildNumber
+    )
+
+  end
+
+  # ===
+
+  lane :generate_project do
+
+    # === Generate project from scratch
+
+    # default initial location for any command
+    # is inside 'Fastlane' folder
+
+    sh 'cd ./.. && xcake make'
+
+    # === Set proper build number (proper version number is stored in the Info file)
+
+    newBuildNumber = prompt(text: 'Desired BUILD number:')
+
+    increment_build_number(
+      xcodeproj: projFileName,
+      build_number: newBuildNumber
+    )
 
   end
 

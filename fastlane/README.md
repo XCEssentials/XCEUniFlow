@@ -6,14 +6,19 @@ sudo gem install fastlane
 ```
 # Available Actions
 ## iOS
+### ios inc_version_and_commit
+```
+fastlane ios inc_version_and_commit
+```
+
 ### ios regenerate_project
 ```
 fastlane ios regenerate_project
 ```
 
-### ios inc_version
+### ios generate_project
 ```
-fastlane ios inc_version
+fastlane ios generate_project
 ```
 
 
