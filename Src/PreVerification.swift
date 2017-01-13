@@ -13,28 +13,24 @@ import Foundation
 public
 extension UFL
 {
-    struct VerificationFailed: Error
-    {
-        let msg: String
-        
-        //===
-        
-        init(_ title: String)
-        {
-            self.msg = "Verification [ \(title) ] failed."
-        }
-    }
-    
-    //===
-    
     static
-    func extract<Output>(_ title: String, _ op: () -> Output?) throws -> Output
+    func extract<Output>(
+        _ description: String,
+        _ context: Any = #file,
+        _ action: String = #function,
+        _ op: () -> Output?
+        ) throws -> Output
     {
         guard
             let result = op()
         else
         {
-            throw VerificationFailed(title)
+            throw
+                reject(
+                    "verification [ \(description) ] failed",
+                    context,
+                    action
+                )
         }
         
         //===
@@ -43,12 +39,22 @@ extension UFL
     }
     
     static
-    func verify(_ title: String, _ op: () -> Bool) throws
+    func verify(
+        _ description: String,
+        _ context: Any = #file,
+        _ action: String = #function,
+        _ op: () -> Bool
+        ) throws
     {
         if
             !op()
         {
-            throw VerificationFailed(title)
+            throw
+                reject(
+                    "verification [ \(description) ] failed",
+                    context,
+                    action
+                )
         }
     }
 }

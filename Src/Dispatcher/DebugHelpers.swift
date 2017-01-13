@@ -17,7 +17,23 @@ extension Dispatcher
     {
         onReject = {
             
-            print("MKHUniFlow: [-] \($0.rawValue) REJECTED, error: \($1)")
+            if
+                let er = $1 as? ActionRejected
+            {
+                print("===\\\\\\\\\\\\\\\\\\")
+                
+                print(
+                    "MKHUniFlow: [-] REJECTED \($0.rawValue)",
+                    "'\(er.action)' from '\(er.context)',",
+                    "because \(er.reason)."
+                )
+                
+                print("===/////////")
+            }
+            else
+            {
+                print("MKHUniFlow: [-] \($0.rawValue) REJECTED, error: \($1)")
+            }
         }
     }
 }
