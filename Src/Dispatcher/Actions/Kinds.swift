@@ -14,8 +14,8 @@ public
 enum ActionKind: String
 {
     case
-        action,
-        actionShort,
-        trigger,
-        triggerShort
+        action = "Action",
+        actionShort = "Action (short)",
+        trigger = "Trigger",
+        triggerShort = "Trigger (short)"
 }
