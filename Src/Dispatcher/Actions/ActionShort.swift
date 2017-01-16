@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit(
-        _ actionShort: @escaping (_: ActionShortParams<State>) throws -> Mutation<State>
+        _ actS: @escaping (_: State) throws -> (Mutations<State>, Triggers<State>)
         )
     {
         OperationQueue
@@ -27,7 +27,7 @@ extension Dispatcher
                 // that even allows from an Action handler
                 // to submit another Action
                 
-                self.process(actionShort)
+                self.process(actS)
         }
     }
 }
@@ -37,14 +37,15 @@ extension Dispatcher
 extension Dispatcher
 {
     func process(
-        _ actionShort: @escaping (_: ActionShortParams<State>) throws -> Mutation<State>
+        _ actS: @escaping (_: State) throws -> (Mutations<State>, Triggers<State>)
         )
     {
         do
         {
-            let mutation = try actionShort((state, self))
+            let result = try actS(state)
             
-            mutation(&state)
+            result.0(&state)
+            result.1(self)
             
             //===
             

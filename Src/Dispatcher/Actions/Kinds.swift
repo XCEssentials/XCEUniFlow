@@ -17,5 +17,7 @@ enum ActionKind: String
         action = "Action",
         actionShort = "Action (short)",
         trigger = "Trigger",
-        triggerShort = "Trigger (short)"
+        triggerShort = "Trigger (short)",
+        mutator = "Mutator",
+        mutatorShort = "Mutator (short)"
 }

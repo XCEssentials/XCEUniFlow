@@ -11,19 +11,7 @@ import Foundation
 //===
 
 public
-typealias ActionParams<Input, State: AppModel> = (
-    input: Input,
-    state: State,
-    dispatcher: Dispatcher<State>
-)
+typealias Mutations<State> = (_: inout State) -> Void
 
 public
-typealias ActionShortParams<State: AppModel> = (
-    state: State,
-    dispatcher: Dispatcher<State>
-)
-
-//===
-
-public
-typealias Mutation<State> = (_ state: inout State) -> Void
+typealias Triggers<State: AppModel> = (_: Dispatcher<State>) -> Void

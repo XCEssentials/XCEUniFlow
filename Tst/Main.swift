@@ -8,43 +8,7 @@
 
 import XCTest
 
-//@testable
 import MKHUniFlow
-
-//===
-
-struct GM: AppModel
-{
-    var v: Int? = nil
-}
-
-//===
-
-enum ArithmeticMutations
-{
-    static
-    func setExplicit(p: ActionParams<Int, GM>) -> Mutation<GM>
-    {
-        return { $0.v = p.input }
-    }
-    
-    static
-    func incFive(p: ActionShortParams<GM>) throws -> Mutation<GM>
-    {
-        // this check is unnecessary here, just for demonstration:
-        try UFL.verify("Current value was set", self){ p.state.v != nil }
-        
-        //===
-        
-        // this check ensures that current value is not nil,
-        // as well as unwraps it for further use:
-        let v = try UFL.extract("Get current value", self){ p.state.v }
-        
-        //===
-        
-        return { $0.v = v + 5 }
-    }
-}
 
 //===
 
@@ -78,10 +42,7 @@ class Main: XCTestCase
         //===
         
         disp.submit(
-            ArithmeticMutations.setExplicit, with: 10)
-        
-        disp.submit(
-            ArithmeticMutations.incFive)
+            ArithmeticMutations.doTheChanges)
         
         //===
         

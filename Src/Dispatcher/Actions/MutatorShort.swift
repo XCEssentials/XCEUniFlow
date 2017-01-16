@@ -1,8 +1,8 @@
 //
-//  Action.swift
+//  MutatorShort.swift
 //  MKHUniFlow
 //
-//  Created by Maxim Khatskevich on 1/12/17.
+//  Created by Maxim Khatskevich on 1/16/17.
 //  Copyright © 2017 Maxim Khatskevich. All rights reserved.
 //
 
@@ -13,9 +13,8 @@ import Foundation
 public
 extension Dispatcher
 {
-    func submit<Input>(
-        _ act: @escaping (_: Input, _: State) throws -> (Mutations<State>, Triggers<State>),
-        with input: Input
+    func submit(
+        _ mutS: @escaping (_: State) throws -> Mutations<State>
         )
     {
         OperationQueue
@@ -28,7 +27,7 @@ extension Dispatcher
                 // that even allows from an Action handler
                 // to submit another Action
                 
-                self.process(act, with: input)
+                self.process(mutS)
         }
     }
 }
@@ -37,17 +36,15 @@ extension Dispatcher
 
 extension Dispatcher
 {
-    func process<Input>(
-        _ act: @escaping (_: Input, _: State) throws -> (Mutations<State>, Triggers<State>),
-        with input: Input
+    func process(
+        _ mutS: @escaping (_: State) throws -> Mutations<State>
         )
     {
         do
         {
-            let result = try act(input, state)
+            let result = try mutS(state)
             
-            result.0(&state)
-            result.1(self)
+            result(&state)
             
             //===
             
@@ -59,7 +56,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onReject.map { $0(.action, error) }
+            onReject.map { $0(.mutatorShort, error) }
         }
     }
 }
