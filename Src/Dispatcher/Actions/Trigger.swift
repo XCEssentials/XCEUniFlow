@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit<Input>(
-        _ trigger: @escaping (_: ActionParams<Input, State>) throws -> Void,
+        _ trig: @escaping (_: Input, _: State) throws -> Triggers<State>,
         with input: Input
         )
     {
@@ -28,7 +28,7 @@ extension Dispatcher
                 // that even allows from an Action handler
                 // to submit another Action
                 
-                self.process(trigger, with: input)
+                self.process(trig, with: input)
         }
     }
 }
@@ -38,13 +38,15 @@ extension Dispatcher
 extension Dispatcher
 {
     func process<Input>(
-        _ trigger: @escaping (_: ActionParams<Input, State>) throws -> Void,
+        _ trig: @escaping (_: Input, _: State) throws -> Triggers<State>,
         with input: Input
         )
     {
         do
         {
-            try trigger((input, state, self))
+            let result = try trig(input, state)
+            
+            result(self)
             
             //===
             

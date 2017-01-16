@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit(
-        _ triggerShort: @escaping (_: ActionShortParams<State>) throws -> Void
+        _ trigS: @escaping (_: State) throws -> Triggers<State>
         )
     {
         OperationQueue
@@ -27,7 +27,7 @@ extension Dispatcher
                 // that even allows from an Action handler
                 // to submit another Action
                 
-                self.process(triggerShort)
+                self.process(trigS)
         }
     }
 }
@@ -37,12 +37,14 @@ extension Dispatcher
 extension Dispatcher
 {
     func process(
-        _ triggerShort: @escaping (_: ActionShortParams<State>) throws -> Void
+        _ trigS: @escaping (_: State) throws -> Triggers<State>
         )
     {
         do
         {
-            try triggerShort((state, self))
+            let result = try trigS(state)
+            
+            result(self)
             
             //===
             

@@ -42,10 +42,7 @@ class Main: XCTestCase
         //===
         
         disp.submit(
-            ArithmeticMutations.setExplicit, with: 10)
-        
-        disp.submit(
-            ArithmeticMutations.incFive)
+            ArithmeticMutations.doTheChanges)
         
         //===
         

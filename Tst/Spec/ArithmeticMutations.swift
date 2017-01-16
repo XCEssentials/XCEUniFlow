@@ -15,22 +15,29 @@ import MKHUniFlow
 enum ArithmeticMutations
 {
     static
-    func setExplicit(p: ActionParams<Int, GM>) -> Mutation<GM>
+    func doTheChanges(_: GM) -> Triggers<GM>
     {
-        return { $0.v = p.input }
+        return { $0.submit(setExplicit, with: 10)
+                 $0.submit(incFive) }
     }
     
     static
-    func incFive(p: ActionShortParams<GM>) throws -> Mutation<GM>
+    func setExplicit(value: Int, _: GM) -> Mutations<GM>
+    {
+        return { $0.v = value }
+    }
+    
+    static
+    func incFive(state: GM) throws -> Mutations<GM>
     {
         // this check is unnecessary here, just for demonstration:
-        try UFL.verify("Current value was set", self){ p.state.v != nil }
+        try UFL.verify("Current value was set", self){ state.v != nil }
         
         //===
         
         // this check ensures that current value is not nil,
         // as well as unwraps it for further use:
-        let v = try UFL.extract("Get current value", self){ p.state.v }
+        let v = try UFL.extract("Get current value", self){ state.v }
         
         //===
         

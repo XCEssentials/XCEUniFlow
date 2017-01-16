@@ -20,6 +20,8 @@
 		944971371E28065900B1EE03 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944971361E28065900B1EE03 /* Core.swift */; };
 		944971391E28068200B1EE03 /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944971381E28068200B1EE03 /* Subscriptions.swift */; };
 		9449713B1E2808C200B1EE03 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449713A1E2808C200B1EE03 /* Helpers.swift */; };
+		9476938D1E2D670600ED1B03 /* Mutator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9476938C1E2D670600ED1B03 /* Mutator.swift */; };
+		9476938F1E2D676500ED1B03 /* MutatorShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9476938E1E2D676500ED1B03 /* MutatorShort.swift */; };
 		948AC9A01E281BCB0037F1C0 /* PreVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948AC99F1E281BCB0037F1C0 /* PreVerification.swift */; };
 		948AC9AC1E2821CF0037F1C0 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948AC9A81E2821CF0037F1C0 /* Action.swift */; };
 		948AC9AD1E2821CF0037F1C0 /* ActionShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948AC9A91E2821CF0037F1C0 /* ActionShort.swift */; };
@@ -44,6 +46,8 @@
 		944971361E28065900B1EE03 /* Core.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
 		944971381E28068200B1EE03 /* Subscriptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
 		9449713A1E2808C200B1EE03 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		9476938C1E2D670600ED1B03 /* Mutator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mutator.swift; sourceTree = "<group>"; };
+		9476938E1E2D676500ED1B03 /* MutatorShort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutatorShort.swift; sourceTree = "<group>"; };
 		948AC99F1E281BCB0037F1C0 /* PreVerification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreVerification.swift; sourceTree = "<group>"; };
 		948AC9A81E2821CF0037F1C0 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		948AC9A91E2821CF0037F1C0 /* ActionShort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionShort.swift; sourceTree = "<group>"; };
@@ -168,6 +172,8 @@
 				948AC9A91E2821CF0037F1C0 /* ActionShort.swift */,
 				948AC9AA1E2821CF0037F1C0 /* Trigger.swift */,
 				948AC9AB1E2821CF0037F1C0 /* TriggerShort.swift */,
+				9476938C1E2D670600ED1B03 /* Mutator.swift */,
+				9476938E1E2D676500ED1B03 /* MutatorShort.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -277,9 +283,11 @@
 				94E2457C1E27CEC50087855D /* Blank.swift in Sources */,
 				948AC9AE1E2821CF0037F1C0 /* Trigger.swift in Sources */,
 				948AC9AC1E2821CF0037F1C0 /* Action.swift in Sources */,
+				9476938D1E2D670600ED1B03 /* Mutator.swift in Sources */,
 				9449713B1E2808C200B1EE03 /* Helpers.swift in Sources */,
 				8F34CAE16A4073A14BBED82A /* Protocols.swift in Sources */,
 				94E245791E27CE900087855D /* Pending.swift in Sources */,
+				9476938F1E2D676500ED1B03 /* MutatorShort.swift in Sources */,
 				948AC9A01E281BCB0037F1C0 /* PreVerification.swift in Sources */,
 				944971351E28063600B1EE03 /* TypeAliases.swift in Sources */,
 				94E2457A1E27CE900087855D /* Final.swift in Sources */,
