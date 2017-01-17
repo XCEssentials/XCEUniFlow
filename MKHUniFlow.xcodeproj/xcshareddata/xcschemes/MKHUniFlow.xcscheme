@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4FDE398A5865017EFE3EFD04"
+               BlueprintIdentifier = "447ACA0DA25157BB7C1B101E"
                BuildableName = "MKHUniFlow.framework"
                BlueprintName = "MKHUniFlow"
                ReferencedContainer = "container:MKHUniFlow.xcodeproj">
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F106D57DFD68976CE696ED5A"
+               BlueprintIdentifier = "FBAB0F12E15EDE6EF73BB385"
                BuildableName = "MKHUniFlowTst.xctest"
                BlueprintName = "MKHUniFlowTst"
                ReferencedContainer = "container:MKHUniFlow.xcodeproj">
@@ -42,7 +42,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4FDE398A5865017EFE3EFD04"
+            BlueprintIdentifier = "447ACA0DA25157BB7C1B101E"
             BuildableName = "MKHUniFlow.framework"
             BlueprintName = "MKHUniFlow"
             ReferencedContainer = "container:MKHUniFlow.xcodeproj">
@@ -64,7 +64,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4FDE398A5865017EFE3EFD04"
+            BlueprintIdentifier = "447ACA0DA25157BB7C1B101E"
             BuildableName = "MKHUniFlow.framework"
             BlueprintName = "MKHUniFlow"
             ReferencedContainer = "container:MKHUniFlow.xcodeproj">
@@ -82,7 +82,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4FDE398A5865017EFE3EFD04"
+            BlueprintIdentifier = "447ACA0DA25157BB7C1B101E"
             BuildableName = "MKHUniFlow.framework"
             BlueprintName = "MKHUniFlow"
             ReferencedContainer = "container:MKHUniFlow.xcodeproj">
