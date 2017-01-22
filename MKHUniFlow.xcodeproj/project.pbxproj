@@ -14,7 +14,6 @@
 		19F8DAF72B5D307D4B448467 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D2C5D938A7B8BD6A356947 /* Main.swift */; };
 		3B62BC6AFA40389AC5DB5C97 /* Blank.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0539F994E45A0A1E6367DC /* Blank.swift */; };
 		3DFB4A6B8EB5404822695B78 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8615A7874E4CDA379A3113D /* Helpers.swift */; };
-		50B5BFD184E75115D77DCDE5 /* MutatorShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10991C6BEF19266A883A7DAF /* MutatorShort.swift */; };
 		558BBB161AAA9DF4CAD9C43A /* ActionShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBCC3ED17C75FED6DAC0D2C /* ActionShort.swift */; };
 		591B7026AB0E02C8716497BB /* GM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BD14F38C74630B73110484 /* GM.swift */; };
 		5D9B8E6FC99BEFA871BF6660 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D8AED3AEE0900DDDCBCE0A /* Protocols.swift */; };
@@ -28,15 +27,12 @@
 		D1651739BB1FA14CFF2A6DE7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5841247CE30F71E216BFA2DF /* UIKit.framework */; };
 		E09F7D19603A3AFE5ACD11BF /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF4FFCBE91BCF2C86667AC /* Subscriptions.swift */; };
 		E11E1DBB83A4BBCE091FB5A9 /* ArithmeticMutations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B23C3F3B3195CECAACF84D /* ArithmeticMutations.swift */; };
-		E5685911F1906D8C099D0B99 /* Mutator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDBEC7C986D0776A70D3E5C /* Mutator.swift */; };
 		E870D44ADA2285FF9C36A989 /* Kinds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C2629E46193733C4E478AE /* Kinds.swift */; };
 		EC240FF10CA6FC646DC9AC31 /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E39D240FE51B283D1609DC11 /* Trigger.swift */; };
 		EDE7167E2C7B2E0AA3242866 /* TriggerShort.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7DA1218E130E941587CEE /* TriggerShort.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0BDBEC7C986D0776A70D3E5C /* Mutator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Mutator.swift; sourceTree = "<group>"; };
-		10991C6BEF19266A883A7DAF /* MutatorShort.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MutatorShort.swift; sourceTree = "<group>"; };
 		17B23C3F3B3195CECAACF84D /* ArithmeticMutations.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ArithmeticMutations.swift; sourceTree = "<group>"; };
 		18BD14F38C74630B73110484 /* GM.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GM.swift; sourceTree = "<group>"; };
 		1CA2C21A9ED30C4129B53271 /* Action.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
@@ -149,8 +145,6 @@
 				A7C2629E46193733C4E478AE /* Kinds.swift */,
 				1CA2C21A9ED30C4129B53271 /* Action.swift */,
 				4FBCC3ED17C75FED6DAC0D2C /* ActionShort.swift */,
-				0BDBEC7C986D0776A70D3E5C /* Mutator.swift */,
-				10991C6BEF19266A883A7DAF /* MutatorShort.swift */,
 				E39D240FE51B283D1609DC11 /* Trigger.swift */,
 				D2B7DA1218E130E941587CEE /* TriggerShort.swift */,
 			);
@@ -289,8 +283,6 @@
 				183EB5D22A84C6ACA7436162 /* Action.swift in Sources */,
 				558BBB161AAA9DF4CAD9C43A /* ActionShort.swift in Sources */,
 				E870D44ADA2285FF9C36A989 /* Kinds.swift in Sources */,
-				E5685911F1906D8C099D0B99 /* Mutator.swift in Sources */,
-				50B5BFD184E75115D77DCDE5 /* MutatorShort.swift in Sources */,
 				EC240FF10CA6FC646DC9AC31 /* Trigger.swift in Sources */,
 				EDE7167E2C7B2E0AA3242866 /* TriggerShort.swift in Sources */,
 				A9A47116A05AF708DA9C718A /* Core.swift in Sources */,

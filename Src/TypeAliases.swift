@@ -11,13 +11,5 @@ import Foundation
 //===
 
 public
-typealias MixedEffect<State: AppModel> =
-    ((_: inout State) -> Void, (_: Dispatcher<State>) -> Void)
-
-public
 typealias Mutations<State> =
     (_: inout State) -> Void
-
-public
-typealias Triggers<State: AppModel> =
-    (_: Dispatcher<State>) -> Void

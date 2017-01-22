@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit(
-        _ actS: @escaping (_: State) throws -> (Mutations<State>, Triggers<State>)
+        _ actS: @escaping (_: State, _: Dispatcher<State>) throws -> Mutations<State>
         )
     {
         OperationQueue
@@ -37,15 +37,14 @@ extension Dispatcher
 extension Dispatcher
 {
     func process(
-        _ actS: @escaping (_: State) throws -> (Mutations<State>, Triggers<State>)
+        _ actS: @escaping (_: State, _: Dispatcher<State>) throws -> Mutations<State>
         )
     {
         do
         {
-            let result = try actS(state)
+            let mutation = try actS(state, self)
             
-            result.0(&state)
-            result.1(self)
+            mutation(&state)
             
             //===
             
