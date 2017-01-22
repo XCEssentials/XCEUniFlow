@@ -146,9 +146,9 @@
 		A1F72571F49E51348756E4CB /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				A7C2629E46193733C4E478AE /* Kinds.swift */,
 				1CA2C21A9ED30C4129B53271 /* Action.swift */,
 				4FBCC3ED17C75FED6DAC0D2C /* ActionShort.swift */,
-				A7C2629E46193733C4E478AE /* Kinds.swift */,
 				0BDBEC7C986D0776A70D3E5C /* Mutator.swift */,
 				10991C6BEF19266A883A7DAF /* MutatorShort.swift */,
 				E39D240FE51B283D1609DC11 /* Trigger.swift */,

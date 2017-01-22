@@ -29,7 +29,7 @@ extension Dispatcher
                 // to submit another Action
                 
                 self.process(mut, with: input)
-        }
+            }
     }
 }
 
