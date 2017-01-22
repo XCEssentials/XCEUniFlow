@@ -11,7 +11,5 @@ import Foundation
 //===
 
 public
-typealias Mutations<State> = (_: inout State) -> Void
-
-public
-typealias Triggers<State: AppModel> = (_: Dispatcher<State>) -> Void
+typealias Mutations<State> =
+    (_: inout State) -> Void

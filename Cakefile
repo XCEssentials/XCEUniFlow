@@ -110,6 +110,9 @@ target do |target|
             configuration.settings["CODE_SIGN_IDENTITY[sdk=iphoneos*]"] = ""
             configuration.settings["DEVELOPMENT_TEAM"] = developmentTeamId
 
+            configuration.settings["FRAMEWORK_SEARCH_PATHS"] = "$BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/**",
+					"$(inherited)"
+
         end
 
         #=== Source Files

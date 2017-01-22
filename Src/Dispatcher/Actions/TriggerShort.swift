@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit(
-        _ trigS: @escaping (_: State) throws -> Triggers<State>
+        _ trigS: @escaping (_: State, _: Dispatcher<State>) throws -> Void
         )
     {
         OperationQueue
@@ -28,7 +28,7 @@ extension Dispatcher
                 // to submit another Action
                 
                 self.process(trigS)
-        }
+            }
     }
 }
 
@@ -37,14 +37,12 @@ extension Dispatcher
 extension Dispatcher
 {
     func process(
-        _ trigS: @escaping (_: State) throws -> Triggers<State>
+        _ trigS: @escaping (_: State, _: Dispatcher<State>) throws -> Void
         )
     {
         do
         {
-            let result = try trigS(state)
-            
-            result(self)
+            try trigS(state, self)
             
             //===
             

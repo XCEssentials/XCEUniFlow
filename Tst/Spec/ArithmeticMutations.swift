@@ -15,20 +15,20 @@ import MKHUniFlow
 enum ArithmeticMutations
 {
     static
-    func doTheChanges(_: GM) -> Triggers<GM>
+    func doTheChanges(_: GM, disp: Dispatcher<GM>)
     {
-        return { $0.submit(setExplicit, with: 10)
-                 $0.submit(incFive) }
+        disp.submit(setExplicit, with: 10)
+        disp.submit(incFive)
     }
     
     static
-    func setExplicit(value: Int, _: GM) -> Mutations<GM>
+    func setExplicit(value: Int, _: GM, _: Dispatcher<GM>) -> Mutations<GM>
     {
         return { $0.v = value }
     }
     
     static
-    func incFive(state: GM) throws -> Mutations<GM>
+    func incFive(state: GM, _: Dispatcher<GM>) throws -> Mutations<GM>
     {
         // this check is unnecessary here, just for demonstration:
         try UFL.verify("Current value was set", self){ state.v != nil }

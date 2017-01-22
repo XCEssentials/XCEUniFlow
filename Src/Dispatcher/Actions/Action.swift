@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit<Input>(
-        _ act: @escaping (_: Input, _: State) throws -> (Mutations<State>, Triggers<State>),
+        _ act: @escaping (_: Input, _: State, _: Dispatcher<State>) throws -> Mutations<State>,
         with input: Input
         )
     {
@@ -29,7 +29,7 @@ extension Dispatcher
                 // to submit another Action
                 
                 self.process(act, with: input)
-        }
+            }
     }
 }
 
@@ -38,16 +38,15 @@ extension Dispatcher
 extension Dispatcher
 {
     func process<Input>(
-        _ act: @escaping (_: Input, _: State) throws -> (Mutations<State>, Triggers<State>),
+        _ act: @escaping (_: Input, _: State, _: Dispatcher<State>) throws -> Mutations<State>,
         with input: Input
         )
     {
         do
         {
-            let result = try act(input, state)
+            let mutation = try act(input, state, self)
             
-            result.0(&state)
-            result.1(self)
+            mutation(&state)
             
             //===
             

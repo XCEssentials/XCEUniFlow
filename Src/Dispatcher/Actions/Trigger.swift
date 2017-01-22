@@ -14,7 +14,7 @@ public
 extension Dispatcher
 {
     func submit<Input>(
-        _ trig: @escaping (_: Input, _: State) throws -> Triggers<State>,
+        _ trig: @escaping (_: Input, _: State, _: Dispatcher<State>) throws -> Void,
         with input: Input
         )
     {
@@ -29,7 +29,7 @@ extension Dispatcher
                 // to submit another Action
                 
                 self.process(trig, with: input)
-        }
+            }
     }
 }
 
@@ -38,15 +38,13 @@ extension Dispatcher
 extension Dispatcher
 {
     func process<Input>(
-        _ trig: @escaping (_: Input, _: State) throws -> Triggers<State>,
+        _ trig: @escaping (_: Input, _: State, _: Dispatcher<State>) throws -> Void,
         with input: Input
         )
     {
         do
         {
-            let result = try trig(input, state)
-            
-            result(self)
+            try trig(input, state, self)
             
             //===
             
