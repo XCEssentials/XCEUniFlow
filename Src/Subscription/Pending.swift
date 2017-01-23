@@ -11,7 +11,7 @@ import Foundation
 //===
 
 public
-struct SubscriptionPending<State: AppModel, SubState>
+struct SubscriptionPending<State, SubState>
 {
     let base: SubscriptionBlank<State>
     let onConvert: (_: State) -> SubState?

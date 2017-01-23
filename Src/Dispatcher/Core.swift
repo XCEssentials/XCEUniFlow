@@ -12,7 +12,7 @@ import Foundation
 
 public
 final
-class Dispatcher<State: AppModel>
+class Dispatcher<State>
 {
     //=== MARK: Private members
     

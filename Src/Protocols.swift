@@ -11,14 +11,9 @@ import Foundation
 //===
 
 public
-protocol AppModel { }
-
-//===
-
-public
 protocol DispatcherBindable: class
 {
-    associatedtype State: AppModel
+    associatedtype State
     
     func bind(with dispatcher: Dispatcher<State>) -> Self
 }
@@ -28,7 +23,7 @@ protocol DispatcherBindable: class
 public
 protocol DispatcherInitializable: class
 {
-    associatedtype State: AppModel
+    associatedtype State
     
     init(with dispatcher: Dispatcher<State>)
 }

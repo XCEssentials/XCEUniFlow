@@ -12,7 +12,7 @@ import MKHUniFlow
 
 //===
 
-struct GM: AppModel
+struct GM
 {
     var v: Int? = nil
 }

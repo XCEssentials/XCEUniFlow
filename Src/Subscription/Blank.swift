@@ -11,7 +11,7 @@ import Foundation
 //===
 
 public
-struct SubscriptionBlank<State: AppModel>
+struct SubscriptionBlank<State>
 {
     let observer: AnyObject
     let dispatcher: Dispatcher<State>
