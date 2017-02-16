@@ -17,7 +17,7 @@ enum ArithmeticMutations: Feature
     static
     func doTheChanges() -> Action<GM>
     {
-        return trigger { _, submit in
+        return action { _, submit, _ in
             
             submit { ArithmeticMutations.setExplicit(value: 10) }
             submit { ArithmeticMutations.incFive() }
@@ -27,7 +27,7 @@ enum ArithmeticMutations: Feature
     static
     func setExplicit(value: Int) -> Action<GM>
     {
-        return action { model, _ in
+        return action { model, _, mutate in
             
             // you have to check at least one precondition to
             // definitely avoid doing the same action twice:
@@ -43,14 +43,14 @@ enum ArithmeticMutations: Feature
             
             //===
             
-            return { $0.v = value }
+            mutate { $0.v = value }
         }
     }
     
     static
     func incFive() -> Action<GM>
     {
-        return action { model, _ in
+        return action { model, _, mutate in
             
             // this check is unnecessary here, just for demonstration:
             try UFL.verify("Current value was set") { model.v != nil }
@@ -63,7 +63,7 @@ enum ArithmeticMutations: Feature
             
             //===
             
-            return { $0.v = v + 5 }
+            mutate { $0.v = v + 5 }
         }
     }
 }
