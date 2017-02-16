@@ -15,7 +15,7 @@ struct Action<UFLModel>
 {
     let id: String
     
-    let body: (UFLModel, (() -> Action<UFLModel>) -> Void, ((inout UFLModel) -> Void) -> Void) throws -> Void
+    let body: (UFLModel, (() -> Action<UFLModel>) -> Void) throws -> Mutations<UFLModel>
 }
 
 //===
@@ -31,10 +31,19 @@ extension Feature
     static
     func action<UFLModel>(
         _ name: String = #function,
-        _ body: @escaping (UFLModel, (() -> Action<UFLModel>) -> Void, ((inout UFLModel) -> Void) -> Void) throws -> Void
+        _ body: @escaping (UFLModel, (() -> Action<UFLModel>) -> Void) throws -> Mutations<UFLModel>
         ) -> Action<UFLModel>
     {
         return Action(id: "\(self).\(name)", body: body)
+    }
+    
+    static
+    func trigger<UFLModel>(
+        _ name: String = #function,
+        _ body: @escaping (UFLModel, (() -> Action<UFLModel>) -> Void) throws -> Void
+        ) -> Action<UFLModel>
+    {
+        return Action(id: "\(self).\(name)", body: { try body($0, $1); return { _ in } })
     }
 }
 
@@ -76,32 +85,13 @@ extension Dispatcher
     {
         do
         {
-            let submit: (_ f: () -> Action<State>) -> Void = {
-                
-                self.submit($0)
-            }
+            let mutate = try act.body(state, { self.submit($0) })
+            
+            mutate(&self.state)
             
             //===
             
-            var modelWasMutated = false
-            
-            let mutate: (_ f: (inout State) -> Void) -> Void = {
-                
-                $0(&self.state)
-                modelWasMutated = true
-            }
-            
-            //===
-            
-            try act.body(state, submit, mutate)
-            
-            //===
-            
-            if
-                modelWasMutated
-            {
-                notifySubscriptions()
-            }
+            notifySubscriptions()
         }
         catch
         {

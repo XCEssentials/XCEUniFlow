@@ -17,7 +17,7 @@ enum ArithmeticMutations: Feature
     static
     func doTheChanges() -> Action<GM>
     {
-        return action { _, submit, _ in
+        return trigger { _, submit in
             
             submit { ArithmeticMutations.setExplicit(value: 10) }
             submit { ArithmeticMutations.incFive() }
@@ -27,22 +27,30 @@ enum ArithmeticMutations: Feature
     static
     func setExplicit(value: Int) -> Action<GM>
     {
-        return action { _, _, mutate in
+        return action { model, _ in
             
-            print("")
+            // you have to check at least one precondition to
+            // definitely avoid doing the same action twice:
             
+            // also you need to put at least something before
+            // actually returning mutation code
+            // to be able to use short closure notation
+            // (without explicit input parameters type declaration) and
+            // not getting the "parameter may not have 'var' specifier"
+            // LOL Xcode bug, I guess...
             
-            mutate { // (m: inout GM) in
-                
-                $0.v = value
-            }
+            try UFL.verify("The model.v is not equal to desired new value") { model.v != value }
+            
+            //===
+            
+            return { $0.v = value }
         }
     }
     
     static
     func incFive() -> Action<GM>
     {
-        return action { model, _, mutate in
+        return action { model, _ in
             
             // this check is unnecessary here, just for demonstration:
             try UFL.verify("Current value was set") { model.v != nil }
@@ -55,7 +63,7 @@ enum ArithmeticMutations: Feature
             
             //===
             
-            mutate { $0.v = v + 5 }
+            return { $0.v = v + 5 }
         }
     }
 }
