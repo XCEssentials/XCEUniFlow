@@ -15,7 +15,7 @@ struct Action<UFLModel>
 {
     let id: String
     
-    let body: (UFLModel, (() -> Action<UFLModel>) -> Void) throws -> Mutations<UFLModel>
+    let body: (UFLModel, @escaping (() -> Action<UFLModel>) -> Void) throws -> Mutations<UFLModel>
 }
 
 //===
@@ -31,7 +31,7 @@ extension Feature
     static
     func action<UFLModel>(
         _ name: String = #function,
-        _ body: @escaping (UFLModel, (() -> Action<UFLModel>) -> Void) throws -> Mutations<UFLModel>
+        _ body: @escaping (UFLModel, @escaping (() -> Action<UFLModel>) -> Void) throws -> Mutations<UFLModel>
         ) -> Action<UFLModel>
     {
         return Action(id: "\(self).\(name)", body: body)
@@ -40,7 +40,7 @@ extension Feature
     static
     func trigger<UFLModel>(
         _ name: String = #function,
-        _ body: @escaping (UFLModel, (() -> Action<UFLModel>) -> Void) throws -> Void
+        _ body: @escaping (UFLModel, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
         ) -> Action<UFLModel>
     {
         return Action(id: "\(self).\(name)", body: { try body($0, $1); return { _ in } })
