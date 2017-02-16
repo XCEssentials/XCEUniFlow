@@ -17,39 +17,45 @@ enum ArithmeticMutations: Feature
     static
     func doTheChanges() -> Action<GM>
     {
-        return action {
+        return action { _, submit, _ in
             
-            $0.submit { ArithmeticMutations.setExplicit(value: 10) }
-            $0.submit { ArithmeticMutations.incFive() }
+            submit { ArithmeticMutations.setExplicit(value: 10) }
+            submit { ArithmeticMutations.incFive() }
         }
     }
     
     static
     func setExplicit(value: Int) -> Action<GM>
     {
-        return action {
+        return action { _, _, mutate in
             
-            $0.mutate { $0.v = value }
+            print("")
+            
+            
+            mutate { // (m: inout GM) in
+                
+                $0.v = value
+            }
         }
     }
     
     static
     func incFive() -> Action<GM>
     {
-        return action { p in
+        return action { model, _, mutate in
             
             // this check is unnecessary here, just for demonstration:
-            try UFL.verify("Current value was set") { p.model.v != nil }
+            try UFL.verify("Current value was set") { model.v != nil }
             
             //===
             
             // this check ensures that current value is not nil,
             // as well as unwraps it for further use:
-            let v = try UFL.extract("Get current value") { p.model.v }
+            let v = try UFL.extract("Get current value") { model.v }
             
             //===
             
-            p.mutate { $0.v = v + 5 }
+            mutate { $0.v = v + 5 }
         }
     }
 }

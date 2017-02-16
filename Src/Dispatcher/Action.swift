@@ -11,56 +11,11 @@ import Foundation
 //===
 
 public
-struct ActionParameters<UFLModel>
-{
-    private
-    let dispatcher: Dispatcher<UFLModel>
-    
-    public private(set)
-    var model: UFLModel
-    
-    //===
-    
-    // internal
-    var modelWasMutated: Bool = false
-    
-    //===
-    
-    // internal
-    init(_ dispatcher: Dispatcher<UFLModel>, _ model: UFLModel)
-    {
-        self.dispatcher = dispatcher
-        self.model = model
-    }
-    
-    //===
-    
-    public
-    mutating
-    func mutate(_ f: (inout UFLModel) -> Void)
-    {
-        f(&model)
-        
-        //===
-        
-        modelWasMutated = true
-    }
-    
-    public
-    func submit(_ actionGetter: () -> Action<UFLModel>)
-    {
-        dispatcher.submit(actionGetter)
-    }
-}
-
-//===
-
-public
 struct Action<UFLModel>
 {
     let id: String
     
-    let body: (inout ActionParameters<UFLModel>) throws -> Void
+    let body: (UFLModel, (() -> Action<UFLModel>) -> Void, ((inout UFLModel) -> Void) -> Void) throws -> Void
 }
 
 //===
@@ -76,7 +31,7 @@ extension Feature
     static
     func action<UFLModel>(
         _ name: String = #function,
-        _ body: @escaping (inout ActionParameters<UFLModel>) throws -> Void
+        _ body: @escaping (UFLModel, (() -> Action<UFLModel>) -> Void, ((inout UFLModel) -> Void) -> Void) throws -> Void
         ) -> Action<UFLModel>
     {
         return Action(id: "\(self).\(name)", body: body)
@@ -121,16 +76,30 @@ extension Dispatcher
     {
         do
         {
-            var params = ActionParameters(self, state)
+            let submit: (_ f: () -> Action<State>) -> Void = {
+                
+                self.submit($0)
+            }
             
-            try act.body(&params)
+            //===
+            
+            var modelWasMutated = false
+            
+            let mutate: (_ f: (inout State) -> Void) -> Void = {
+                
+                $0(&self.state)
+                modelWasMutated = true
+            }
+            
+            //===
+            
+            try act.body(state, submit, mutate)
             
             //===
             
             if
-                params.modelWasMutated
+                modelWasMutated
             {
-                state = params.model
                 notifySubscriptions()
             }
         }
