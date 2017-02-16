@@ -27,7 +27,7 @@ class Dispatcher<State>
     //=== MARK: Public members
     
     public
-    var onReject: ((_: ActionKind, _: Error) -> Void)?
+    var onReject: ((_ actionId: String, _: Error) -> Void)?
     
     //=== Initializer
     

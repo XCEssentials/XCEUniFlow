@@ -12,35 +12,44 @@ import MKHUniFlow
 
 //===
 
-enum ArithmeticMutations
+enum ArithmeticMutations: Feature
 {
     static
-    func doTheChanges(_: GM, disp: Dispatcher<GM>)
+    func doTheChanges() -> Action<GM>
     {
-        disp.submit(setExplicit, with: 10)
-        disp.submit(incFive)
+        return action {
+            
+            $0.submit { ArithmeticMutations.setExplicit(value: 10) }
+            $0.submit { ArithmeticMutations.incFive() }
+        }
     }
     
     static
-    func setExplicit(value: Int, _: GM, _: Dispatcher<GM>) -> Mutations<GM>
+    func setExplicit(value: Int) -> Action<GM>
     {
-        return { $0.v = value }
+        return action {
+            
+            $0.mutate { $0.v = value }
+        }
     }
     
     static
-    func incFive(state: GM, _: Dispatcher<GM>) throws -> Mutations<GM>
+    func incFive() -> Action<GM>
     {
-        // this check is unnecessary here, just for demonstration:
-        try UFL.verify("Current value was set", self){ state.v != nil }
-        
-        //===
-        
-        // this check ensures that current value is not nil,
-        // as well as unwraps it for further use:
-        let v = try UFL.extract("Get current value", self){ state.v }
-        
-        //===
-        
-        return { $0.v = v + 5 }
+        return action { p in
+            
+            // this check is unnecessary here, just for demonstration:
+            try UFL.verify("Current value was set") { p.model.v != nil }
+            
+            //===
+            
+            // this check ensures that current value is not nil,
+            // as well as unwraps it for further use:
+            let v = try UFL.extract("Get current value") { p.model.v }
+            
+            //===
+            
+            p.mutate { $0.v = v + 5 }
+        }
     }
 }
