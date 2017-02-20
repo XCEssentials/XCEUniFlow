@@ -13,9 +13,7 @@ import Foundation
 public
 extension Dispatcher
 {
-    func submit(
-        _ actionGetter: () -> Action<State>
-        )
+    func submit(_ actionGetter: () -> Action<State>)
     {
         let act = actionGetter()
         
@@ -40,9 +38,7 @@ extension Dispatcher
 
 extension Dispatcher
 {
-    func process(
-        _ act: Action<State>
-        )
+    func process(_ act: Action<State>)
     {
         do
         {
