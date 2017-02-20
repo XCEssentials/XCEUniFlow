@@ -15,5 +15,5 @@ struct Action<UFLModel>
 {
     let id: String
     
-    let body: (UFLModel, @escaping (() -> Action<UFLModel>) -> Void, (Mutations<UFLModel>) -> Void) throws -> Void
+    let body: (UFLModel, (Mutations<UFLModel>) -> Void, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
 }

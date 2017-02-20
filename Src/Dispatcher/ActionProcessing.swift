@@ -42,7 +42,7 @@ extension Dispatcher
     {
         do
         {
-            try act.body(state, { self.submit($0) }, { $0(&self.state) })
+            try act.body(state, { $0(&self.state) }, { self.submit($0) })
             
             //===
             

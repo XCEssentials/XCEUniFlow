@@ -21,7 +21,7 @@ extension Feature
     static
         func action<UFLModel>(
         _ name: String = #function,
-        _ body: @escaping (UFLModel, @escaping (() -> Action<UFLModel>) -> Void, (Mutations<UFLModel>) -> Void) throws -> Void
+        _ body: @escaping (UFLModel, (Mutations<UFLModel>) -> Void, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
         ) -> Action<UFLModel>
     {
         return Action(id: "\(self).\(name)", body: body)
