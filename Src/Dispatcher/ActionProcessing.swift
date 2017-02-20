@@ -13,6 +13,26 @@ import Foundation
 public
 extension Dispatcher
 {
+    func submit(_ actionGetter: @autoclosure () -> Action<State>)
+    {
+        let act = actionGetter()
+        
+        //===
+        
+        OperationQueue
+            .main
+            .addOperation {
+                
+                // we add this action to queue async-ly,
+                // to make sure it will be processed AFTER
+                // current execution is completes,
+                // that even allows from an Action handler
+                // to submit another Action
+                
+                self.process(act)
+            }
+    }
+    
     func submit(_ actionGetter: () -> Action<State>)
     {
         let act = actionGetter()

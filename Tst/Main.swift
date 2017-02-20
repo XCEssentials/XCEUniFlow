@@ -41,7 +41,9 @@ class Main: XCTestCase
         
         //===
         
-        disp.submit { ArithmeticMutations.doTheChanges() }
+        disp.submit { ArithmeticMutations.doTheChanges() } // option 1
+        // disp.submit(ArithmeticMutations.doTheChanges()) // option 2
+        // disp.submit(ArithmeticMutations.doTheChanges)   // option 3
         
         //===
         
