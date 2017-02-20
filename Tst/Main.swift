@@ -18,7 +18,7 @@ class Main: XCTestCase
     
     //===
     
-    func testExample()
+    func testRegularActions()
     {
         let ex = expectation(description: "After All Actions")
         
@@ -50,5 +50,8 @@ class Main: XCTestCase
         waitForExpectations(timeout: 1.0)
     }
     
-    
+    func testFeature()
+    {
+        //
+    }
 }

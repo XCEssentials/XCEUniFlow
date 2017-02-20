@@ -12,7 +12,7 @@ import MKHUniFlow
 
 //===
 
-enum ArithmeticMutations: Action
+enum ArithmeticMutations: ActionContext
 {
     static
     func doTheChanges() -> Action<GM>

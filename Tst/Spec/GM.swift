@@ -15,4 +15,6 @@ import MKHUniFlow
 struct GM
 {
     var v: Int? = nil
+    
+    var search: M_Search? = nil
 }

@@ -33,7 +33,7 @@ public
 extension FeatureState
 {
     static
-    func action<F: Feature>(
+        func action<F: Feature>(
         _ name: String = #function,
         _ body: @escaping (F, (Mutations<F>) -> Void, @escaping (() -> Action<F.UFLModel>) -> Void) throws -> Void
         ) -> Action<F.UFLModel>
