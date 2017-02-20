@@ -11,30 +11,14 @@ import Foundation
 //===
 
 public
-struct ActionRejected: Error
-{
-    public
-    let reason: String
-    
-    //===
-    
-    fileprivate
-    init(
-        _ reason: String
-        )
-    {
-        self.reason = reason
-    }
-}
-
-//===
-
-public
 extension UFL
 {
     static
     func reject(_ reason: String? = nil) -> ActionRejected
     {
-        return ActionRejected(reason ?? "State did not satisfy pre-conditions")
+        return
+            ActionRejected(
+                reason ??
+                "State did not satisfy pre-conditions")
     }
 }

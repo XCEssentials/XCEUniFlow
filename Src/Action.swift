@@ -17,3 +17,23 @@ struct Action<UFLModel>
     
     let body: (UFLModel, (Mutations<UFLModel>) -> Void, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
 }
+
+//===
+
+public
+protocol ActionContext {}
+
+//===
+
+public
+extension ActionContext
+{
+    static
+    func action<UFLModel>(
+        _ name: String = #function,
+        _ body: @escaping (UFLModel, (Mutations<UFLModel>) -> Void, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
+        ) -> Action<UFLModel>
+    {
+        return Action(id: "\(self).\(name)", body: body)
+    }
+}

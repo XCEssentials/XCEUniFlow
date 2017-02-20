@@ -11,5 +11,4 @@ import Foundation
 //===
 
 public
-typealias Mutations<State> =
-    (_: inout State) -> Void
+typealias Mutations<Value> = (_: inout Value) -> Void

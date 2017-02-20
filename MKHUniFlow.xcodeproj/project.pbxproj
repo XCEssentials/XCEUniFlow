@@ -21,6 +21,7 @@
 		941CCCDE1E55301F00969C3D /* ActionProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941CCCDD1E55301F00969C3D /* ActionProcessing.swift */; };
 		941CCCE01E5AF13500969C3D /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941CCCDF1E5AF13500969C3D /* Action.swift */; };
 		941CCCE21E5AF18700969C3D /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941CCCE11E5AF18700969C3D /* Feature.swift */; };
+		941CCCE41E5B673400969C3D /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941CCCE31E5B673400969C3D /* Errors.swift */; };
 		A9A47116A05AF708DA9C718A /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0A51D008AABF5F4CD8CC11 /* Core.swift */; };
 		AC678B02770F70AA86679A99 /* PreVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC4D3C0E02C6F8C930A0EC4 /* PreVerification.swift */; };
 		B77A98AF50FA1633AD1B9F00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF891C532D5848ACB529AEDA /* Foundation.framework */; };
@@ -44,6 +45,7 @@
 		941CCCDD1E55301F00969C3D /* ActionProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionProcessing.swift; sourceTree = "<group>"; };
 		941CCCDF1E5AF13500969C3D /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		941CCCE11E5AF18700969C3D /* Feature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		941CCCE31E5B673400969C3D /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		9C31566B772A7DEC41071D3E /* Final.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Final.swift; sourceTree = "<group>"; };
 		B0D0EBEB38A951D4A658D33E /* Pending.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Pending.swift; sourceTree = "<group>"; };
 		B9B9226909DF9569516E0111 /* MKHUniFlow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +157,7 @@
 				469F7453448C2898ECEEF5C2 /* Rejection.swift */,
 				326B27EB4BB2957640DC61E8 /* Subscription */,
 				87204DB34004C65812C732BC /* TypeAliases.swift */,
+				941CCCE31E5B673400969C3D /* Errors.swift */,
 			);
 			path = Src;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941CCCDE1E55301F00969C3D /* ActionProcessing.swift in Sources */,
+				941CCCE41E5B673400969C3D /* Errors.swift in Sources */,
 				941CCCE01E5AF13500969C3D /* Action.swift in Sources */,
 				A9A47116A05AF708DA9C718A /* Core.swift in Sources */,
 				1825D4F49371B015A1832FD6 /* DebugHelpers.swift in Sources */,
