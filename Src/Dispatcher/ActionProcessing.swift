@@ -1,5 +1,5 @@
 //
-//  Action.swift
+//  ActionProcessing.swift
 //  MKHUniFlow
 //
 //  Created by Maxim Khatskevich on 1/12/17.
@@ -7,36 +7,6 @@
 //
 
 import Foundation
-
-//===
-
-public
-struct Action<UFLModel>
-{
-    let id: String
-    
-    let body: (UFLModel, @escaping (() -> Action<UFLModel>) -> Void, (Mutations<UFLModel>) -> Void) throws -> Void
-}
-
-//===
-
-public
-protocol Feature {}
-
-//===
-
-public
-extension Feature
-{
-    static
-    func action<UFLModel>(
-        _ name: String = #function,
-        _ body: @escaping (UFLModel, @escaping (() -> Action<UFLModel>) -> Void, (Mutations<UFLModel>) -> Void) throws -> Void
-        ) -> Action<UFLModel>
-    {
-        return Action(id: "\(self).\(name)", body: body)
-    }
-}
 
 //=== MARK: Public
 
