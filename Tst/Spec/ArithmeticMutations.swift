@@ -17,10 +17,10 @@ enum ArithmeticMutations: Feature
     static
     func doTheChanges() -> Action<GM>
     {
-        return action { _, submit, _ in
+        return action { _, next, _ in
             
-            submit { ArithmeticMutations.setExplicit(value: 10) }
-            submit { ArithmeticMutations.incFive() }
+            next { ArithmeticMutations.setExplicit(value: 10) }
+            next { ArithmeticMutations.incFive() }
         }
     }
     
