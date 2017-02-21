@@ -30,6 +30,7 @@ extension Feature
     static
     func initiation<UFLOutFS: FeatureState>(
         _ name: String = #function,
+        to _: UFLOutFS.Type,
         _ body: @escaping ((() -> UFLOutFS?) -> Void, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLOutFS.UFLFeature

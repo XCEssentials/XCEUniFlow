@@ -63,7 +63,7 @@ extension M.Search
     static
     func initialize() -> Action
     {
-        return initiation { become, _ in
+        return initiation(to: Ready.self) { become, _ in
             
             become { Ready() }
         }
