@@ -59,6 +59,7 @@ class Main: XCTestCase
     
     func testSearch()
     {
+        let progressEx = expectation(description: "Progress reached the value 70")
         let ex = expectation(description: "After All Actions")
         
         //===
@@ -72,6 +73,15 @@ class Main: XCTestCase
                     let s = $0 ==> M.Search.self
                 {
                     print("The search -->> \(s)")
+                    
+                    //===
+                    
+                    if
+                        let p = s as? M.Search.InProgress,
+                        p.progress == 70
+                    {
+                        progressEx.fulfill()
+                    }
                     
                     //===
                     

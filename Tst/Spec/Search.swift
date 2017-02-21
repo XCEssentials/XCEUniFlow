@@ -58,21 +58,14 @@ extension M.Search
 
 //===
 
-extension M.Search: ActionContext
+extension M.Search
 {
     static
     func initialize() -> Action
     {
-        return action { m, mutate, _ in
+        return initiation { become, _ in
             
-            try UFL.isNil("Search is not initialized yet") {
-                
-                m ==> M.Search.self
-            }
-            
-            //===
-            
-            mutate { $0 <== Ready() }
+            become { Ready() }
         }
     }
     
@@ -81,16 +74,9 @@ extension M.Search: ActionContext
     static
     func simulate() -> Action
     {
-        return action { m, mutate, next in
+        return transition(from: Ready.self, to: InProgress.self) { r, become, next in
             
-            try UFL.isNotNil("Search is ready") {
-                
-                m ==> Ready.self
-            }
-            
-            //===
-            
-            mutate { $0 <== InProgress(progress: 0) }
+            become { InProgress(progress: 0) }
             
             //===
             
@@ -106,20 +92,11 @@ extension M.Search: ActionContext
     static
     func update(progress: Int) -> Action
     {
-        return action { m, mutate, _ in
+        return actualization(current: InProgress.self) { p, mutate, _ in
             
-            var p = try UFL.extract("Search is in progress") {
-                
-                m ==> InProgress.self
-            }
+            _ = p // Xcode bug workaround
             
-            //===
-            
-            p.progress = progress
-            
-            //===
-            
-            mutate { $0 <== p }
+            mutate { $0.progress = progress }
         }
     }
     
@@ -128,16 +105,23 @@ extension M.Search: ActionContext
     static
     func fail(error: Error) -> Action
     {
-        return action { m, mutate, _ in
+        return transition(from: InProgress.self, to: Failed.self) { p, become, next in
             
-            try UFL.isNotNil("Search is in progress") {
-                
-                m ==> InProgress.self
-            }
+            _ = p // Xcode bug workaround
+            
+            become { Failed(error: error) }
             
             //===
             
-            mutate { $0 <== Failed(error: error) }
+            next { cleanup() }
         }
+    }
+    
+    //===
+    
+    static
+    func cleanup() -> Action
+    {
+        return deinitiation(from: Failed.self) { _, _, _ in }
     }
 }
