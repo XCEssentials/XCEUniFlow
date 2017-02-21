@@ -11,21 +11,21 @@ import Foundation
 //===
 
 final
-class Subscription<State>
+class Subscription
 {
     // must be an object (class) to work with NSMapTable
 
-    let onConvert: (_: State) -> Any?
+    let onConvert: (_: GlobalModel) -> Any?
     let onUpdate: (_: Any) -> Void
 
     //===
 
-    init<SubState>(
-        _ cvt: @escaping (_: State) -> SubState?,
-        _ upd: @escaping (_: SubState) -> Void
+    init<UFLSubState>(
+        _ cvt: @escaping (_: GlobalModel) -> UFLSubState?,
+        _ upd: @escaping (_: UFLSubState) -> Void
         )
     {
         self.onConvert = cvt
-        self.onUpdate = { upd($0 as! SubState) }
+        self.onUpdate = { upd($0 as! UFLSubState) }
     }
 }

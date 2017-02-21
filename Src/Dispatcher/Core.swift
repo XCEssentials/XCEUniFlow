@@ -12,17 +12,17 @@ import Foundation
 
 public
 final
-class Dispatcher<State>
+class Dispatcher
 {
     //=== MARK: Private members
     
-    var state: State
+    var model = GlobalModel()
     
     var subscriptions =
-        NSMapTable<AnyObject, Subscription<State>>(
+        NSMapTable<AnyObject, Subscription>(
             keyOptions: .weakMemory,
             valueOptions: .strongMemory
-    )
+        )
     
     //=== MARK: Public members
     
@@ -32,9 +32,5 @@ class Dispatcher<State>
     //=== Initializer
     
     public
-    required
-    init(_ initialState: State)
-    {
-        state = initialState
-    }
+    init() {}
 }

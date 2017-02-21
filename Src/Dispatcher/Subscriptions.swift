@@ -16,7 +16,7 @@ extension Dispatcher
     func subscribe(
         _ observer: AnyObject,
         updateNow: Bool = true
-        ) -> SubscriptionBlank<State>
+        ) -> SubscriptionBlank
     {
         return
             SubscriptionBlank(
@@ -37,7 +37,7 @@ extension Dispatcher
 extension Dispatcher
 {
     func register(_ observer: AnyObject,
-                  _ subscription: Subscription<State>,
+                  _ subscription: Subscription,
                   _ initialUpdate: Bool = true)
     {
         subscriptions
@@ -56,13 +56,14 @@ extension Dispatcher
         _ = subscriptions
             .objectEnumerator()?
             .allObjects
-            .flatMap({ $0 as? Subscription<State> })
+            .flatMap({ $0 as? Subscription })
             .map(notify)
     }
     
-    func notify(_ subscription: Subscription<State>)
+    func notify(_ subscription: Subscription)
     {
-        subscription.onConvert(state)
+        subscription
+            .onConvert(model)
             .map(subscription.onUpdate)
     }
 }

@@ -32,21 +32,21 @@ struct ActionRejected: UFLError
 
 //===
 
-public
-struct FeatureReductionFailed: UFLError
-{
-    public
-    let globalModel: Any.Type
-    
-    public
-    let feature: Any.Type
-    
-    //===
-    
-    // internal
-    init(globalModel: Any.Type, feature: Any.Type)
-    {
-        self.globalModel = globalModel
-        self.feature = feature
-    }
-}
+//public
+//struct FeatureReductionFailed: UFLError
+//{
+//    public
+//    let globalModel: Any.Type
+//    
+//    public
+//    let feature: Any.Type
+//    
+//    //===
+//    
+//    // internal
+//    init(globalModel: Any.Type, feature: Any.Type)
+//    {
+//        self.globalModel = globalModel
+//        self.feature = feature
+//    }
+//}

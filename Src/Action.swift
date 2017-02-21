@@ -11,29 +11,20 @@ import Foundation
 //===
 
 public
-struct Action<UFLModel>
+struct Action
 {
     let id: String
     
-    let body: (UFLModel, (Mutations<UFLModel>) -> Void, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
-}
-
-//===
-
-public
-protocol ActionContext {}
-
-//===
-
-public
-extension ActionContext
-{
-    static
-    func action<UFLModel>(
-        _ name: String = #function,
-        _ body: @escaping (UFLModel, (Mutations<UFLModel>) -> Void, @escaping (() -> Action<UFLModel>) -> Void) throws -> Void
-        ) -> Action<UFLModel>
+    let body: (GlobalModel, (Mutations<GlobalModel>) -> Void, @escaping (() -> Action) -> Void) throws -> Void
+    
+    //===
+    
+    // internal
+    init(
+        _ id: String,
+        _ body: @escaping (GlobalModel, (Mutations<GlobalModel>) -> Void, @escaping (() -> Action) -> Void) throws -> Void)
     {
-        return Action(id: "\(self).\(name)", body: body)
+        self.id = id
+        self.body = body
     }
 }

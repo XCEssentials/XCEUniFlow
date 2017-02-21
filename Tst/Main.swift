@@ -14,7 +14,7 @@ import MKHUniFlow
 
 class Main: XCTestCase
 {
-    let disp = Dispatcher(GM())
+    let disp = Dispatcher()
     
     //===
     
@@ -29,21 +29,25 @@ class Main: XCTestCase
         disp.subscribe(self)
             .onUpdate {
                 
-                print("The value -->> \($0.v)")
-                
-                //===
-                
-                if $0.v == 15
+                if
+                    let v = M.Arithmetics.extracted(from: $0)?.v
                 {
-                    ex.fulfill()
+                    print("The value -->> \(v)")
+                    
+                    //===
+                    
+                    if v == 15
+                    {
+                        ex.fulfill()
+                    }
                 }
             }
         
         //===
         
-        disp.submit { ArithmeticMutations.doTheChanges() } // option 1
-        // disp.submit(ArithmeticMutations.doTheChanges()) // option 2
-        // disp.submit(ArithmeticMutations.doTheChanges)   // option 3
+        disp.submit { M.Arithmetics.begin() } // option 1
+        // disp.submit(M.Arithmetics.begin()) // option 2
+        // disp.submit(M.Arithmetics.begin)   // option 3
         
         //===
         

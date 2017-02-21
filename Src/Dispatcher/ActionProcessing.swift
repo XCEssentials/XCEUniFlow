@@ -13,7 +13,7 @@ import Foundation
 public
 extension Dispatcher
 {
-    func submit(_ actionGetter: @autoclosure () -> Action<State>)
+    func submit(_ actionGetter: @autoclosure () -> Action)
     {
         let act = actionGetter()
         
@@ -33,7 +33,7 @@ extension Dispatcher
             }
     }
     
-    func submit(_ actionGetter: () -> Action<State>)
+    func submit(_ actionGetter: () -> Action)
     {
         let act = actionGetter()
         
@@ -58,11 +58,11 @@ extension Dispatcher
 
 extension Dispatcher
 {
-    func process(_ act: Action<State>)
+    func process(_ act: Action)
     {
         do
         {
-            try act.body(state, { $0(&self.state) }, { self.submit($0) })
+            try act.body(model, { $0(&self.model) }, { self.submit($0) })
             
             //===
             
