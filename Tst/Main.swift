@@ -18,7 +18,7 @@ class Main: XCTestCase
     
     //===
     
-    func testRegularActions()
+    func testArithmetics()
     {
         let ex = expectation(description: "After All Actions")
         
@@ -49,6 +49,44 @@ class Main: XCTestCase
         disp.submit { M.Arithmetics.begin() } // option 1
         // disp.submit(M.Arithmetics.begin()) // option 2
         // disp.submit(M.Arithmetics.begin)   // option 3
+        
+        //===
+        
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    //===
+    
+    func testSearch()
+    {
+        let ex = expectation(description: "After All Actions")
+        
+        //===
+        
+        disp.enableDefaultReporting()
+        
+        disp.subscribe(self)
+            .onUpdate {
+                
+                if
+                    let s = $0 ==> M.Search.self
+                {
+                    print("The search -->> \(s)")
+                    
+                    //===
+                    
+                    if
+                        s is M.Search.Failed
+                    {
+                        ex.fulfill()
+                    }
+                }
+        }
+        
+        //===
+        
+        disp.submit { M.Search.initialize() }
+        disp.submit { M.Search.simulate() }
         
         //===
         

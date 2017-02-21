@@ -14,24 +14,6 @@ import MKHUniFlow
 
 extension M
 {
-//    var search: Search
-//    {
-//        get
-//        {
-//            return self.extract(Search.feature, defaultValue: .undefined)
-//        }
-//        
-//        set
-//        {
-//            self.merge(newValue)
-//        }
-//    }
-}
-
-//===
-
-extension M
-{
     enum Search: Feature
     {
         // it's a feature, but actual feature params
@@ -71,52 +53,91 @@ extension M
 
 extension M.Search
 {
-//    static
-//    func initialize() -> Action
-//    {
-//        return action { m, mutate, next in
-//            
-//            try UFL.verify("Feature is not initialized yet") {
-//                
-//                switch m.search
-//                {
-//                    case .undefined:
-//                        true
-//                    
-//                    default:
-//                        false
-//                }
-//            }
-//            
-//            //===
-//            
-//            mutate { $0.search = .ready }
-//            
-//            //===
-//            
-//            next { begin() }
-//        }
-//    }
-//    
-//    //===
-//    
-//    static
-//    func begin() -> Action
-//    {
-//        return action { m, mutate, next in
-//            
-//            try UFL.verify("Feature is ready") {
-//                
-//                m.search.map == .ready
-//                
-//                
-////                if
-////                    let s = M.Search.extracted(from: m),
-////                    s == M.Search.ready
-////                {
-////                    print("YES")
-////                }
-//            }
-//        }
-//    }
+    struct SearchFailed: Error {}
+}
+
+//===
+
+extension M.Search: ActionContext
+{
+    static
+    func initialize() -> Action
+    {
+        return action { m, mutate, _ in
+            
+            try UFL.isNil("Search is not initialized yet") {
+                
+                m ==> M.Search.self
+            }
+            
+            //===
+            
+            mutate { $0 <== Ready() }
+        }
+    }
+    
+    //===
+    
+    static
+    func simulate() -> Action
+    {
+        return action { m, mutate, next in
+            
+            try UFL.isNotNil("Search is ready") {
+                
+                m ==> Ready.self
+            }
+            
+            //===
+            
+            mutate { $0 <== InProgress(progress: 0) }
+            
+            //===
+            
+            next { update(progress: 10) }
+            next { update(progress: 30) }
+            next { update(progress: 70) }
+            next { fail(error: SearchFailed()) }
+        }
+    }
+    
+    //===
+    
+    static
+    func update(progress: Int) -> Action
+    {
+        return action { m, mutate, _ in
+            
+            var p = try UFL.extract("Search is in progress") {
+                
+                m ==> InProgress.self
+            }
+            
+            //===
+            
+            p.progress = progress
+            
+            //===
+            
+            mutate { $0 <== p }
+        }
+    }
+    
+    //===
+    
+    static
+    func fail(error: Error) -> Action
+    {
+        return action { m, mutate, _ in
+            
+            try UFL.isNotNil("Search is in progress") {
+                
+                m ==> InProgress.self
+            }
+            
+            //===
+            
+            mutate { $0 <== Failed(error: error) }
+        }
+    }
 }
