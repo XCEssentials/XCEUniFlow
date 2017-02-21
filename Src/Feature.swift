@@ -11,7 +11,76 @@ import Foundation
 //===
 
 public
-protocol Feature {}
+protocol Feature: ActionContext {}
+
+//===
+
+public
+extension Feature
+{
+    static
+    var name: String { return String(reflecting: Self.self) }
+}
+
+//===
+
+public
+extension Feature
+{
+    static
+    func transition<UFLInFS: FeatureState, UFLOutFS: FeatureState>(
+        _ name: String = #function,
+        _ body: @escaping (UFLInFS?, (() -> UFLOutFS?) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        ) -> Action
+        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+    {
+        return
+            Action(name: "\(self).\(name)") { globalModel, mutateGlobal, next in
+                
+                let currentState = globalModel ==> UFLInFS.self
+                
+                var newState: UFLOutFS?
+                
+                //===
+                
+                try body(currentState, { newState = $0() }, next)
+                
+                //===
+                
+                mutateGlobal { $0 <== newState }
+            }
+    }
+    
+    
+    static
+    func initiation<UFLOutFS: FeatureState>(
+        _ name: String = #function,
+        _ body: @escaping ((() -> UFLOutFS?) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        ) -> Action
+        where Self == UFLOutFS.UFLFeature
+    {
+        return
+            Action(name: "\(self).\(name)") { globalModel, mutateGlobal, next in
+                
+                try UFL.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
+                    
+                    globalModel ==> UFLOutFS.UFLFeature.self
+                }
+                
+                //===
+                
+                var newState: UFLOutFS?
+                
+                //===
+                
+                try body({ newState = $0() }, next)
+                
+                //===
+                
+                mutateGlobal { $0 <== newState }
+        }
+    }
+}
 
 //===
 
@@ -20,42 +89,3 @@ protocol FeatureState
 {
     associatedtype UFLFeature: Feature
 }
-
-//===
-
-//public
-//extension FeatureState
-//{
-//    static
-//        func action<F: Feature>(
-//        _ name: String = #function,
-//        _ body: @escaping (F, (Mutations<F>) -> Void, @escaping (() -> Action<F.UFLModel>) -> Void) throws -> Void
-//        ) -> Action<F.UFLModel>
-//    {
-//        return
-//            Action(id: "\(self).\(name)") { globalModel, mutateGlobal, next in
-//                
-//                guard
-//                    var f = F.reduce(globalModel)
-//                else
-//                {
-//                    throw
-//                        FeatureReductionFailed(
-//                            globalModel: F.UFLModel.self,
-//                            feature: F.self)
-//                }
-//                
-//                //===
-//                
-//                let mutateFeature: (Mutations<F>) -> Void = { $0(&f) }
-//                
-//                //===
-//                
-//                try body(f, mutateFeature, next)
-//                
-//                //===
-//                
-//                mutateGlobal { F.merge(f, to: &$0) }
-//            }
-//    }
-//}

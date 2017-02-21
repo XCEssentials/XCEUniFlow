@@ -50,6 +50,9 @@ extension ActionContext
         _ body: @escaping ActionBody
         ) -> Action
     {
-        return Action(name: "\(String(reflecting: self)).\(name)", body: body)
+        return
+            Action(
+                name: "\(String(reflecting: self)).\(name)",
+                body: body)
     }
 }
