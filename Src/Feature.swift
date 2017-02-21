@@ -16,32 +16,13 @@ protocol Feature {}
 //===
 
 public
-extension Feature
+protocol FeatureState
 {
-    static
-    func extracted(from global: GlobalModel) -> Self?
-    {
-        return global.extract(Self.self)
-    }
-    
-    static
-    func action(
-        _ name: String = #function,
-        _ body: @escaping (GlobalModel, (Mutations<GlobalModel>) -> Void, @escaping (() -> Action) -> Void) throws -> Void
-        ) -> Action
-    {
-        return Action("\(self).\(name)", body)
-    }
+    associatedtype UFLFeature: Feature
 }
-
 
 //===
 
-//public
-//protocol FeatureState {}
-//
-////===
-//
 //public
 //extension FeatureState
 //{

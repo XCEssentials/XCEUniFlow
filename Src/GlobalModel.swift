@@ -11,18 +11,27 @@ import Foundation
 //===
 
 public
+typealias GM = GlobalModel
+
+//===
+
+public
+typealias FeatureKey = String
+
+//===
+
+public
 struct GlobalModel
 {
     private
-    var data: [String: Feature] = [:]
+    var data: [FeatureKey: Any] = [:]
     
     //===
     
-    private
     static
-    func key<F: Feature>(from feature: F.Type) -> String
+    func key<F: Feature>(from _: F.Type) -> FeatureKey
     {
-        return String(reflecting: feature.self)
+        return String(reflecting: F.self)
     }
     
     //===
@@ -33,21 +42,32 @@ struct GlobalModel
     //===
     
     public
-    func extract<F: Feature>(_: F.Type) -> F?
+    func extract<F: Feature>(feature _: F.Type) -> Any?
     {
-        return data[GlobalModel.key(from: F.self)] as? F
+        return data[GlobalModel.key(from: F.self)]
+    }
+    
+    public
+    func extract<FS: FeatureState>(state _: FS.Type) -> FS?
+    {
+        return data[GlobalModel.key(from: FS.UFLFeature.self)] as? FS
+    }
+    public
+    func extract<FS: FeatureState>(defaultValue: FS) -> Any
+    {
+        return data[GlobalModel.key(from: FS.UFLFeature.self)] ?? defaultValue
     }
     
     public
     mutating
-    func merge<F: Feature>(_ feature: F?) -> Void
+    func merge<FS: FeatureState>(_ state: FS?) -> Void
     {
-        data[GlobalModel.key(from: F.self)] = feature
+        data[GlobalModel.key(from: FS.UFLFeature.self)] = state
     }
     
     public
     mutating
-    func remove<F: Feature>(_ featureOfType: F.Type) -> Void
+    func remove<F: Feature>(_: F.Type) -> Void
     {
         data.removeValue(forKey: GlobalModel.key(from: F.self))
     }
@@ -59,9 +79,48 @@ infix operator <==
 
 @discardableResult
 public
-func <== <F: Feature>(global: inout GlobalModel, feature: F) -> GlobalModel
+func <== <FS: FeatureState>(global: inout GM, state: FS?) -> GM
 {
-    global.merge(feature)
+    global.merge(state)
+    
+    //===
+    
+    return global
+}
+
+public
+func <== <FS: FeatureState>(state: inout FS?, global: GM) -> Void
+{
+    state = global.extract(state: FS.self)
+}
+
+//===
+
+infix operator ==>
+
+@discardableResult
+public
+func ==> <F: Feature>(global: GM, _: F.Type) -> Any?
+{
+    return global.extract(feature: F.self)
+}
+
+@discardableResult
+public
+func ==> <FS: FeatureState>(global: GM, _: FS.Type) -> FS?
+{
+    return global.extract(state: FS.self)
+}
+
+//===
+
+infix operator /==
+
+@discardableResult
+public
+func /== <F: Feature>(global: inout GM, _: F.Type) -> GM
+{
+    global.remove(F.self)
     
     //===
     

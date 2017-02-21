@@ -74,7 +74,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onReject.map { $0(act.id, error) }
+            onReject.map { $0(act.name, error) }
         }
     }
 }

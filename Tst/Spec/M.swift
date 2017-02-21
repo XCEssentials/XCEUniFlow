@@ -8,9 +8,8 @@
 
 import Foundation
 
+import MKHUniFlow
+
 //===
 
-enum M
-{
-    // just a namespace, stands for 'Model'
-}
+typealias M = GlobalModel

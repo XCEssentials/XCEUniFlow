@@ -14,30 +14,32 @@ import MKHUniFlow
 
 extension M
 {
-    struct Arithmetics: Feature
+    enum Arithmetics: Feature
     {
-        var v: Int
+        struct Main: FeatureState { typealias UFLFeature = Arithmetics
+            
+            var v: Int
+        }
     }
 }
 
 //===
 
-extension M.Arithmetics
+extension M.Arithmetics: ActionContext
 {
     static
     func begin() -> Action
     {
         return action { m, mutate, next in
             
-            try UFL.verify("Feature is not initialized yet") {
+            try UFL.isNil("Feature is not initialized yet") {
                 
-                M.Arithmetics.extracted(from: m) == nil
-                // m.extract(M.Arithmetics.self) == nil
+                m ==> M.Arithmetics.self
             }
             
             //===
             
-            mutate { $0 <== M.Arithmetics(v: 0) }
+            mutate { $0 <== Main(v: 0) }
             
             //===
             
@@ -61,9 +63,9 @@ extension M.Arithmetics
             // not getting the "parameter may not have 'var' specifier"
             // LOL Xcode bug, I guess...
             
-            var a = try UFL.extract("The feature was started") {
+            var a = try UFL.extract("Feature is initialized") {
                 
-                M.Arithmetics.extracted(from: m)
+                m ==> Main.self
             }
             
             //===
@@ -88,9 +90,9 @@ extension M.Arithmetics
     {
         return action { m, mutate, _ in
             
-            var a = try UFL.extract("The feature was started") {
+            var a = try UFL.extract("Feature is initialized") {
                 
-                M.Arithmetics.extracted(from: m)
+                m ==> Main.self
             }
             
             //===

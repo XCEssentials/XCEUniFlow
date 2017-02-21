@@ -30,13 +30,14 @@ class Main: XCTestCase
             .onUpdate {
                 
                 if
-                    let v = M.Arithmetics.extracted(from: $0)?.v
+                    let a = $0 ==> M.Arithmetics.Main.self
                 {
-                    print("The value -->> \(v)")
+                    print("The value -->> \(a.v)")
                     
                     //===
                     
-                    if v == 15
+                    if
+                        a.v == 15
                     {
                         ex.fulfill()
                     }
@@ -52,10 +53,5 @@ class Main: XCTestCase
         //===
         
         waitForExpectations(timeout: 1.0)
-    }
-    
-    func testFeature()
-    {
-        //
     }
 }

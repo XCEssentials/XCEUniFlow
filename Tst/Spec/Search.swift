@@ -14,27 +14,56 @@ import MKHUniFlow
 
 extension M
 {
+//    var search: Search
+//    {
+//        get
+//        {
+//            return self.extract(Search.feature, defaultValue: .undefined)
+//        }
+//        
+//        set
+//        {
+//            self.merge(newValue)
+//        }
+//    }
+}
+
+//===
+
+extension M
+{
     enum Search: Feature
     {
-        // it's a feature, but actual feature implementation
-        // is split between different feature states,
+        // it's a feature, but actual feature params
+        // are split between different feature states,
         // which will be introduced as nested types
         
         //===
         
-        case ready
+        struct Ready: FeatureState { typealias UFLFeature = Search
+            
+        }
         
         //===
         
-        case inProgress
+        struct InProgress: FeatureState { typealias UFLFeature = Search
+            
+            var progress: Int
+        }
         
         //===
         
-        case complete
+        struct Complete: FeatureState { typealias UFLFeature = Search
+            
+            var value: Int
+        }
         
         //===
         
-        case failed
+        struct Failed: FeatureState { typealias UFLFeature = Search
+            
+            var error: Error
+        }
     }
 }
 
@@ -43,23 +72,51 @@ extension M
 extension M.Search
 {
 //    static
-//    func begin() -> Action
+//    func initialize() -> Action
 //    {
 //        return action { m, mutate, next in
 //            
 //            try UFL.verify("Feature is not initialized yet") {
 //                
-//                M.Search.reduce(from: m) == nil
+//                switch m.search
+//                {
+//                    case .undefined:
+//                        true
+//                    
+//                    default:
+//                        false
+//                }
 //            }
 //            
 //            //===
 //            
-//            mutate { $0.merge(M.Search.ready) }
+//            mutate { $0.search = .ready }
 //            
 //            //===
 //            
-////            next { setExplicit(value: 10) }
-////            next { incFive() }
+//            next { begin() }
+//        }
+//    }
+//    
+//    //===
+//    
+//    static
+//    func begin() -> Action
+//    {
+//        return action { m, mutate, next in
+//            
+//            try UFL.verify("Feature is ready") {
+//                
+//                m.search.map == .ready
+//                
+//                
+////                if
+////                    let s = M.Search.extracted(from: m),
+////                    s == M.Search.ready
+////                {
+////                    print("YES")
+////                }
+//            }
 //        }
 //    }
 }

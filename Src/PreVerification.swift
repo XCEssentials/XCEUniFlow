@@ -43,4 +43,32 @@ extension UFL
             throw reject("verification [ \(description) ] failed")
         }
     }
+    
+    static
+    func isNil(
+        _ description: String,
+        _ op: () -> Any?
+        ) throws
+    {
+        guard
+            op() == nil
+        else
+        {
+            throw reject("verification [ \(description) ] failed")
+        }
+    }
+    
+    static
+    func isNotNil(
+        _ description: String,
+        _ op: () -> Any?
+        ) throws
+    {
+        guard
+            op() != nil
+        else
+        {
+            throw reject("verification [ \(description) ] failed")
+        }
+    }
 }

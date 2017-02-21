@@ -11,20 +11,45 @@ import Foundation
 //===
 
 public
+typealias GMMutations = (_: inout GM) -> Void
+
+public
+typealias GMMutationsWrapped = (GMMutations) -> Void
+
+public
+typealias ActionGetter = () -> Action
+
+public
+typealias ActionGetterWrapped = (ActionGetter) -> Void
+
+public
+typealias ActionBody = (GM, GMMutationsWrapped, @escaping ActionGetterWrapped) throws -> Void
+
+//===
+
+public
 struct Action
 {
-    let id: String
-    
-    let body: (GlobalModel, (Mutations<GlobalModel>) -> Void, @escaping (() -> Action) -> Void) throws -> Void
-    
-    //===
-    
-    // internal
-    init(
-        _ id: String,
-        _ body: @escaping (GlobalModel, (Mutations<GlobalModel>) -> Void, @escaping (() -> Action) -> Void) throws -> Void)
+    let name: String
+    let body: ActionBody
+}
+
+//===
+
+public
+protocol ActionContext {}
+
+//===
+
+public
+extension ActionContext
+{
+    static
+    func action(
+        _ name: String = #function,
+        _ body: @escaping ActionBody
+        ) -> Action
     {
-        self.id = id
-        self.body = body
+        return Action(name: "\(String(reflecting: self)).\(name)", body: body)
     }
 }
