@@ -18,15 +18,32 @@ class Main: XCTestCase
     
     //===
     
+    override
+    func setUp()
+    {
+        disp.enableDefaultReporting()
+    }
+    
+    override
+    func tearDown()
+    {
+        disp.onReject = nil
+    }
+    
+    //===
+    
     func testArithmetics()
     {
         let ex = expectation(description: "After All Actions")
         
         //===
         
-        disp.enableDefaultReporting()
+        let proxy = disp.proxy()
         
-        disp.subscribe(self)
+        //===
+        
+        proxy
+            .subscribe(self)
             .onUpdate {
                 
                 if
@@ -46,9 +63,9 @@ class Main: XCTestCase
         
         //===
         
-        disp.submit { M.Arithmetics.begin() } // option 1
-        // disp.submit(M.Arithmetics.begin()) // option 2
-        // disp.submit(M.Arithmetics.begin)   // option 3
+        proxy.submit { M.Arithmetics.begin() } // option 1
+        // proxy.submit(M.Arithmetics.begin)   // option 2
+        // disp.submit(M.Arithmetics.begin()) // option 3 - only with Dispatcher directly
         
         //===
         
@@ -64,9 +81,12 @@ class Main: XCTestCase
         
         //===
         
-        disp.enableDefaultReporting()
+        let proxy = disp.proxy()
         
-        disp.subscribe(self)
+        //===
+        
+        proxy
+            .subscribe(self)
             .onUpdate {
                 
                 if
@@ -95,8 +115,8 @@ class Main: XCTestCase
         
         //===
         
-        disp.submit { M.Search.initialize() }
-        disp.submit { M.Search.simulate() }
+        proxy.submit { M.Search.initialize() }
+        proxy.submit { M.Search.simulate() }
         
         //===
         
