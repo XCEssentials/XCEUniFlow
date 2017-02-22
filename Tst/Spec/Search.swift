@@ -22,7 +22,7 @@ extension M
         
         //===
         
-        struct Ready: FeatureState { typealias UFLFeature = Search
+        struct Ready: SimpleState { typealias UFLFeature = Search
             
         }
         
@@ -37,23 +37,15 @@ extension M
         
         struct Complete: FeatureState { typealias UFLFeature = Search
             
-            var value: Int
+            var results: [String]
         }
         
         //===
         
-        struct Failed: FeatureState { typealias UFLFeature = Search
+        struct Failed: SimpleState { typealias UFLFeature = Search
             
-            var error: Error
         }
     }
-}
-
-//===
-
-extension M.Search
-{
-    struct SearchFailed: Error {}
 }
 
 //===
@@ -63,10 +55,7 @@ extension M.Search
     static
     func initialize() -> Action
     {
-        return initiation(to: Ready.self) { become, _ in
-            
-            become { Ready() }
-        }
+        return initialization(into: Ready.self)
     }
     
     //===
@@ -74,7 +63,7 @@ extension M.Search
     static
     func simulate() -> Action
     {
-        return transition(from: Ready.self, to: InProgress.self) { r, become, next in
+        return transition(from: Ready.self, into: InProgress.self) { _, become, next in
             
             become { InProgress(progress: 0) }
             
@@ -83,7 +72,8 @@ extension M.Search
             next { update(progress: 10) }
             next { update(progress: 30) }
             next { update(progress: 70) }
-            next { fail(error: SearchFailed()) }
+            next { fail() }
+            next { cleanup() }
         }
     }
     
@@ -92,9 +82,9 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualization(current: InProgress.self) { p, mutate, _ in
+        return actualization(of: InProgress.self) { _, mutate, _ in
             
-            _ = p // Xcode bug workaround
+            _ = 1 // Xcode bug workaround
             
             mutate { $0.progress = progress }
         }
@@ -103,18 +93,9 @@ extension M.Search
     //===
     
     static
-    func fail(error: Error) -> Action
+    func fail() -> Action
     {
-        return transition(from: InProgress.self, to: Failed.self) { p, become, next in
-            
-            _ = p // Xcode bug workaround
-            
-            become { Failed(error: error) }
-            
-            //===
-            
-            next { cleanup() }
-        }
+        return transition(from: InProgress.self, into: Failed.self)
     }
     
     //===
@@ -122,6 +103,6 @@ extension M.Search
     static
     func cleanup() -> Action
     {
-        return deinitiation(from: Failed.self) { _, _, _ in }
+        return deinitialization(from: Failed.self)
     }
 }

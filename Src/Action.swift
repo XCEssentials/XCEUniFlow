@@ -30,8 +30,20 @@ typealias ActionBody = (GM, GMMutationsWrapped, @escaping ActionGetterWrapped) t
 public
 struct Action
 {
+    public
     let name: String
+    
+    // internal
     let body: ActionBody
+    
+    //===
+    
+    // internal
+    init(_ name: String, _ body: @escaping ActionBody)
+    {
+        self.name = name
+        self.body = body
+    }
 }
 
 //===
@@ -45,14 +57,11 @@ public
 extension ActionContext
 {
     static
-    func action(
-        _ name: String = #function,
-        _ body: @escaping ActionBody
-        ) -> Action
+    var name: String { return String(reflecting: Self.self) }
+    
+    static
+    func action(_ name: String = #function, body: @escaping ActionBody) -> Action
     {
-        return
-            Action(
-                name: "\(String(reflecting: self)).\(name)",
-                body: body)
+        return Action("\(self.name).\(name)", body)
     }
 }

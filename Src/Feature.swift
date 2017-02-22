@@ -19,24 +19,31 @@ public
 extension Feature
 {
     static
-    var name: String { return String(reflecting: Self.self) }
-}
-
-//===
-
-public
-extension Feature
-{
-    static
-    func initiation<UFLOutFS: FeatureState>(
-        _ name: String = #function,
-        to _: UFLOutFS.Type,
-        _ body: @escaping ((() -> UFLOutFS?) -> Void, @escaping ActionGetterWrapped) throws -> Void
+    func initialization<UFLOutFS: SimpleState>(
+        action name: String = #function,
+        into targetState: UFLOutFS.Type
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
         return
-            Action(name: "\(self).\(name)") { globalModel, mutateGlobal, next in
+            initialization(action: name, into: targetState) { become, _ in
+                    
+                become { targetState.init() }
+            }
+    }
+    
+    //===
+    
+    static
+    func initialization<UFLOutFS: FeatureState>(
+        action name: String = #function,
+        into _: UFLOutFS.Type,
+        body: @escaping ((() -> UFLOutFS?) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        ) -> Action
+        where Self == UFLOutFS.UFLFeature
+    {
+        return
+            Action("\(self.name).\(name)") { globalModel, mutateGlobal, next in
                 
                 try UFL.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                     
@@ -54,52 +61,73 @@ extension Feature
                 //===
                 
                 mutateGlobal { $0 <== newState }
-        }
+            }
     }
+    
+    //===
     
     static
     func transition<UFLInFS: FeatureState, UFLOutFS: FeatureState>(
-        _ name: String = #function,
+        action name: String = #function,
         from _: UFLInFS.Type,
-        to _: UFLOutFS.Type,
-        _ body: @escaping (UFLInFS, (() -> UFLOutFS) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        into _: UFLOutFS.Type,
+        body: @escaping (UFLInFS, (() -> UFLOutFS) -> Void, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
         return
-            Action(name: "\(self).\(name)") { globalModel, mutateGlobal, next in
+            Action("\(self.name).\(name)") { globalModel, mutateGlobal, next in
                 
-                let from = try UFL.extract("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+                let current = try UFL.extract("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                     
                     globalModel ==> UFLInFS.self
                 }
                 
                 //===
                 
-                var to: UFLOutFS?
+                var target: UFLOutFS?
                 
-                try body(from, { to = $0() }, next)
-                
-                //===
-                
-                try UFL.isNotNil("New state for feature \(UFLInFS.UFLFeature.name) is set") { to }
+                try body(current, { target = $0() }, next)
                 
                 //===
                 
-                mutateGlobal { $0 <== to }
-        }
+                try UFL.isNotNil("New state for feature \(UFLInFS.UFLFeature.name) is set") { target }
+                
+                //===
+                
+                mutateGlobal { $0 <== target }
+            }
     }
+    
+    //===
+    
+    static
+    func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
+        action name: String = #function,
+        from currentState: UFLInFS.Type,
+        into targetState: UFLOutFS.Type
+        ) -> Action
+        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+    {
+        return
+            transition(action: name, from: currentState, into: targetState) { _, become, _ in
+                
+                become { targetState.init() }
+            }
+    }
+    
+    //===
     
     static
     func actualization<UFLFS: FeatureState>(
-        _ name: String = #function,
-        current _: UFLFS.Type,
-        _ body: @escaping (UFLFS, (Mutations<UFLFS>) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        action name: String = #function,
+        of _: UFLFS.Type,
+        body: @escaping (UFLFS, (Mutations<UFLFS>) -> Void, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLFS.UFLFeature
     {
         return
-            transition(from: UFLFS.self, to: UFLFS.self) { state, become, next in
+            transition(action: name, from: UFLFS.self, into: UFLFS.self) { state, become, next in
                 
                 var buf = state
                 
@@ -109,18 +137,20 @@ extension Feature
             }
     }
     
+    //===
+    
     static
-    func deinitiation<UFLInFS: FeatureState>(
-        _ name: String = #function,
+    func deinitialization<UFLInFS: FeatureState>(
+        action name: String = #function,
         from _: UFLInFS.Type,
-        _ body: @escaping (UFLInFS, (() -> Bool) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (UFLInFS, (() -> Bool) -> Void, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLInFS.UFLFeature
     {
         return
-            Action(name: "\(self).\(name)") { globalModel, mutateGlobal, next in
+            Action("\(self.name).\(name)") { globalModel, mutateGlobal, next in
                 
-                let state = try UFL.extract("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+                let current = try UFL.extract("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                     
                     globalModel ==> UFLInFS.self
                 }
@@ -129,7 +159,7 @@ extension Feature
                 
                 var shouldRemove = true
                 
-                try body(state, { shouldRemove = $0() }, next)
+                try body(current, { shouldRemove = $0() }, next)
                 
                 //===
                 
@@ -138,7 +168,19 @@ extension Feature
                 {
                     mutateGlobal { $0 /== Self.self }
                 }
-        }
+            }
+    }
+    
+    //===
+    
+    static
+    func deinitialization<UFLInFS: FeatureState>(
+        action name: String = #function,
+        from currentState: UFLInFS.Type
+        ) -> Action
+        where Self == UFLInFS.UFLFeature
+    {
+        return deinitialization(from: currentState) { _, _, _ in }
     }
 }
 
@@ -148,4 +190,12 @@ public
 protocol FeatureState
 {
     associatedtype UFLFeature: Feature
+}
+
+//===
+
+public
+protocol SimpleState: FeatureState
+{
+    init()
 }
