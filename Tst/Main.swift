@@ -14,11 +14,11 @@ import MKHUniFlow
 
 class Main: XCTestCase
 {
-    let disp = Dispatcher(GM())
+    let disp = Dispatcher()
     
     //===
     
-    func testExample()
+    func testArithmetics()
     {
         let ex = expectation(description: "After All Actions")
         
@@ -29,25 +29,77 @@ class Main: XCTestCase
         disp.subscribe(self)
             .onUpdate {
                 
-                print("The value -->> \($0.v)")
-                
-                //===
-                
-                if $0.v == 15
+                if
+                    let a = $0 ==> M.Arithmetics.Main.self
                 {
-                    ex.fulfill()
+                    print("The value -->> \(a.v)")
+                    
+                    //===
+                    
+                    if
+                        a.v == 15
+                    {
+                        ex.fulfill()
+                    }
                 }
             }
         
         //===
         
-        disp.submit(
-            ArithmeticMutations.doTheChanges)
+        disp.submit { M.Arithmetics.begin() } // option 1
+        // disp.submit(M.Arithmetics.begin()) // option 2
+        // disp.submit(M.Arithmetics.begin)   // option 3
         
         //===
         
         waitForExpectations(timeout: 1.0)
     }
     
+    //===
     
+    func testSearch()
+    {
+        let progressEx = expectation(description: "Progress reached the value 70")
+        let ex = expectation(description: "After All Actions")
+        
+        //===
+        
+        disp.enableDefaultReporting()
+        
+        disp.subscribe(self)
+            .onUpdate {
+                
+                if
+                    let s = $0 ==> M.Search.self
+                {
+                    print("The search -->> \(s)")
+                    
+                    //===
+                    
+                    if
+                        let p = s as? M.Search.InProgress,
+                        p.progress == 70
+                    {
+                        progressEx.fulfill()
+                    }
+                    
+                    //===
+                    
+                    if
+                        s is M.Search.Failed
+                    {
+                        ex.fulfill()
+                    }
+                }
+        }
+        
+        //===
+        
+        disp.submit { M.Search.initialize() }
+        disp.submit { M.Search.simulate() }
+        
+        //===
+        
+        waitForExpectations(timeout: 1.0)
+    }
 }

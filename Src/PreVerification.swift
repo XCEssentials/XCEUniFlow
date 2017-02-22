@@ -16,8 +16,6 @@ extension UFL
     static
     func extract<Output>(
         _ description: String,
-        _ context: Any = #file,
-        _ action: String = #function,
         _ op: () -> Output?
         ) throws -> Output
     {
@@ -25,12 +23,7 @@ extension UFL
             let result = op()
         else
         {
-            throw
-                reject(
-                    "verification [ \(description) ] failed",
-                    context,
-                    action
-                )
+            throw reject("verification [ \(description) ] failed")
         }
         
         //===
@@ -41,20 +34,41 @@ extension UFL
     static
     func verify(
         _ description: String,
-        _ context: Any = #file,
-        _ action: String = #function,
         _ op: () -> Bool
         ) throws
     {
         if
             !op()
         {
-            throw
-                reject(
-                    "verification [ \(description) ] failed",
-                    context,
-                    action
-                )
+            throw reject("verification [ \(description) ] failed")
+        }
+    }
+    
+    static
+    func isNil(
+        _ description: String,
+        _ op: () -> Any?
+        ) throws
+    {
+        guard
+            op() == nil
+        else
+        {
+            throw reject("verification [ \(description) ] failed")
+        }
+    }
+    
+    static
+    func isNotNil(
+        _ description: String,
+        _ op: () -> Any?
+        ) throws
+    {
+        guard
+            op() != nil
+        else
+        {
+            throw reject("verification [ \(description) ] failed")
         }
     }
 }

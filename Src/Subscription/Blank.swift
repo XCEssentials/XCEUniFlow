@@ -11,25 +11,25 @@ import Foundation
 //===
 
 public
-struct SubscriptionBlank<State: AppModel>
+struct SubscriptionBlank
 {
     let observer: AnyObject
-    let dispatcher: Dispatcher<State>
+    let dispatcher: Dispatcher
     let initialUpdate: Bool
     
     //===
     
     public
-    func onConvert<SubState>(
-        _ cvt: @escaping (_: State) -> SubState?
+    func onConvert<UFLSubState>(
+        _ cvt: @escaping (_: GlobalModel) -> UFLSubState?
         )
-        -> SubscriptionPending<State, SubState>
+        -> SubscriptionPending<UFLSubState>
     {
         return SubscriptionPending(base: self, onConvert: cvt)
     }
     
     public
-    func onUpdate(_ upd: @escaping (_: State) -> Void)
+    func onUpdate(_ upd: @escaping (_: GlobalModel) -> Void)
     {
         dispatcher
             .register(

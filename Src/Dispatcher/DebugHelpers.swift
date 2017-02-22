@@ -23,8 +23,7 @@ extension Dispatcher
                 print("===\\\\\\\\\\\\\\\\\\")
                 
                 print(
-                    "MKHUniFlow: [-] REJECTED \($0.rawValue)",
-                    "'\(er.action)' from '\(er.context)',",
+                    "MKHUniFlow: [-] REJECTED \($0)",
                     "because \(er.reason)."
                 )
                 
@@ -32,7 +31,7 @@ extension Dispatcher
             }
             else
             {
-                print("MKHUniFlow: [-] \($0.rawValue) REJECTED, error: \($1)")
+                print("MKHUniFlow: [-] \($0) REJECTED, error: \($1)")
             }
         }
     }
