@@ -15,7 +15,7 @@ protocol DispatcherBindable: class
 {
     associatedtype State
     
-    func bind(with dispatcher: Dispatcher<State>) -> Self
+    func bind(with dispatcher: Dispatcher) -> Self
 }
 
 //===
@@ -25,5 +25,5 @@ protocol DispatcherInitializable: class
 {
     associatedtype State
     
-    init(with dispatcher: Dispatcher<State>)
+    init(with dispatcher: Dispatcher)
 }

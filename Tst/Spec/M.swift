@@ -1,8 +1,8 @@
 //
-//  GM.swift
+//  M.swift
 //  MKHUniFlow
 //
-//  Created by Maxim Khatskevich on 1/15/17.
+//  Created by Maxim Khatskevich on 2/20/17.
 //  Copyright © 2017 Maxim Khatskevich. All rights reserved.
 //
 
@@ -12,7 +12,4 @@ import MKHUniFlow
 
 //===
 
-struct GM
-{
-    var v: Int? = nil
-}
+typealias M = GlobalModel

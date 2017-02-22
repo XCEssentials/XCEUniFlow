@@ -1,5 +1,5 @@
 //
-//  ActionShort.swift
+//  ActionProcessing.swift
 //  MKHUniFlow
 //
 //  Created by Maxim Khatskevich on 1/12/17.
@@ -13,10 +13,12 @@ import Foundation
 public
 extension Dispatcher
 {
-    func submit(
-        _ actS: @escaping (_: State, _: Dispatcher<State>) throws -> Mutations<State>
-        )
+    func submit(_ actionGetter: @autoclosure () -> Action)
     {
+        let act = actionGetter()
+        
+        //===
+        
         OperationQueue
             .main
             .addOperation {
@@ -27,7 +29,27 @@ extension Dispatcher
                 // that even allows from an Action handler
                 // to submit another Action
                 
-                self.process(actS)
+                self.process(act)
+            }
+    }
+    
+    func submit(_ actionGetter: () -> Action)
+    {
+        let act = actionGetter()
+        
+        //===
+        
+        OperationQueue
+            .main
+            .addOperation {
+                
+                // we add this action to queue async-ly,
+                // to make sure it will be processed AFTER
+                // current execution is completes,
+                // that even allows from an Action handler
+                // to submit another Action
+                
+                self.process(act)
             }
     }
 }
@@ -36,15 +58,11 @@ extension Dispatcher
 
 extension Dispatcher
 {
-    func process(
-        _ actS: @escaping (_: State, _: Dispatcher<State>) throws -> Mutations<State>
-        )
+    func process(_ act: Action)
     {
         do
         {
-            let mutation = try actS(state, self)
-            
-            mutation(&state)
+            try act.body(model, { $0(&self.model) }, { self.submit($0) })
             
             //===
             
@@ -56,7 +74,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onReject.map { $0(.actionShort, error) }
+            onReject.map { $0(act.name, error) }
         }
     }
 }
