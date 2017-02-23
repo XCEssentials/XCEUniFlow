@@ -38,7 +38,7 @@ class Main: XCTestCase
         
         //===
         
-        let proxy = disp.proxy()
+        let proxy = disp.proxy
         
         //===
         
@@ -81,7 +81,7 @@ class Main: XCTestCase
         
         //===
         
-        let proxy = disp.proxy()
+        let proxy = disp.proxy
         
         //===
         
