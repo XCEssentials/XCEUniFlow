@@ -7,6 +7,7 @@ Pod::Spec.new do |s|
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
   s.author                    = { 'Maxim Khatskevich' => 'maxim@khatskevi.ch' }
   s.ios.deployment_target     = '8.0'
+  s.dependency                  'MKHRequirement', '~> 1.1'
   s.source                    = { :git => '#{s.homepage}.git', :tag => '#{s.version}' }
   s.source_files              = 'Src/**/*.swift'
   s.requires_arc              = true
