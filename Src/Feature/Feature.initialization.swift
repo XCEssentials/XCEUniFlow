@@ -8,6 +8,8 @@
 
 import Foundation
 
+import MKHRequirement
+
 //===
 
 public
@@ -23,7 +25,7 @@ extension Feature
     {
         return Action("\(self.name).\(name)") { gm, mutate, next in
                 
-            try UFL.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
+            try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
                 gm ==> UFLOutFS.UFLFeature.self
             }

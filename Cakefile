@@ -37,6 +37,8 @@ project.all_configurations.each do |configuration|
     configuration.settings["CLANG_WARN_INFINITE_RECURSION"] = "YES" # Xcode 8
     configuration.settings["CLANG_WARN_SUSPICIOUS_MOVE"] = "YES" # Xcode 8
     configuration.settings["ENABLE_STRICT_OBJC_MSGSEND"] = "YES" # Xcode 8
+    
+    configuration.settings["ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES"] = "YES"
 
     #===
 
@@ -81,6 +83,7 @@ target do |target|
         #===
 
         configuration.settings["SWIFT_VERSION"] = currentSwiftVersion # Xcode 8
+        configuration.settings["ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES"] = "YES"
 
     end
 
