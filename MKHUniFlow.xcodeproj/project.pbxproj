@@ -297,7 +297,7 @@
 			attributes = {
 				CLASSPREFIX = UFL;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Maxim Khatskevich";
 				TargetAttributes = {
 					447ACA0DA25157BB7C1B101E = {
@@ -546,7 +546,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 88BF99824756E146E041DFD5 /* Pods-MKHUniFlow.release.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
@@ -576,6 +576,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B7A272111E854B12BFC1A18E /* Pods-MKHUniFlowTst.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UJA88X59XP;
@@ -600,7 +601,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4EA92E50C2E2A423E825AFBC /* Pods-MKHUniFlow.debug.xcconfig */;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
@@ -631,6 +632,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 07E72E75CA7A206EB2E93C1C /* Pods-MKHUniFlowTst.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UJA88X59XP;
