@@ -30,21 +30,27 @@
 		94E6097A1E5E307A007AA3BE /* ActionAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E609791E5E307A007AA3BE /* ActionAliases.swift */; };
 		94E6097C1E5E3093007AA3BE /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E6097B1E5E3093007AA3BE /* ActionContext.swift */; };
 		94E6097E1E5E33A5007AA3BE /* Proxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E6097D1E5E33A5007AA3BE /* Proxy.swift */; };
+		A1B667AB2A6844017EC3799F /* Pods_MKHUniFlowTst.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91074F714E40DF6D6EDD308A /* Pods_MKHUniFlowTst.framework */; };
 		A9A47116A05AF708DA9C718A /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0A51D008AABF5F4CD8CC11 /* Core.swift */; };
 		B77A98AF50FA1633AD1B9F00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF891C532D5848ACB529AEDA /* Foundation.framework */; };
 		CFA1CB3CD1A27332844977DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF891C532D5848ACB529AEDA /* Foundation.framework */; };
 		D1651739BB1FA14CFF2A6DE7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5841247CE30F71E216BFA2DF /* UIKit.framework */; };
+		D7F17E8C895B7E6DC237C992 /* Pods_MKHUniFlow.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4EE4DEECE98A27AE200AC2 /* Pods_MKHUniFlow.framework */; };
 		E09F7D19603A3AFE5ACD11BF /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFF4FFCBE91BCF2C86667AC /* Subscriptions.swift */; };
 		E11E1DBB83A4BBCE091FB5A9 /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B23C3F3B3195CECAACF84D /* Arithmetics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07E72E75CA7A206EB2E93C1C /* Pods-MKHUniFlowTst.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MKHUniFlowTst.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MKHUniFlowTst/Pods-MKHUniFlowTst.debug.xcconfig"; sourceTree = "<group>"; };
 		17B23C3F3B3195CECAACF84D /* Arithmetics.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Arithmetics.swift; sourceTree = "<group>"; };
 		3FFF4FFCBE91BCF2C86667AC /* Subscriptions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
 		43A00DD9A740032074EB3B38 /* MKHUniFlowTst.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MKHUniFlowTst.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EA92E50C2E2A423E825AFBC /* Pods-MKHUniFlow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MKHUniFlow.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MKHUniFlow/Pods-MKHUniFlow.debug.xcconfig"; sourceTree = "<group>"; };
 		5841247CE30F71E216BFA2DF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		5D0A51D008AABF5F4CD8CC11 /* Core.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
 		720B056BE0C802168099F476 /* DebugHelpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DebugHelpers.swift; sourceTree = "<group>"; };
+		88BF99824756E146E041DFD5 /* Pods-MKHUniFlow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MKHUniFlow.release.xcconfig"; path = "Pods/Target Support Files/Pods-MKHUniFlow/Pods-MKHUniFlow.release.xcconfig"; sourceTree = "<group>"; };
+		91074F714E40DF6D6EDD308A /* Pods_MKHUniFlowTst.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MKHUniFlowTst.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		941CCCDD1E55301F00969C3D /* ActionProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionProcessing.swift; sourceTree = "<group>"; };
 		946C23FB1E5BA51F00B7C6AC /* M.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = M.swift; sourceTree = "<group>"; };
 		946C23FD1E5BA52700B7C6AC /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
@@ -63,12 +69,14 @@
 		94E6097D1E5E33A5007AA3BE /* Proxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Proxy.swift; sourceTree = "<group>"; };
 		9C31566B772A7DEC41071D3E /* Final.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Final.swift; sourceTree = "<group>"; };
 		B0D0EBEB38A951D4A658D33E /* Pending.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Pending.swift; sourceTree = "<group>"; };
+		B7A272111E854B12BFC1A18E /* Pods-MKHUniFlowTst.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MKHUniFlowTst.release.xcconfig"; path = "Pods/Target Support Files/Pods-MKHUniFlowTst/Pods-MKHUniFlowTst.release.xcconfig"; sourceTree = "<group>"; };
 		B9B9226909DF9569516E0111 /* MKHUniFlow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8615A7874E4CDA379A3113D /* Helpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		CC1670AB226D13D721B0CD2A /* MKHUniFlow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MKHUniFlow.h; sourceTree = "<group>"; };
 		CF0539F994E45A0A1E6367DC /* Blank.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Blank.swift; sourceTree = "<group>"; };
 		EF891C532D5848ACB529AEDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		F3D2C5D938A7B8BD6A356947 /* Main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		FA4EE4DEECE98A27AE200AC2 /* Pods_MKHUniFlow.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MKHUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +86,7 @@
 			files = (
 				B77A98AF50FA1633AD1B9F00 /* Foundation.framework in Frameworks */,
 				0BE7E81E0E8A1C23A80E1E05 /* UIKit.framework in Frameworks */,
+				A1B667AB2A6844017EC3799F /* Pods_MKHUniFlowTst.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +96,7 @@
 			files = (
 				CFA1CB3CD1A27332844977DB /* Foundation.framework in Frameworks */,
 				D1651739BB1FA14CFF2A6DE7 /* UIKit.framework in Frameworks */,
+				D7F17E8C895B7E6DC237C992 /* Pods_MKHUniFlow.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +142,7 @@
 				C91618CACEF83550A46581ED /* Src */,
 				8540F70493E990E4CA8D2EB3 /* Src-Extra */,
 				C85830E30FCC9DD90251A253 /* Frameworks */,
+				BB10612F88F2B72C9322CFF8 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,10 +196,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BB10612F88F2B72C9322CFF8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4EA92E50C2E2A423E825AFBC /* Pods-MKHUniFlow.debug.xcconfig */,
+				88BF99824756E146E041DFD5 /* Pods-MKHUniFlow.release.xcconfig */,
+				07E72E75CA7A206EB2E93C1C /* Pods-MKHUniFlowTst.debug.xcconfig */,
+				B7A272111E854B12BFC1A18E /* Pods-MKHUniFlowTst.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		C85830E30FCC9DD90251A253 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				F80CEFCB4426265DC345C034 /* iOS */,
+				FA4EE4DEECE98A27AE200AC2 /* Pods_MKHUniFlow.framework */,
+				91074F714E40DF6D6EDD308A /* Pods_MKHUniFlowTst.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -232,8 +256,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BDD9EE4277E40B591190E187 /* Build configuration list for PBXNativeTarget "MKHUniFlow" */;
 			buildPhases = (
+				E6500B2E4B85AAEDF3AC8E2D /* [CP] Check Pods Manifest.lock */,
 				223DAB44F1981DC965BC2EF7 /* Sources */,
 				F3C77C281A2C9EA06F2E70F7 /* Frameworks */,
+				C8A662675F1E8023EAC7F0C7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,8 +274,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A849EDC48BF01103B0CE4E64 /* Build configuration list for PBXNativeTarget "MKHUniFlowTst" */;
 			buildPhases = (
+				521947C3089E307AFF6B9CC3 /* [CP] Check Pods Manifest.lock */,
 				0DC327E32B768A74EB43F779 /* Sources */,
 				2D6505E998DC326328D091C7 /* Frameworks */,
+				47C644CC022D1AB8DAF516A3 /* [CP] Embed Pods Frameworks */,
+				8ABF8480B72F9B7BB2274902 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -298,6 +327,84 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		47C644CC022D1AB8DAF516A3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MKHUniFlowTst/Pods-MKHUniFlowTst-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		521947C3089E307AFF6B9CC3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8ABF8480B72F9B7BB2274902 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MKHUniFlowTst/Pods-MKHUniFlowTst-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C8A662675F1E8023EAC7F0C7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MKHUniFlow/Pods-MKHUniFlow-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6500B2E4B85AAEDF3AC8E2D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0DC327E32B768A74EB43F779 /* Sources */ = {
@@ -437,6 +544,7 @@
 		};
 		9684D8DC9A98EC07E89852E8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88BF99824756E146E041DFD5 /* Pods-MKHUniFlow.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 10;
@@ -466,6 +574,7 @@
 		};
 		A199C7B25D1DFBA2606ECDA5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7A272111E854B12BFC1A18E /* Pods-MKHUniFlowTst.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -489,6 +598,7 @@
 		};
 		C6FBD7D70D539B583C9AD522 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4EA92E50C2E2A423E825AFBC /* Pods-MKHUniFlow.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 10;
@@ -519,6 +629,7 @@
 		};
 		C71A3A4125854C7622AAC737 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07E72E75CA7A206EB2E93C1C /* Pods-MKHUniFlowTst.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
