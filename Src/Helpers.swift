@@ -11,9 +11,4 @@ import Foundation
 //===
 
 public
-enum UFL { }
-
-//===
-
-public
 typealias Mutations<Value> = (_: inout Value) -> Void

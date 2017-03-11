@@ -8,6 +8,8 @@
 
 import Foundation
 
+import MKHRequirement
+
 //===
 
 public
@@ -24,7 +26,7 @@ extension Feature
     {
         return Action("\(self.name).\(name)") { gm, mutate, next in
                 
-            let current = try UFL.extract("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            let current = try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
                 gm ==> UFLInFS.self
             }
@@ -37,7 +39,7 @@ extension Feature
             
             //===
             
-            try UFL.isNotNil("New state for feature \(UFLInFS.UFLFeature.name) is set") { target }
+            try REQ.isNotNil("New state for feature \(UFLInFS.UFLFeature.name) is set") { target }
             
             //===
             
