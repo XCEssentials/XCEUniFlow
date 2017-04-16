@@ -22,8 +22,10 @@ default_platform :ios
 
 #===
 
-projName = 'MKHUniFlow'
+companyPrefix = 'XCE'
+projName = 'UniFlow'
 projFileName = projName + '.xcodeproj'
+podspecFilePath = './' + companyPrefix + projName + '.podspec'
 
 #===
 
@@ -61,18 +63,19 @@ platform :ios do
     # ===
 
     commit_version_bump( # it will fail if more than version bump
+      xcodeproj: projFileName,
       message: 'Version Bump to ' + newVersionNumber + ' (' + newBuildNumber + ')'
     )
 
     # ===
 
     version_bump_podspec(
-      path: './' + projName + '.podspec',
+      path: podspecFilePath,
       version_number: newVersionNumber
     )
 
     git_commit(
-      path: './' + projName + '.podspec',
+      path: podspecFilePath,
       message: 'Version Bump to ' + newVersionNumber + ' in Podspec file'
     )
 
@@ -96,7 +99,7 @@ platform :ios do
     # default initial location for any command
     # is inside 'Fastlane' folder
 
-    sh 'cd ./.. && xcake make'
+    sh 'cd ./.. && struct generate && pod update --no-repo-update'
 
     # === Set proper current version and build numbers
 
@@ -121,7 +124,7 @@ platform :ios do
     # default initial location for any command
     # is inside 'Fastlane' folder
 
-    sh 'cd ./.. && xcake make'
+    sh 'cd ./.. && struct generate && pod update --no-repo-update'
 
     # === Set proper build number (proper version number is stored in the Info file)
 

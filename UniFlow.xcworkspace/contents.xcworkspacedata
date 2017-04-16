@@ -5,7 +5,7 @@
       location = "group:README.md">
    </FileRef>
    <FileRef
-      location = "group:MKHUniFlow.xcodeproj">
+      location = "group:UniFlow.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

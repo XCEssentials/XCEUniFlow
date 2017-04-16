@@ -1,0 +1,75 @@
+# generated with MKHProjGen
+# https://github.com/maximkhatskevich/MKHProjGen
+# https://github.com/workshop/struct/wiki/Spec-format:-v1.3
+version: 1.3.0
+configurations:
+  Debug:
+    type: "debug"
+    profiles:
+    - "general:debug"
+    overrides:
+      IPHONEOS_DEPLOYMENT_TARGET: "8.0"
+      SWIFT_VERSION: "3.0"
+      VERSIONING_SYSTEM: "apple-generic"
+      CODE_SIGN_IDENTITY[sdk=iphoneos*]: ""
+      SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+  Release:
+    type: "release"
+    profiles:
+    - "general:release"
+    overrides:
+      IPHONEOS_DEPLOYMENT_TARGET: "8.0"
+      SWIFT_VERSION: "3.0"
+      VERSIONING_SYSTEM: "apple-generic"
+      CODE_SIGN_IDENTITY[sdk=iphoneos*]: ""
+targets:
+  Fwk:
+    platform: "ios"
+    type: ":framework"
+    sources:
+    - "Src"
+    configurations:
+      Debug:
+        PRODUCT_NAME: "XCEUniFlow"
+        IPHONEOS_DEPLOYMENT_TARGET: "8.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "io.XCEssentials.UniFlow"
+        INFOPLIST_FILE: "Info/Fwk.plist"
+        SDKROOT: "iphoneos"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        DEFINES_MODULE: "NO"
+        SKIP_INSTALL: "YES"
+        MTL_ENABLE_DEBUG_INFO: "true"
+      Release:
+        PRODUCT_NAME: "XCEUniFlow"
+        IPHONEOS_DEPLOYMENT_TARGET: "8.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "io.XCEssentials.UniFlow"
+        INFOPLIST_FILE: "Info/Fwk.plist"
+        SDKROOT: "iphoneos"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        DEFINES_MODULE: "NO"
+        SKIP_INSTALL: "YES"
+  Tests:
+    platform: "ios"
+    type: ":bundle.unit-test"
+    references:
+    - "Fwk"
+    sources:
+    - "Tst"
+    configurations:
+      Debug:
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+        IPHONEOS_DEPLOYMENT_TARGET: "8.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "io.XCEssentials.UniFlow.Tst"
+        INFOPLIST_FILE: "Info/Tst.plist"
+        FRAMEWORK_SEARCH_PATHS: "$(inherited) $(BUILT_PRODUCTS_DIR)"
+        MTL_ENABLE_DEBUG_INFO: "true"
+      Release:
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @loader_path/Frameworks"
+        IPHONEOS_DEPLOYMENT_TARGET: "8.0"
+        PRODUCT_BUNDLE_IDENTIFIER: "io.XCEssentials.UniFlow.Tst"
+        INFOPLIST_FILE: "Info/Tst.plist"
+        FRAMEWORK_SEARCH_PATHS: "$(inherited) $(BUILT_PRODUCTS_DIR)"
+variants:
+  $base:
+    abstract: true
+  UniFlow:

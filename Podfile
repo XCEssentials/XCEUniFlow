@@ -1,4 +1,4 @@
-projectName = 'MKHUniFlow'
+projectName = 'UniFlow'
 
 platform :ios, '8.0'
 
@@ -17,7 +17,7 @@ end
 
 #===
 
-target projectName do
+target 'Fwk' do
 
 	project projectName
 
@@ -27,7 +27,7 @@ target projectName do
 
 end
 
-target projectName + 'Tst' do
+target 'Tests' do
 
 	project projectName
 

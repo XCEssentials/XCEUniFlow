@@ -8,7 +8,8 @@
 
 import Foundation
 
-import MKHUniFlow
+import XCEUniFlow
+import MKHRequirement
 
 //===
 
@@ -32,7 +33,7 @@ extension M.Arithmetics: ActionContext
     {
         return action { m, mutate, next in
             
-            try UFL.isNil("Feature is not initialized yet") {
+            try REQ.isNil("Feature is not initialized yet") {
                 
                 m ==> M.Arithmetics.self
             }
@@ -63,14 +64,14 @@ extension M.Arithmetics: ActionContext
             // not getting the "parameter may not have 'var' specifier"
             // LOL Xcode bug, I guess...
             
-            var a = try UFL.extract("Feature is initialized") {
+            var a = try REQ.value("Feature is initialized") {
                 
                 m ==> Main.self
             }
             
             //===
             
-            try UFL.verify("Current value is not equal to desired new value") {
+            try REQ.isTrue("Current value is not equal to desired new value") {
                 
                 return a.v != value
             }
@@ -90,7 +91,7 @@ extension M.Arithmetics: ActionContext
     {
         return action { m, mutate, _ in
             
-            var a = try UFL.extract("Feature is initialized") {
+            var a = try REQ.value("Feature is initialized") {
                 
                 m ==> Main.self
             }
