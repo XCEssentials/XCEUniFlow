@@ -6,8 +6,9 @@ let My =
 (
     repoName: "UniFlow",
     deploymentTarget: "8.0",
-    companyIdentifier: "io.XCEssentials" // ,
+    companyIdentifier: "io.XCEssentials",
 //    developmentTeamId: "UJA88X59XP" // 'Maxim Khatskevich'
+    companyPrefix: "XCE"
 )
 
 let BundleId =
@@ -46,6 +47,8 @@ let project = Project(My.repoName) { p in
         //---
         
         t.configurations.all.override(
+            
+            "PRODUCT_NAME" <<< "\(My.companyPrefix)\(My.repoName)",
             
             "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
         

@@ -30,6 +30,7 @@ targets:
     - "Src"
     configurations:
       Debug:
+        PRODUCT_NAME: "XCEUniFlow"
         IPHONEOS_DEPLOYMENT_TARGET: "8.0"
         PRODUCT_BUNDLE_IDENTIFIER: "io.XCEssentials.UniFlow"
         INFOPLIST_FILE: "Info/Fwk.plist"
@@ -39,6 +40,7 @@ targets:
         SKIP_INSTALL: "YES"
         MTL_ENABLE_DEBUG_INFO: "true"
       Release:
+        PRODUCT_NAME: "XCEUniFlow"
         IPHONEOS_DEPLOYMENT_TARGET: "8.0"
         PRODUCT_BUNDLE_IDENTIFIER: "io.XCEssentials.UniFlow"
         INFOPLIST_FILE: "Info/Fwk.plist"
