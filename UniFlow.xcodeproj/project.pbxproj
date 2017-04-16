@@ -137,7 +137,6 @@
 				495360659139125626B449F8 /* M.swift */,
 				265B8A3146642C5431634E19 /* Search.swift */,
 			);
-			name = Spec;
 			path = Spec;
 			sourceTree = "<group>";
 		};
@@ -160,7 +159,6 @@
 				3E847272F35F365CC9E6623D /* GlobalModel.Operators.swift */,
 				227FBA907C30DF694A0407D5 /* GlobalModel.swift */,
 			);
-			name = GlobalModel;
 			path = GlobalModel;
 			sourceTree = "<group>";
 		};
@@ -168,7 +166,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = "$local";
+			name = $local;
 			sourceTree = "<group>";
 		};
 		3CAA0DEDC627E586BD52E1A4 /* Subscription */ = {
@@ -178,7 +176,6 @@
 				F64A559B0D3AA6B909406E32 /* Final.swift */,
 				906180A41B6ABE7262318FBD /* Pending.swift */,
 			);
-			name = Subscription;
 			path = Subscription;
 			sourceTree = "<group>";
 		};
@@ -199,7 +196,6 @@
 				83776628A8881F2CD7F58E1F /* Proxy.swift */,
 				61B44E109B8586421DB0ECE8 /* Subscriptions.swift */,
 			);
-			name = Dispatcher;
 			path = Dispatcher;
 			sourceTree = "<group>";
 		};
@@ -210,7 +206,6 @@
 				D7F2775F635720502E061911 /* ActionAliases.swift */,
 				B35105B6056DDC26451EA700 /* ActionContext.swift */,
 			);
-			name = Action;
 			path = Action;
 			sourceTree = "<group>";
 		};
@@ -255,7 +250,6 @@
 				A8E3E05A552306B794491B9B /* Helpers.swift */,
 				3CAA0DEDC627E586BD52E1A4 /* Subscription */,
 			);
-			name = Src;
 			path = Src;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -263,7 +257,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = "$subproj";
+			name = $subproj;
 			sourceTree = "<group>";
 		};
 		F05A9EC0785375844F17241C /* Tst */ = {
@@ -272,7 +266,6 @@
 				B5CC9E94E8CAF528291BECC3 /* Main.swift */,
 				094245C40DFF4BD7F6ECA720 /* Spec */,
 			);
-			name = Tst;
 			path = Tst;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -285,7 +278,6 @@
 				6AC3B29D3BC7D367FFF39528 /* Feature.transition.swift */,
 				7ECF6C9FEFAF62874FA10CD4 /* FeatureState.swift */,
 			);
-			name = Feature;
 			path = Feature;
 			sourceTree = "<group>";
 		};
@@ -339,7 +331,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0830;
 			};
 			buildConfigurationList = 046F7686F27AB38CF79B51BA /* Build configuration list for PBXProject "UniFlow" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -588,6 +580,7 @@
 			baseConfigurationReference = 336ACD837C2CC6485DC695BE /* Pods-Fwk.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 11;
 				DEFINES_MODULE = NO;
 				ENABLE_TESTABILITY = YES;
@@ -612,6 +605,7 @@
 			baseConfigurationReference = A1E350B5E0F68BD2EC98CE5A /* Pods-Fwk.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CURRENT_PROJECT_VERSION = 11;
 				DEFINES_MODULE = NO;
 				ENABLE_TESTABILITY = YES;

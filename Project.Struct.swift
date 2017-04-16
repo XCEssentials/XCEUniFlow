@@ -27,7 +27,9 @@ let project = Project(My.repoName) { p in
         "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
         
         "SWIFT_VERSION" <<< "3.0",
-        "VERSIONING_SYSTEM" <<< "apple-generic"
+        "VERSIONING_SYSTEM" <<< "apple-generic",
+        
+        "CODE_SIGN_IDENTITY[sdk=iphoneos*]" <<< ""
     )
     
     p.configurations.debug.override(
