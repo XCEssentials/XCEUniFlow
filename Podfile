@@ -1,4 +1,4 @@
-projectName = 'MKHUniFlow'
+projectName = 'UniFlow'
 
 platform :ios, '8.0'
 
