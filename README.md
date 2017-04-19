@@ -74,7 +74,7 @@ In its turn, each app feature can be represented by one or several alternative s
 
 This concludes static/data model of an app.
 
-App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be represented by [state transitions](https://en.wikipedia.org/wiki/Finite-state_machine). Each of such transitions may affect one specific feature, or multiple features at once. In general case, each transition consists of pre-conditions which must be fulfilled before this trnasition can be performed, as well as transition body that defines how exactly this transition is going to be made.
+App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be represented by [state transitions](https://en.wikipedia.org/wiki/Finite-state_machine). Each of such transitions may affect one specific feature, or multiple features at once. In general case, each transition consists of pre-conditions which must be fulfilled before this trnasition can be performed, as well as transition body that defines how exactly this transition is going to be made. Transitions are also used to bring any kind of input from outer world into the app (for example, user input, system notifications, etc.)
 
 ## How to install
 
@@ -86,29 +86,25 @@ pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
 
 ## How it works
 
-Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be implemented as a data type that conforms to **`Feature`** protocol. This data type is never supposed to be instantiated and works only as meta data to combine corresponding feature states. This is how we define application features.
+Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a data type that conforms to **`Feature`** protocol. Its name corresponds to the feature name. This data type is never supposed to be instantiated and will be needed as meta data for corresponding feature states only.
 
-Each of the app feature states should be implemented in form of a data type that conforms to **`FeatureState`** protocol (each explicitly defines corresponding `Feature`). Instances of these data types will be representing their features (remember, each feature might be represented by not more than one `FeatureState`-inherited data type instance at any given point of time). This is how we define all possible app states.
+Each of the app feature states should be represented by a data type that conforms to **`FeatureState`** protocol and explicitly defines corresponding feature via typealias `UFLFeature`. Instances of these data types will be used to represent their features.
 
-All the `FeatureState`-instances are supposed to be stored in a single global storage called **`GlobalModel`**. It is a single point of truth at any moment of time, which stores global current app state ("global app state" is a meta definition that means combination of all `FeatureState`-inherited data type instances).
+All app features are supposed to be stored in a single global storage called **`GlobalModel`**. It is a single point of truth at any moment of time, which stores global app state. On a high level, it works much like a dictionary, where app features are used as keys, and corresponding feature states are stored as values. This means that `GlobalModel` may or may not contain any given feature at any given moment of time, but if it contains a feature - it only contains one and only one particular feature state; as soon as we decide to to put another feature state into `GlobalModel` (after we made a transition) - it will override any previously saved feature state (for this particular feature) that was stored in `GlobalModel` at the moment.
 
-====
-- **GlobalModel** is a universal storage for all the data that is directly used by app during time.
+Each transition should be represented by an instance of **`Action`**, a special data type (`struct`) that contains transition name and body (in the form of `closure`).
 
+There is a special technique for how to define transition. `Action` initializer is inaccessible directly. It is supposed that all transitions should be defined in form of static functions that return `Action` instance. Such functions must be incapsuleted into special data type that conforms to `ActionContext` protocol: this protocol provides exclusive access to a sepcial static function that allows to create `Action` instance by passing into it transition body. Such technique enforces source code unification and provides great flexibility: the encapsulating function can accept any number of input parameters, that can be captured into transition body closure, but in the end transition body is always just a closure with no input parameters.
 
+In most cases, it is recommended to incapsulate state transitions into related features, so `Feature` protocol inherits `ActionContext` protocol.
 
-The key component of the library is **Dispatcher**. It keeps inside **GlobalModel**, which is universal storage for everything that is directly used by app during time. Every [application feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a **Feature**, each 
+After we have defined app features, their states and transitions, we need to make it work together. Each app has to maintain one and only one dispatcher - instance of **`Dispatcher`** class. It's is recommended to create and start using one first thing afte app finishes launching.
 
+Dispatcher has several responsibilities:
 
-All data is being stored in GlobalModel. To access data (put, update, remove)
-
-
-All aplication data, meta data and everything, that defines current application state is being stored in **`GlobalModel`** (storage). Developer has no direct access ... To access data in `GlobalModel` , or update it, or remove 
-
-- **Action** is a piece of a way to implement [business logic](https://en.wikipedia.org/wiki/Business_logic) 
-- **Feature** is a way to represent any app functionality
-- **Dispatcher** 
-
+- store global app state (the only instance of `GlobalModel`);
+- process state transitions (instances of `Action` data type that mutate the `GlobalModel` instance stored inside dispatcher);
+- deliver notifications about global state mutations to subscribed observers (this is how we can interconnect different parts/scopes of the app, including delivering updates to GUI in "reactive" style).
 
 ## How to use
 
