@@ -1,14 +1,59 @@
-# Introduction
+# UniFlow
 
-**UniFlow** is a predictable state container for Cocoa and Cocoa Touch.
+App architecture done right, inspired by Flux (from Facebook).
 
-This framework implements so-called 'Unidirectional Data Flow' paradigm for developing applications for iOS and macOS platforms. The key idea behind it is just [state machine](https://en.wikipedia.org/wiki/Finite-state_machine).
+## Problem
 
-# Motivation
+Every app has an architecture, good or bad. Since there is no universal methodology about how to build an app, every developer/team has to come up with their own solution every time an app is being built.
+
+There are several fundamental challenges that every app has to solve, it doesn't matter what this app is about:
+
+- data model sharing (data exchange and syncronization between different scopes/views/modules/etc.);
+- maintainting data consistency at any given moment of time acros whole app;
+- managing app states;
+- multithreading synchronization.
+
+Optionally, there are few more fundamental challenges that every app faces sooner or later (not everyone makes it a priority, but it becomes more-or-less necessary at some point of time during evolution of the project):
+
+- maintain (at least some) code structure, so (at least some) rules on code organization become necessary, especially if two or more developers work on the app at the same time;
+- separate [business logic](https://en.wikipedia.org/wiki/Business_logic) layer from [presentation logic](https://en.wikipedia.org/wiki/Presentation_logic) layer;
+- eliminate (at least) critical issues at run time that lead to crashes (horrible experience for end users, very harmful for any app considering how competitive mobile app market is now);
+- eliminate bugs casued by unexpected behavior (that kind of behavior often leads to crashes in run time as well);
+- keep source code documented.
+
+So let's define **app architecture** as a set of rules that define how listed above challenges are being solved in particular app.
+
+## Pre-existing solutions
+
+There are quite few design patterns that are trying to describe how to organize overall application structure on a high level ([MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), etc.). They are not very specific and different developers interpret and implement these patterns in a slightly different way.
+
+One of the most promising (and relatively new on iOS) is so-called **"unidirectional data flow"** pattern introduced by Facebook in their Flux framework. The most well established native implementation of this pattern for Apple platforms written in Swift is [ReSwift](https://github.com/ReSwift/ReSwift).
+
+It's a very powerfull framework that seems to cover all the fundamental needs. However, there are several things that are not so great and might be improved
+
+### Overhead with Reducer implementation
+
+1. *Reducer* is not supposed to have any internal state/data ever, so the only value of *reducer* is the logic that can be easily represented as a pure function (with input parameters), so it doesn't make sense to have *reducer* as an object/instance and implement it's functionality as instance member/function.
+2. The way *reducers* are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every *reducer* as an object/struct and then always remember (during application and *store* initialization) to create exactly one instance of each *reducer* and explicitly register it in the *store*. Otherwise, *reducer* will not be included in the *actions* processing chain and silently will not work.
+3. Entire library architecture promotes very strange and inconvenent way of organizing app logic/code. Each *action* supposed to represet only data model needed for the logic related to this *action*, while logic itself is spread across one or multiple *reducers*. The only way to recall/understand what a particular *action* does, without having detailed up-to-date documentation, is to search across whole app for *reducsers* which react to that specific *action*. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app and pure overall app UX.
+4. The way *reducer* main function expected to be written is far from perfect. While it may look cool because it's pure "functional" approach, it's lot of manual work for developer that implements app functionality. We have to do check/unwrap optional *state* in every single reducer, before we even start to write any app-specific code, which is just ridiculous - why wouldn't we have the 'state' set at any moment of application life time? Plus, it comes as read-only input parameter and you HAVE to return a state value, even if this action made no mutations on state at all - that all makes developer (in most cases) to explicitly unwrap optional input state into a variable ("var"). We also do not know what the *action* is and have to always optionally typecast it or at least check its type. That's lot of unnecessary complications that make the logic behind the source code hard to read and understand, so, again, it's very error-prone.
+
+### Subscription mechanism limitations
+
+The subscription mechanism requires:
+
+1. *observer* to have a specific method implemented (conform to protocol) that limits developer with naming;
+2. this specific method (*newState*) receives optional value, that require the code to always have unwrapping code before any app-specific code comes, which is on a big scale a big unnecessary manual work to be done by developer.
+
+### Middleware
+
+*Middleware* seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
+
+## Whishlist
 
 A framework like this should be a tool that helps and inspire to:
 
-1. make the app completely predictable at any moment of (execution) time;
+1. make the app completely predictable at any moment of time (so that eliminates crashes);
 2. effectivly exchange/share data between different scopes (without having to store and maintain direct cross-references in many-to-many style) so all parts of the app (including all UIs) stay consistent all the time;
 3. eliminate implicit [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)) in application source code;
 4. make the app source code well structured - easy to read, understand and reason about;
@@ -17,14 +62,80 @@ A framework like this should be a tool that helps and inspire to:
 7. make the app source code easily translatable to/from [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) specifications;
 8. make application source code ready for unit tests (including independent module testing and integration testing);
 9. keep developer written source code minimal and compact (make it look like specifications);
-10. keep library overhead as low as possible (no run-time "magic" should be involved). 
+10. keep library overhead as low as possible (no run-time "magic" should be involved, as less "manual" operations as possible).
 
-# Inspiration
+## Methodology overview
 
-Thanks to:
-- [Facebook](facebook.com) and their [Flux](https://facebook.github.io/flux/) framework for web development, where the idea originally comes from;
-- [Redux](https://github.com/reactjs/redux) JavaScript framework.
-- [ReSwift](https://github.com/ReSwift/ReSwift) which is the most similar implementation of the idea for Apple platforms.
+Each computer program (**app**) is a [State Machine](https://en.wikipedia.org/wiki/Finite-state_machine). This, in particular, means, that to write an app we have to define all possible app states and all possible transitions between these states which we wish to allow.
+
+On the other hand, each app consists of [features](https://en.wikipedia.org/wiki/Software_feature), which may or may not depend one on another. Based on this, it is fair to say that overall (global) app state at any given moment of time can be represented by a combination of one or several app features.
+
+In its turn, each app feature can be represented by one or several alternative states. This means, that at any given moment of time a feature can be represented by one and only one of its states.
+
+This concludes static/data model of an app.
+
+App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be represented by [state transitions](https://en.wikipedia.org/wiki/Finite-state_machine). Each of such transitions may affect one specific feature, or multiple features at once. In general case, each transition consists of pre-conditions which must be fulfilled before this trnasition can be performed, as well as transition body that defines how exactly this transition is going to be made.
+
+## How to install
+
+The recommended way of installing **UniFlow** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
+
+```Ruby
+pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
+```
+
+## How it works
+
+Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be implemented as a data type that conforms to **`Feature`** protocol. This data type is never supposed to be instantiated and works only as meta data to combine corresponding feature states. This is how we define application features.
+
+Each of the app feature states should be implemented in form of a data type that conforms to **`FeatureState`** protocol (each explicitly defines corresponding `Feature`). Instances of these data types will be representing their features (remember, each feature might be represented by not more than one `FeatureState`-inherited data type instance at any given point of time). This is how we define all possible app states.
+
+All the `FeatureState`-instances are supposed to be stored in a single global storage called **`GlobalModel`**. It is a single point of truth at any moment of time, which stores global current app state ("global app state" is a meta definition that means combination of all `FeatureState`-inherited data type instances).
+
+====
+- **GlobalModel** is a universal storage for all the data that is directly used by app during time.
+
+
+
+The key component of the library is **Dispatcher**. It keeps inside **GlobalModel**, which is universal storage for everything that is directly used by app during time. Every [application feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a **Feature**, each 
+
+
+All data is being stored in GlobalModel. To access data (put, update, remove)
+
+
+All aplication data, meta data and everything, that defines current application state is being stored in **`GlobalModel`** (storage). Developer has no direct access ... To access data in `GlobalModel` , or update it, or remove 
+
+- **Action** is a piece of a way to implement [business logic](https://en.wikipedia.org/wiki/Business_logic) 
+- **Feature** is a way to represent any app functionality
+- **Dispatcher** 
+
+
+## How to use
+
+Import framework as follows:
+
+```Swift
+import XCEUniFlow
+```
+
+## Versioning notation
+
+## Future plans
+
+## Contribution, feedback, questions...
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Key concepts
 
@@ -68,33 +179,11 @@ It's important that everything is stored in one single object that represents wh
 
 As the app grows, developer just need to extend `GlobalModel` to support the new features and behviours, as well as define new actions to implement new functionality and maintain new parts of `GlobalModel`.
 
-# Why ReSwift is NOT good enough?
-
-Below are the weak points of [ReSwift](https://github.com/ReSwift/ReSwift).
-
-## Overhead with Reducer implementation
-
-1. *Reducer* is not supposed to have any internal state/data ever, so the only value of *reducer* is the logic that can be easily represented as a pure function (with input parameters), so it doesn't make sense to have *reducer* as an object/instance and implement it's functionality as instance member/function.
-2. The way *reducers* are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every *reducer* as an object/struct and then always remember (during application and *store* initialization) to create exactly one instance of each *reducer* and explicitly register it in the *store*. Otherwise, *reducer* will not be included in the *actions* processing chain and silently will not work.
-3. Entire library architecture promotes very strange and inconvenent way of organizing app logic/code. Each *action* supposed to represet only data model needed for the logic related to this *action*, while logic itself is spread across one or multiple *reducers*. The only way to recall/understand what a particular *action* does, without having detailed up-to-date documentation, is to search across whole app for *reducsers* which react to that specific *action*. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app and pure overall app UX.
-4. The way *reducer* main function expected to be written is far from perfect. While it may look cool because it's pure "functional" approach, it's lot of manual work for developer that implements app functionality. We have to do check/unwrap optional *state* in every single reducer, before we even start to write any app-specific code, which is just ridiculous - why wouldn't we have the 'state' set at any moment of application life time? Plus, it comes as read-only input parameter and you HAVE to return a state value, even if this action made no mutations on state at all - that all makes developer (in most cases) to explicitly unwrap optional input state into a variable ("var"). We also do not know what the *action* is and have to always optionally typecast it or at least check its type. That's lot of unnecessary complications that make the logic behind the source code hard to read and understand, so, again, it's very error-prone.
-
-## Subscription mechanism limitations
-
-The subscription mechanism requires:
-
-1. *observer* to have a specific method implemented (conform to protocol) that limits developer with naming;
-2. this specific method (*newState*) receives optional value, that require the code to always have unwrapping code before any app-specific code comes, which is on a big scale a big unnecessary manual work to be done by developer.
-
-## Middleware
-
-*Middleware* seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
-
 # Extra benefits from using UniFlow
 
 - every mutation of app state is easy to track and debug;
 - it encourages developer to better design architectural solutions before writing code;
-- allows significantly improve precision of estimations on development time.
+- allows significantly improve precision of estimates on development time.
 
 # Swift 3 + Objective-C
 
