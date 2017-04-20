@@ -80,7 +80,7 @@ App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be repres
 
 The recommended way of installing **UniFlow** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
 
-```swift
+```ruby
 pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
 ```
 
