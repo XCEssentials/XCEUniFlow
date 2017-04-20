@@ -114,12 +114,13 @@ Import framework as follows:
 import XCEUniFlow
 ```
 
-## Versioning notation
-
 ## Future plans
+
+The project has evolved through several minor and 3 major updates. Current notation considered to be stable and pretty well balanced in terms of ease of use, consise and self-expressive API and functionality. Pretty much any kind of functionality can be implemented using proposed methodology.
 
 ## Contribution, feedback, questions...
 
+I you have any kind of feedback or questions - feel free to open an issue. If you'd like to propose an improvement or found a bug - start na issue as well, or feel free to fork and submit a pull request. Any kind of contributions would be much appreciated!
 
 
 
@@ -131,41 +132,6 @@ import XCEUniFlow
 
 
 
-
-
-# Key concepts
-
-The whole state of the app is stored in a single object called `GlobalModel`. After initialization, `GlobalModel` is being passed as input parameter into `Dispatcher` initialization function and being stored inside `Dispatcher`, isolated from the rest of the world. Developer has NO direct access to `GlobalModel` anymore. 
-
-The only way to change the state object is to emit (submit to `Dispatcher`) an `Action`. In most cases, `Action` supposed to mutate the `GlobalModel` stored inside `Dispatcher`.
-
-The only way to access/consume the state object is to subscribe for notifications from `Dispatcher` which are being sent every time an `Action` has been successfully processed.
-
-## GlobalModel
-
-`GlobalModel` is the object that represents all possible states of the app (including UI state). It also contains all (source, non-derived) data that is needed in order the app to function properly, including any content that should be displayed in UI and any meta-data (parameters, temporary values, etc.) about how this content should be displayed/represented.
-
-## Action
-
-In general case, every `Action` defines an atomic piece of [business logic](https://en.wikipedia.org/wiki/Business_logic) (like a step in an operation, initialization of an operation, etc.) or [presentation logic](https://en.wikipedia.org/wiki/Presentation_logic) that mutates `GlobalModel`.
-
-Optionally, `Action` may contain any kind of internal data that represents input parameters for the logic behind this action. This is how developer can bring any kind of data/input from the outer world (user input, data from system notifications, etc.).
-
-There are two special (helper) types of `Action`:
-- `Trigger` is an action that is not supposed to mutate `GlobalModel` directly, but only emit other action(s);
-- `Notification` is an action that is not supposed to mutate `GlobalModel` or even do anything at all (think about it as a "pure" system-wide notification, that still can contain some attached data and will deliver it to all subscribers of `Dispatcher`).
-
-## Subscriptions
-
-If an object in the app needs to have access to current app state (`GlobalModel`), then it needs to be subscribed for updates from `Dispatcher` and become *observer*. Every time the `Dispatcher` successfully processed an action - it notifies every *observer* one by one, in the order as they subscribed.
-
-## Dispatcher
-
-`Dispatcher` is the central point of communication between different parts/components of the app, it is responsible for the tasks listed below.
-
-- store current application state;
-- process actions;
-- maintain (create, store, notify and remove) subscriptions.
 
 # The key differences
 
