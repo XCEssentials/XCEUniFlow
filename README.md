@@ -21,33 +21,33 @@ Optionally, there are few more fundamental challenges that every app faces soone
 - eliminate bugs caused by unexpected behavior (that kind of behavior often leads to crashes in run time as well);
 - keep source code documented.
 
-So let's define ****app architecture**** as a set of rules that define how listed above challenges are being solved in particular app.
+So let's define ******app architecture****** as a set of rules that define how listed above challenges are being solved in particular app.
 
 ## Pre-existing solutions
 
 There are quite few design patterns that are trying to describe how to organize overall application structure on a high level ([MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), etc.). They are not very specific and different developers interpret and implement these patterns in a slightly different way.
 
-One of the most promising (and relatively new on iOS) is so-called ****"unidirectional data flow"**** pattern introduced by Facebook in their Flux framework. The most well established native implementation of this pattern for Apple platforms written in Swift is [ReSwift](https://github.com/ReSwift/ReSwift).
+One of the most promising (and relatively new on iOS) is so-called ******"unidirectional data flow"****** pattern introduced by Facebook in their Flux framework. The most well established native implementation of this pattern for Apple platforms written in Swift is [ReSwift](https://github.com/ReSwift/ReSwift).
 
 It's a very powerful framework that seems to cover all the fundamental needs. However, there are several things that are not so great and might be improved
 
 ### Overhead with Reducer implementation
 
-1. **Reducer** is not supposed to have any internal state/data ever, so the only value of **reducer** is the logic that can be easily represented as a pure function (with input parameters), so it doesn't make sense to have **reducer** as an object/instance and implement it's functionality as instance member/function.
-2. The way **reducers** are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every **reducer** as an object/struct and then always remember (during application and **store** initialization) to create exactly one instance of each **reducer** and explicitly register it in the **store**. Otherwise, **reducer** will not be included in the **actions** processing chain and silently will not work.
-3. Entire library architecture promotes very strange and inconvenient way of organizing app logic/code. Each **action** supposed to represent only data model needed for the logic related to this **action**, while logic itself is spread across one or multiple **reducers**. The only way to recall/understand what a particular **action** does, without having detailed up-to-date documentation, is to search across whole app for **reducers** which react to that specific **action**. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app and pure overall app UX.
-4. The way **reducer** main function expected to be written is far from perfect. While it may look cool because it's pure "functional" approach, it's lot of manual work for developer that implements app functionality. We have to do check/unwrap optional **state** in every single reducer, before we even start to write any app-specific code, which is just ridiculous - why wouldn't we have the 'state' set at any moment of application life time? Plus, it comes as read-only input parameter and you HAVE to return a state value, even if this action made no mutations on state at all - that all makes developer (in most cases) to explicitly unwrap optional input state into a variable ("var"). We also do not know what the **action** is and have to always optionally typecast it or at least check its type. That's lot of unnecessary complications that make the logic behind the source code hard to read and understand, so, again, it's very error-prone.
+1. ****Reducer**** is not supposed to have any internal state/data ever, so the only value of ****reducer**** is the logic that can be easily represented as a pure function (with input parameters), so it doesn't make sense to have ****reducer**** as an object/instance and implement it's functionality as instance member/function.
+2. The way ****reducers**** are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every ****reducer**** as an object/struct and then always remember (during application and ****store**** initialization) to create exactly one instance of each ****reducer**** and explicitly register it in the ****store****. Otherwise, ****reducer**** will not be included in the ****actions**** processing chain and silently will not work.
+3. Entire library architecture promotes very strange and inconvenient way of organizing app logic/code. Each ****action**** supposed to represent only data model needed for the logic related to this ****action****, while logic itself is spread across one or multiple ****reducers****. The only way to recall/understand what a particular ****action**** does, without having detailed up-to-date documentation, is to search across whole app for ****reducers**** which react to that specific ****action****. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app and pure overall app UX.
+4. The way ****reducer**** main function expected to be written is far from perfect. While it may look cool because it's pure "functional" approach, it's lot of manual work for developer that implements app functionality. We have to do check/unwrap optional ****state**** in every single reducer, before we even start to write any app-specific code, which is just ridiculous - why wouldn't we have the 'state' set at any moment of application life time? Plus, it comes as read-only input parameter and you HAVE to return a state value, even if this action made no mutations on state at all - that all makes developer (in most cases) to explicitly unwrap optional input state into a variable ("var"). We also do not know what the ****action**** is and have to always optionally typecast it or at least check its type. That's lot of unnecessary complications that make the logic behind the source code hard to read and understand, so, again, it's very error-prone.
 
 ### Subscription mechanism limitations
 
 The subscription mechanism requires:
 
-1. **observer** to have a specific method implemented (conform to protocol) that limits developer with naming;
-2. this specific method (**newState**) receives optional value, that require the code to always have unwrapping code before any app-specific code comes, which is on a big scale a big unnecessary manual work to be done by developer.
+1. ****observer**** to have a specific method implemented (conform to protocol) that limits developer with naming;
+2. this specific method (****newState****) receives optional value, that require the code to always have unwrapping code before any app-specific code comes, which is on a big scale a big unnecessary manual work to be done by developer.
 
 ### Middleware
 
-**Middleware** seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
+****Middleware**** seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
 
 ## Wishlist
 
@@ -66,7 +66,7 @@ A framework like this should be a tool that helps and inspire to:
 
 ## Methodology overview
 
-Each computer program (****app****) is a [State Machine](https://en.wikipedia.org/wiki/Finite-state_machine). This, in particular, means, that to write an app we have to define all possible app states and all possible transitions between these states which we wish to allow.
+Each computer program (******app******) is a [State Machine](https://en.wikipedia.org/wiki/Finite-state_machine). This, in particular, means, that to write an app we have to define all possible app states and all possible transitions between these states which we wish to allow.
 
 On the other hand, each app consists of [features](https://en.wikipedia.org/wiki/Software_feature), which may or may not depend one on another. Based on this, it is fair to say that overall (global) app state at any given moment of time can be represented by a combination of one or several app features.
 
@@ -78,7 +78,7 @@ App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be repres
 
 ## How to install
 
-The recommended way of installing ****UniFlow**** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
+The recommended way of installing ******UniFlow****** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
 
 ```Ruby
 pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
@@ -86,19 +86,19 @@ pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
 
 ## How it works
 
-Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a data type that conforms to ****`Feature`**** protocol. Its name corresponds to the feature name. This data type is never supposed to be instantiated and will be needed as meta data for corresponding feature states only.
+Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a data type that conforms to ******`Feature`****** protocol. Its name corresponds to the feature name. This data type is never supposed to be instantiated and will be needed as meta data for corresponding feature states only.
 
-Each of the app feature states should be represented by a data type that conforms to ****`FeatureState`**** protocol and explicitly defines corresponding feature via typealias `UFLFeature`. Instances of these data types will be used to represent their features.
+Each of the app feature states should be represented by a data type that conforms to ******`FeatureState`****** protocol and explicitly defines corresponding feature via typealias `UFLFeature`. Instances of these data types will be used to represent their features.
 
-All app features are supposed to be stored in a single global storage called ****`GlobalModel`****. It is a single point of truth at any moment of time, which stores global app state. On a high level, it works much like a dictionary, where app features are used as keys, and corresponding feature states are stored as values. This means that `GlobalModel` may or may not contain any given feature at any given moment of time, but if it contains a feature - it only contains one and only one particular feature state; as soon as we decide to to put another feature state into `GlobalModel` (after we made a transition) - it will override any previously saved feature state (for this particular feature) that was stored in `GlobalModel` at the moment.
+All app features are supposed to be stored in a single global storage called ******`GlobalModel`******. It is a single point of truth at any moment of time, which stores global app state. On a high level, it works much like a dictionary, where app features are used as keys, and corresponding feature states are stored as values. This means that `GlobalModel` may or may not contain any given feature at any given moment of time, but if it contains a feature - it only contains one and only one particular feature state; as soon as we decide to to put another feature state into `GlobalModel` (after we made a transition) - it will override any previously saved feature state (for this particular feature) that was stored in `GlobalModel` at the moment.
 
-Each transition should be represented by an instance of ****`Action`****, a special data type (`struct`) that contains transition name and body (in the form of `closure`).
+Each transition should be represented by an instance of ******`Action`******, a special data type (`struct`) that contains transition name and body (in the form of `closure`).
 
 There is a special technique for how to define transition. `Action` initializer is inaccessible directly. It is supposed that all transitions should be defined in form of static functions that return `Action` instance. Such functions must be encapsulated into special data type that conforms to `ActionContext` protocol: this protocol provides exclusive access to a special static function that allows to create `Action` instance by passing into it transition body. Such technique enforces source code unification and provides great flexibility: the encapsulating function can accept any number of input parameters, that can be captured into transition body closure, but in the end transition body is always just a closure with no input parameters.
 
 In most cases, it is recommended to encapsulate state transitions into related features, so `Feature` protocol inherits `ActionContext` protocol.
 
-After we have defined app features, their states and transitions, we need to make it work together. Each app has to maintain one and only one dispatcher - instance of ****`Dispatcher`**** class. It's is recommended to create and start using one first thing after app finishes launching.
+After we have defined app features, their states and transitions, we need to make it work together. Each app has to maintain one and only one dispatcher - instance of ******`Dispatcher`****** class. It's is recommended to create and start using one first thing after app finishes launching.
 
 Dispatcher has several responsibilities:
 
@@ -114,6 +114,8 @@ Import framework like this:
 import XCEUniFlow
 ```
 
+### Dispatcher
+
 First of all, you need to create a dispatcher. The recommended way is just to decalre an internal instance level constant in your `AppDelegate` class. This guarantees that dispatcher has the same life cycle as the app itself.
 
 ```Swift
@@ -127,6 +129,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 	// ...
 }
 ```
+
+### DispatcherProxy
 
 For safety reasons, it is not recommended to pass reference to dispatcher across the app. Instead, there is a special lightweight data structure called `DispatcherProxy` that provides access to essential functionality of a given dispatcher and supposed to be freely passed/copied/stored as many times as it is needed.
 
@@ -224,6 +228,8 @@ class Ctrl: UIViewController, DispatcherInitializable
 }
 ```
 
+### Subscription
+
 To subscribe for notifications from dispatcher, all you need to do is, basically, register an object as observer and provide corresponding `update handler`. Optionally you may also provide `convert handler` which is responsible for converting global app state into more specific model (this helps make the code even more declarative).
 
 In most cases, to subscribe an observer for notifications from dispatcher you need to implement one of the two mentioned earlier protocols (`DispatcherInitializable` or `DispatcherBindable`). When got access to `proxy` - just pass `self` as observer and a custom closure/function that accepts global app state as input parameter into `onUpdate` function.
@@ -309,6 +315,140 @@ class View: UIView, DispatcherInitializable
 
 Note, that observer object works like a key in a dictionary to identify subscription among all other subscriptions. Only one subscription is possible per observer. Every next attempt to setup a subscription for an observer will override previous subscription for this observer.
 
+### Feature modeling
+
+One of the most important techniques in this methodology is how to define features, feature states and state transitions.
+
+Lets model a simple search feature.
+
+Assume we have a simple GUI where user have a single input text field where a search keyword must be entered (it might be a single or multi-word string, it doesn't matter).
+
+When user finishes input and starts search process, the input text field is no longer editable, the search keyword can not be changed anymore. In the background the app is doing search for the given keyword.
+
+When the search is finished, we have on hands an array of items as result of search (might be empty), as well as the search keyword (read-only) for which these results have been found.
+
+To define an app feature, lets declare a custom data type that conforms to `Feature` protocol. Feature data type is not supposed to be instantiated, so it's a good idea to use `enum` data type to declare app features.
+
+```Swift
+enum Search: Feature
+{
+	// ...
+}
+```
+
+Inside `Search` type, lets declare 3 nested types, they will represent corresponding `Search` states.
+
+```Swift
+enum Search: Feature
+{
+    struct Preparing: SimpleState { typealias UFLFeature = Search
+        
+        // getting user input, waiting for start
+    }
+    
+    struct InProgress: FeatureState { typealias UFLFeature = Search
+        
+        // the search process for a given keyword is in progress
+    }
+    
+    struct Finished: FeatureState { typealias UFLFeature = Search
+        
+        // the search process for a given keyword is finished,
+        // got list of results (may be empty)
+    }
+}
+```
+
+Note, that `SimpleState` is a special protocol inherited from `FeatureState`. All it does is gives the library a hint, that the type that conforms to that protocol can be instantiated without parameters (using default system-provided `init` constructor). That protocol is recommended for states that do not have internal variables or they have default values. We will see how it is used later.
+
+Now lets extend each feature state with necessary constants and variables that reflects the essence of corresponding state.
+
+In the beginning, until user finished input and started the search process, `Search` feature is supposed to be represented by `Preparing` state. We do not need to store in model anything in that state.
+
+When user finished input and started the actual search process, and until the search process has been finished, `Search` feature supposed to be represented by `InProgress` state. While search is in progress, we may need to know what is the keyword for which we are doing search right now. So lets add a constant (!) that will store search keyword inside `InProgress` state.
+
+```Swift
+struct InProgress: FeatureState { typealias UFLFeature = Search
+        
+    // the search process for a given keyword is in progress
+    
+    let keyword: String // read-only, requires to set value explicitly
+}
+```
+
+When the search process has been finished, `Search` feature automatically transitions into `Finished` state. Here we still need to know what is the keyword for which we have completed search process just now, as well as represent a list of results (as we do not know what's the data type of results list elements, let it be `Any`, it doesn't matter for the purpose of this example).
+
+```Swift
+struct Finished: FeatureState { typealias UFLFeature = Search
+        
+    // the search process for a given keyword is finished,
+    // got list of results (may be empty)
+    
+    let keyword: String // read-only, requires to set value explicitly
+    
+    let results: [Any] // read-only, requires to set value explicitly
+}
+```
+
+Now lets connect these states together by defining transitions.
+
+First of all, lets define transition that initializes the feature.
+
+```Swift
+extension Search
+{
+    static
+    func setup() -> Action
+    {
+        return initialization(into: Preparing.self)
+    }
+}
+```
+
+In the example above, a special helper static function `initialization` (provided by the library) has been used. It automates many routine checks and operations. This specific helper works with one specific feature state, makes a transition where initial state is undefined and target state is as provided (`Preparing` in our case). This particular function works only with feature states that conform to `SimpleState` protocol. Under the hood it makes all the necessary checks for you - ensures that the feature is NOT presented in global state yet, and then, if everything is good, creates an instance of target state and puts it into global model, or fails action processing otherwise. More on this and other special helpers later.
+
+Next, when user finished input and initiates search process, we need to transition from `Preparing` state into `InProgress` state. Here is an example of how it might be implemented.
+
+```Swift
+static
+func begin(with word: String) -> Action
+{
+    return transition(from: Preparing.self, into: InProgress.self) { _, become, next in
+            
+            become { InProgress(keyword: word) }
+            
+            //===
+            
+            var results: [Any] = []
+            
+            // do the search here, on background thread most likely
+            // when search is finished - return to main thread and
+            // deliver results by submitting another action via 'next' handler
+            
+            // ...
+            
+            next {  }
+        }
+    }
+```
+
+In the example above, a special helper static function `transition` (provided by the library) has been used. It automates many routine checks and operations. This specific helper makes a transition between the two provided states of the same feature. Under the hood it makes all the necessary checks for you - ensures that the feature IS already presented in global state and its current state is as provided (`Preparing` in this case), and then, if everything is good, lets you create an instance of target state to later put it into global model for you, or fails action processing otherwise. More on this and other special helpers later.
+
+Finally, when the search is finished, we need to transition from `InProgress` state into `Finished` state. Here is an example of how it might be implemented.
+
+```Swift
+static
+func finished(with word: String, results list: [Any]) -> Action
+{
+    return transition(from: InProgress.self, into: Finished.self) { _, become, _ in
+        
+        become { Finished(keyword: word, results: list) }
+    }
+}
+```
+
+Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all. And so on.
+
 ## Positive outcomes
 
 There are quite a few positive outcomes from using this framework as a foundation for your app:
@@ -316,7 +456,7 @@ There are quite a few positive outcomes from using this framework as a foundatio
 - the methodology encourages to write app source code in functional manner, that eliminates side effects, makes it better organized, easier to read and understand;
 - it provides very clear strategy for scaling app from very few features to dozens and hundreds of them;
 - it eliminates unexpected behavior, because if you write state transitions properly - check all necessary preconditions and secure all necessary data into temporary variables before proceed with actually making the transition - there is no chance to get an unexpected behavior or run time exception;
-- it dramatically increases codebase modularity and testability (in comparison with "traditional" ****imperative**** programming or any other popular architecture patterns), making both module and integration testing a breeze;
+- it dramatically increases codebase modularity and testability (in comparison with "traditional" ******imperative****** programming or any other popular architecture patterns), making both module and integration testing a breeze;
 - each transition (with its trigger points) is easily translatable into [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) scenario and vice versa;
 - easy to deliver any data to any scope of the app, just subscribe for updates from dispatcher and read/put access desired data from/into global app state;
 - the app still easily compatible with existing architecture patterns like MVC, MVVM and others, because this library only organizes Model layer.
