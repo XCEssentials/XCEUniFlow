@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name                      = 'XCEUniFlow'
   s.summary                   = 'App architecture done right, inspired by Flux (from Facebook).'
-  s.version                   = '3.2.1'
+  s.version                   = '3.2.2'
   s.homepage                  = 'https://XCEssentials.github.io//UniFlow'
   
   s.source                    = { :git => 'https://github.com/XCEssentials/UniFlow.git', :tag => '#{s.version}' }
