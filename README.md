@@ -114,6 +114,19 @@ Import framework as follows:
 import XCEUniFlow
 ```
 
+## Positive outcomes
+
+There are quite a few positive outcomes from using this framework as a foundation for your app:
+
+- the methodology encourages to write app source code in functional manner, that eliminates side effects, makes it better organized, easier to read and understand;
+- it provides very clear strategy for scaling app from very few features to dozens and hundreds of them;
+- it eliminates unexpected behaviour, becasue if you write state transitions properly - check all necessary preconditions and secure all necessery data into temporary variables before proceed with actually making the transition - there is no chance to get an unexpected behavior or run time exception;
+- it dramatically increases codebase modularity and testability (in comparison with "traditional" **imperative** programming or any other popular architecture patterns), making both module and integration testing a breeze;
+- each transition (with its trigger points) is easily translatable into [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) scenario and vice versa;
+- easy to deliver any data to any scope of the app, just subscribe for udpates from dispatcher and read/put access desired data from/into global app state;
+- the app still easily compatible with existing architecture patterns like MVC, MVVM and others, because this library only organizes Model layer.
+- no need to sacrafcie with performance, because this library brings no overhead at all, no run time magic, everything written in pure Swift.
+
 ## Future plans
 
 The project has evolved through several minor and 3 major updates. Current notation considered to be stable and pretty well balanced in terms of ease of use, consise and self-expressive API and functionality. Pretty much any kind of functionality can be implemented using proposed methodology.
