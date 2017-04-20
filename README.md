@@ -80,7 +80,7 @@ App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be repres
 
 The recommended way of installing **UniFlow** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
 
-```Ruby
+```swift
 pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
 ```
 
@@ -110,7 +110,7 @@ Dispatcher has several responsibilities:
 
 Import framework like this:
 
-```Swift
+```swift
 import XCEUniFlow
 ```
 
@@ -118,7 +118,7 @@ import XCEUniFlow
 
 First of all, you need to create a dispatcher. The recommended way is just to decalre an internal instance level constant in your `AppDelegate` class. This guarantees that dispatcher has the same life cycle as the app itself.
 
-```Swift
+```swift
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
@@ -136,7 +136,7 @@ For safety reasons, it is not recommended to pass reference to dispatcher across
 
 Access dispatcher proxy as follows:
 
-```Swift
+```swift
 let theProxy = dispatcher.proxy
 ```
 
@@ -144,7 +144,7 @@ For each data type that will need access to global app state, it is recommended 
 
 Here is example of custom UIWindow-subclass that implements `DispatcherInitializable` protocol.
 
-```Swift
+```swift
 final
 class Window: UIWindow, DispatcherInitializable
 {
@@ -164,7 +164,7 @@ class Window: UIWindow, DispatcherInitializable
 
 Here is example of custom UIWindow-subclass that implements `DispatcherBindable` protocol.
 
-```Swift
+```swift
 final
 class Window: UIWindow, DispatcherBindable
 {
@@ -180,7 +180,7 @@ It's responsibility of the observer to subscribe or does not subscribe for updat
 
 Here is example of custom UIViewController-subclass that implements `DispatcherInitializable` protocol. It does not subscribe for dispatcher notifications, but stores `proxy` for future use independent from dispatcher notifications.
 
-```Swift
+```swift
 // lets say we have a custom view, subclass of UIView,
 // which also accepts proxy during initialization
 
@@ -236,7 +236,7 @@ In most cases, to subscribe an observer for notifications from dispatcher you ne
 
 Here is an example of how a custom UIView-based class subscribes for dispatcher notifications. Note, that in this example the `onUpdate` function accepts another function as input parameter - for the sake of better code organization.
 
-```Swift
+```swift
 final
 class View: UIView, DispatcherInitializable
 {
@@ -270,7 +270,7 @@ class View: UIView, DispatcherInitializable
 
 Optionally, you may want to pass a custom closure/function that accepts global app state and returns any kind of custom or system data type ("sub-state") into `onConvert` function, and then pass custom closure/function that accepts sub-state as input parameter into `onUpdate` function. See example below.
 
-```Swift
+```swift
 final
 class View: UIView, DispatcherInitializable
 {
@@ -329,7 +329,7 @@ When the search is finished, we have on hands an array of items as result of sea
 
 To define an app feature, lets declare a custom data type that conforms to `Feature` protocol. Feature data type is not supposed to be instantiated, so it's a good idea to use `enum` data type to declare app features.
 
-```Swift
+```swift
 enum Search: Feature
 {
 	// ...
@@ -338,7 +338,7 @@ enum Search: Feature
 
 Inside `Search` type, lets declare 3 nested types, they will represent corresponding `Search` states.
 
-```Swift
+```swift
 enum Search: Feature
 {
     struct Preparing: SimpleState { typealias UFLFeature = Search
@@ -367,7 +367,7 @@ In the beginning, until user finished input and started the search process, `Sea
 
 When user finished input and started the actual search process, and until the search process has been finished, `Search` feature supposed to be represented by `InProgress` state. While search is in progress, we may need to know what is the keyword for which we are doing search right now. So lets add a constant (!) that will store search keyword inside `InProgress` state.
 
-```Swift
+```swift
 struct InProgress: FeatureState { typealias UFLFeature = Search
         
     // the search process for a given keyword is in progress
@@ -378,7 +378,7 @@ struct InProgress: FeatureState { typealias UFLFeature = Search
 
 When the search process has been finished, `Search` feature automatically transitions into `Finished` state. Here we still need to know what is the keyword for which we have completed search process just now, as well as represent a list of results (as we do not know what's the data type of results list elements, let it be `Any`, it doesn't matter for the purpose of this example).
 
-```Swift
+```swift
 struct Finished: FeatureState { typealias UFLFeature = Search
         
     // the search process for a given keyword is finished,
@@ -394,7 +394,7 @@ Now lets connect these states together by defining transitions.
 
 First of all, lets define transition that initializes the feature.
 
-```Swift
+```swift
 extension Search
 {
     static
@@ -409,7 +409,7 @@ In the example above, a special helper static function `initialization` (provide
 
 Next, when user finished input and initiates search process, we need to transition from `Preparing` state into `InProgress` state. Here is an example of how it might be implemented.
 
-```Swift
+```swift
 static
 func begin(with word: String) -> Action
 {
@@ -436,7 +436,7 @@ In the example above, a special helper static function `transition` (provided by
 
 Finally, when the search is finished, we need to transition from `InProgress` state into `Finished` state. Here is an example of how it might be implemented.
 
-```Swift
+```swift
 static
 func finished(with word: String, results list: [Any]) -> Action
 {
