@@ -419,7 +419,7 @@ func begin(with word: String) -> Action
             
             //===
             
-            var results: [Any] = []
+            var list: [Any] = []
             
             // do the search here, on background thread most likely
             // when search is finished - return to main thread and
@@ -427,7 +427,7 @@ func begin(with word: String) -> Action
             
             // ...
             
-            next {  }
+            next { finished(with: word, results: list) }
         }
     }
 ```
