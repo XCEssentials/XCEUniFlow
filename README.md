@@ -1,8 +1,8 @@
-# UniFlow
+**UniFlow** - App architecture done right, inspired by Flux (from Facebook).
 
-App architecture done right, inspired by Flux (from Facebook).
+[TOC]
 
-## Problem
+# Problem
 
 Every app has an architecture, good or bad. Since there is no universal methodology about how to build an app, every developer/team has to come up with their own solution every time an app is being built.
 
@@ -23,7 +23,7 @@ Optionally, there are few more fundamental challenges that every app faces soone
 
 So let's define **app architecture** as a set of rules that define how listed above challenges are being solved in particular app.
 
-## Pre-existing solutions
+# Pre-existing solutions
 
 There are quite few design patterns that are trying to describe how to organize overall application structure on a high level ([MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), etc.). They are not very specific and different developers interpret and implement these patterns in a slightly different way.
 
@@ -31,25 +31,25 @@ One of the most promising (and relatively new on iOS) is so-called **"unidirecti
 
 It's a very powerful framework that seems to cover all the fundamental needs. However, there are several things that are not so great and might be improved.
 
-### Overhead with Reducer implementation
+## Overhead with Reducer implementation
 
 1. **Reducer** is not supposed to have any internal state/data ever, so the only value of **reducer** is the logic that can be easily represented as a pure function (with input parameters), so it doesn't make sense to have **reducer** as an object/instance and implement it's functionality as instance member/function.
 2. The way **reducers** are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every **reducer** as an object/struct and then always remember (during application and **store** initialization) to create exactly one instance of each **reducer** and explicitly register it in the **store**. Otherwise, **reducer** will not be included in the **actions** processing chain and silently will not work.
 3. Entire library architecture promotes very strange and inconvenient way of organizing app logic/code. Each **action** supposed to represent only data model needed for the logic related to this **action**, while logic itself is spread across one or multiple **reducers**. The only way to recall/understand what a particular **action** does, without having detailed up-to-date documentation, is to search across whole app for **reducers** which react to that specific **action**. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app and pure overall app UX.
 4. The way **reducer** main function expected to be written is far from perfect. While it may look cool because it's pure "functional" approach, it's lot of manual work for developer that implements app functionality. We have to do check/unwrap optional **state** in every single reducer, before we even start to write any app-specific code, which is just ridiculous - why wouldn't we have the 'state' set at any moment of application life time? Plus, it comes as read-only input parameter and you HAVE to return a state value, even if this action made no mutations on state at all - that all makes developer (in most cases) to explicitly unwrap optional input state into a variable ("var"). We also do not know what the **action** is and have to always optionally typecast it or at least check its type. That's lot of unnecessary complications that make the logic behind the source code hard to read and understand, so, again, it's very error-prone.
 
-### Subscription mechanism limitations
+## Subscription mechanism limitations
 
 The subscription mechanism requires:
 
 1. **observer** to have a specific method implemented (conform to protocol) that limits developer with naming;
 2. this specific method (**newState**) receives optional value, that require the code to always have unwrapping code before any app-specific code comes, which is on a big scale a big unnecessary manual work to be done by developer.
 
-### Middleware
+## Middleware
 
 **Middleware** seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
 
-## Wishlist
+# Wishlist
 
 A framework like this should be a tool that helps and inspires to:
 
@@ -64,11 +64,11 @@ A framework like this should be a tool that helps and inspires to:
 9. keep developer written source code minimal and compact (make it look like specifications);
 10. keep library overhead as low as possible (no run-time "magic" should be involved, as less "manual" operations as possible).
 
-## Scope
+# Scope
 
 This library provides the lowest level of abstraction in application development process, so any kind of specific tasks (like networking, data encoding/decoding, any kind of computations, GUI configuration, etc.) are out of scope.
 
-## Theoretical fundamentals
+# Theoretical fundamentals
 
 Any **app consists of** two main components: **[model](https://en.wikipedia.org/wiki/Data_model)** (static component, which provides storage for all possible kinds of [data](https://en.wikipedia.org/wiki/Data) that the app can operate with) and **[business logic](https://en.wikipedia.org/wiki/Business_logic)** (dynamic component, which represents all possible mutations that might happen with that data model).
 
@@ -78,7 +78,7 @@ Moreover, each app consists of features, which may or may not depend one on anot
 
 To sum it up, every app should be represented as a set of features. Every feature can be defined by one or several *alternative* states (every feature state corresponds to its own model), plus transitions between these states. 
 
-## Methodology overview
+# Methodology overview
 
 App model - **global model** - is a composite object that consists of feature models. To be completely precise, every feature (when presented in global model at all) at any given moment of time is represented by exactly one of its state models. Obviously, each feature state model that is currently presented in global model defines what's current state of corresponding feature; if no single state model of a given feature is presented in global model, then current state of that particular feature is undefined (the feature is not being used currently).
 
@@ -88,7 +88,7 @@ This concludes static/data model of an app.
 
 App business logic can be represented by transitions between different app global states. That means each transition should change current state of one or several features. In general case, each transition consists of pre-conditions which must be fulfilled before this transition can be performed, as well as transition body that defines how exactly this transition is going to be made. Transitions are also used to bring any kind of input from outer world into the app (for example, user input, system notifications, etc.)
 
-## How to install
+# How to install
 
 The recommended way of installing **UniFlow** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
 
@@ -96,7 +96,7 @@ The recommended way of installing **UniFlow** into your project is via [CocoaPod
 pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
 ```
 
-## How it works
+# How it works
 
 Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a data type that conforms to **`Feature`** protocol. Its name corresponds to the feature name. This data type is never supposed to be instantiated and will be needed as meta data for corresponding feature states only.
 
@@ -118,7 +118,7 @@ Dispatcher has several responsibilities:
 - process state transitions (instances of `Action` data type that mutate the `GlobalModel` instance stored inside dispatcher);
 - deliver notifications about global state mutations to subscribed observers (this is how we can interconnect different parts/scopes of the app, including delivering updates to GUI in "reactive" style).
 
-## How to use
+# How to use
 
 Import framework like this:
 
@@ -126,7 +126,7 @@ Import framework like this:
 import XCEUniFlow
 ```
 
-### Dispatcher
+## Dispatcher
 
 First of all, you need to create a dispatcher. The recommended way is just to decalre an internal instance level constant in your `AppDelegate` class. This guarantees that dispatcher has the same life cycle as the app itself.
 
@@ -142,7 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 }
 ```
 
-### DispatcherProxy
+## DispatcherProxy
 
 For safety reasons, it is not recommended to pass reference to dispatcher across the app. Instead, there is a special lightweight data structure called `DispatcherProxy` that provides access to essential functionality of a given dispatcher and supposed to be freely passed/copied/stored as many times as it is needed.
 
@@ -240,7 +240,7 @@ class Ctrl: UIViewController, DispatcherInitializable
 }
 ```
 
-### Subscription
+## Subscription
 
 To subscribe for notifications from dispatcher, all you need to do is, basically, register an object as observer and provide corresponding `update handler`. Optionally you may also provide `convert handler` which is responsible for converting global app state into more specific model (this helps make the code even more declarative).
 
@@ -327,7 +327,7 @@ class View: UIView, DispatcherInitializable
 
 Note, that observer object works like a key in a dictionary to identify subscription among all other subscriptions. Only one subscription is possible per observer. Every next attempt to setup a subscription for an observer will override previous subscription for this observer.
 
-### Feature modeling
+## Feature modeling
 
 One of the most important techniques in this methodology is how to define features, feature states and state transitions.
 
@@ -459,7 +459,7 @@ func finished(with word: String, results list: [Any]) -> Action
 }
 ```
 
-### Execute transitions
+## Execute transitions
 
 To initiate transition processing, submit corresponding `Action` (with necessary parameters, if any) to dispatcher via its `proxy` (see example below).
 
@@ -474,11 +474,11 @@ proxy.submit { Search.begin(with: word) } // actually start search process
 
 Remember, all actions are being processed serially on the main thread, one-by-one, in the same order as they have been submitted (FIFO).
 
-### Final notes
+## Final notes
 
 Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all). And so on.
 
-## Positive outcomes
+# Positive outcomes
 
 There are quite a few positive outcomes from using this framework as a foundation for your app:
 
@@ -491,16 +491,16 @@ There are quite a few positive outcomes from using this framework as a foundatio
 - the app still easily compatible with existing architecture patterns like MVC, MVVM and others, because this library only organizes Model layer.
 - no need to sacrifice with performance, because this library brings no overhead at all, no run time magic, everything written in pure Swift.
 
-## Compatibility with Objective-C
+# Compatibility with Objective-C
 
 For mixed environment Swift 3 + Objective-C use [version 1.1.1](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.1). For compatibility with Swift 2.2 and Swift 2.3 (as well as Objective-C) use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
 
 Starting from [version 2.0.0](https://github.com/XCEssentials/UniFlow/releases/tag/2.0.0) interoperability with Objective-C is no longer supported.
 
-## Future plans
+# Future plans
 
 The project has evolved through several minor and 3 major updates. Current notation considered to be stable and pretty well balanced in terms of ease of use, concise and self-expressive API and functionality. Pretty much any kind of functionality can be implemented using proposed methodology.
 
-## Contribution, feedback, questions...
+# Contribution, feedback, questions...
 
 I you have any kind of feedback or questions - feel free to open an issue. If you'd like to propose an improvement or found a bug - start na issue as well, or feel free to fork and submit a pull request. Any kind of contributions would be much appreciated!
