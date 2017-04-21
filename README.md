@@ -27,9 +27,9 @@ So let's define **app architecture** as a set of rules that define how listed ab
 
 There are quite few design patterns that are trying to describe how to organize overall application structure on a high level ([MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), etc.). They are not very specific and different developers interpret and implement these patterns in a slightly different way.
 
-One of the most promising (and relatively new on iOS) is so-called **"unidirectional data flow"** pattern introduced by Facebook in their Flux framework. The most well established native implementation of this pattern for Apple platforms written in Swift is [ReSwift](https://github.com/ReSwift/ReSwift).
+One of the most promising (and relatively new on iOS) is so-called **"unidirectional data flow"** pattern introduced by [Facebook](https://www.facebook.com) in their [Flux](https://github.com/facebook/flux) framework. The most well established native implementation of this pattern for Apple platforms written in Swift is [ReSwift](https://github.com/ReSwift/ReSwift).
 
-It's a very powerful framework that seems to cover all the fundamental needs. However, there are several things that are not so great and might be improved
+It's a very powerful framework that seems to cover all the fundamental needs. However, there are several things that are not so great and might be improved.
 
 ### Overhead with Reducer implementation
 
@@ -51,7 +51,7 @@ The subscription mechanism requires:
 
 ## Wishlist
 
-A framework like this should be a tool that helps and inspire to:
+A framework like this should be a tool that helps and inspires to:
 
 1. make the app completely predictable at any moment of time (so that eliminates crashes);
 2. effectively exchange/share data between different scopes (without having to store and maintain direct cross-references in many-to-many style) so all parts of the app (including all UIs) stay consistent all the time;
@@ -64,17 +64,29 @@ A framework like this should be a tool that helps and inspire to:
 9. keep developer written source code minimal and compact (make it look like specifications);
 10. keep library overhead as low as possible (no run-time "magic" should be involved, as less "manual" operations as possible).
 
+## Scope
+
+This library provides the lowest level of abstraction in application development process, so any kind of specific tasks (like networking, data encoding/decoding, any kind of computations, GUI configuration, etc.) are out of scope.
+
+## Theoretical fundamentals
+
+Any **app consists of** two main components: **[model](https://en.wikipedia.org/wiki/Data_model)** (static component, which provides storage for all possible kinds of [data](https://en.wikipedia.org/wiki/Data) that the app can operate with) and **[business logic](https://en.wikipedia.org/wiki/Business_logic)** (dynamic component, which represents all possible mutations that might happen with that data model).
+
+On the other hand, computer program (app) is a [State Machine](https://en.wikipedia.org/wiki/Finite-state_machine). This, in particular, means, that **to write an app** we have to **define** all possible app **states** and all possible **transitions** between these states which we wish to allow.
+
+Moreover, each app consists of features, which may or may not depend one on another. Every feature may require to store some data to operate with, to represent internal state, to deliver some computation results, etc. The exact set of required kinds of data, as well as data values may change over time.
+
+To sum it up, every app should be represented as a set of features. Every feature can be defined by one or several *alternative* states (every feature state corresponds to its own model), plus transitions between these states. 
+
 ## Methodology overview
 
-Each computer program (**app**) is a [State Machine](https://en.wikipedia.org/wiki/Finite-state_machine). This, in particular, means, that to write an app we have to define all possible app states and all possible transitions between these states which we wish to allow.
+App model - **global model** - is a composite object that consists of feature models. To be completely precise, every feature (when presented in global model at all) at any given moment of time is represented by exactly one of its state models. Obviously, each feature state model that is currently presented in global model defines what's current state of corresponding feature; if no single state model of a given feature is presented in global model, then current state of that particular feature is undefined (the feature is not being used currently).
 
-On the other hand, each app consists of [features](https://en.wikipedia.org/wiki/Software_feature), which may or may not depend one on another. Based on this, it is fair to say that overall (global) app state at any given moment of time can be represented by a combination of one or several app features.
-
-In its turn, each app feature can be represented by one or several alternative states. This means, that at any given moment of time a feature can be represented by one and only one of its states.
+By app **global state** at any given moment of time lets agree to understand a combination of all feature state models currently presented in app global model.
 
 This concludes static/data model of an app.
 
-App [business logic](https://en.wikipedia.org/wiki/Business_logic) can be represented by [state transitions](https://en.wikipedia.org/wiki/Finite-state_machine). Each of such transitions may affect one specific feature, or multiple features at once. In general case, each transition consists of pre-conditions which must be fulfilled before this transition can be performed, as well as transition body that defines how exactly this transition is going to be made. Transitions are also used to bring any kind of input from outer world into the app (for example, user input, system notifications, etc.)
+App business logic can be represented by transitions between different app global states. That means each transition should change current state of one or several features. In general case, each transition consists of pre-conditions which must be fulfilled before this transition can be performed, as well as transition body that defines how exactly this transition is going to be made. Transitions are also used to bring any kind of input from outer world into the app (for example, user input, system notifications, etc.)
 
 ## How to install
 
@@ -90,7 +102,7 @@ Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be rep
 
 Each of the app feature states should be represented by a data type that conforms to **`FeatureState`** protocol and explicitly defines corresponding feature via typealias `UFLFeature`. Instances of these data types will be used to represent their features.
 
-All app features are supposed to be stored in a single global storage called **`GlobalModel`**. It is a single point of truth at any moment of time, which stores global app state. On a high level, it works much like a dictionary, where app features are used as keys, and corresponding feature states are stored as values. This means that `GlobalModel` may or may not contain any given feature at any given moment of time, but if it contains a feature - it only contains one and only one particular feature state; as soon as we decide to to put another feature state into `GlobalModel` (after we made a transition) - it will override any previously saved feature state (for this particular feature) that was stored in `GlobalModel` at the moment.
+All app features are supposed to be stored in a single global storage represented by data type called **`GlobalModel`**. Each app supposed to have the only intance of that type. It is a single point of truth at any moment of time, which stores global app state. On a high level, it works much like a dictionary, where app features are used as keys, and corresponding feature states are stored as values. This means that `GlobalModel` may or may not contain any given feature at any given moment of time, but if it contains a feature - it only contains one and only one particular feature state; as soon as we decide to to put another feature state into `GlobalModel` (after we made a transition) - it will override any previously saved feature state (for this particular feature) that was stored in `GlobalModel` at the moment.
 
 Each transition should be represented by an instance of **`Action`**, a special data type (`struct`) that contains transition name and body (in the form of `closure`).
 
@@ -447,7 +459,24 @@ func finished(with word: String, results list: [Any]) -> Action
 }
 ```
 
-Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all. And so on.
+### Execute transitions
+
+To initiate transition processing, submit corresponding `Action` (with necessary parameters, if any) to dispatcher via its `proxy` (see example below).
+
+```swift
+let proxy = // get proxy from dispatcher
+proxy.submit { Search.setup() } // initialize feature in global model
+// ... wait for user input and initiation of actual search process...
+let word = // get input from user
+proxy.submit { Search.begin(with: word) } // actually start search process
+// ...
+```
+
+Remember, all actions are being processed serially on the main thread, one-by-one, in the same order as they have been submitted (FIFO).
+
+### Final notes
+
+Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all). And so on.
 
 ## Positive outcomes
 
