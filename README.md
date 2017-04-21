@@ -459,7 +459,24 @@ func finished(with word: String, results list: [Any]) -> Action
 }
 ```
 
-Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all. And so on.
+### Execute transitions
+
+To initiate transition processing, submit corresponding `Action` (with necessary parameters, if any) to dispatcher via its `proxy` (see example below).
+
+```swift
+let proxy = // get proxy from dispatcher
+proxy.submit { Search.setup() } // initialize feature in global model
+// ... wait for user input and initiation of actual search process...
+let word = // get input from user
+proxy.submit { Search.begin(with: word) } // actually start search process
+// ...
+```
+
+Remember, all actions are being processed serially on the main thread, one-by-one, in the same order as they have been submitted (FIFO).
+
+### Final notes
+
+Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all). And so on.
 
 ## Positive outcomes
 
