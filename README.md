@@ -1,5 +1,3 @@
-**UniFlow** - App architecture done right, inspired by Flux (from Facebook).
-
 [TOC]
 
 # Problem
@@ -66,7 +64,7 @@ A framework like this should be a tool that helps and inspires to:
 
 # Scope
 
-This library provides the lowest level of abstraction in application development process, so any kind of specific tasks (like networking, data encoding/decoding, any kind of computations, GUI configuration, etc.) are out of scope.
+This library provides the highest level of abstraction in application development process, so any kind of specific tasks (like networking, data encoding/decoding, any kind of computations, GUI configuration, etc.) are out of scope.
 
 # Theoretical fundamentals
 
