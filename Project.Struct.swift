@@ -7,7 +7,6 @@ let My =
     repoName: "UniFlow",
     deploymentTarget: "8.0",
     companyIdentifier: "io.XCEssentials",
-//    developmentTeamId: "UJA88X59XP" // 'Maxim Khatskevich'
     companyPrefix: "XCE"
 )
 
@@ -28,9 +27,7 @@ let project = Project(My.repoName) { p in
         "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
         
         "SWIFT_VERSION" <<< "3.0",
-        "VERSIONING_SYSTEM" <<< "apple-generic",
-        
-        "CODE_SIGN_IDENTITY[sdk=iphoneos*]" <<< ""
+        "VERSIONING_SYSTEM" <<< "apple-generic"
     )
     
     p.configurations.debug.override(

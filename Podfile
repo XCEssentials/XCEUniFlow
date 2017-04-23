@@ -1,8 +1,8 @@
-projectName = 'UniFlow'
+projName = 'UniFlow'
 
 platform :ios, '8.0'
 
-workspace projectName
+workspace projName
 
 use_frameworks!
 
@@ -10,8 +10,7 @@ use_frameworks!
 
 def sharedPods
 
-	# pod 'MKHRequirement', :path => './../MKHRequirement'
-	pod 'MKHRequirement', :git => 'https://github.com/maximkhatskevich/MKHRequirement.git'
+	pod 'XCERequirement', '~> 1.4'
 
 end
 
@@ -19,7 +18,7 @@ end
 
 target 'Fwk' do
 
-	project projectName
+	project projName
 
 	#===
 
@@ -29,15 +28,10 @@ end
 
 target 'Tests' do
 
-	project projectName
+	project projName
 
 	#===
 
 	sharedPods
-
-	#===
-
-	# pod 'MKHHelpers', :path => './../MKHHelpers'
-	# pod 'MKHHelpers', :git => 'https://github.com/maximkhatskevich/MKHHelpers.git'
 
 end
