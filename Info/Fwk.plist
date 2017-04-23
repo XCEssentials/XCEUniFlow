@@ -18,7 +18,5 @@
 	<string>3.2.3</string>
 	<key>CFBundleVersion</key>
 	<string>14</string>
-	<key>NSPrincipalClass</key>
-	<string></string>
 </dict>
 </plist>
