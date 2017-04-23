@@ -1,4 +1,10 @@
-[TOC]
+[![CocoaPods](https://img.shields.io/cocoapods/v/XCEUniFlow.svg)](https://cocoapods.org/?q=XCEUniFlow)
+
+[![license](https://img.shields.io/github/license/XCEssentials/UniFlow.svg)](https://opensource.org/licenses/MIT)
+
+[![CocoaPods](https://img.shields.io/cocoapods/p/XCEUniFlow.svg)](https://cocoapods.org/?q=XCEUniFlow)
+
+
 
 # Problem
 
@@ -88,11 +94,7 @@ App business logic can be represented by transitions between different app globa
 
 # How to install
 
-The recommended way of installing **UniFlow** into your project is via [CocoaPods](https://cocoapods.org). Just add to your [Podfile](https://guides.cocoapods.org/syntax/podfile.html):
-
-```ruby
-pod 'XCEUniFlow', :git => 'https://github.com/XCEssentials/UniFlow.git'
-```
+The recommended way is to install using [CocoaPods](https://cocoapods.org/?q=XCEUniFlow).
 
 # How it works
 
