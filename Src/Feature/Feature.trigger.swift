@@ -26,4 +26,16 @@ extension Feature
             try body(state, next)
         }
     }
+    
+    static
+    func trigger(
+        action name: String = #function,
+        body: @escaping (GlobalModel, @escaping ActionGetterWrapped) throws -> Void
+        ) -> Action
+    {
+        return action(name) { state, _, next in
+            
+            try body(state, next)
+        }
+    }
 }

@@ -1,5 +1,6 @@
-[![CocoaPods](https://img.shields.io/cocoapods/v/XCEUniFlow.svg)](https://cocoapods.org/?q=XCEUniFlow)
 [![license](https://img.shields.io/github/license/XCEssentials/UniFlow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub tag](https://img.shields.io/github/tag/XCEssentials/UniFlow.svg)](https://github.com/XCEssentials/UniFlow/releases)
+[![CocoaPods](https://img.shields.io/cocoapods/v/XCEUniFlow.svg)](https://cocoapods.org/?q=XCEUniFlow)
 [![CocoaPods](https://img.shields.io/cocoapods/p/XCEUniFlow.svg)](https://cocoapods.org/?q=XCEUniFlow)
 
 # Problem
