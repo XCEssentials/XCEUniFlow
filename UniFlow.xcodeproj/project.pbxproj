@@ -27,6 +27,7 @@
 		843D13AD3D31D0564B6E40C9 /* Feature.transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E4B71A8624693E0E36828A /* Feature.transition.swift */; };
 		84544339B733222CAE70A8EF /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E2E69B9B67F966F3F02271 /* Main.swift */; };
 		91ED7042A55FE65B9615E57F /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5829D56CCB9F44CD27FC74 /* Action.swift */; };
+		94102DA51EC0365D00A9C45B /* Feature.trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94102DA41EC0365D00A9C45B /* Feature.trigger.swift */; };
 		9419D0751EACA0520021E3F4 /* Feature.actualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419D0741EACA0520021E3F4 /* Feature.actualization.swift */; };
 		AAC10889135C4BBEF3BE436C /* GlobalModel.Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8214D381C9E3D521BEADCBE0 /* GlobalModel.Operators.swift */; };
 		AF56437D215FD4393E1A9223 /* ActionProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DED653D57922322AB6AFA65 /* ActionProcessing.swift */; };
@@ -90,6 +91,7 @@
 		68D78DF83F50F082FA70639D /* GlobalModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GlobalModel.swift; sourceTree = "<group>"; };
 		8214D381C9E3D521BEADCBE0 /* GlobalModel.Operators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GlobalModel.Operators.swift; sourceTree = "<group>"; };
 		8FE9AC1C5EA0FDD8C0A0A75A /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
+		94102DA41EC0365D00A9C45B /* Feature.trigger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feature.trigger.swift; sourceTree = "<group>"; };
 		9419D0741EACA0520021E3F4 /* Feature.actualization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Feature.actualization.swift; sourceTree = "<group>"; };
 		9B36BFFADBF9CE3CE5A7FD55 /* Feature.initialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Feature.initialization.swift; sourceTree = "<group>"; };
 		A72DF59D1862D8144FEDDDC3 /* ActionContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActionContext.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				9419D0741EACA0520021E3F4 /* Feature.actualization.swift */,
+				94102DA41EC0365D00A9C45B /* Feature.trigger.swift */,
 				3BFD83A0A5FF478DF79F43BA /* Feature.deinitialization.swift */,
 				9B36BFFADBF9CE3CE5A7FD55 /* Feature.initialization.swift */,
 				F4FAB6D77A32B939EE1694E5 /* Feature.swift */,
@@ -445,6 +448,7 @@
 				3D30FF35C73295AB762BEAEE /* DebugHelpers.swift in Sources */,
 				E66119872D7BBA9232D584B5 /* Proxy.swift in Sources */,
 				B589BDD12BAC06586D11AF04 /* Subscriptions.swift in Sources */,
+				94102DA51EC0365D00A9C45B /* Feature.trigger.swift in Sources */,
 				3CD6766DC788A2952B68F0B1 /* Feature.deinitialization.swift in Sources */,
 				E9DFB68705E1B3DF0DFF5864 /* Feature.initialization.swift in Sources */,
 				7B9910F17E93843ECA177817 /* Feature.swift in Sources */,
