@@ -8,6 +8,8 @@
 
 import Foundation
 
+import XCERequirement
+
 //===
 
 public
@@ -21,7 +23,16 @@ extension Feature
         ) -> Action
         where Self == UFLFS.UFLFeature
     {
-        return transition(action: name, from: UFLFS.self, into: UFLFS.self) { state, _, next in
+        return action(name) { gm, _, next in
+            
+            let state =
+                
+            try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
+                
+                gm ==> UFLFS.self
+            }
+            
+            //===
             
             try body(state, next)
         }
@@ -33,9 +44,9 @@ extension Feature
         body: @escaping (GlobalModel, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
     {
-        return action(name) { state, _, next in
+        return action(name) { gm, _, next in
             
-            try body(state, next)
+            try body(gm, next)
         }
     }
 }
