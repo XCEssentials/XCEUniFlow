@@ -26,7 +26,9 @@ extension Feature
     {
         return Action("\(self.name).\(name)") { gm, mutate, next in
                 
-            let current = try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            let state =
+                
+            try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
                 gm ==> UFLInFS.self
             }
@@ -35,11 +37,14 @@ extension Feature
             
             var target: UFLOutFS?
             
-            try body(current, { target = $0() }, next)
+            try body(state, { target = $0() }, next)
             
             //===
             
-            try REQ.isNotNil("New state for feature \(UFLInFS.UFLFeature.name) is set") { target }
+            try REQ.isNotNil("New state for \(UFLInFS.UFLFeature.name) is set") {
+                
+                target
+            }
             
             //===
             
