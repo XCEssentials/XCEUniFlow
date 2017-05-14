@@ -23,7 +23,7 @@ extension Feature
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
-        return Action("\(self.name).\(name)") { gm, mutate, next in
+        return action(name) { gm, mutate, next in
                 
             try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
@@ -40,6 +40,13 @@ extension Feature
             
             //===
             
+            try REQ.isNotNil("New state for \(UFLOutFS.UFLFeature.name) is set") {
+                
+                newState
+            }
+            
+            //===
+            
             mutate { $0 <== newState }
         }
     }
@@ -49,14 +56,21 @@ extension Feature
     static
     func initialization<UFLOutFS: SimpleState>(
         action name: String = #function,
-        into targetState: UFLOutFS.Type,
+        into newState: UFLOutFS.Type,
         body: @escaping (@escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
-        return initialization(action: name, into: targetState) { become, next in
+        return action(name) { gm, mutate, next in
+            
+            try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-            become { targetState.init() }
+                gm ==> UFLOutFS.UFLFeature.self
+            }
+            
+            //===
+            
+            mutate { $0 <== newState.init() }
             
             //===
             
@@ -69,13 +83,20 @@ extension Feature
     static
     func initialization<UFLOutFS: SimpleState>(
         action name: String = #function,
-        into targetState: UFLOutFS.Type
+        into newState: UFLOutFS.Type
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
-        return initialization(action: name, into: targetState) { become, _ in
+        return action(name) { gm, mutate, _ in
+            
+            try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-            become { targetState.init() }
+                gm ==> UFLOutFS.UFLFeature.self
+            }
+            
+            //===
+            
+            mutate { $0 <== newState.init() }
         }
     }
 }
