@@ -8,6 +8,8 @@
 
 import Foundation
 
+import XCERequirement
+
 //===
 
 public
@@ -21,13 +23,24 @@ extension Feature
         ) -> Action
         where Self == UFLFS.UFLFeature
     {
-        return transition(action: name, from: UFLFS.self, into: UFLFS.self) { state, become, next in
+        return action(name) { gm, mutate, next in
+            
+            let currentState =
                 
-            var buf = state
+            try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
+                
+                gm ==> UFLFS.self
+            }
             
-            try body(state, { $0(&buf) }, next)
+            //===
             
-            become { buf }
+            var buf = currentState
+            
+            try body(currentState, { $0(&buf) }, next)
+            
+            //===
+            
+            mutate { $0 <== buf }
         }
     }
 }
