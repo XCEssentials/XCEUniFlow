@@ -24,9 +24,9 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
-        return Action("\(self.name).\(name)") { gm, mutate, next in
+        return action(name) { gm, mutate, next in
                 
-            let state =
+            let currentState =
                 
             try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
@@ -35,20 +35,20 @@ extension Feature
             
             //===
             
-            var target: UFLOutFS?
+            var newState: UFLOutFS?
             
-            try body(state, { target = $0() }, next)
+            try body(currentState, { newState = $0() }, next)
             
             //===
             
             try REQ.isNotNil("New state for \(UFLInFS.UFLFeature.name) is set") {
                 
-                target
+                newState
             }
             
             //===
             
-            mutate { $0 <== target }
+            mutate { $0 <== newState }
         }
     }
     
@@ -58,14 +58,21 @@ extension Feature
     func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
         action name: String = #function,
         from currentState: UFLInFS.Type,
-        into targetState: UFLOutFS.Type,
+        into newState: UFLOutFS.Type,
         body: @escaping (@escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
-        return transition(action: name, from: currentState, into: targetState) { _, become, next in
+        return action(name) { gm, mutate, next in
             
-            become { targetState.init() }
+            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+                
+                gm ==> UFLInFS.self
+            }
+            
+            //===
+            
+            mutate { $0 <== newState.init() }
             
             //===
             
@@ -79,13 +86,20 @@ extension Feature
     func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
         action name: String = #function,
         from currentState: UFLInFS.Type,
-        into targetState: UFLOutFS.Type
+        into newState: UFLOutFS.Type
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
-        return transition(action: name, from: currentState, into: targetState) { _, become, _ in
+        return action(name) { gm, mutate, _ in
+            
+            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
-            become { targetState.init() }
+                gm ==> UFLInFS.self
+            }
+            
+            //===
+            
+            mutate { $0 <== newState.init() }
         }
     }
 }

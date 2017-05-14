@@ -23,9 +23,9 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.UFLFeature
     {
-        return Action("\(self.name).\(name)") { gm, mutate, next in
+        return action(name) { gm, mutate, next in
                 
-            let state =
+            let currentState =
                 
             try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
@@ -36,14 +36,14 @@ extension Feature
             
             var shouldProceed = true
             
-            try body(state, { shouldProceed = $0() }, next)
+            try body(currentState, { shouldProceed = $0() }, next)
             
             //===
             
             if
                 shouldProceed
             {
-                mutate { $0 /== Self.self }
+                mutate{ $0 /== Self.self }
             }
         }
     }
@@ -53,13 +53,24 @@ extension Feature
     static
     func deinitialization<UFLInFS: FeatureState>(
         action name: String = #function,
-        from currentState: UFLInFS.Type,
+        from _: UFLInFS.Type,
         body: @escaping (@escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLInFS.UFLFeature
     {
-        return deinitialization(action: name, from: currentState) { _, _, next in
-        
+        return action(name) { gm, mutate, next in
+            
+            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+                
+                gm ==> UFLInFS.self
+            }
+            
+            //===
+            
+            mutate{ $0 /== Self.self }
+            
+            //===
+            
             try body(next)
         }
     }
@@ -69,10 +80,20 @@ extension Feature
     static
     func deinitialization<UFLInFS: FeatureState>(
         action name: String = #function,
-        from currentState: UFLInFS.Type
+        from _: UFLInFS.Type
         ) -> Action
         where Self == UFLInFS.UFLFeature
     {
-        return deinitialization(action: name, from: currentState) { _, _, _ in }
+        return action(name) { gm, mutate, _ in
+            
+            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+                
+                gm ==> UFLInFS.self
+            }
+            
+            //===
+            
+            mutate{ $0 /== Self.self }
+        }
     }
 }

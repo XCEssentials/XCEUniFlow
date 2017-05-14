@@ -25,7 +25,7 @@ extension Feature
     {
         return action(name) { gm, _, next in
             
-            let state =
+            let currentState =
                 
             try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
                 
@@ -34,7 +34,7 @@ extension Feature
             
             //===
             
-            try body(state, next)
+            try body(currentState, next)
         }
     }
     
