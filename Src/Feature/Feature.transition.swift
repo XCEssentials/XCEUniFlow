@@ -57,8 +57,8 @@ extension Feature
     static
     func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
         action name: String = #function,
-        from currentState: UFLInFS.Type,
-        into newState: UFLOutFS.Type,
+        from _: UFLInFS.Type,
+        into _: UFLOutFS.Type,
         body: @escaping (@escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
@@ -72,7 +72,7 @@ extension Feature
             
             //===
             
-            mutate { $0 <== newState.init() }
+            mutate { $0 <== UFLOutFS.init() }
             
             //===
             
@@ -85,8 +85,8 @@ extension Feature
     static
     func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
         action name: String = #function,
-        from currentState: UFLInFS.Type,
-        into newState: UFLOutFS.Type
+        from _: UFLInFS.Type,
+        into _: UFLOutFS.Type
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
@@ -99,7 +99,7 @@ extension Feature
             
             //===
             
-            mutate { $0 <== newState.init() }
+            mutate { $0 <== UFLOutFS.init() }
         }
     }
 }

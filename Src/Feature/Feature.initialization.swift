@@ -56,7 +56,7 @@ extension Feature
     static
     func initialization<UFLOutFS: SimpleState>(
         action name: String = #function,
-        into newState: UFLOutFS.Type,
+        into _: UFLOutFS.Type,
         body: @escaping (@escaping ActionGetterWrapped) throws -> Void
         ) -> Action
         where Self == UFLOutFS.UFLFeature
@@ -70,7 +70,7 @@ extension Feature
             
             //===
             
-            mutate { $0 <== newState.init() }
+            mutate { $0 <== UFLOutFS.init() }
             
             //===
             
@@ -83,7 +83,7 @@ extension Feature
     static
     func initialization<UFLOutFS: SimpleState>(
         action name: String = #function,
-        into newState: UFLOutFS.Type
+        into _: UFLOutFS.Type
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
@@ -96,7 +96,7 @@ extension Feature
             
             //===
             
-            mutate { $0 <== newState.init() }
+            mutate { $0 <== UFLOutFS.init() }
         }
     }
 }
