@@ -23,11 +23,11 @@ extension Feature
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
-        return action(name) { gm, mutate, next in
+        return action(name) { model, mutate, next in
                 
             try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-                gm ==> UFLOutFS.UFLFeature.self
+                model ==> UFLOutFS.UFLFeature.self
             }
             
             //===
@@ -61,11 +61,11 @@ extension Feature
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
-        return action(name) { gm, mutate, next in
+        return action(name) { model, mutate, next in
             
             try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-                gm ==> UFLOutFS.UFLFeature.self
+                model ==> UFLOutFS.UFLFeature.self
             }
             
             //===
@@ -87,11 +87,11 @@ extension Feature
         ) -> Action
         where Self == UFLOutFS.UFLFeature
     {
-        return action(name) { gm, mutate, _ in
+        return action(name) { model, mutate, _ in
             
             try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-                gm ==> UFLOutFS.UFLFeature.self
+                model ==> UFLOutFS.UFLFeature.self
             }
             
             //===

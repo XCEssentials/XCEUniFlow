@@ -49,12 +49,12 @@ class Main: XCTestCase
                 if
                     let a = $0 ==> M.Arithmetics.Main.self
                 {
-                    print("The value -->> \(a.v)")
+                    print("The value -->> \(a.val)")
                     
                     //===
                     
                     if
-                        a.v == 15
+                        a.val == 15
                     {
                         ex.fulfill()
                     }

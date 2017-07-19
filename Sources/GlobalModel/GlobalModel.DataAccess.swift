@@ -38,7 +38,7 @@ extension GlobalModel
 {
     public
     mutating
-    func merge<FS: FeatureState>(_ state: FS?) -> Void
+    func merge<FS: FeatureState>(_ state: FS?)
     {
         data[GlobalModel.key(from: FS.UFLFeature.self)] = state
     }
@@ -51,7 +51,7 @@ extension GlobalModel
 {
     public
     mutating
-    func remove<F: Feature>(_: F.Type) -> Void
+    func remove<F: Feature>(_: F.Type)
     {
         data.removeValue(forKey: GlobalModel.key(from: F.self))
     }

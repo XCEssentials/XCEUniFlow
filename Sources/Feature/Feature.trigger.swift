@@ -23,13 +23,13 @@ extension Feature
         ) -> Action
         where Self == UFLFS.UFLFeature
     {
-        return action(name) { gm, _, next in
+        return action(name) { model, _, next in
             
             let currentState =
                 
             try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
                 
-                gm ==> UFLFS.self
+                model ==> UFLFS.self
             }
             
             //===
@@ -44,9 +44,9 @@ extension Feature
         body: @escaping (GlobalModel, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
     {
-        return action(name) { gm, _, next in
+        return action(name) { model, _, next in
             
-            try body(gm, next)
+            try body(model, next)
         }
     }
 }

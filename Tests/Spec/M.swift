@@ -12,4 +12,4 @@ import XCEUniFlow
 
 //===
 
-typealias M = GlobalModel
+typealias M = GlobalModel // swiftlint:disable:this type_name

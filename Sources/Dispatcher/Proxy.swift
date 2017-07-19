@@ -22,7 +22,6 @@ typealias DispatcherProxy =
 
 //===
 
-
 public
 extension Dispatcher
 {

@@ -23,13 +23,13 @@ extension Feature
         ) -> Action
         where Self == UFLFS.UFLFeature
     {
-        return action(name) { gm, mutate, next in
+        return action(name) { model, mutate, next in
             
             let currentState =
                 
             try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
                 
-                gm ==> UFLFS.self
+                model ==> UFLFS.self
             }
             
             //===

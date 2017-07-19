@@ -2,7 +2,7 @@ import XCEProjectGenerator
 
 //===
 
-let My =
+let params =
 (
     repoName: "UniFlow",
     deploymentTarget: "8.0",
@@ -10,10 +10,10 @@ let My =
     companyPrefix: "XCE"
 )
 
-let BundleId =
+let bundleId =
 (
-    fwk: "\(My.companyIdentifier).\(My.repoName)",
-    tst: "\(My.companyIdentifier).\(My.repoName).Tst"
+    fwk: "\(params.companyIdentifier).\(params.repoName)",
+    tst: "\(params.companyIdentifier).\(params.repoName).Tst"
 )
 
 //===
@@ -24,7 +24,7 @@ let project = Project("Main") { project in
     
     project.configurations.all.override(
         
-        "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
+        "IPHONEOS_DEPLOYMENT_TARGET" <<< params.deploymentTarget, // bug wokraround
         
         "SWIFT_VERSION" <<< "3.0",
         "VERSIONING_SYSTEM" <<< "apple-generic",
@@ -47,11 +47,11 @@ let project = Project("Main") { project in
         
         target.configurations.all.override(
             
-            "PRODUCT_NAME" <<< "\(My.companyPrefix)\(My.repoName)",
+            "PRODUCT_NAME" <<< "\(params.companyPrefix)\(params.repoName)",
             
-            "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
+            "IPHONEOS_DEPLOYMENT_TARGET" <<< params.deploymentTarget, // bug wokraround
         
-            "PRODUCT_BUNDLE_IDENTIFIER" <<< BundleId.fwk,
+            "PRODUCT_BUNDLE_IDENTIFIER" <<< bundleId.fwk,
             "INFOPLIST_FILE" <<< "Info/Fwk.plist",
             
             //--- iOS related:
@@ -85,9 +85,9 @@ let project = Project("Main") { project in
                 "LD_RUNPATH_SEARCH_PATHS" <<<
                 "$(inherited) @executable_path/Frameworks @loader_path/Frameworks",
                 
-                "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
+                "IPHONEOS_DEPLOYMENT_TARGET" <<< params.deploymentTarget, // bug wokraround
                 
-                "PRODUCT_BUNDLE_IDENTIFIER" <<< BundleId.tst,
+                "PRODUCT_BUNDLE_IDENTIFIER" <<< bundleId.tst,
                 "INFOPLIST_FILE" <<< "Info/Tst.plist",
                 "FRAMEWORK_SEARCH_PATHS" <<< "$(inherited) $(BUILT_PRODUCTS_DIR)"
             )

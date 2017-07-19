@@ -24,13 +24,13 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
-        return action(name) { gm, mutate, next in
+        return action(name) { model, mutate, next in
                 
             let currentState =
                 
             try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
-                gm ==> UFLInFS.self
+                model ==> UFLInFS.self
             }
             
             //===
@@ -63,11 +63,11 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
-        return action(name) { gm, mutate, next in
+        return action(name) { model, mutate, next in
             
             try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
-                gm ==> UFLInFS.self
+                model ==> UFLInFS.self
             }
             
             //===
@@ -90,11 +90,11 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
     {
-        return action(name) { gm, mutate, _ in
+        return action(name) { model, mutate, _ in
             
             try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
                 
-                gm ==> UFLInFS.self
+                model ==> UFLInFS.self
             }
             
             //===

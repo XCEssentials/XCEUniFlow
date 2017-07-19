@@ -140,6 +140,14 @@ platform :ios do
       build_number: buildNumber
     )
 
+    # === Sort all project entries
+
+    sh 'cd ./.. && xcodeproj sort'
+
+    # === Add custom 'Run Script Phase' entries
+
+    sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + projName
+
   end
 
   # ===
@@ -161,6 +169,22 @@ platform :ios do
       xcodeproj: projName,
       build_number: newBuildNumber
     )
+
+    # === Sort all project entries
+
+    sh 'cd ./.. && xcodeproj sort'
+
+    # === Add custom 'Run Script Phase' entries
+
+    sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + pr
+    # === Sort all project entries
+
+    sh 'cd ./.. && xcodeproj sort'
+
+    # === Add custom 'Run Script Phase' entries
+
+    sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + projName
+ojName
 
   end
 

@@ -19,7 +19,7 @@ extension M
     {
         struct Main: FeatureState { typealias UFLFeature = Arithmetics
             
-            var v: Int
+            var val: Int
         }
     }
 }
@@ -31,16 +31,16 @@ extension M.Arithmetics: ActionContext
     static
     func begin() -> Action
     {
-        return action { m, mutate, next in
+        return action { model, mutate, next in
             
             try REQ.isNil("Feature is not initialized yet") {
                 
-                m ==> M.Arithmetics.self
+                model ==> M.Arithmetics.self
             }
             
             //===
             
-            mutate { $0 <== Main(v: 0) }
+            mutate { $0 <== Main(val: 0) }
             
             //===
             
@@ -52,7 +52,7 @@ extension M.Arithmetics: ActionContext
     static
     func setExplicit(value: Int) -> Action
     {
-        return action { m, mutate, _ in
+        return action { model, mutate, _ in
             
             // you have to check at least one precondition to
             // definitely avoid doing the same action twice:
@@ -66,19 +66,19 @@ extension M.Arithmetics: ActionContext
             
             var a = try REQ.value("Feature is initialized") {
                 
-                m ==> Main.self
+                model ==> Main.self
             }
             
             //===
             
             try REQ.isTrue("Current value is not equal to desired new value") {
                 
-                return a.v != value
+                return a.val != value
             }
             
             //===
             
-            a.v = value
+            a.val = value
             
             //===
             
@@ -89,16 +89,16 @@ extension M.Arithmetics: ActionContext
     static
     func incFive() -> Action
     {
-        return action { m, mutate, _ in
+        return action { model, mutate, _ in
             
             var a = try REQ.value("Feature is initialized") {
                 
-                m ==> Main.self
+                model ==> Main.self
             }
             
             //===
             
-            a.v += 5
+            a.val += 5
             
             //===
             

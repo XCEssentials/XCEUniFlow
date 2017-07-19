@@ -19,7 +19,7 @@ infix operator /== // removes value from GM, returns nothing
 //=== MARK: GET
 
 public
-func <== <FS: FeatureState>(state: inout FS?, global: GlobalModel) -> Void
+func <== <FS: FeatureState>(state: inout FS?, global: GlobalModel)
 {
     state = global.extract(state: FS.self)
 }
