@@ -64,9 +64,6 @@ typealias UFLFeatureState = FeatureState
 public
 typealias UFLSimpleState = SimpleState
 
-//public
-//typealias UFL = <#type expression#>
-
 public
 typealias UFLDispatcher = Dispatcher
 

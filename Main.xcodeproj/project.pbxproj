@@ -26,6 +26,8 @@
 		903A0F529A232BFFF57E6274 /* Feature_actualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25391BD0ECF5DD90DDE9B9 /* Feature_actualization.swift */; };
 		943EB3C61F1FD3E800C068A2 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943EB3C51F1FD3E800C068A2 /* Aliases.swift */; };
 		94F666411F1FDB650073620A /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F666401F1FDB650073620A /* Protocols.swift */; };
+		94F666441F1FDE2F0073620A /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F666421F1FDDCB0073620A /* Action.swift */; };
+		94F666451F1FDE2F0073620A /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F666431F1FDDCB0073620A /* ActionContext.swift */; };
 		A3B92AF6B60B19B98CB4F005 /* Pods_Fwk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84DDC5C08ED605D5F45712E8 /* Pods_Fwk.framework */; };
 		B52866C80BC4207BFF59966D /* Dispatcher_Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B5FDA73468BEFA229479E7 /* Dispatcher_Subscriptions.swift */; };
 		B7E7084E4FFBD0115D655918 /* Feature_deinitialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5FC52D7CC3AFDC76A5951E /* Feature_deinitialization.swift */; };
@@ -155,7 +157,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = $local;
+			name = "$local";
 			sourceTree = "<group>";
 		};
 		32D256F4E80AF25CDF739B7F /* Sources */ = {
@@ -436,6 +438,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94F666441F1FDE2F0073620A /* Action.swift in Sources */,
+				94F666451F1FDE2F0073620A /* ActionContext.swift in Sources */,
 				943EB3C61F1FD3E800C068A2 /* Aliases.swift in Sources */,
 				EF081C8982C0A12EC5D17B1A /* Dispatcher.swift in Sources */,
 				6E2FA77E93FAF107EEC9DC0C /* Dispatcher_ActionProcessing.swift in Sources */,
