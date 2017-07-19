@@ -3,6 +3,14 @@ extension Dispatcher
 {
     func enableDefaultReporting()
     {
-        onReject = { print("MKHUniFlow: [-] \($0) REJECTED, error: \($1)") }
+        onDidProcessAction = {
+            
+            print("XCEUniFlow: [+] \($0) PROCESSED")
+        }
+        
+        onDidRejectAction = {
+            
+            print("XCEUniFlow: [-] \($0) REJECTED, error: \($1)")
+        }
     }
 }

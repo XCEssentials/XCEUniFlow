@@ -19,7 +19,10 @@ class Dispatcher
     //=== MARK: Public members
     
     public
-    var onReject: ((_ actionId: String, _: Error) -> Void)?
+    var onDidProcessAction: ((_ actionId: String) -> Void)?
+    
+    public
+    var onDidRejectAction: ((_ actionId: String, _: Error) -> Void)?
     
     //=== Initializer
     

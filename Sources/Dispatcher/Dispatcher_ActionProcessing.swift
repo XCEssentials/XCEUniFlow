@@ -54,6 +54,7 @@ extension Dispatcher
             
             //===
             
+            onDidProcessAction?(act.name)
             notifySubscriptions()
         }
         catch
@@ -62,7 +63,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onReject.map { $0(act.name, error) }
+            onDidRejectAction?(act.name, error)
         }
     }
 }
