@@ -14,6 +14,7 @@ class Subscription
         )
     {
         self.onConvert = cvt
-        self.onUpdate = { upd($0 as! UFLSubState) } // swiftlint:disable:this force_cast
+        self.onUpdate = { upd($0 as! UFLSubState) }
+        // swiftlint:disable:previous force_cast
     }
 }

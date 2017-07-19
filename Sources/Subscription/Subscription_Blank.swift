@@ -19,10 +19,10 @@ struct SubscriptionBlank
     public
     func onUpdate(_ upd: @escaping (_: GlobalModel) -> Void)
     {
-        dispatcher
-            .register(
-                observer,
-                Subscription({ $0 }, upd),
-                initialUpdate)
+        dispatcher .register(
+            observer,
+            Subscription({ $0 }, upd),
+            initialUpdate
+        )
     }
 }

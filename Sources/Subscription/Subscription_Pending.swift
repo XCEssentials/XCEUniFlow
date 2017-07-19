@@ -9,10 +9,10 @@ struct SubscriptionPending<UFLSubState>
     public
     func onUpdate(_ upd: @escaping (_: UFLSubState) -> Void)
     {
-        base.dispatcher
-            .register(
-                base.observer,
-                Subscription(onConvert, upd),
-                base.initialUpdate)
+        base.dispatcher.register(
+            base.observer,
+            Subscription(onConvert, upd),
+            base.initialUpdate
+        )
     }
 }
