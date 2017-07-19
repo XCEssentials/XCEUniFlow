@@ -20,7 +20,7 @@ let BundleId =
 
 let specFormat = Spec.Format.v2_1_0
 
-let project = Project(My.repoName) { project in
+let project = Project("Main") { project in
     
     project.configurations.all.override(
         
