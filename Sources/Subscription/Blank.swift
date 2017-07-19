@@ -1,7 +1,3 @@
-import Foundation
-
-//===
-
 public
 struct SubscriptionBlank
 {

@@ -1,5 +1,3 @@
-import Foundation
-
 import XCERequirement
 
 //===
@@ -8,32 +6,31 @@ public
 extension Feature
 {
     static
-    func transition<UFLInFS: FeatureState, UFLOutFS: FeatureState>(
+    func initialization<UFLOutFS: FeatureState>(
         action name: String = #function,
-        from _: UFLInFS.Type,
         into _: UFLOutFS.Type,
-        body: @escaping (UFLInFS, (() -> UFLOutFS) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping ((() -> UFLOutFS?) -> Void, @escaping ActionGetterWrapped) throws -> Void
         ) -> Action
-        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+        where Self == UFLOutFS.UFLFeature
     {
         return action(name) { model, mutate, next in
                 
-            let currentState =
+            try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-            try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
-                
-                model ==> UFLInFS.self
+                model ==> UFLOutFS.UFLFeature.self
             }
             
             //===
             
             var newState: UFLOutFS?
             
-            try body(currentState, { newState = $0() }, next)
+            //===
+            
+            try body({ newState = $0() }, next)
             
             //===
             
-            try REQ.isNotNil("New state for \(UFLInFS.UFLFeature.name) is set") {
+            try REQ.isNotNil("New state for \(UFLOutFS.UFLFeature.name) is set") {
                 
                 newState
             }
@@ -47,19 +44,18 @@ extension Feature
     //===
     
     static
-    func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
+    func initialization<UFLOutFS: SimpleState>(
         action name: String = #function,
-        from _: UFLInFS.Type,
         into _: UFLOutFS.Type,
         body: @escaping (@escaping ActionGetterWrapped) throws -> Void
         ) -> Action
-        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+        where Self == UFLOutFS.UFLFeature
     {
         return action(name) { model, mutate, next in
             
-            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-                model ==> UFLInFS.self
+                model ==> UFLOutFS.UFLFeature.self
             }
             
             //===
@@ -75,18 +71,17 @@ extension Feature
     //===
     
     static
-    func transition<UFLInFS: FeatureState, UFLOutFS: SimpleState>(
+    func initialization<UFLOutFS: SimpleState>(
         action name: String = #function,
-        from _: UFLInFS.Type,
         into _: UFLOutFS.Type
         ) -> Action
-        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+        where Self == UFLOutFS.UFLFeature
     {
         return action(name) { model, mutate, _ in
             
-            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.isNil("\(UFLOutFS.UFLFeature.name) is NOT initialized yet") {
                 
-                model ==> UFLInFS.self
+                model ==> UFLOutFS.UFLFeature.self
             }
             
             //===

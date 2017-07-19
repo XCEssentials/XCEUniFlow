@@ -1,7 +1,3 @@
-import Foundation
-
-//===
-
 final
 class Subscription
 {

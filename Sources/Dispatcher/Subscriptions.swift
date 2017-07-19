@@ -1,7 +1,3 @@
-import Foundation
-
-//=== MARK: Public
-
 public
 extension Dispatcher
 {

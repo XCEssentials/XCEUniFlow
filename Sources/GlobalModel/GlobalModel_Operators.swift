@@ -1,5 +1,3 @@
-import Foundation
-
 //=== MARK: Summary
 
 infix operator <== // gets value from GM and puts it into the left parameter, returns nothing
