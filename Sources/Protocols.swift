@@ -1,7 +1,7 @@
 public
 protocol DispatcherInitializable: class
 {
-    init(with proxy: DispatcherProxy)
+    init(with proxy: Dispatcher.Proxy)
 }
 
 //===
@@ -9,5 +9,5 @@ protocol DispatcherInitializable: class
 public
 protocol DispatcherBindable: class
 {
-    func bind(with proxy: DispatcherProxy) -> Self
+    func bind(with proxy: Dispatcher.Proxy) -> Self
 }

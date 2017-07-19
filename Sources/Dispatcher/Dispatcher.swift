@@ -10,11 +10,16 @@ class Dispatcher
     
     var model = GlobalModel()
     
-    var subscriptions =
-        NSMapTable<AnyObject, Subscription>(
-            keyOptions: .weakMemory,
-            valueOptions: .strongMemory
-        )
+    var subscriptions = NSMapTable<AnyObject, Subscription>(
+        keyOptions: .weakMemory,
+        valueOptions: .strongMemory
+    )
+    
+    //===
+    
+    public
+    lazy
+    var proxy: Proxy = Proxy(self)
     
     //=== MARK: Public members
     

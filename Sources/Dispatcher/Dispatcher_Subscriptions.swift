@@ -1,29 +1,10 @@
 extension Dispatcher
 {
-    func subscribe(
-        _ observer: AnyObject,
-        updateNow: Bool = true
-        ) -> SubscriptionBlank
-    {
-        return
-            SubscriptionBlank(
-                observer: observer,
-                dispatcher: self,
-                initialUpdate: updateNow)
-    }
-    
-    func unsubscribe(_ observer: AnyObject)
-    {
-        subscriptions
-            .removeObject(forKey: observer)
-    }
-
     func register(_ observer: AnyObject,
                   _ subscription: Subscription,
                   _ initialUpdate: Bool = true)
     {
-        subscriptions
-            .setObject(subscription, forKey: observer)
+        subscriptions.setObject(subscription, forKey: observer)
         
         //===
         
@@ -35,11 +16,11 @@ extension Dispatcher
     
     func notifySubscriptions()
     {
-        _ = subscriptions
+        subscriptions
             .objectEnumerator()?
             .allObjects
             .flatMap({ $0 as? Subscription })
-            .map(notify)
+            .forEach(notify)
     }
     
     func notify(_ subscription: Subscription)

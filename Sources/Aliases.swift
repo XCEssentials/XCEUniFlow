@@ -20,15 +20,6 @@ typealias ActionBody = (
     @escaping ActionGetterWrapped
     ) throws -> Void
 
-public
-typealias DispatcherProxy = (
-    //  https://en.wikipedia.org/wiki/Proxy_pattern
-    subscribe: (AnyObject) -> SubscriptionBlank,
-    subscribeLater: (AnyObject) -> SubscriptionBlank,
-    unsubscribe: (AnyObject) -> Void,
-    submit: ActionGetterWrapped
-    )
-
 //=== MARK: Prefixed versions
 
 public
@@ -66,6 +57,3 @@ typealias UFLSimpleState = SimpleState
 
 public
 typealias UFLDispatcher = Dispatcher
-
-public
-typealias UFLDispatcherProxy = DispatcherProxy
