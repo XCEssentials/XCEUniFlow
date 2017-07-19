@@ -1,4 +1,3 @@
-public
 extension Dispatcher
 {
     func subscribe(
@@ -18,12 +17,7 @@ extension Dispatcher
         subscriptions
             .removeObject(forKey: observer)
     }
-}
 
-//=== MARK: Internal
-
-extension Dispatcher
-{
     func register(_ observer: AnyObject,
                   _ subscription: Subscription,
                   _ initialUpdate: Bool = true)
