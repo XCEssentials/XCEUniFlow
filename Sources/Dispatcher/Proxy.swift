@@ -1,10 +1,3 @@
-//
-//  Proxy.swift
-//  MKHUniFlow
-//
-//  Created by Maxim Khatskevich on 2/22/17.
-//  Copyright © 2017 Maxim Khatskevich. All rights reserved.
-//
 //  https://en.wikipedia.org/wiki/Proxy_pattern
 
 import Foundation

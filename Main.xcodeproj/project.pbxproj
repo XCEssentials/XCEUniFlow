@@ -26,6 +26,7 @@
 		6E2FA77E93FAF107EEC9DC0C /* ActionProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780FD7928E14DF6701A17FC0 /* ActionProcessing.swift */; };
 		7ABA2821DA98084D9315E040 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37F837854CA9F402CB5788A /* Main.swift */; };
 		903A0F529A232BFFF57E6274 /* Feature.actualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25391BD0ECF5DD90DDE9B9 /* Feature.actualization.swift */; };
+		943EB3C61F1FD3E800C068A2 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943EB3C51F1FD3E800C068A2 /* Aliases.swift */; };
 		A3B92AF6B60B19B98CB4F005 /* Pods_Fwk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84DDC5C08ED605D5F45712E8 /* Pods_Fwk.framework */; };
 		B52866C80BC4207BFF59966D /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B5FDA73468BEFA229479E7 /* Subscriptions.swift */; };
 		B7E7084E4FFBD0115D655918 /* Feature.deinitialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5FC52D7CC3AFDC76A5951E /* Feature.deinitialization.swift */; };
@@ -93,12 +94,13 @@
 		7C6B3EC1ECF898B0341A8790 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		84DDC5C08ED605D5F45712E8 /* Pods_Fwk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fwk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		918926DCF828EB1DE913CABB /* Feature.initialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Feature.initialization.swift; sourceTree = "<group>"; };
+		943EB3C51F1FD3E800C068A2 /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		974B6908AA9C5442972D696F /* ActionAliases.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActionAliases.swift; sourceTree = "<group>"; };
 		9ABB2447CDC7368F51EFC29E /* Feature.trigger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Feature.trigger.swift; sourceTree = "<group>"; };
 		9C9A66E5C53B105AEBE191EE /* FeatureState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FeatureState.swift; sourceTree = "<group>"; };
 		A9DAEF3ED1AE7A7950D4E015 /* GlobalModel.DataAccess.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GlobalModel.DataAccess.swift; sourceTree = "<group>"; };
 		AC5FC52D7CC3AFDC76A5951E /* Feature.deinitialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Feature.deinitialization.swift; sourceTree = "<group>"; };
-		B090EA585AB4B2A72EDCE4A8 /* Fwk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fwk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B090EA585AB4B2A72EDCE4A8 /* Fwk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Fwk.framework; path = XCEUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B269728244DF2854A791301D /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C562F2099BE89A92533B5209 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
 		DF8C7400E90721C1FCDCCC6F /* Action.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
@@ -138,7 +140,6 @@
 				E37F837854CA9F402CB5788A /* Main.swift */,
 				A9F7C85FA84965870402EE09 /* Spec */,
 			);
-			name = Tests;
 			path = Tests;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -151,7 +152,6 @@
 				7671D060E44057F9C475B28E /* Proxy.swift */,
 				27B5FDA73468BEFA229479E7 /* Subscriptions.swift */,
 			);
-			name = Dispatcher;
 			path = Dispatcher;
 			sourceTree = "<group>";
 		};
@@ -159,12 +159,13 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = "$local";
+			name = $local;
 			sourceTree = "<group>";
 		};
 		32D256F4E80AF25CDF739B7F /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				943EB3C51F1FD3E800C068A2 /* Aliases.swift */,
 				F07E10D8D0A3D2B85781326F /* Action */,
 				15F0F99607B3D0A89D7070D2 /* Dispatcher */,
 				435DF34AA0AC0AAB54C5EA88 /* Feature */,
@@ -172,7 +173,6 @@
 				2D9DB5ED4D7B4E5B98363C56 /* Helpers.swift */,
 				5754115FCABDD6A153B65D66 /* Subscription */,
 			);
-			name = Sources;
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -187,7 +187,6 @@
 				9ABB2447CDC7368F51EFC29E /* Feature.trigger.swift */,
 				9C9A66E5C53B105AEBE191EE /* FeatureState.swift */,
 			);
-			name = Feature;
 			path = Feature;
 			sourceTree = "<group>";
 		};
@@ -209,7 +208,6 @@
 				6C98268D502872273D9E7AF9 /* Final.swift */,
 				1D61B23E75A6833EB5CAFCD0 /* Pending.swift */,
 			);
-			name = Subscription;
 			path = Subscription;
 			sourceTree = "<group>";
 		};
@@ -237,7 +235,6 @@
 				A9DAEF3ED1AE7A7950D4E015 /* GlobalModel.DataAccess.swift */,
 				E774C18E47FC3D4F33BF9981 /* GlobalModel.Operators.swift */,
 			);
-			name = GlobalModel;
 			path = GlobalModel;
 			sourceTree = "<group>";
 		};
@@ -248,7 +245,6 @@
 				7A20DF2084B7CFDC9EC526D1 /* M.swift */,
 				19A62F4C81FC8434010F1493 /* Search.swift */,
 			);
-			name = Spec;
 			path = Spec;
 			sourceTree = "<group>";
 		};
@@ -281,7 +277,6 @@
 				974B6908AA9C5442972D696F /* ActionAliases.swift */,
 				14151E346C220AD7C6E015CB /* ActionContext.swift */,
 			);
-			name = Action;
 			path = Action;
 			sourceTree = "<group>";
 		};
@@ -386,7 +381,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
-			showEnvVarsInLog = 1;
 		};
 		D79885E8B61FDC137CD86537 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -474,6 +468,7 @@
 				51F9E3DAFD66A5687C5CF992 /* GlobalModel.Operators.swift in Sources */,
 				00431D525F4EC15C6AF29623 /* GlobalModel.swift in Sources */,
 				FD34A4BC07AB89308831FC0B /* Helpers.swift in Sources */,
+				943EB3C61F1FD3E800C068A2 /* Aliases.swift in Sources */,
 				2EABA76603E2716B25949124 /* Pending.swift in Sources */,
 				0487B31856A66C2D31FF83EB /* Proxy.swift in Sources */,
 				B52866C80BC4207BFF59966D /* Subscriptions.swift in Sources */,

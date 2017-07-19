@@ -1,11 +1,3 @@
-//
-//  Feature.trigger.swift
-//  UniFlow
-//
-//  Created by Maxim Khatskevich on 5/8/17.
-//
-//
-
 import Foundation
 
 import XCERequirement
