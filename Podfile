@@ -1,8 +1,9 @@
-projName = 'UniFlow'
+repoName = 'UniFlow'
+projName = 'Main'
 
 platform :ios, '8.0'
 
-workspace projName
+workspace repoName
 
 use_frameworks!
 
@@ -11,6 +12,7 @@ use_frameworks!
 def sharedPods
 
 	pod 'XCERequirement', '~> 1.4'
+	# pod 'XCEStaticState', '~> 1.2'
 
 end
 
@@ -34,4 +36,11 @@ target 'Tests' do
 
 	sharedPods
 
+    #===
+    
+    pod 'XCETesting', '~> 1.1'
+
 end
+
+
+
