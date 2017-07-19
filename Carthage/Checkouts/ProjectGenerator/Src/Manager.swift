@@ -27,6 +27,12 @@ enum Manager
             
             case .v1_3_0:
                 rawSpec = Spec_1_3_0.generate(for: project)
+            
+            case .v2_0_0:
+                rawSpec = Spec_2_0_0.generate(for: project)
+            
+            case .v2_1_0:
+                rawSpec = Spec_2_1_0.generate(for: project)
         }
         
         //===

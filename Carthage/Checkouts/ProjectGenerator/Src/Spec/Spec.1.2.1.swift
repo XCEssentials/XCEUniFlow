@@ -1,11 +1,3 @@
-//
-//  Spec.1.2.1.swift
-//  MKHProjGen
-//
-//  Created by Maxim Khatskevich on 3/17/17.
-//  Copyright © 2017 Maxim Khatskevich. All rights reserved.
-//
-
 import Foundation
 
 //===
@@ -27,7 +19,7 @@ enum Spec_1_2_1
         
         // https://github.com/lyptt/struct/wiki/Spec-format:-v1.2#version-number
         
-        result <<< (idention, Spec.key("version") + " 1.2.1")
+        result <<< (idention, Spec.key("version") + " \(Spec.Format.v1_2_1.rawValue)")
         
         //===
         
@@ -595,9 +587,23 @@ enum Spec_1_2_1
             
             //===
             
-            result <<< processScripts(&idention, regulars: scripts.regulars)
-            result <<< processScripts(&idention, beforeBuild: scripts.beforeBuilds)
-            result <<< processScripts(&idention, afterBuild: scripts.afterBuilds)
+            if
+                !scripts.regulars.isEmpty
+            {
+                result <<< processScripts(&idention, regulars: scripts.regulars)
+            }
+            
+            if
+                !scripts.beforeBuilds.isEmpty
+            {
+                result <<< processScripts(&idention, beforeBuild: scripts.beforeBuilds)
+            }
+            
+            if
+                !scripts.afterBuilds.isEmpty
+            {
+                result <<< processScripts(&idention, afterBuild: scripts.afterBuilds)
+            }
             
             //===
             

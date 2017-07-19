@@ -35,16 +35,6 @@ xcode-select --install
 fastlane ios inc_version_and_commit
 ```
 
-### ios regenerate_project
-```
-fastlane ios regenerate_project
-```
-
-### ios generate_project
-```
-fastlane ios generate_project
-```
-
 
 ----
 

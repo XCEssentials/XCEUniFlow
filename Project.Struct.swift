@@ -18,32 +18,34 @@ let BundleId =
 
 //===
 
-let specFormat = Spec.Format.v1_3_0
+let specFormat = Spec.Format.v2_1_0
 
-let project = Project(My.repoName) { p in
+let project = Project(My.repoName) { project in
     
-    p.configurations.all.override(
+    project.configurations.all.override(
         
         "IPHONEOS_DEPLOYMENT_TARGET" <<< My.deploymentTarget, // bug wokraround
         
         "SWIFT_VERSION" <<< "3.0",
-        "VERSIONING_SYSTEM" <<< "apple-generic"
+        "VERSIONING_SYSTEM" <<< "apple-generic",
+        
+        "CURRENT_PROJECT_VERSION" <<< "0" // just a default non-empty value
     )
     
-    p.configurations.debug.override(
+    project.configurations.debug.override(
         
         "SWIFT_OPTIMIZATION_LEVEL" <<< "-Onone"
     )
     
     //---
     
-    p.target("Fwk", .iOS, .framework) { t in
+    project.target("Fwk", .iOS, .framework) { target in
         
-        t.include("Src")
+        target.include("Sources")
         
         //---
         
-        t.configurations.all.override(
+        target.configurations.all.override(
             
             "PRODUCT_NAME" <<< "\(My.companyPrefix)\(My.repoName)",
             
@@ -63,20 +65,20 @@ let project = Project(My.repoName) { p in
             "SKIP_INSTALL" <<< "YES"
         )
         
-        t.configurations.debug.override(
+        target.configurations.debug.override(
             
             "MTL_ENABLE_DEBUG_INFO" <<< true
         )
         
         //---
     
-        t.unitTests { ut in
+        target.unitTests { unitTests in
             
-            ut.include("Tst")
+            unitTests.include("Tests")
             
             //---
             
-            ut.configurations.all.override(
+            unitTests.configurations.all.override(
                 
                 // very important for unit tests,
                 // prevents the error when unit test do not start at all
@@ -90,7 +92,7 @@ let project = Project(My.repoName) { p in
                 "FRAMEWORK_SEARCH_PATHS" <<< "$(inherited) $(BUILT_PRODUCTS_DIR)"
             )
             
-            ut.configurations.debug.override(
+            unitTests.configurations.debug.override(
                 
                 "MTL_ENABLE_DEBUG_INFO" <<< true
             )
