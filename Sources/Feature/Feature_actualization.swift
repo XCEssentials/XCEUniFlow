@@ -12,7 +12,7 @@ extension Feature
         ) -> Action
         where Self == S.ParentFeature
     {
-        return action(name) { model, mutate, next in
+        return action(name) { model, mutate, submit in
             
             let currentState =
                 
@@ -25,7 +25,7 @@ extension Feature
             
             var buf = currentState
             
-            try body(currentState, { $0(&buf) }, next)
+            try body(currentState, { $0(&buf) }, submit)
             
             //===
             

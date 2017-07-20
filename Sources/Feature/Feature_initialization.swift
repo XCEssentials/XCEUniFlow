@@ -3,17 +3,29 @@ import XCERequirement
 //===
 
 public
-extension Feature
+struct Initialization<S: FeatureState>: Action
 {
-    static
-    func initialization<S: FeatureState>(
-        action name: String = #function,
+    public
+    let name: String
+    
+    public
+    let body: ActionBody
+}
+
+//===
+
+public
+extension Initialization
+{
+    init(
+        action: String = #function,
         body: @escaping (Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
-        ) -> Action
-        where Self == S.ParentFeature
+        )
     {
-        return action(name) { model, mutate, next in
-                
+        self.name = action
+        
+        self.body = { model, mutate, submit in
+
             try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
                 
                 model ==> S.ParentFeature.self
@@ -28,25 +40,26 @@ extension Feature
             // http://alisoftware.github.io/swift/closures/2016/07/25/closure-capture-1/
             // capture 'var' value by reference here!
             
-            try body({ newState = $0() }, next)
+            try body({ newState = $0() }, submit)
             
             //===
             
             mutate { $0 <== newState }
         }
     }
-    
-    //===
-    
-    static
-    func initialization<S: SimpleState>(
-        action name: String = #function,
-        into _: S.Type
-        ) -> Action
-        where Self == S.ParentFeature
+}
+
+//===
+
+public
+extension Initialization where S: SimpleState
+{
+    init(action: String = #function)
     {
-        return action(name) { model, mutate, _ in
-            
+        self.name = action
+        
+        self.body = { model, mutate, _ in
+        
             try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
                 
                 model ==> S.ParentFeature.self

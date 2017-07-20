@@ -1,18 +1,19 @@
 public
-struct Action
+protocol Action
+{
+    var name: String { get }
+    
+    var body: ActionBody { get }
+}
+
+//===
+
+public
+struct GenericAction: Action
 {
     public
     let name: String
     
-    // internal
+    public
     let body: ActionBody
-    
-    //===
-    
-    // internal
-    init(_ name: String, _ body: @escaping ActionBody)
-    {
-        self.name = name
-        self.body = body
-    }
 }

@@ -15,7 +15,22 @@ protocol DispatcherBindable: class
 //===
 
 public
-protocol Feature: ActionContext {}
+protocol Feature {}
+
+//===
+
+public
+extension Feature
+{
+    static
+    var name: String { return String(reflecting: Self.self) }
+    
+    static
+    func action(_ name: String = #function, body: @escaping ActionBody) -> Action
+    {
+        return GenericAction(name: "\(self.name).\(name)", body: body)
+    }
+}
 
 //===
 

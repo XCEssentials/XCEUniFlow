@@ -26,12 +26,12 @@ extension M
 
 //===
 
-extension M.Arithmetics: ActionContext
+extension M.Arithmetics
 {
     static
     func begin() -> Action
     {
-        return action { model, mutate, next in
+        return action { model, mutate, submit in
             
             try REQ.isNil("Feature is not initialized yet") {
                 
@@ -44,8 +44,8 @@ extension M.Arithmetics: ActionContext
             
             //===
             
-            next { setExplicit(value: 10) }
-            next { incFive() }
+            submit { setExplicit(value: 10) }
+            submit { incFive() }
         }
     }
     

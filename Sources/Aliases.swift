@@ -44,7 +44,7 @@ public
 typealias UFLAction = Action
 
 public
-typealias UFLActionContext = ActionContext
+typealias UFLGenericAction = GenericAction
 
 public
 typealias UFLFeature = Feature

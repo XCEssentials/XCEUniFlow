@@ -13,7 +13,7 @@ extension Feature
         ) -> Action
         where Self == UFLFS.ParentFeature
     {
-        return action(name) { model, _, next in
+        return action(name) { model, _, submit in
             
             let currentState =
                 
@@ -24,7 +24,7 @@ extension Feature
             
             //===
             
-            try body(currentState, next)
+            try body(currentState, submit)
         }
     }
     
@@ -34,9 +34,9 @@ extension Feature
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return action(name) { model, _, next in
+        return action(name) { model, _, submit in
             
-            try body(model, next)
+            try body(model, submit)
         }
     }
 }

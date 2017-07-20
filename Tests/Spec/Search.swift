@@ -55,25 +55,29 @@ extension M.Search
     static
     func initialize() -> Action
     {
-        return initialization(into: Ready.self)
+        return Initialization<Ready>()
+        
+//        return Into<Ready>.initialization()
+//        return Ready.initializeInto()
+//        return initialization(into: Ready.self)
     }
     
     //===
     
     static
     func simulate() -> Action
-    {
-        return transition(from: Ready.self, into: InProgress.self) { _, become, next in
+    {       // Into<InProgress>.transition { (_: Ready, become, submit) in
+        return transition(from: Ready.self, into: InProgress.self) { _, become, submit in
             
             become { InProgress(progress: 0) }
             
             //===
             
-            next { update(progress: 10) }
-            next { update(progress: 30) }
-            next { update(progress: 70) }
-            next { fail() }
-            next { cleanup() }
+            submit { update(progress: 10) }
+            submit { update(progress: 30) }
+            submit { update(progress: 70) }
+            submit { fail() }
+            submit { cleanup() }
         }
     }
     

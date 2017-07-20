@@ -14,7 +14,7 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.ParentFeature, UFLInFS.ParentFeature == UFLOutFS.ParentFeature
     {
-        return action(name) { model, mutate, next in
+        return action(name) { model, mutate, submit in
                 
             let currentState =
                 
@@ -27,7 +27,7 @@ extension Feature
             
             var newState: UFLOutFS?
             
-            try body(currentState, { newState = $0() }, next)
+            try body(currentState, { newState = $0() }, submit)
             
             //===
             
@@ -53,7 +53,7 @@ extension Feature
         ) -> Action
         where Self == UFLInFS.ParentFeature, UFLInFS.ParentFeature == UFLOutFS.ParentFeature
     {
-        return action(name) { model, mutate, next in
+        return action(name) { model, mutate, submit in
             
             try REQ.isNotNil("\(UFLInFS.ParentFeature.name) is in \(UFLInFS.self) state") {
                 
@@ -66,7 +66,7 @@ extension Feature
             
             //===
             
-            try body(next)
+            try body(submit)
         }
     }
     
