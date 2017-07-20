@@ -3,7 +3,7 @@ import XCERequirement
 //===
 
 public
-struct Initialization<S: FeatureState>: Action
+struct InitializationInto<S: FeatureState>: Action
 {
     public
     let name: String
@@ -15,7 +15,7 @@ struct Initialization<S: FeatureState>: Action
 //===
 
 public
-extension Initialization
+extension InitializationInto
 {
     init(
         action: String = #function,
@@ -52,7 +52,7 @@ extension Initialization
 //===
 
 public
-extension Initialization where S: SimpleState
+extension InitializationInto where S: SimpleState
 {
     init(action: String = #function)
     {

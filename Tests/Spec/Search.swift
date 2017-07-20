@@ -55,19 +55,26 @@ extension M.Search
     static
     func initialize() -> Action
     {
-        return Initialization<Ready>()
-        
-//        return Into<Ready>.initialization()
-//        return Ready.initializeInto()
-//        return initialization(into: Ready.self)
+        return InitializationInto<Ready>()
+    }
+    
+    //===
+    
+    static
+    func begin() -> Action
+    {
+        return TriggerOn { _, submit in
+            
+            submit { simulate() }
+        }
     }
     
     //===
     
     static
     func simulate() -> Action
-    {       // Into<InProgress>.transition { (_: Ready, become, submit) in
-        return transition(from: Ready.self, into: InProgress.self) { _, become, submit in
+    {
+        return TransitionBetween<Ready, InProgress> { _, become, submit in
             
             become { InProgress(progress: 0) }
             
@@ -86,7 +93,7 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualization { (_: InProgress, mutate, _) in
+        return ActualizationOf<InProgress> { _, mutate, _ in
             
             _ = 0 // Xcode bug workaround
             
@@ -99,7 +106,7 @@ extension M.Search
     static
     func fail() -> Action
     {
-        return transition(from: InProgress.self, into: Failed.self)
+        return TransitionBetween<InProgress, Failed>()
     }
     
     //===
@@ -107,6 +114,6 @@ extension M.Search
     static
     func cleanup() -> Action
     {
-        return deinitialization(from: Failed.self)
+        return DeinitializationFrom<Failed>()
     }
 }

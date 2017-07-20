@@ -47,3 +47,13 @@ protocol SimpleState: FeatureState
 {
     init()
 }
+
+//===
+
+public
+protocol Action
+{
+    var name: String { get }
+    
+    var body: ActionBody { get }
+}

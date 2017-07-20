@@ -3,16 +3,28 @@ import XCERequirement
 //===
 
 public
-extension Feature
+struct ActualizationOf<S: FeatureState>: Action
 {
-    static
-    func actualization<S: FeatureState>(
-        action name: String = #function,
+    public
+    let name: String
+    
+    public
+    let body: ActionBody
+}
+
+//===
+
+public
+extension ActualizationOf
+{
+    init(
+        action: String = #function,
         body: @escaping (S, Wrapped<Mutations<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
-        ) -> Action
-        where Self == S.ParentFeature
+        )
     {
-        return action(name) { model, mutate, submit in
+        self.name = action
+        
+        self.body = { model, mutate, submit in
             
             let currentState =
                 
