@@ -44,6 +44,24 @@ public
 typealias UFLAction = Action
 
 public
+typealias UFLInitializationInto<S: FeatureState> = InitializationInto<S>
+
+public
+typealias UFLActualizationOf<S: FeatureState> = ActualizationOf<S>
+
+public
+typealias UFLTriggerOn = TriggerOn
+
+public
+typealias UFLTransitionBetween<From, Into> = TransitionBetween<From, Into> where
+    From: FeatureState,
+    Into: FeatureState,
+    From.ParentFeature == Into.ParentFeature
+
+public
+typealias UFLDeinitializationFrom<S: FeatureState> = DeinitializationFrom<S>
+
+public
 typealias UFLGenericAction = GenericAction
 
 public
