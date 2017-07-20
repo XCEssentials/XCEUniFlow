@@ -6,20 +6,19 @@ public
 extension Feature
 {
     static
-    func actualization<UFLFS: FeatureState>(
+    func actualization<S: FeatureState>(
         action name: String = #function,
-        of _: UFLFS.Type,
-        body: @escaping (UFLFS, (Mutations<UFLFS>) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (S, Wrapped<Mutations<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
-        where Self == UFLFS.UFLFeature
+        where Self == S.ParentFeature
     {
         return action(name) { model, mutate, next in
             
             let currentState =
                 
-            try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
+            try REQ.value("\(S.ParentFeature.name) is in \(S.self) state") {
                 
-                model ==> UFLFS.self
+                model ==> S.self
             }
             
             //===

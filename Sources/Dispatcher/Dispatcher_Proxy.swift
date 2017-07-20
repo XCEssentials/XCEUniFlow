@@ -22,6 +22,7 @@ extension Dispatcher
         
         //===
         
+        public
         func subscribe(
             _ observer: AnyObject,
             updateNow: Bool = true
@@ -34,11 +35,13 @@ extension Dispatcher
             )
         }
         
+        public
         func unsubscribe(_ observer: AnyObject)
         {
             dispatcher.subscriptions.removeObject(forKey: observer)
         }
         
+        public
         func submit(_ actionGetter: @autoclosure () -> Action)
         {
             let act = actionGetter()
@@ -57,6 +60,7 @@ extension Dispatcher
             }
         }
         
+        public
         func submit(_ actionGetter: () -> Action)
         {
             let act = actionGetter()

@@ -27,7 +27,8 @@ class Main: XCTestCase
     override
     func tearDown()
     {
-        disp.onReject = nil
+        disp.onDidProcessAction = nil
+        disp.onDidRejectAction = nil
     }
     
     //===
@@ -65,7 +66,6 @@ class Main: XCTestCase
         
         proxy.submit { M.Arithmetics.begin() } // option 1
         // proxy.submit(M.Arithmetics.begin)   // option 2
-        // disp.submit(M.Arithmetics.begin()) // option 3 - only with Dispatcher directly
         
         //===
         

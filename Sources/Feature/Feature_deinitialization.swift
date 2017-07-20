@@ -6,79 +6,43 @@ public
 extension Feature
 {
     static
-    func deinitialization<UFLInFS: FeatureState>(
+    func deinitialization<S: FeatureState>(
         action name: String = #function,
-        from _: UFLInFS.Type,
-        body: @escaping (UFLInFS, (() -> Bool) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
-        where Self == UFLInFS.UFLFeature
+        where Self == S.ParentFeature
     {
         return action(name) { model, mutate, next in
                 
             let currentState =
                 
-            try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.value("\(S.ParentFeature.name) is in \(S.self) state") {
                 
-                model ==> UFLInFS.self
+                model ==> S.self
             }
             
             //===
             
-            var shouldProceed = true
-            
-            try body(currentState, { shouldProceed = $0() }, next)
-            
-            //===
-            
-            if
-                shouldProceed
-            {
-                mutate{ $0 /== Self.self }
-            }
-        }
-    }
-    
-    //===
-    
-    static
-    func deinitialization<UFLInFS: FeatureState>(
-        action name: String = #function,
-        from _: UFLInFS.Type,
-        body: @escaping (@escaping ActionGetterWrapped) throws -> Void
-        ) -> Action
-        where Self == UFLInFS.UFLFeature
-    {
-        return action(name) { model, mutate, next in
-            
-            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
-                
-                model ==> UFLInFS.self
-            }
+            try body(currentState, next)
             
             //===
             
             mutate{ $0 /== Self.self }
-            
-            //===
-            
-            try body(next)
         }
     }
     
-    //===
-    
     static
-    func deinitialization<UFLInFS: FeatureState>(
+    func deinitialization<S: FeatureState>(
         action name: String = #function,
-        from _: UFLInFS.Type
+        from _: S.Type
         ) -> Action
-        where Self == UFLInFS.UFLFeature
+        where Self == S.ParentFeature
     {
         return action(name) { model, mutate, _ in
             
-            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.isNotNil("\(S.ParentFeature.name) is in \(S.self) state") {
                 
-                model ==> UFLInFS.self
+                model ==> S.self
             }
             
             //===

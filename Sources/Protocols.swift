@@ -22,7 +22,7 @@ protocol Feature: ActionContext {}
 public
 protocol FeatureState
 {
-    associatedtype UFLFeature: Feature
+    associatedtype ParentFeature: Feature
 }
 
 //===

@@ -1,26 +1,29 @@
 public
+typealias Wrapped<Value> = (Value) -> Void
+
+public
 typealias Mutations<Value> = (_: inout Value) -> Void
 
 public
 typealias ModelMutations = (_: inout GlobalModel) -> Void
 
 public
-typealias ModelMutationsWrapped = (ModelMutations) -> Void
+typealias StateGetter<State: FeatureState> = () -> State
 
 public
 typealias ActionGetter = () -> Action
 
 public
-typealias ActionGetterWrapped = (ActionGetter) -> Void
-
-public
 typealias ActionBody = (
     GlobalModel,
-    ModelMutationsWrapped,
-    @escaping ActionGetterWrapped
+    Wrapped<ModelMutations>,
+    @escaping Wrapped<ActionGetter>
     ) throws -> Void
 
 //=== MARK: Prefixed versions
+
+public
+typealias UFLWrapped<Value> = Wrapped<Value>
 
 public
 typealias UFLMutations<Value> = Mutations<Value>
@@ -29,13 +32,10 @@ public
 typealias UFLModelMutations = ModelMutations
 
 public
-typealias UFLModelMutationsWrapped = ModelMutationsWrapped
+typealias UFLStateGetter<State: FeatureState> = StateGetter<State>
 
 public
 typealias UFLActionGetter = ActionGetter
-
-public
-typealias UFLActionGetterWrapped = ActionGetterWrapped
 
 public
 typealias UFLActionBody = ActionBody

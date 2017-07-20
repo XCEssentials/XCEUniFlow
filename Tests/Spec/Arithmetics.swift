@@ -17,7 +17,7 @@ extension M
 {
     enum Arithmetics: Feature
     {
-        struct Main: FeatureState { typealias UFLFeature = Arithmetics
+        struct Main: FeatureState { typealias ParentFeature = Arithmetics
             
             var val: Int
         }

@@ -9,15 +9,15 @@ extension Feature
     func trigger<UFLFS: FeatureState>(
         action name: String = #function,
         on _: UFLFS.Type,
-        body: @escaping (UFLFS, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (UFLFS, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
-        where Self == UFLFS.UFLFeature
+        where Self == UFLFS.ParentFeature
     {
         return action(name) { model, _, next in
             
             let currentState =
                 
-            try REQ.value("\(UFLFS.UFLFeature.name) is in \(UFLFS.self) state") {
+            try REQ.value("\(UFLFS.ParentFeature.name) is in \(UFLFS.self) state") {
                 
                 model ==> UFLFS.self
             }
@@ -31,7 +31,7 @@ extension Feature
     static
     func trigger(
         action name: String = #function,
-        body: @escaping (GlobalModel, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
         return action(name) { model, _, next in

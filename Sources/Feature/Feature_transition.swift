@@ -10,15 +10,15 @@ extension Feature
         action name: String = #function,
         from _: UFLInFS.Type,
         into _: UFLOutFS.Type,
-        body: @escaping (UFLInFS, (() -> UFLOutFS) -> Void, @escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (UFLInFS, (() -> UFLOutFS) -> Void, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
-        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+        where Self == UFLInFS.ParentFeature, UFLInFS.ParentFeature == UFLOutFS.ParentFeature
     {
         return action(name) { model, mutate, next in
                 
             let currentState =
                 
-            try REQ.value("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.value("\(UFLInFS.ParentFeature.name) is in \(UFLInFS.self) state") {
                 
                 model ==> UFLInFS.self
             }
@@ -31,7 +31,7 @@ extension Feature
             
             //===
             
-            try REQ.isNotNil("New state for \(UFLInFS.UFLFeature.name) is set") {
+            try REQ.isNotNil("New state for \(UFLInFS.ParentFeature.name) is set") {
                 
                 newState
             }
@@ -49,13 +49,13 @@ extension Feature
         action name: String = #function,
         from _: UFLInFS.Type,
         into _: UFLOutFS.Type,
-        body: @escaping (@escaping ActionGetterWrapped) throws -> Void
+        body: @escaping (@escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
-        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+        where Self == UFLInFS.ParentFeature, UFLInFS.ParentFeature == UFLOutFS.ParentFeature
     {
         return action(name) { model, mutate, next in
             
-            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.isNotNil("\(UFLInFS.ParentFeature.name) is in \(UFLInFS.self) state") {
                 
                 model ==> UFLInFS.self
             }
@@ -78,11 +78,11 @@ extension Feature
         from _: UFLInFS.Type,
         into _: UFLOutFS.Type
         ) -> Action
-        where Self == UFLInFS.UFLFeature, UFLInFS.UFLFeature == UFLOutFS.UFLFeature
+        where Self == UFLInFS.ParentFeature, UFLInFS.ParentFeature == UFLOutFS.ParentFeature
     {
         return action(name) { model, mutate, _ in
             
-            try REQ.isNotNil("\(UFLInFS.UFLFeature.name) is in \(UFLInFS.self) state") {
+            try REQ.isNotNil("\(UFLInFS.ParentFeature.name) is in \(UFLInFS.self) state") {
                 
                 model ==> UFLInFS.self
             }

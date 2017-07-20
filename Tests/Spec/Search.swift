@@ -22,27 +22,27 @@ extension M
         
         //===
         
-        struct Ready: SimpleState { typealias UFLFeature = Search
+        struct Ready: SimpleState { typealias ParentFeature = Search
             
         }
         
         //===
         
-        struct InProgress: FeatureState { typealias UFLFeature = Search
+        struct InProgress: FeatureState { typealias ParentFeature = Search
             
             var progress: Int
         }
         
         //===
         
-        struct Complete: FeatureState { typealias UFLFeature = Search
+        struct Complete: FeatureState { typealias ParentFeature = Search
             
             var results: [String]
         }
         
         //===
         
-        struct Failed: SimpleState { typealias UFLFeature = Search
+        struct Failed: SimpleState { typealias ParentFeature = Search
             
         }
     }
@@ -82,9 +82,9 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualization(of: InProgress.self) { _, mutate, _ in
+        return actualization { (_: InProgress, mutate, _) in
             
-            _ = 1 // Xcode bug workaround
+            _ = 0 // Xcode bug workaround
             
             mutate { $0.progress = progress }
         }

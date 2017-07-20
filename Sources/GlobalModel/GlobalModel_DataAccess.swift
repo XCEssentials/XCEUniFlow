@@ -12,12 +12,12 @@ extension GlobalModel
     public
     func extract<FS: FeatureState>(state _: FS.Type) -> FS?
     {
-        return data[GlobalModel.key(from: FS.UFLFeature.self)] as? FS
+        return data[GlobalModel.key(from: FS.ParentFeature.self)] as? FS
     }
     public
     func extract<FS: FeatureState>(defaultValue: FS) -> Any
     {
-        return data[GlobalModel.key(from: FS.UFLFeature.self)] ?? defaultValue
+        return data[GlobalModel.key(from: FS.ParentFeature.self)] ?? defaultValue
     }
 }
 
@@ -30,7 +30,7 @@ extension GlobalModel
     mutating
     func merge<FS: FeatureState>(_ state: FS?)
     {
-        data[GlobalModel.key(from: FS.UFLFeature.self)] = state
+        data[GlobalModel.key(from: FS.ParentFeature.self)] = state
     }
 }
 
