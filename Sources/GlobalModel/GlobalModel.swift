@@ -4,17 +4,21 @@ typealias FeatureKey = String
 //===
 
 public
+extension Feature
+{
+    static
+    var key: FeatureKey
+    {
+        return FeatureKey(reflecting: self)
+    }
+}
+
+//===
+
+public
 struct GlobalModel
 {
     var data: [FeatureKey: Any] = [:]
-    
-    //===
-    
-    static
-    func key<F: Feature>(from _: F.Type) -> FeatureKey
-    {
-        return String(reflecting: F.self)
-    }
     
     //===
     

@@ -6,18 +6,18 @@ extension GlobalModel
     public
     func extract<F: Feature>(feature _: F.Type) -> Any?
     {
-        return data[GlobalModel.key(from: F.self)]
+        return data[F.key]
     }
     
     public
-    func extract<FS: FeatureState>(state _: FS.Type) -> FS?
+    func extract<S: FeatureState>(state _: S.Type) -> S?
     {
-        return data[GlobalModel.key(from: FS.ParentFeature.self)] as? FS
+        return data[S.ParentFeature.key] as? S
     }
     public
-    func extract<FS: FeatureState>(defaultValue: FS) -> Any
+    func extract<S: FeatureState>(defaultValue: S) -> Any
     {
-        return data[GlobalModel.key(from: FS.ParentFeature.self)] ?? defaultValue
+        return data[S.ParentFeature.key] ?? defaultValue
     }
 }
 
@@ -28,9 +28,9 @@ extension GlobalModel
 {
     public
     mutating
-    func merge<FS: FeatureState>(_ state: FS?)
+    func merge<S: FeatureState>(_ state: S?)
     {
-        data[GlobalModel.key(from: FS.ParentFeature.self)] = state
+        data[S.ParentFeature.key] = state
     }
 }
 
@@ -43,6 +43,6 @@ extension GlobalModel
     mutating
     func remove<F: Feature>(_: F.Type)
     {
-        data.removeValue(forKey: GlobalModel.key(from: F.self))
+        data.removeValue(forKey: F.key)
     }
 }
