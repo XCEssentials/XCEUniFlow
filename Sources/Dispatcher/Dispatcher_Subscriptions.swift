@@ -3,22 +3,42 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        _ observer: AnyObject,
-        updateNow: Bool = true
-        ) -> SubscriptionBlank
+        updateNow: Bool = true,
+        onUpdate: @escaping (GlobalModel) -> Void
+        ) -> Dispatcher.Proxy
     {
-        return SubscriptionBlank(
-            observer: observer,
-            dispatcher: dispatcher,
-            initialUpdate: updateNow
+        let subscription = Subscription(onUpdate)
+        
+        //===
+        
+        dispatcher.add(subscription, updateNow)
+        
+        //===
+        
+        return Dispatcher.Proxy(
+            for: dispatcher,
+            subscription: subscription
         )
     }
     
     public
-    func unsubscribe(_ observer: AnyObject)
+    func subscribe<SubState>(
+        updateNow: Bool = true,
+        onConvert: @escaping (GlobalModel) -> SubState?,
+        onUpdate: @escaping (SubState) -> Void
+        ) -> Dispatcher.Proxy
     {
-        dispatcher.subscriptions.removeValue(
-            forKey: Subscription.identifier(for: observer)
+        let subscription = Subscription(onConvert, onUpdate)
+        
+        //===
+        
+        dispatcher.add(subscription, updateNow)
+        
+        //===
+        
+        return Dispatcher.Proxy(
+            for: dispatcher,
+            subscription: subscription
         )
     }
 }
@@ -36,23 +56,16 @@ extension Dispatcher
         
         //===
         
-        if initialUpdate
+        if
+            initialUpdate
         {
-            notify(subscription)
+            subscription.execute(with: model)
         }
     }
     
     func notifySubscriptions()
     {
         subscriptions
-            .map{ $0.value }
-            .forEach(notify)
-    }
-    
-    func notify(_ subscription: Subscription)
-    {
-        subscription
-            .onConvert(model)
-            .map(subscription.onUpdate)
+            .forEach{ $0.value.execute(with: model) }
     }
 }

@@ -3,29 +3,38 @@ import XCERequirement
 //===
 
 public
-struct InitializationInto<S: FeatureState>: Action
+extension Feature
 {
-    public
-    let name: String
-    
-    public
-    let body: ActionBody
+    static
+    var initialization: InitializationContext<Self>.Type
+    {
+        return InitializationContext<Self>.self
+    }
 }
 
 //===
 
 public
-extension InitializationInto
+enum InitializationContext<F: Feature>
 {
-    init(
+    public
+    enum Into<S: FeatureState> where S.ParentFeature == F { }
+}
+
+//===
+
+public
+extension InitializationContext.Into
+{
+    public
+    static
+    func via(
         action: String = #function,
         body: @escaping (Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
-        )
+        ) -> Action
     {
-        self.name = action
-        
-        self.body = { model, mutate, submit in
-
+        return Action(name: action, feature: F.self) { model, mutate, submit in
+            
             try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
                 
                 model ==> S.ParentFeature.self
@@ -52,14 +61,14 @@ extension InitializationInto
 //===
 
 public
-extension InitializationInto where S: SimpleState
+extension InitializationContext.Into where S: SimpleState
 {
-    init(action: String = #function)
+    public
+    static
+    func automatic(action: String = #function) -> Action
     {
-        self.name = action
-        
-        self.body = { model, mutate, _ in
-        
+        return Action(name: action, feature: F.self) { model, mutate, _ in
+            
             try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
                 
                 model ==> S.ParentFeature.self

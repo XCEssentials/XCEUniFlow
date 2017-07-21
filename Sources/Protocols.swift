@@ -17,19 +17,11 @@ protocol DispatcherBindable: class
 public
 protocol Feature {}
 
-//===
-
 public
 extension Feature
 {
     static
     var name: String { return String(reflecting: Self.self) }
-    
-    static
-    func action(_ name: String = #function, body: @escaping ActionBody) -> Action
-    {
-        return GenericAction(name: "\(self.name).\(name)", body: body)
-    }
 }
 
 //===
@@ -46,14 +38,4 @@ public
 protocol SimpleState: FeatureState
 {
     init()
-}
-
-//===
-
-public
-protocol Action
-{
-    var name: String { get }
-    
-    var body: ActionBody { get }
 }

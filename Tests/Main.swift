@@ -16,6 +16,30 @@ class Main: XCTestCase
 {
     let disp = Dispatcher(defaultReporting: true)
     
+    var proxy: Dispatcher.Proxy!
+    
+    //===
+    
+    override
+    func setUp()
+    {
+        super.setUp()
+        
+        //===
+        
+        //
+    }
+    
+    override
+    func tearDown()
+    {
+        proxy = nil
+        
+        //===
+        
+        super.tearDown()
+    }
+     
     //===
     
     func testArithmetics()
@@ -24,32 +48,26 @@ class Main: XCTestCase
         
         //===
         
-        let proxy = disp.proxy
-        
-        //===
-        
-        proxy
-            .subscribe(self)
-            .onUpdate {
+        proxy = disp.proxy.subscribe {
+            
+            if
+                let a = $0 ==> M.Arithmetics.Main.self
+            {
+                print("The value -->> \(a.val)")
+                
+                //===
                 
                 if
-                    let a = $0 ==> M.Arithmetics.Main.self
+                    a.val == 15
                 {
-                    print("The value -->> \(a.val)")
-                    
-                    //===
-                    
-                    if
-                        a.val == 15
-                    {
-                        ex.fulfill()
-                    }
+                    ex.fulfill()
                 }
             }
+        }
         
         //===
         
-        proxy.submit { M.Arithmetics.begin() } // option 1
+//        proxy.submit { M.Arithmetics.begin() } // option 1
         // proxy.submit(M.Arithmetics.begin)   // option 2
         
         //===
@@ -66,42 +84,36 @@ class Main: XCTestCase
         
         //===
         
-        let proxy = disp.proxy
-        
-        //===
-        
-        proxy
-            .subscribe(self)
-            .onUpdate {
+        proxy = disp.proxy.subscribe {
+                
+            if
+                let s = $0 ==> M.Search.self
+            {
+                print("The search -->> \(s)")
+                
+                //===
                 
                 if
-                    let s = $0 ==> M.Search.self
+                    let p = s as? M.Search.InProgress,
+                    p.progress == 70
                 {
-                    print("The search -->> \(s)")
-                    
-                    //===
-                    
-                    if
-                        let p = s as? M.Search.InProgress,
-                        p.progress == 70
-                    {
-                        progressEx.fulfill()
-                    }
-                    
-                    //===
-                    
-                    if
-                        s is M.Search.Failed
-                    {
-                        ex.fulfill()
-                    }
+                    progressEx.fulfill()
                 }
+                
+                //===
+                
+                if
+                    s is M.Search.Failed
+                {
+                    ex.fulfill()
+                }
+            }
         }
         
         //===
         
-        proxy.submit { M.Search.initialize() }
-        proxy.submit { M.Search.simulate() }
+//        proxy.submit { M.Search.initialize() }
+//        proxy.submit { M.Search.simulate() }
         
         //===
         

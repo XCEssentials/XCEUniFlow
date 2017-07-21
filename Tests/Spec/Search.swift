@@ -55,65 +55,73 @@ extension M.Search
     static
     func initialize() -> Action
     {
-        return InitializationInto<Ready>()
+        return initialization.Into<Ready>.automatic()
+//        return initialization.Into<Ready>.using { ... }
+//        return initialization.Into<Ready>.via { ... }
+//        return initialization.Into<Ready>.by { ... }
+//        return InitializationInto<Ready>()
     }
     
     //===
     
-    static
-    func begin() -> Action
-    {
-        return TriggerOn { _, submit in
-            
-            submit { simulate() }
-        }
-    }
-    
-    //===
-    
-    static
-    func simulate() -> Action
-    {
-        return TransitionBetween<Ready, InProgress> { _, become, submit in
-            
-            become { InProgress(progress: 0) }
-            
-            //===
-            
-            submit { update(progress: 10) }
-            submit { update(progress: 30) }
-            submit { update(progress: 70) }
-            submit { fail() }
-            submit { cleanup() }
-        }
-    }
-    
-    //===
-    
-    static
-    func update(progress: Int) -> Action
-    {
-        return ActualizationOf<InProgress> { _, mutate, _ in
-            
-            _ = 0 // Xcode bug workaround
-            
-            mutate { $0.progress = progress }
-        }
-    }
-    
-    //===
-    
-    static
-    func fail() -> Action
-    {
-        return TransitionBetween<InProgress, Failed>()
-    }
-    
-    //===
-    
-    static
-    func cleanup() -> Action
-    {
-        return DeinitializationFrom<Failed>()
-    }
+//    static
+//    func begin() -> Action
+//    {
+//        return TriggerOn { _, submit in
+//            
+//            submit { simulate() }
+//        }
+//    }
+//    
+//    //===
+//    
+//    static
+//    func simulate() -> Action
+//            // From<Ready>.transition
+//            // transition(Ready.self, InProgress.self) { _, become, submit in
+//    {       // transition { (reay: Ready, become: Into<InProgress>, submit) in\
+//            // transition(Between<Ready, InProgress>) { _, become, submit in
+//            // transition.between<Ready, InProgress>.automatic()
+//        return TransitionBetween<Ready, InProgress> { _, become, submit in
+//            
+//            become { InProgress(progress: 0) }
+//            
+//            //===
+//            
+//            submit { update(progress: 10) }
+//            submit { update(progress: 30) }
+//            submit { update(progress: 70) }
+//            submit { fail() }
+//            submit { cleanup() }
+//        }
+//    }
+//    
+//    //===
+//    
+//    static
+//    func update(progress: Int) -> Action
+//    {
+//        return ActualizationOf<InProgress> { _, mutate, _ in
+//            
+//            _ = 0 // Xcode bug workaround
+//            
+//            mutate { $0.progress = progress }
+//        }
+//    }
+//    
+//    //===
+//    
+//    static
+//    func fail() -> Action
+//    {
+//        return TransitionBetween<InProgress, Failed>()
+//    }
+//    
+//    //===
+//    
+//    static
+//    func cleanup() -> Action
+//    {
+//        return DeinitializationFrom<Failed>()
+//    }
 }

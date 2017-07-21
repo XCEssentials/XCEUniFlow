@@ -22,17 +22,35 @@ class Dispatcher
         
         let dispatcher: Dispatcher
         
+        weak
+        var subscription: Subscription?
+        
         //===
         
-        init(_ dispatcher: Dispatcher)
+        init(
+            for dispatcher: Dispatcher,
+            subscription: Subscription? = nil
+            )
         {
             self.dispatcher = dispatcher
+            self.subscription = subscription
+        }
+        
+        deinit
+        {
+            if
+                let subscription = subscription
+            {
+                dispatcher
+                    .subscriptions
+                    .removeValue(forKey: subscription.identifier)
+            }
         }
     }
     
     public
     lazy
-    var proxy: Proxy = Proxy(self)
+    var proxy: Proxy = Proxy(for: self)
     
     //=== MARK: Public members
     
