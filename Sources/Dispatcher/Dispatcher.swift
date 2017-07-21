@@ -10,12 +10,25 @@ class Dispatcher
     
     var model = GlobalModel()
     
-    var subscriptions = NSMapTable<AnyObject, Subscription>(
-        keyOptions: .weakMemory,
-        valueOptions: .strongMemory
-    )
+    var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
     //===
+    
+    public
+    final
+    class Proxy
+    {
+        //  https://en.wikipedia.org/wiki/Proxy_pattern
+        
+        let dispatcher: Dispatcher
+        
+        //===
+        
+        init(_ dispatcher: Dispatcher)
+        {
+            self.dispatcher = dispatcher
+        }
+    }
     
     public
     lazy

@@ -1,10 +1,38 @@
+public
+extension Dispatcher.Proxy
+{
+    public
+    func subscribe(
+        _ observer: AnyObject,
+        updateNow: Bool = true
+        ) -> SubscriptionBlank
+    {
+        return SubscriptionBlank(
+            observer: observer,
+            dispatcher: dispatcher,
+            initialUpdate: updateNow
+        )
+    }
+    
+    public
+    func unsubscribe(_ observer: AnyObject)
+    {
+        dispatcher.subscriptions.removeValue(
+            forKey: Subscription.identifier(for: observer)
+        )
+    }
+}
+
+//===
+
 extension Dispatcher
 {
-    func register(_ observer: AnyObject,
-                  _ subscription: Subscription,
-                  _ initialUpdate: Bool = true)
+    func add(
+        _ subscription: Subscription,
+        _ initialUpdate: Bool = true
+        )
     {
-        subscriptions.setObject(subscription, forKey: observer)
+        subscriptions[subscription.identifier] = subscription
         
         //===
         
@@ -17,9 +45,7 @@ extension Dispatcher
     func notifySubscriptions()
     {
         subscriptions
-            .objectEnumerator()?
-            .allObjects
-            .flatMap({ $0 as? Subscription })
+            .map{ $0.value }
             .forEach(notify)
     }
     

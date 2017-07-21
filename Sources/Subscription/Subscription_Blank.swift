@@ -8,20 +8,19 @@ struct SubscriptionBlank
     //===
     
     public
-    func onConvert<UFLSubState>(
-        _ cvt: @escaping (_: GlobalModel) -> UFLSubState?
+    func onConvert<SubState>(
+        _ cvt: @escaping (GlobalModel) -> SubState?
         )
-        -> SubscriptionPending<UFLSubState>
+        -> SubscriptionPending<SubState>
     {
         return SubscriptionPending(base: self, onConvert: cvt)
     }
     
     public
-    func onUpdate(_ upd: @escaping (_: GlobalModel) -> Void)
+    func onUpdate(_ upd: @escaping (GlobalModel) -> Void)
     {
-        dispatcher .register(
-            observer,
-            Subscription({ $0 }, upd),
+        dispatcher.add(
+            Subscription(observer, { $0 }, upd),
             initialUpdate
         )
     }
