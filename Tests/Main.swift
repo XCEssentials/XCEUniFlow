@@ -14,22 +14,7 @@ import XCEUniFlow
 
 class Main: XCTestCase
 {
-    let disp = Dispatcher()
-    
-    //===
-    
-    override
-    func setUp()
-    {
-        disp.enableDefaultReporting()
-    }
-    
-    override
-    func tearDown()
-    {
-        disp.onDidProcessAction = nil
-        disp.onDidRejectAction = nil
-    }
+    let disp = Dispatcher(defaultReporting: true)
     
     //===
     

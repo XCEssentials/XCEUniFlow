@@ -23,7 +23,6 @@
 		946A61361F210531006DC0F1 /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A61301F210531006DC0F1 /* Transition.swift */; };
 		946A61371F210531006DC0F1 /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A61311F210531006DC0F1 /* Trigger.swift */; };
 		946A61381F210531006DC0F1 /* GenericAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A61321F210531006DC0F1 /* GenericAction.swift */; };
-		9B19EFE7328275F6F398C14C /* Dispatcher_DebugHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E64212593350D5CEC2ADF58 /* Dispatcher_DebugHelpers.swift */; };
 		9F998B35BF16D74C525DEFF1 /* GlobalModel_Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691F14028EF3F5E09B368C5E /* GlobalModel_Operators.swift */; };
 		AE57060626B3FE0E4404270D /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63211CC941BA8BE2B2C01BE9 /* Protocols.swift */; };
 		B685E60037F407D3CE0E2C3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
@@ -74,7 +73,6 @@
 		108F3760A25DB521BCF2B6CE /* M.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = M.swift; sourceTree = "<group>"; };
 		170D95578C5313F01B6F8B37 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		1B963C5720D1093F4F08FB3F /* Arithmetics.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Arithmetics.swift; sourceTree = "<group>"; };
-		1E64212593350D5CEC2ADF58 /* Dispatcher_DebugHelpers.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Dispatcher_DebugHelpers.swift; sourceTree = "<group>"; };
 		39A348AE64DDC3F62111FEFA /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4333E94AB3B0DEC7E84782 /* GlobalModel_DataAccess.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GlobalModel_DataAccess.swift; sourceTree = "<group>"; };
 		3C6B71409E355E17097CD352 /* Subscription.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
@@ -195,7 +193,6 @@
 			children = (
 				70312CF3787F250F9AB0CE4F /* Dispatcher.swift */,
 				F8F660813FD9100580637A00 /* Dispatcher_ActionProcessing.swift */,
-				1E64212593350D5CEC2ADF58 /* Dispatcher_DebugHelpers.swift */,
 				CF8A48D099EEA71932A60B6F /* Dispatcher_Subscriptions.swift */,
 			);
 			path = Dispatcher;
@@ -442,7 +439,6 @@
 				946A61341F210531006DC0F1 /* Deinitialization.swift in Sources */,
 				51AC7667DD82FABB70D4DEBF /* Dispatcher.swift in Sources */,
 				E8F33CD22879B9663EEE7565 /* Dispatcher_ActionProcessing.swift in Sources */,
-				9B19EFE7328275F6F398C14C /* Dispatcher_DebugHelpers.swift in Sources */,
 				0CB746EDCC28D1E0360A574F /* Dispatcher_Subscriptions.swift in Sources */,
 				946A61381F210531006DC0F1 /* GenericAction.swift in Sources */,
 				0A63E68FDA4B63C01776BE8F /* GlobalModel.swift in Sources */,

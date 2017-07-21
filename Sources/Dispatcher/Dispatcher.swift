@@ -45,5 +45,20 @@ class Dispatcher
     //=== Initializer
     
     public
-    init() {}
+    init(defaultReporting: Bool = false)
+    {
+        if
+            defaultReporting
+        {
+            self.onDidProcessAction = {
+                
+                print("XCEUniFlow: [+] \($0) PROCESSED")
+            }
+            
+            self.onDidRejectAction = {
+                
+                print("XCEUniFlow: [-] \($0) REJECTED, error: \($1)")
+            }
+        }
+    }
 }
