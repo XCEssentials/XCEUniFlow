@@ -60,37 +60,33 @@ extension M.Search
     
     //===
     
-//    static
-//    func begin() -> Action
-//    {
-//        return TriggerOn { _, submit in
-//            
-//            submit { simulate() }
-//        }
-//    }
-//    
-//    //===
-//    
-//    static
-//    func simulate() -> Action
-//            // From<Ready>.transition
-//            // transition(Ready.self, InProgress.self) { _, become, submit in
-//    {       // transition { (reay: Ready, become: Into<InProgress>, submit) in\
-//            // transition(Between<Ready, InProgress>) { _, become, submit in
-//            // transition.between<Ready, InProgress>.automatic()
-//        return TransitionBetween<Ready, InProgress> { _, become, submit in
-//            
-//            become { InProgress(progress: 0) }
-//            
-//            //===
-//            
-//            submit { update(progress: 10) }
-//            submit { update(progress: 30) }
-//            submit { update(progress: 70) }
-//            submit { fail() }
-//            submit { cleanup() }
-//        }
-//    }
+    static
+    func begin() -> Action
+    {
+        return trigger.On<Ready>.via { _, submit in
+            
+            submit { simulate() }
+        }
+    }
+    
+    //===
+    
+    static
+    func simulate() -> Action
+    {
+        return transition.Between<Ready, InProgress>.via { _, become, submit in
+            
+            become { InProgress(progress: 0) }
+            
+            //===
+            
+            submit { update(progress: 10) }
+            submit { update(progress: 30) }
+            submit { update(progress: 70) }
+            submit { fail() }
+            submit { cleanup() }
+        }
+    }
     
     //===
     
@@ -115,9 +111,9 @@ extension M.Search
     
     //===
     
-//    static
-//    func cleanup() -> Action
-//    {
-//        return DeinitializationFrom<Failed>()
-//    }
+    static
+    func cleanup() -> Action
+    {
+        return deinitialization.From<Failed>.automatic()
+    }
 }

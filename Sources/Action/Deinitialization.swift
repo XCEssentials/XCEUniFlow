@@ -28,14 +28,30 @@ extension Deinitialization
 {
     public
     static
-    func unconditional(
-        action: String = #function,
-        completion: ((@escaping Wrapped<ActionGetter>) throws -> Void)?
+    func automatic(
+        action: String = #function
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { _, mutate, submit in
+        return Action(name: action, feature: F.self) { _, mutate, _ in
             
-            try completion?(submit)
+            _ = 0 // Xcode bug workaround
+            
+            mutate{ $0 /== F.self }
+        }
+    }
+    
+    //===
+    
+    public
+    static
+    func prepare(
+        action: String = #function,
+        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
+        ) -> Action
+    {
+        return Action(name: action, feature: F.self) { model, mutate, submit in
+            
+            try body(model, submit)
             
             //===
             
@@ -51,9 +67,30 @@ extension Deinitialization.From
 {
     public
     static
-    func via(
+    func automatic(
+        action: String = #function
+        ) -> Action
+    {
+        return Action(name: action, feature: F.self) { model, mutate, _ in
+            
+            try REQ.isNotNil("\(S.ParentFeature.name) is in \(S.self) state") {
+                
+                model ==> S.self
+            }
+            
+            //===
+            
+            mutate{ $0 /== S.ParentFeature.self }
+        }
+    }
+    
+    //===
+    
+    public
+    static
+    func prepare(
         action: String = #function,
-        body: ((S, @escaping Wrapped<ActionGetter>) throws -> Void)?
+        body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
         return Action(name: action, feature: F.self) { model, mutate, submit in
@@ -67,7 +104,7 @@ extension Deinitialization.From
             
             //===
             
-            try body?(currentState, submit)
+            try body(currentState, submit)
             
             //===
             

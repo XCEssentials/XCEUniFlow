@@ -67,7 +67,7 @@ class Main: XCTestCase
         
         //===
         
-//        proxy.submit { M.Arithmetics.begin() } // option 1
+        proxy.submit { M.Arithmetics.begin() } // option 1
         // proxy.submit(M.Arithmetics.begin)   // option 2
         
         //===
@@ -112,8 +112,8 @@ class Main: XCTestCase
         
         //===
         
-//        proxy.submit { M.Search.initialize() }
-//        proxy.submit { M.Search.simulate() }
+        proxy.submit { M.Search.initialize() }
+        proxy.submit { M.Search.begin() }
         
         //===
         
