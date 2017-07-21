@@ -213,9 +213,9 @@
 				946A61321F210531006DC0F1 /* Action.swift */,
 				946A612F1F210531006DC0F1 /* Initialization.swift */,
 				946A612D1F210531006DC0F1 /* Actualization.swift */,
-				946A612E1F210531006DC0F1 /* Deinitialization.swift */,
 				946A61301F210531006DC0F1 /* Transition.swift */,
 				946A61311F210531006DC0F1 /* Trigger.swift */,
+				946A612E1F210531006DC0F1 /* Deinitialization.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";

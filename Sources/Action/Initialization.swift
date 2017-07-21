@@ -6,16 +6,16 @@ public
 extension Feature
 {
     static
-    var initialization: InitializationContext<Self>.Type
+    var initialization: Initialization<Self>.Type
     {
-        return InitializationContext<Self>.self
+        return Initialization<Self>.self
     }
 }
 
 //===
 
 public
-enum InitializationContext<F: Feature>
+enum Initialization<F: Feature>
 {
     public
     enum Into<S: FeatureState> where S.ParentFeature == F { }
@@ -24,7 +24,32 @@ enum InitializationContext<F: Feature>
 //===
 
 public
-extension InitializationContext.Into
+extension Initialization.Into where S: SimpleState
+{
+    public
+    static
+    func automatic(
+        action: String = #function
+        ) -> Action
+    {
+        return Action(name: action, feature: F.self) { model, mutate, _ in
+            
+            try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
+                
+                model ==> S.ParentFeature.self
+            }
+            
+            //===
+            
+            mutate { $0 <== S.init() }
+        }
+    }
+}
+
+//===
+
+public
+extension Initialization.Into
 {
     public
     static
@@ -54,29 +79,6 @@ extension InitializationContext.Into
             //===
             
             mutate { $0 <== newState }
-        }
-    }
-}
-
-//===
-
-public
-extension InitializationContext.Into where S: SimpleState
-{
-    public
-    static
-    func automatic(action: String = #function) -> Action
-    {
-        return Action(name: action, feature: F.self) { model, mutate, _ in
-            
-            try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
-                
-                model ==> S.ParentFeature.self
-            }
-            
-            //===
-            
-            mutate { $0 <== S.init() }
         }
     }
 }

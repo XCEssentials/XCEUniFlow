@@ -56,10 +56,6 @@ extension M.Search
     func initialize() -> Action
     {
         return initialization.Into<Ready>.automatic()
-//        return initialization.Into<Ready>.using { ... }
-//        return initialization.Into<Ready>.via { ... }
-//        return initialization.Into<Ready>.by { ... }
-//        return InitializationInto<Ready>()
     }
     
     //===
@@ -95,30 +91,30 @@ extension M.Search
 //            submit { cleanup() }
 //        }
 //    }
-//    
-//    //===
-//    
-//    static
-//    func update(progress: Int) -> Action
-//    {
-//        return ActualizationOf<InProgress> { _, mutate, _ in
-//            
-//            _ = 0 // Xcode bug workaround
-//            
-//            mutate { $0.progress = progress }
-//        }
-//    }
-//    
-//    //===
-//    
-//    static
-//    func fail() -> Action
-//    {
-//        return TransitionBetween<InProgress, Failed>()
-//    }
-//    
-//    //===
-//    
+    
+    //===
+    
+    static
+    func update(progress: Int) -> Action
+    {
+        return actualization.Of<InProgress>.via { _, mutate, _ in
+            
+            _ = 0 // Xcode bug workaround
+            
+            mutate { $0.progress = progress }
+        }
+    }
+    
+    //===
+    
+    static
+    func fail() -> Action
+    {
+        return transition.Between<InProgress, Failed>.automatic()
+    }
+    
+    //===
+    
 //    static
 //    func cleanup() -> Action
 //    {
