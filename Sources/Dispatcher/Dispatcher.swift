@@ -12,7 +12,7 @@ class Dispatcher
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
-    //===
+    //=== MARK: Nested public types
     
     public
     final
@@ -48,11 +48,11 @@ class Dispatcher
         }
     }
     
+    //=== MARK: Public members
+    
     public
     lazy
     var proxy: Proxy = Proxy(for: self)
-    
-    //=== MARK: Public members
     
     public
     var onDidProcessAction: ((_ actionId: String) -> Void)?
@@ -65,18 +65,6 @@ class Dispatcher
     public
     init(defaultReporting: Bool = false)
     {
-        if
-            defaultReporting
-        {
-            self.onDidProcessAction = {
-                
-                print("XCEUniFlow: [+] \($0) PROCESSED")
-            }
-            
-            self.onDidRejectAction = {
-                
-                print("XCEUniFlow: [-] \($0) REJECTED, error: \($1)")
-            }
-        }
+        if defaultReporting { enableDefaultReporting() }
     }
 }

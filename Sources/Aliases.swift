@@ -55,3 +55,5 @@ typealias UFLSimpleState = SimpleState
 public
 typealias UFLDispatcher = Dispatcher
 
+public
+typealias UFLGlobalModel = GlobalModel
