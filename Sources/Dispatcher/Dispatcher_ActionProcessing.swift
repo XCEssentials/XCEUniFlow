@@ -60,16 +60,13 @@ extension Dispatcher
             // NOTE: if body will throw,
             // then mutations will not be applied to global model
             
-            mutations?(&model)
-            
             //===
             
             if
                 let mutations = mutations
             {
-                var changes = GlobalModel()
-                mutations(&changes)
-                subscriptions.forEach{ $0.value.execute(with: changes) }
+                mutations(&model)
+                subscriptions.forEach{ $0.value.execute(with: model) }
             }
             
             //===
