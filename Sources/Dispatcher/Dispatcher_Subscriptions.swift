@@ -62,10 +62,4 @@ extension Dispatcher
             subscription.execute(with: model)
         }
     }
-    
-    func notifySubscriptions()
-    {
-        subscriptions
-            .forEach{ $0.value.execute(with: model) }
-    }
 }

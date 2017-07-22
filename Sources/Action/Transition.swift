@@ -33,23 +33,24 @@ extension Transition.Between where Into: SimpleState
     static
     func automatic(
         action: String = #function,
+        // submit
         completion: ((@escaping Wrapped<ActionGetter>) throws -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
-            try REQ.isNotNil("\(From.ParentFeature.name) is in \(From.self) state") {
+            try REQ.isNotNil("\(F.name) is in \(From.self) state") {
                 
                 model ==> From.self
             }
             
             //===
             
-            mutate { $0 <== Into.init() }
+            try completion?(submit)
             
             //===
             
-            try completion?(submit)
+            return { $0 <== Into.init() }
         }
     }
 }
@@ -63,14 +64,15 @@ extension Transition.Between
     static
     func via(
         action: String = #function,
+        // currentState, become, submit
         body: @escaping (From, Wrapped<StateGetter<Into>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
             let currentState =
                 
-            try REQ.value("\(From.ParentFeature.name) is in \(From.self) state") {
+            try REQ.value("\(F.name) is in \(From.self) state") {
                 
                 model ==> From.self
             }
@@ -79,18 +81,20 @@ extension Transition.Between
             
             var newState: Into?
             
+            //===
+            
             try body(currentState, { newState = $0() }, submit)
             
             //===
             
-            try REQ.isNotNil("New state for \(Into.ParentFeature.name) is set") {
+            try REQ.isNotNil("New state for \(F.name) is set") {
                 
                 newState
             }
             
             //===
             
-            mutate { $0 <== newState }
+            return { $0 <== newState }
         }
     }
 }

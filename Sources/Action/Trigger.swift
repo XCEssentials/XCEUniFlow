@@ -31,12 +31,17 @@ extension Trigger
     static
     func via(
         action: String = #function,
+        // model, submit
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, _, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
             try body(model, submit)
+            
+            //===
+            
+            return nil
         }
     }
 }
@@ -50,14 +55,15 @@ extension Trigger.On
     static
     func via(
         action: String = #function,
+        // currentState, submit
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, _, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
             let currentState =
                 
-            try REQ.value("\(S.ParentFeature.name) is in \(S.self) state") {
+            try REQ.value("\(F.name) is in \(S.self) state") {
                 
                 model ==> S.self
             }
@@ -65,6 +71,10 @@ extension Trigger.On
             //===
             
             try body(currentState, submit)
+            
+            //===
+            
+            return nil
         }
     }
 }

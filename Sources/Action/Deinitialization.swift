@@ -32,11 +32,11 @@ extension Deinitialization
         action: String = #function
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { _, mutate, _ in
+        return Action(name: action, feature: F.self) { _, _ in
             
             _ = 0 // Xcode bug workaround
             
-            mutate{ $0 /== F.self }
+            return { $0 /== F.self }
         }
     }
     
@@ -46,16 +46,17 @@ extension Deinitialization
     static
     func prepare(
         action: String = #function,
+        // model, submit
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
             try body(model, submit)
             
             //===
             
-            mutate{ $0 /== F.self }
+            return { $0 /== F.self }
         }
     }
 }
@@ -71,16 +72,16 @@ extension Deinitialization.From
         action: String = #function
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, _ in
+        return Action(name: action, feature: F.self) { model, _ in
             
-            try REQ.isNotNil("\(S.ParentFeature.name) is in \(S.self) state") {
+            try REQ.isNotNil("\(F.name) is in \(S.self) state") {
                 
                 model ==> S.self
             }
             
             //===
             
-            mutate{ $0 /== S.ParentFeature.self }
+            return { $0 /== F.self }
         }
     }
     
@@ -90,14 +91,15 @@ extension Deinitialization.From
     static
     func prepare(
         action: String = #function,
+        // currentState, submit
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
             let currentState =
                 
-            try REQ.value("\(S.ParentFeature.name) is in \(S.self) state") {
+            try REQ.value("\(F.name) is in \(S.self) state") {
                 
                 model ==> S.self
             }
@@ -108,7 +110,7 @@ extension Deinitialization.From
             
             //===
             
-            mutate{ $0 /== S.ParentFeature.self }
+            return { $0 /== F.self }
         }
     }
 }

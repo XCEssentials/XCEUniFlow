@@ -31,27 +31,26 @@ extension Actualization.Of
     static
     func via(
         action: String = #function,
+        // currentState, mutate, submit
         body: @escaping (S, Wrapped<Mutations<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
-            let currentState =
+            var state =
                 
-            try REQ.value("\(S.ParentFeature.name) is in \(S.self) state") {
+            try REQ.value("\(F.name) is in \(S.self) state") {
                 
                 model ==> S.self
             }
             
             //===
             
-            var buf = currentState
-            
-            try body(currentState, { $0(&buf) }, submit)
+            try body(state, { $0(&state) }, submit)
             
             //===
             
-            mutate { $0 <== buf }
+            return { $0 <== state }
         }
     }
 }

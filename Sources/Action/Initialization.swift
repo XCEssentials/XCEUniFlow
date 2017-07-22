@@ -32,16 +32,16 @@ extension Initialization.Into where S: SimpleState
         action: String = #function
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, _ in
+        return Action(name: action, feature: F.self) { model, _ in
             
-            try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
+            try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
-                model ==> S.ParentFeature.self
+                model ==> F.self
             }
             
             //===
             
-            mutate { $0 <== S.init() }
+            return { $0 <== S.init() }
         }
     }
 }
@@ -55,14 +55,15 @@ extension Initialization.Into
     static
     func via(
         action: String = #function,
+        // become, submit
         body: @escaping (Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, mutate, submit in
+        return Action(name: action, feature: F.self) { model, submit in
             
-            try REQ.isNil("\(S.ParentFeature.name) is NOT initialized yet") {
+            try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
-                model ==> S.ParentFeature.self
+                model ==> F.self
             }
             
             //===
@@ -78,7 +79,7 @@ extension Initialization.Into
             
             //===
             
-            mutate { $0 <== newState }
+            return { $0 <== newState }
         }
     }
 }

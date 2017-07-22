@@ -52,22 +52,29 @@ extension Dispatcher
     {
         do
         {
-            var tmpModel = self.model
             
-            try act.body(
-                model,
-                { $0(&tmpModel) },
-                { self.proxy.submit($0) }
-            )
+            let mutations = try act.body(model) { self.proxy.submit($0) }
             
-            // if body will throw (even after call 'mutate',
+            //===
+            
+            // NOTE: if body will throw,
             // then mutations will not be applied to global model
-            self.model = tmpModel
+            
+            mutations?(&model)
+            
+            //===
+            
+            if
+                let mutations = mutations
+            {
+                var changes = GlobalModel()
+                mutations(&changes)
+                subscriptions.forEach{ $0.value.execute(with: changes) }
+            }
             
             //===
             
             onDidProcessAction?(act.name)
-            notifySubscriptions()
         }
         catch
         {
