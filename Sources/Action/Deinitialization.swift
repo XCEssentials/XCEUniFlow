@@ -29,12 +29,16 @@ extension Deinitialization
     public
     static
     func automatic(
-        action: String = #function
+        action: String = #function,
+        // submit
+        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { _, _ in
+        return Action(name: action, feature: F.self) { _, submit in
             
-            _ = 0 // Xcode bug workaround
+            completion?(submit)
+            
+            //===
             
             return { $0 /== F.self }
         }
@@ -69,15 +73,21 @@ extension Deinitialization.From
     public
     static
     func automatic(
-        action: String = #function
+        action: String = #function,
+        // submit
+        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, _ in
+        return Action(name: action, feature: F.self) { model, submit in
             
             try REQ.isNotNil("\(F.name) is in \(S.self) state") {
                 
                 model ==> S.self
             }
+            
+            //===
+            
+            completion?(submit)
             
             //===
             

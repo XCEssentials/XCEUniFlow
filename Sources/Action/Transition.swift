@@ -34,7 +34,7 @@ extension Transition.Between where Into: SimpleState
     func automatic(
         action: String = #function,
         // submit
-        completion: ((@escaping Wrapped<ActionGetter>) throws -> Void)? = nil
+        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
         return Action(name: action, feature: F.self) { model, submit in
@@ -46,7 +46,7 @@ extension Transition.Between where Into: SimpleState
             
             //===
             
-            try completion?(submit)
+            completion?(submit)
             
             //===
             

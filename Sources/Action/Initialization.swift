@@ -29,15 +29,21 @@ extension Initialization.Into where S: SimpleState
     public
     static
     func automatic(
-        action: String = #function
+        action: String = #function,
+        // submit
+        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, _ in
+        return Action(name: action, feature: F.self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
                 model ==> F.self
             }
+            
+            //===
+            
+            completion?(submit)
             
             //===
             
