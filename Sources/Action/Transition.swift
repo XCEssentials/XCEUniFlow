@@ -18,6 +18,9 @@ public
 enum Transition<F: Feature>
 {
     public
+    enum From<From: FeatureState> where From.ParentFeature == F { }
+    
+    public
     enum Between<From: FeatureState, Into: FeatureState> where
         From.ParentFeature == F,
         Into.ParentFeature == F
@@ -88,6 +91,31 @@ extension Transition.Between
             try REQ.isNotNil("New state for \(F.name) is set") {
                 
                 newState
+            }
+            
+            //===
+            
+            return { $0 <== newState }
+        }
+    }
+}
+
+//===
+
+public
+extension Transition.From
+{
+    static
+    func into<Into: FeatureState>(
+        action: String = #function,
+        _ newState: Into
+        ) -> Action
+    {
+        return Action(name: action, feature: F.self) { model, _ in
+            
+            try REQ.isNotNil("\(F.name) is in \(From.self) state") {
+                
+                model ==> From.self
             }
             
             //===
