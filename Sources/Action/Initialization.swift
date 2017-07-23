@@ -26,7 +26,6 @@ enum Initialization<F: Feature>
 public
 extension Initialization.Into where S: SimpleState
 {
-    public
     static
     func automatic(
         action: String = #function,
@@ -57,7 +56,6 @@ extension Initialization.Into where S: SimpleState
 public
 extension Initialization.Into
 {
-    public
     static
     func via(
         action: String = #function,

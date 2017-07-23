@@ -27,7 +27,6 @@ enum Trigger<F: Feature>
 public
 extension Trigger
 {
-    public
     static
     func via(
         action: String = #function,
@@ -51,7 +50,6 @@ extension Trigger
 public
 extension Trigger.On
 {
-    public
     static
     func via(
         action: String = #function,

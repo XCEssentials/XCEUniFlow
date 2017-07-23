@@ -29,7 +29,6 @@ enum Transition<F: Feature>
 public
 extension Transition.Between where Into: SimpleState
 {
-    public
     static
     func automatic(
         action: String = #function,
@@ -60,7 +59,6 @@ extension Transition.Between where Into: SimpleState
 public
 extension Transition.Between
 {
-    public
     static
     func via(
         action: String = #function,

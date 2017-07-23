@@ -26,7 +26,6 @@ enum Deinitialization<F: Feature>
 public
 extension Deinitialization
 {
-    public
     static
     func automatic(
         action: String = #function,
@@ -46,7 +45,6 @@ extension Deinitialization
     
     //===
     
-    public
     static
     func prepare(
         action: String = #function,
@@ -70,7 +68,6 @@ extension Deinitialization
 public
 extension Deinitialization.From
 {
-    public
     static
     func automatic(
         action: String = #function,
@@ -97,7 +94,6 @@ extension Deinitialization.From
     
     //===
     
-    public
     static
     func prepare(
         action: String = #function,

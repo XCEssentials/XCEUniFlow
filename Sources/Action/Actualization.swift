@@ -27,7 +27,6 @@ enum Actualization<F: Feature>
 public
 extension Actualization.Of
 {
-    public
     static
     func via(
         action: String = #function,
