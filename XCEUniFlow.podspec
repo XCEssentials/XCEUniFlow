@@ -21,7 +21,6 @@ Pod::Spec.new do |s|
   s.requires_arc              = true
   
   s.dependency                  'XCERequirement', '~> 1.4'
-  # s.dependency                  'XCEStaticState', '~> 1.2'
 
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
   s.author                    = { 'Maxim Khatskevich' => 'maxim@khatskevi.ch' }
