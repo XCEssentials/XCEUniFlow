@@ -1,7 +1,17 @@
 public
 struct GlobalModel
 {
-    public
+    var data: [Key: Any] = [:]
+    
+    //===
+    
+    init() {}
+}
+
+//===
+
+extension GlobalModel
+{
     typealias Key = String
     
     static
@@ -9,12 +19,11 @@ struct GlobalModel
     {
         return Key(reflecting: self)
     }
-    
-    //===
-    
-    var data: [Key: Any] = [:]
-    
-    //===
-    
-    init() {}
+}
+
+//===
+
+extension GlobalModel
+{
+    //
 }
