@@ -5,12 +5,12 @@ extension Dispatcher
     {
         onDidProcessAction = {
             
-            print("XCEUniFlow: [+] \($0) PROCESSED")
+            print("XCEUniFlow: [+] PROCESSED '\($0)' from '\($1)'")
         }
         
         onDidRejectAction = {
             
-            print("XCEUniFlow: [-] \($0) REJECTED, error: \($1)")
+            print("XCEUniFlow: [-] REJECTED '\($0)' from '\($1)', reason: \($2)")
         }
     }
     
