@@ -6,7 +6,7 @@ extension Feature
     static
     func extract(from model: GlobalModel) -> Any?
     {
-        return model.data[Self.key]
+        return model.data[GlobalModel.key(for: Self.self)]
     }
 }
 
@@ -18,7 +18,7 @@ extension FeatureState
     static
     func extract(from model: GlobalModel) -> Self?
     {
-        return model.data[Self.ParentFeature.key] as? Self
+        return model.data[GlobalModel.key(for: Self.ParentFeature.self)] as? Self
     }
 }
 
@@ -30,13 +30,13 @@ extension GlobalModel
     public
     func extract<F: Feature>(feature _: F.Type) -> Any?
     {
-        return data[F.key]
+        return data[GlobalModel.key(for: F.self)]
     }
     
     public
     func extract<S: FeatureState>(state _: S.Type) -> S?
     {
-        return data[S.ParentFeature.key] as? S
+        return data[GlobalModel.key(for: S.ParentFeature.self)] as? S
     }
 }
 
@@ -47,7 +47,7 @@ extension Optional where Wrapped: FeatureState
 {
     func merge(into model: inout GlobalModel)
     {
-        model.data[Wrapped.ParentFeature.key] = self
+        model.data[GlobalModel.key(for: Wrapped.ParentFeature.self)] = self
     }
 }
 
@@ -56,7 +56,7 @@ extension FeatureState
 {
     func merge(into model: inout GlobalModel)
     {
-        model.data[Self.ParentFeature.key] = self
+        model.data[GlobalModel.key(for: Self.ParentFeature.self)] = self
     }
 }
 
@@ -69,7 +69,7 @@ extension GlobalModel
     mutating
     func merge<S: FeatureState>(_ state: S?)
     {
-        data[S.ParentFeature.key] = state
+        data[GlobalModel.key(for: S.ParentFeature.self)] = state
     }
 }
 
@@ -81,7 +81,7 @@ extension Feature
     static
     func remove(from model: inout GlobalModel)
     {
-        model.data.removeValue(forKey: Self.key)
+        model.data.removeValue(forKey: GlobalModel.key(for: Self.self))
     }
 }
 
@@ -94,6 +94,6 @@ extension GlobalModel
     mutating
     func remove<F: Feature>(_: F.Type)
     {
-        data.removeValue(forKey: F.key)
+        data.removeValue(forKey: GlobalModel.key(for: F.self))
     }
 }
