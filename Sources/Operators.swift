@@ -9,9 +9,9 @@ infix operator /== // removes value from GM, returns nothing
 //=== MARK: GET
 
 public
-func <== <FS: FeatureState>(state: inout FS?, global: GlobalModel)
+func <== <S: FeatureState>(state: inout S?, global: GlobalModel)
 {
-    state = global.extract(state: FS.self)
+    state = global.extract(state: S.self)
 }
 
 @discardableResult
@@ -23,15 +23,24 @@ func ==> <F: Feature>(global: GlobalModel, _: F.Type) -> Any?
 
 @discardableResult
 public
-func ==> <FS: FeatureState>(global: GlobalModel, _: FS.Type) -> FS?
+func ==> <F, S>(global: GlobalModel, _: F.Type) -> S? where
+    S: FeatureState,
+    S.ParentFeature == F
 {
-    return global.extract(state: FS.self)
+    return global.extract(feature: F.self)
+}
+
+@discardableResult
+public
+func ==> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
+{
+    return global.extract(state: S.self)
 }
 
 //=== MARK: SET
 
 public
-func <== <FS: FeatureState>(global: inout GlobalModel, state: FS?)
+func <== <S: FeatureState>(global: inout GlobalModel, state: S?)
 {
     global.merge(state)
 }

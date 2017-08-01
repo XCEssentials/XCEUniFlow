@@ -25,5 +25,5 @@ extension GlobalModel
 
 extension GlobalModel
 {
-    //
+    
 }

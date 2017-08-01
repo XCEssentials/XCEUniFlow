@@ -10,6 +10,14 @@ extension GlobalModel
     }
     
     public
+    func extract<F, S>(feature _: F.Type) -> S? where
+        S: FeatureState,
+        S.ParentFeature == F
+    {
+        return data[GlobalModel.key(for: F.self)] as? S
+    }
+    
+    public
     func extract<S: FeatureState>(state _: S.Type) -> S?
     {
         return data[GlobalModel.key(for: S.ParentFeature.self)] as? S
