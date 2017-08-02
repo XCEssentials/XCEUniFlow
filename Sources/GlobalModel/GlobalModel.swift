@@ -20,10 +20,3 @@ extension GlobalModel
         return Key(reflecting: self)
     }
 }
-
-//===
-
-extension GlobalModel
-{
-    
-}
