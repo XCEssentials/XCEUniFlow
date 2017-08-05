@@ -14,6 +14,16 @@ struct Action
 //===
 
 public
+enum NoMutation: MutationAnnotation { }
+
+//===
+
+public
+enum UnspecifiedMutation: MutationAnnotation { } // maybe multiple mutations???
+
+//===
+
+public
 extension Feature
 {
     static
@@ -32,7 +42,7 @@ extension Feature
             
             //===
             
-            return { $0 = updatedModel }
+            return ({ $0 = updatedModel }, UnspecifiedMutation.self)
         }
     }
 }

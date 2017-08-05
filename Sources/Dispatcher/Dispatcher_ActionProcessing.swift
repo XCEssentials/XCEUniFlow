@@ -40,7 +40,7 @@ extension Dispatcher
         do
         {
             
-            let mutations = try act.body(model) { self.proxy.submit($0) }
+            let result = try act.body(model) { self.proxy.submit($0) }
             
             //===
             
@@ -50,10 +50,13 @@ extension Dispatcher
             //===
             
             if
-                let mutations = mutations
+                let (mutations, annotation) = result
             {
                 mutations(&model)
-                subscriptions.forEach{ $0.value.execute(with: model) }
+                subscriptions.forEach{
+                    
+                    $0.value.execute(with: model, recentChanges: annotation)
+                }
             }
             
             //===

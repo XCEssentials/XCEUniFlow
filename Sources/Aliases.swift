@@ -14,7 +14,7 @@ public
 typealias ActionBody = (
     _ model: GlobalModel,
     _ submit: @escaping Wrapped<ActionGetter>
-    ) throws -> Mutations<GlobalModel>?
+    ) throws -> (Mutations<GlobalModel>, MutationAnnotation.Type)?
 
 //=== MARK: Prefixed versions
 

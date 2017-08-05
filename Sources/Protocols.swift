@@ -39,3 +39,18 @@ protocol SimpleState: FeatureState
 {
     init()
 }
+
+//===
+
+public
+protocol MutationAnnotation { }
+
+//===
+
+public
+protocol FeatureMutation: MutationAnnotation
+{
+    static
+    var feature: Feature.Type { get }
+    
+}

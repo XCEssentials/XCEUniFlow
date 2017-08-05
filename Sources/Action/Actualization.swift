@@ -24,6 +24,15 @@ enum Actualization<F: Feature>
 
 //===
 
+extension Actualization: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+}
+
+//===
+
 public
 extension Actualization.Of
 {
@@ -49,7 +58,7 @@ extension Actualization.Of
             
             //===
             
-            return { $0 <== state }
+            return ({ $0 <== state }, Actualization<F>.self)
         }
     }
 }

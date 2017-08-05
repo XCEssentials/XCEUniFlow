@@ -23,6 +23,15 @@ enum Initialization<F: Feature>
 
 //===
 
+extension Initialization: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+}
+
+//===
+
 public
 extension Initialization.Into where S: SimpleState
 {
@@ -46,7 +55,7 @@ extension Initialization.Into where S: SimpleState
             
             //===
             
-            return { $0 <== S.init() }
+            return ({ $0 <== S.init() }, Initialization<F>.self)
         }
     }
 }
@@ -83,7 +92,7 @@ extension Initialization.Into
             
             //===
             
-            return { $0 <== newState }
+            return ({ $0 <== newState }, Initialization<F>.self)
         }
     }
 }

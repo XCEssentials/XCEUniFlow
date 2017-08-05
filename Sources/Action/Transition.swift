@@ -29,6 +29,41 @@ enum Transition<F: Feature>
 
 //===
 
+extension Transition: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+}
+
+//===
+
+public
+extension Transition.From
+{
+    static
+        func into<Into: FeatureState>(
+        action: String = #function,
+        _ newState: Into
+        ) -> Action
+        where Into.ParentFeature == F
+    {
+        return Action(name: action, feature: F.self) { model, _ in
+            
+            try REQ.isNotNil("\(F.name) is in \(From.self) state") {
+                
+                model ==> From.self
+            }
+            
+            //===
+            
+            return ({ $0 <== newState }, Transition<F>.self)
+        }
+    }
+}
+
+//===
+
 public
 extension Transition.Between where Into: SimpleState
 {
@@ -52,7 +87,7 @@ extension Transition.Between where Into: SimpleState
             
             //===
             
-            return { $0 <== Into.init() }
+            return ({ $0 <== Into.init() }, Transition<F>.self)
         }
     }
 }
@@ -95,32 +130,7 @@ extension Transition.Between
             
             //===
             
-            return { $0 <== newState }
-        }
-    }
-}
-
-//===
-
-public
-extension Transition.From
-{
-    static
-    func into<Into: FeatureState>(
-        action: String = #function,
-        _ newState: Into
-        ) -> Action
-    {
-        return Action(name: action, feature: F.self) { model, _ in
-            
-            try REQ.isNotNil("\(F.name) is in \(From.self) state") {
-                
-                model ==> From.self
-            }
-            
-            //===
-            
-            return { $0 <== newState }
+            return ({ $0 <== newState }, Transition<F>.self)
         }
     }
 }

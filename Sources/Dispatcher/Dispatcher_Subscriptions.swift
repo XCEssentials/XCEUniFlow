@@ -4,7 +4,7 @@ extension Dispatcher.Proxy
     public
     func subscribe(
         updateNow: Bool = true,
-        onUpdate: @escaping (GlobalModel) -> Void
+        onUpdate: @escaping (GlobalModel, MutationAnnotation.Type) -> Void
         ) -> Dispatcher.Proxy
     {
         let subscription = Subscription(onUpdate)
@@ -24,8 +24,8 @@ extension Dispatcher.Proxy
     public
     func subscribe<SubState>(
         updateNow: Bool = true,
-        onConvert: @escaping (GlobalModel) -> SubState?,
-        onUpdate: @escaping (SubState) -> Void
+        onConvert: @escaping (GlobalModel, MutationAnnotation.Type) -> SubState?,
+        onUpdate: @escaping (SubState, MutationAnnotation.Type) -> Void
         ) -> Dispatcher.Proxy
     {
         let subscription = Subscription(onConvert, onUpdate)
@@ -59,7 +59,10 @@ extension Dispatcher
         if
             initialUpdate
         {
-            subscription.execute(with: model)
+            subscription.execute(
+                with: model,
+                recentChanges: NoMutation.self
+            )
         }
     }
 }

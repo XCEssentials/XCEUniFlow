@@ -8,40 +8,55 @@ class Subscription
     
     //===
     
-    let onConvert: ((GlobalModel) -> Any?)?
-    let onUpdate: (Any) -> Void
+    let onConvert: ((GlobalModel, MutationAnnotation.Type) -> Any?)?
+    let onUpdate: (Any, MutationAnnotation.Type) -> Void
 
     //===
 
     init<SubState>(
-        _ onConvert: @escaping (_: GlobalModel) -> SubState?,
-        _ onUpdate: @escaping (_: SubState) -> Void
+        _ onConvert: @escaping (GlobalModel, MutationAnnotation.Type) -> SubState?,
+        _ onUpdate: @escaping (SubState, MutationAnnotation.Type) -> Void
         )
     {
         self.onConvert = onConvert
-        self.onUpdate = { ($0 as? SubState).map(onUpdate) }
+        self.onUpdate = {
+            
+            if
+                let subState = $0 as? SubState
+            {
+                onUpdate(subState, $1)
+            }
+        }
     }
     
     init(
-        _ onUpdate: @escaping (_: GlobalModel) -> Void
+        _ onUpdate: @escaping (GlobalModel, MutationAnnotation.Type) -> Void
         )
     {
         self.onConvert = nil
-        self.onUpdate = { ($0 as? GlobalModel).map(onUpdate) }
+        self.onUpdate = {
+            
+            if
+                let globalModel = $0 as? GlobalModel
+            {
+                onUpdate(globalModel, $1)
+            }
+        }
     }
     
     //===
     
-    func execute(with model: GlobalModel)
+    func execute(with model: GlobalModel, recentChanges: MutationAnnotation.Type)
     {
         if
-            let cvt = onConvert
+            let cvt = onConvert,
+            let subModel = cvt(model, recentChanges)
         {
-            cvt(model).map(onUpdate)
+            onUpdate(subModel, recentChanges)
         }
         else
         {
-            onUpdate(model)
+            onUpdate(model, recentChanges)
         }
     }
 }

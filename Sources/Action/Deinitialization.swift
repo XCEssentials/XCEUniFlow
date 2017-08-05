@@ -23,6 +23,15 @@ enum Deinitialization<F: Feature>
 
 //===
 
+extension Deinitialization: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+}
+
+//===
+
 public
 extension Deinitialization
 {
@@ -39,7 +48,7 @@ extension Deinitialization
             
             //===
             
-            return { $0 /== F.self }
+            return ({ $0 /== F.self }, Deinitialization<F>.self)
         }
     }
     
@@ -58,7 +67,7 @@ extension Deinitialization
             
             //===
             
-            return { $0 /== F.self }
+            return ({ $0 /== F.self }, Deinitialization<F>.self)
         }
     }
 }
@@ -88,7 +97,7 @@ extension Deinitialization.From
             
             //===
             
-            return { $0 /== F.self }
+            return ({ $0 /== F.self }, Deinitialization<F>.self)
         }
     }
     
@@ -116,7 +125,7 @@ extension Deinitialization.From
             
             //===
             
-            return { $0 /== F.self }
+            return ({ $0 /== F.self }, Deinitialization<F>.self)
         }
     }
 }
