@@ -97,10 +97,9 @@ class Main: XCTestCase
                 
                 if
                     // change: MutationAnnotation.Type
-                    change is FeatureMutation.Type,
-                    change == Initialization<M.Search>.self,
-                    change is Initialization<M.Search>.Type,
-                    let change = change as? FeatureMutation.Type,
+                    change.isFeatureMutation, // change is FeatureMutation.Type
+                    Initialization<M.Search>.isEqual(to: change), // change == Initialization<M.Search>.self
+                    let change = change.asFeatureMutation, // change as? FeatureMutation.Type
                     change.feature == M.Search.self
                 {
                     print("YES")
@@ -113,12 +112,6 @@ class Main: XCTestCase
                 if
                     let p = s as? M.Search.InProgress,
                     p.progress == 70
-//                    myChanges.kind == .actualization
-//                    M.Search.transition.Between<M.Search.Ready, M.Search.InProgress>.self == changes
-                    // changes is Updated<M.Search.InProgress>
-                    // changes is Removed<M.Search>
-                    // changes is Updated<M.Search>
-                    // changes is Updated<M.Search>.kind == .removed
                 {
                     progressEx.fulfill()
                 }
