@@ -89,26 +89,6 @@ class Main: XCTestCase
             if
                 let s = globalModel ==> M.Search.self
             {
-                print("The search -->> \(s)")
-                print("CHANGE: -->> \(String(reflecting: change))")
-                print("CHANGE: -->> \(change)")
-                
-                //===
-                
-                if
-                    // change: MutationAnnotation.Type
-                    change.isFeatureMutation, // change is FeatureMutation.Type
-                    Initialization<M.Search>.isEqual(to: change), // change == Initialization<M.Search>.self
-                    let change = change.asFeatureMutation, // change as? FeatureMutation.Type
-                    change.feature == M.Search.self
-                {
-                    print("YES")
-                }
-                else
-                {
-                    print("NO")
-                }
-                
                 if
                     let p = s as? M.Search.InProgress,
                     p.progress == 70
