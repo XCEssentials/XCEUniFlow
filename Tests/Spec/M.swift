@@ -12,4 +12,4 @@ import XCEUniFlow
 
 //===
 
-typealias M = GlobalModel // swiftlint:disable:this type_name
+enum M { } // scope // swiftlint:disable:this type_name
