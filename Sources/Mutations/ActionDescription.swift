@@ -1,10 +1,10 @@
 public
-protocol MutationAnnotation { }
+protocol ActionDescription { }
 
 //===
 
 public
-extension MutationAnnotation
+extension ActionDescription
 {
     static
     var isFeatureMutation: Bool
@@ -19,7 +19,7 @@ extension MutationAnnotation
     }
     
     static
-        func isEqual(to anotherType: MutationAnnotation.Type) -> Bool
+    func isEqual(to anotherType: ActionDescription.Type) -> Bool
     {
         return anotherType == Self.self
     }
@@ -28,17 +28,12 @@ extension MutationAnnotation
 //===
 
 public
-enum NoMutation: MutationAnnotation { }
+enum UnspecifiedMutation: ActionDescription { } // maybe multiple mutations???
 
 //===
 
 public
-enum UnspecifiedMutation: MutationAnnotation { } // maybe multiple mutations???
-
-//===
-
-public
-protocol FeatureMutation: MutationAnnotation
+protocol FeatureMutation: ActionDescription
 {
     static
     var feature: Feature.Type { get }

@@ -39,7 +39,6 @@ extension Dispatcher
     {
         do
         {
-            
             let result = try act.body(model) { self.proxy.submit($0) }
             
             //===
@@ -50,18 +49,15 @@ extension Dispatcher
             //===
             
             if
-                let (mutations, annotation) = result
+                let (mutation, description) = result
             {
-                mutations(&model)
-                subscriptions.forEach{
-                    
-                    $0.value.execute(with: model, recentChanges: annotation)
-                }
+                mutation(&model)
+                subscriptions.forEach{ $0.value.body(model, description) }
             }
             
             //===
             
-            onDidProcessAction?(act.name, act.feature.name)
+            onDidProcessAction?(act.name, act.contextDescription)
         }
         catch
         {
@@ -69,7 +65,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onDidRejectAction?(act.name, act.feature.name, error)
+            onDidRejectAction?(act.name, act.contextDescription, error)
         }
     }
 }

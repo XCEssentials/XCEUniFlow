@@ -34,7 +34,7 @@ extension ActualizationOf.At
         body: @escaping (S, Wrapped<Mutations<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, submit in
+        return Action(name: action, context: F.self) { model, submit in
             
             var state =
                 

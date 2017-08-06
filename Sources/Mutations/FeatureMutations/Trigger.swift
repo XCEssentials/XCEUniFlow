@@ -25,29 +25,6 @@ enum Trigger<F: Feature>
 //===
 
 public
-extension Trigger
-{
-    static
-    func via(
-        action: String = #function,
-        // model, submit
-        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
-        ) -> Action
-    {
-        return Action(name: action, feature: F.self) { model, submit in
-            
-            try body(model, submit)
-            
-            //===
-            
-            return nil
-        }
-    }
-}
-
-//===
-
-public
 extension Trigger.On
 {
     static
@@ -57,7 +34,7 @@ extension Trigger.On
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, submit in
+        return Action(name: action, context: F.self) { model, submit in
             
             let currentState =
                 

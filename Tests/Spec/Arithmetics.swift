@@ -26,7 +26,7 @@ extension M
 
 //===
 
-extension M.Arithmetics
+enum Actions: ActionContext
 {
     static
     func begin() -> Action
@@ -40,7 +40,7 @@ extension M.Arithmetics
             
             //===
             
-            mutate { $0 <== Main(val: 0) }
+            mutate { $0 <== M.Arithmetics.Main(val: 0) }
             
             //===
             
@@ -66,7 +66,7 @@ extension M.Arithmetics
             
             var a = try REQ.value("Feature is initialized") {
                 
-                model ==> Main.self
+                model ==> M.Arithmetics.Main.self
             }
             
             //===
@@ -93,7 +93,7 @@ extension M.Arithmetics
             
             var a = try REQ.value("Feature is initialized") {
                 
-                model ==> Main.self
+                model ==> M.Arithmetics.Main.self
             }
             
             //===

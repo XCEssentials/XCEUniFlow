@@ -39,7 +39,7 @@ extension TransitionOf.From
         ) -> Action
         where Into.ParentFeature == F
     {
-        return Action(name: action, feature: F.self) { model, _ in
+        return Action(name: action, context: F.self) { model, _ in
             
             try REQ.isNotNil("\(F.name) is in \(From.self) state") {
                 
@@ -65,7 +65,7 @@ extension TransitionOf.Between where Into: SimpleState
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, submit in
+        return Action(name: action, context: F.self) { model, submit in
             
             try REQ.isNotNil("\(F.name) is in \(From.self) state") {
                 
@@ -95,7 +95,7 @@ extension TransitionOf.Between
         body: @escaping (From, Wrapped<StateGetter<Into>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, feature: F.self) { model, submit in
+        return Action(name: action, context: F.self) { model, submit in
             
             let currentState =
                 

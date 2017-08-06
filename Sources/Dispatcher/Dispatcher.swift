@@ -55,10 +55,10 @@ class Dispatcher
     var proxy: Proxy = Proxy(for: self)
     
     public
-    var onDidProcessAction: ((_ action: String, _ feature: String) -> Void)?
+    var onDidProcessAction: ((_ action: String, _ context: String) -> Void)?
     
     public
-    var onDidRejectAction: ((_ action: String, _ feature: String, _: Error) -> Void)?
+    var onDidRejectAction: ((_ action: String, _ context: String, _: Error) -> Void)?
     
     //=== Initializer
     

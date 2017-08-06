@@ -2,13 +2,16 @@ public
 struct Action
 {
     let name: String
-    let feature: Feature.Type
+    let context: Any.Type
     let body: ActionBody
     
     //===
     
     public
-    var fullName: String { return "\(feature.name).\(name)" }
+    var contextDescription: String { return String(reflecting: context) }
+    
+    public
+    var fullName: String { return "\(contextDescription).\(name)" }
 }
 
 //===
@@ -18,7 +21,7 @@ typealias ActionBody = (
     _ model: GlobalModel,
     _ submit: @escaping Wrapped<ActionGetter>
     )
-    throws -> (Mutations<GlobalModel>, MutationAnnotation.Type)?
+    throws -> (Mutations<GlobalModel>, ActionDescription.Type)?
 
 public
 typealias Wrapped<Value> = (Value) -> Void
