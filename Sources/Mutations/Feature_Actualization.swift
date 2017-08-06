@@ -6,35 +6,26 @@ public
 extension Feature
 {
     static
-    var actualization: Actualization<Self>.Type
+    var actualization: ActualizationOf<Self>.Type
     {
-        return Actualization<Self>.self
+        return ActualizationOf<Self>.self
     }
 }
 
 //===
 
 public
-enum Actualization<F: Feature>
+enum ActualizationOf<F: Feature>
 {
     public
-    enum Of<S: FeatureState> where S.ParentFeature == F { }
+    enum At<S: FeatureState> where S.ParentFeature == F { }
     // swiftlint:disable:previous type_name
 }
 
 //===
 
-extension Actualization: FeatureMutation
-{
-    public
-    static
-    var feature: Feature.Type { return F.self }
-}
-
-//===
-
 public
-extension Actualization.Of
+extension ActualizationOf.At
 {
     static
     func via(
@@ -58,7 +49,7 @@ extension Actualization.Of
             
             //===
             
-            return ({ $0 <== state }, Actualization<F>.self)
+            return ({ $0 <== state }, ActualizationOf<F>.self)
         }
     }
 }

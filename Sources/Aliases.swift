@@ -1,22 +1,4 @@
-public
-typealias Wrapped<Value> = (Value) -> Void
-
-public
-typealias Mutations<Value> = (_: inout Value) -> Void
-
-public
-typealias StateGetter<State: FeatureState> = () -> State
-
-public
-typealias ActionGetter = () -> Action
-
-public
-typealias ActionBody = (
-    _ model: GlobalModel,
-    _ submit: @escaping Wrapped<ActionGetter>
-    ) throws -> (Mutations<GlobalModel>, MutationAnnotation.Type)?
-
-//=== MARK: Prefixed versions
+// MARK: Prefixed global aliases
 
 public
 typealias UFLWrapped<Value> = Wrapped<Value>

@@ -1,29 +1,4 @@
 public
-struct Action
-{
-    let name: String
-    let feature: Feature.Type
-    let body: ActionBody
-    
-    //===
-    
-    public
-    var fullName: String { return "\(feature.name).\(name)" }
-}
-
-//===
-
-public
-enum NoMutation: MutationAnnotation { }
-
-//===
-
-public
-enum UnspecifiedMutation: MutationAnnotation { } // maybe multiple mutations???
-
-//===
-
-public
 extension Feature
 {
     static

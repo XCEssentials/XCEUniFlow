@@ -93,7 +93,7 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualization.Of<InProgress>.via { _, mutate, _ in
+        return actualization.At<InProgress>.via { _, mutate, _ in
             
             _ = 0 // Xcode bug workaround
             

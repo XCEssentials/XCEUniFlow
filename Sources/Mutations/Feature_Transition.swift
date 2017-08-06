@@ -6,16 +6,16 @@ public
 extension Feature
 {
     static
-    var transition: Transition<Self>.Type
+    var transition: TransitionOf<Self>.Type
     {
-        return Transition<Self>.self
+        return TransitionOf<Self>.self
     }
 }
 
 //===
 
 public
-enum Transition<F: Feature>
+enum TransitionOf<F: Feature>
 {
     public
     enum From<From: FeatureState> where From.ParentFeature == F { }
@@ -29,20 +29,11 @@ enum Transition<F: Feature>
 
 //===
 
-extension Transition: FeatureMutation
-{
-    public
-    static
-    var feature: Feature.Type { return F.self }
-}
-
-//===
-
 public
-extension Transition.From
+extension TransitionOf.From
 {
     static
-        func into<Into: FeatureState>(
+    func into<Into: FeatureState>(
         action: String = #function,
         _ newState: Into
         ) -> Action
@@ -57,7 +48,7 @@ extension Transition.From
             
             //===
             
-            return ({ $0 <== newState }, Transition<F>.self)
+            return ({ $0 <== newState }, TransitionOf<F>.self)
         }
     }
 }
@@ -65,7 +56,7 @@ extension Transition.From
 //===
 
 public
-extension Transition.Between where Into: SimpleState
+extension TransitionOf.Between where Into: SimpleState
 {
     static
     func automatic(
@@ -87,7 +78,7 @@ extension Transition.Between where Into: SimpleState
             
             //===
             
-            return ({ $0 <== Into.init() }, Transition<F>.self)
+            return ({ $0 <== Into.init() }, TransitionOf<F>.self)
         }
     }
 }
@@ -95,7 +86,7 @@ extension Transition.Between where Into: SimpleState
 //===
 
 public
-extension Transition.Between
+extension TransitionOf.Between
 {
     static
     func via(
@@ -130,7 +121,7 @@ extension Transition.Between
             
             //===
             
-            return ({ $0 <== newState }, Transition<F>.self)
+            return ({ $0 <== newState }, TransitionOf<F>.self)
         }
     }
 }

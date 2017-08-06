@@ -6,16 +6,16 @@ public
 extension Feature
 {
     static
-    var initialization: Initialization<Self>.Type
+    var initialization: InitializationOf<Self>.Type
     {
-        return Initialization<Self>.self
+        return InitializationOf<Self>.self
     }
 }
 
 //===
 
 public
-enum Initialization<F: Feature>
+enum InitializationOf<F: Feature>
 {
     public
     enum Into<S: FeatureState> where S.ParentFeature == F { }
@@ -23,17 +23,8 @@ enum Initialization<F: Feature>
 
 //===
 
-extension Initialization: FeatureMutation
-{
-    public
-    static
-    var feature: Feature.Type { return F.self }
-}
-
-//===
-
 public
-extension Initialization.Into where S: SimpleState
+extension InitializationOf.Into where S: SimpleState
 {
     static
     func automatic(
@@ -55,7 +46,7 @@ extension Initialization.Into where S: SimpleState
             
             //===
             
-            return ({ $0 <== S.init() }, Initialization<F>.self)
+            return ({ $0 <== S.init() }, InitializationOf<F>.self)
         }
     }
 }
@@ -63,7 +54,7 @@ extension Initialization.Into where S: SimpleState
 //===
 
 public
-extension Initialization.Into
+extension InitializationOf.Into
 {
     static
     func via(
@@ -92,7 +83,7 @@ extension Initialization.Into
             
             //===
             
-            return ({ $0 <== newState }, Initialization<F>.self)
+            return ({ $0 <== newState }, InitializationOf<F>.self)
         }
     }
 }

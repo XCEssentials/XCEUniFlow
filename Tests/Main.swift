@@ -84,7 +84,7 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe { globalModel, change in
+        proxy = disp.proxy.subscribe { globalModel, _ in
                 
             if
                 let s = globalModel ==> M.Search.self

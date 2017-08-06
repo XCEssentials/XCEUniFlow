@@ -6,16 +6,16 @@ public
 extension Feature
 {
     static
-    var deinitialization: Deinitialization<Self>.Type
+    var deinitialization: DeinitializationOf<Self>.Type
     {
-        return Deinitialization<Self>.self
+        return DeinitializationOf<Self>.self
     }
 }
 
 //===
 
 public
-enum Deinitialization<F: Feature>
+enum DeinitializationOf<F: Feature>
 {
     public
     enum From<S: FeatureState> where S.ParentFeature == F { }
@@ -23,17 +23,8 @@ enum Deinitialization<F: Feature>
 
 //===
 
-extension Deinitialization: FeatureMutation
-{
-    public
-    static
-    var feature: Feature.Type { return F.self }
-}
-
-//===
-
 public
-extension Deinitialization
+extension DeinitializationOf
 {
     static
     func automatic(
@@ -48,7 +39,7 @@ extension Deinitialization
             
             //===
             
-            return ({ $0 /== F.self }, Deinitialization<F>.self)
+            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
         }
     }
     
@@ -67,7 +58,7 @@ extension Deinitialization
             
             //===
             
-            return ({ $0 /== F.self }, Deinitialization<F>.self)
+            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
         }
     }
 }
@@ -75,7 +66,7 @@ extension Deinitialization
 //===
 
 public
-extension Deinitialization.From
+extension DeinitializationOf.From
 {
     static
     func automatic(
@@ -97,7 +88,7 @@ extension Deinitialization.From
             
             //===
             
-            return ({ $0 /== F.self }, Deinitialization<F>.self)
+            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
         }
     }
     
@@ -125,7 +116,7 @@ extension Deinitialization.From
             
             //===
             
-            return ({ $0 /== F.self }, Deinitialization<F>.self)
+            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
         }
     }
 }
