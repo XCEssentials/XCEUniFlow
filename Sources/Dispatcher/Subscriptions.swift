@@ -33,8 +33,8 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        runNow: InitialConfiguration,
-        onUpdate: @escaping SubscriptionBody
+        _ runNow: InitialConfiguration,
+        _ onUpdate: @escaping SubscriptionBody
         ) -> Dispatcher.Proxy
     {
         runNow(dispatcher.model)
@@ -54,7 +54,7 @@ extension Dispatcher.Proxy
     
     public
     func subscribe(
-        onUpdate: @escaping SubscriptionBody
+        _ onUpdate: @escaping SubscriptionBody
         ) -> Dispatcher.Proxy
     {
         let subscription = Subscription(onUpdate)
