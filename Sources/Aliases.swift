@@ -32,3 +32,27 @@ typealias UFLDispatcher = Dispatcher
 
 public
 typealias UFLGlobalModel = GlobalModel
+
+public
+typealias UFLDispatcherNotification = DispatcherNotification
+
+public
+typealias UFLInitialUpdate = InitialUpdate
+
+public
+typealias UFLUnspecifiedMutation = UnspecifiedMutation
+
+public
+typealias UFLFeatureMutation = FeatureMutation
+
+public
+typealias UFLInitializationOf = InitializationOf
+
+public
+typealias UFLActualizationOf = ActualizationOf
+
+public
+typealias UFLTransitionOf = TransitionOf
+
+public
+typealias UFLDeinitializationOf = DeinitializationOf

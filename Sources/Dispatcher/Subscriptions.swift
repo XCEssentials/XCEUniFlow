@@ -31,7 +31,7 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        _ updateNow: Bool = true,
+        updateNow: Bool = true,
         _ handler: @escaping Subscription.Body
         ) -> Dispatcher.Proxy
     {

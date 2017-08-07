@@ -7,6 +7,12 @@ public
 extension DispatcherNotification
 {
     static
+    var isInitialUpdate: Bool
+    {
+        return self is InitialUpdate.Type
+    }
+    
+    static
     var isFeatureMutation: Bool
     {
         return self is FeatureMutation.Type
