@@ -1,14 +1,12 @@
 public
-typealias InitialConfiguration = (GlobalModel) -> Void
-
-public
-typealias SubscriptionBody = (GlobalModel, ActionDescription.Type) -> Void
-
-//===
-
 final
 class Subscription
 {
+    public
+    typealias Body = (GlobalModel, DispatcherNotification.Type) -> Void
+    
+    //===
+
     typealias Identifier = ObjectIdentifier
     
     lazy
@@ -16,11 +14,11 @@ class Subscription
     
     //===
     
-    let body: SubscriptionBody
+    let body: Body
     
     //===
     
-    init(_ body: @escaping SubscriptionBody)
+    init(_ body: @escaping Body)
     {
         self.body = body
     }
@@ -33,16 +31,20 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        _ runNow: InitialConfiguration,
-        _ onUpdate: @escaping SubscriptionBody
+        _ updateNow: Bool = true,
+        _ handler: @escaping Subscription.Body
         ) -> Dispatcher.Proxy
     {
-        runNow(dispatcher.model)
+        let subscription = Subscription(handler)
+        dispatcher.subscriptions[subscription.identifier] = subscription
         
         //===
         
-        let subscription = Subscription(onUpdate)
-        dispatcher.subscriptions[subscription.identifier] = subscription
+        if
+            updateNow
+        {
+            handler(dispatcher.model, InitialUpdate.self)
+        }
         
         //===
         
@@ -53,18 +55,10 @@ extension Dispatcher.Proxy
     }
     
     public
-    func subscribe(
-        _ onUpdate: @escaping SubscriptionBody
-        ) -> Dispatcher.Proxy
-    {
-        let subscription = Subscription(onUpdate)
-        dispatcher.subscriptions[subscription.identifier] = subscription
-        
-        //===
-        
-        return Dispatcher.Proxy(
-            for: dispatcher,
-            subscription: subscription
+    func executeNow(
+        _ runOnce: Subscription.Body
         )
+    {
+        runOnce(dispatcher.model, InitialUpdate.self)
     }
 }

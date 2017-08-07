@@ -1,15 +1,21 @@
 public
-protocol ActionDescription { }
+protocol DispatcherNotification { }
 
 //===
 
 public
-extension ActionDescription
+extension DispatcherNotification
 {
     static
     var isFeatureMutation: Bool
     {
         return self is FeatureMutation.Type
+    }
+    
+    static
+    func isMutation(of feature: Feature.Type) -> Bool
+    {
+        return asFeatureMutation?.feature == feature
     }
     
     static
@@ -19,7 +25,7 @@ extension ActionDescription
     }
     
     static
-    func isEqual(to anotherType: ActionDescription.Type) -> Bool
+    func isEqual(to anotherType: DispatcherNotification.Type) -> Bool
     {
         return anotherType == Self.self
     }
@@ -28,12 +34,17 @@ extension ActionDescription
 //===
 
 public
-enum UnspecifiedMutation: ActionDescription { } // maybe multiple mutations???
+enum InitialUpdate: DispatcherNotification { }
 
 //===
 
 public
-protocol FeatureMutation: ActionDescription
+enum UnspecifiedMutation: DispatcherNotification { } // maybe multiple mutations???
+
+//===
+
+public
+protocol FeatureMutation: DispatcherNotification
 {
     static
     var feature: Feature.Type { get }

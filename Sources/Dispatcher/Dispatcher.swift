@@ -41,9 +41,7 @@ class Dispatcher
             if
                 let subscription = subscription
             {
-                dispatcher
-                    .subscriptions
-                    .removeValue(forKey: subscription.identifier)
+                dispatcher.subscriptions[subscription.identifier] = nil
             }
         }
     }
