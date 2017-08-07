@@ -46,13 +46,13 @@ public
 typealias UFLFeatureMutation = FeatureMutation
 
 public
-typealias UFLInitializationOf = InitializationOf
+typealias UFLInitializationOf<F: Feature> = InitializationOf<F>
 
 public
-typealias UFLActualizationOf = ActualizationOf
+typealias UFLActualizationOf<F: Feature> = ActualizationOf<F>
 
 public
-typealias UFLTransitionOf = TransitionOf
+typealias UFLTransitionOf<F: Feature> = TransitionOf<F>
 
 public
-typealias UFLDeinitializationOf = DeinitializationOf
+typealias UFLDeinitializationOf<F: Feature> = DeinitializationOf<F>
