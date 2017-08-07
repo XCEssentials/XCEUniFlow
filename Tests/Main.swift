@@ -51,7 +51,7 @@ class Main: XCTestCase
         proxy = disp.proxy.subscribe { globalModel, _ in
             
             if
-                let a = globalModel ==> M.Arithmetics.Main.self
+                let a = M.Arithmetics.Main.self <== globalModel
             {
                 print("The value -->> \(a.val)")
                 
@@ -84,25 +84,36 @@ class Main: XCTestCase
         
         //===
         
+        /*
+         
+         proxy = proxy.subscribe
+         
+         */
+        
         proxy = disp.proxy.subscribe { globalModel, _ in
-                
-            if
-                let s = globalModel ==> M.Search.self
+            
+            guard
+                M.Search.presented(in: globalModel)
+            else
             {
-                if
-                    let p = s as? M.Search.InProgress,
-                    p.progress == 70
-                {
-                    progressEx.fulfill()
-                }
-                
-                //===
-                
-                if
-                    s is M.Search.Failed
-                {
-                    ex.fulfill()
-                }
+                return
+            }
+            
+            //===
+            
+            if
+                let p = M.Search.InProgress.from(globalModel),
+                p.progress == 70
+            {
+                progressEx.fulfill()
+            }
+            
+            //===
+            
+            if
+                M.Search.Failed.presented(in: globalModel)
+            {
+                ex.fulfill()
             }
         }
         

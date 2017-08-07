@@ -15,7 +15,7 @@ extension GlobalModel
     typealias Key = String
     
     static
-    func key(for feature: Feature.Type) -> Key
+        func key(for feature: Feature.Type) -> Key
     {
         return Key(reflecting: self)
     }
@@ -33,7 +33,7 @@ extension GlobalModel
     }
     
     //===
-
+    
     public
     func extract<F, S>(feature _: F.Type) -> S? where
         S: FeatureState,
@@ -43,11 +43,61 @@ extension GlobalModel
     }
     
     //===
-
+    
     public
     func extract<S: FeatureState>(state _: S.Type) -> S?
     {
         return data[GlobalModel.key(for: S.ParentFeature.self)] as? S
+    }
+}
+
+//===
+
+public
+extension Feature
+{
+    static
+    func from(_ globalModel: GlobalModel) -> Any?
+    {
+        return globalModel.extract(feature: self)
+    }
+    
+    //===
+    
+    static
+    func from<S>(_ globalModel: GlobalModel) -> S? where
+        S: FeatureState,
+        S.ParentFeature == Self
+    {
+        return globalModel.extract(feature: self)
+    }
+    
+    //===
+    
+    static
+    func presented(in globalModel: GlobalModel) -> Bool
+    {
+        return from(globalModel) != nil
+    }
+}
+
+//===
+
+public
+extension FeatureState
+{
+    static
+    func from(_ globalModel: GlobalModel) -> Self?
+    {
+        return globalModel.extract(state: self)
+    }
+    
+    //===
+    
+    static
+    func presented(in globalModel: GlobalModel) -> Bool
+    {
+        return from(globalModel) != nil
     }
 }
 
@@ -79,7 +129,7 @@ extension GlobalModel
 
 // MARK: Operators - Summary
 
-infix operator <== // gets value from GM and puts it into the left parameter, returns nothing
+infix operator <== // gets value from GM
 
 infix operator ==> // gets value from GM and returns it to outer scope
 
@@ -88,9 +138,17 @@ infix operator /== // removes value from GM, returns nothing
 // MARK: Operators - GET
 
 public
-func <== <S: FeatureState>(state: inout S?, global: GlobalModel)
+func <== <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 {
-    state = global.extract(state: S.self)
+    return global.extract(state: S.self)
+}
+
+//===
+
+public
+func <== <F: Feature>(_: F.Type, global: GlobalModel) -> Any?
+{
+    return global.extract(feature: F.self)
 }
 
 //===
