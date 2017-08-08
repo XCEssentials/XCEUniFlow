@@ -18,8 +18,41 @@ public
 enum Trigger<F: Feature>
 {
     public
+    enum WithoutState { }
+    
+    public
     enum On<S: FeatureState> where S.ParentFeature == F { }
     // swiftlint:disable:previous type_name
+}
+
+//===
+
+public
+extension Trigger.WithoutState
+{
+    static
+    func via(
+        action: String = #function,
+        // model, submit
+        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
+        ) -> Action
+    {
+        return Action(name: action, context: F.self) { model, submit in
+            
+            try REQ.isNil("\(F.name) is NOT presented yet") {
+                
+                model ==> F.self
+            }
+            
+            //===
+            
+            try body(model, submit)
+            
+            //===
+            
+            return nil
+        }
+    }
 }
 
 //===
