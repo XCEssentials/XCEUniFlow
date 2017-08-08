@@ -165,7 +165,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = "$local";
+			name = $local;
 			sourceTree = "<group>";
 		};
 		824814F3DC87680FED9E9C8B /* Dispatcher */ = {
@@ -192,11 +192,11 @@
 		94113EE11F37581100352A9C /* FeatureMutations */ = {
 			isa = PBXGroup;
 			children = (
-				94113EE21F37581100352A9C /* Actualization.swift */,
-				94113EE31F37581100352A9C /* Deinitialization.swift */,
 				94113EE41F37581100352A9C /* Initialization.swift */,
+				94113EE21F37581100352A9C /* Actualization.swift */,
 				94113EE51F37581100352A9C /* Transition.swift */,
 				94113EE61F37581100352A9C /* Trigger.swift */,
+				94113EE31F37581100352A9C /* Deinitialization.swift */,
 			);
 			path = FeatureMutations;
 			sourceTree = "<group>";

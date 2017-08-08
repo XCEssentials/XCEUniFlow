@@ -18,14 +18,14 @@ public
 enum ActualizationOf<F: Feature>
 {
     public
-    enum At<S: FeatureState> where S.ParentFeature == F { }
+    enum In<S: FeatureState> where S.ParentFeature == F { }
     // swiftlint:disable:previous type_name
 }
 
 //===
 
 public
-extension ActualizationOf.At
+extension ActualizationOf.In
 {
     static
     func via(

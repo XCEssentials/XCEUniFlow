@@ -21,7 +21,7 @@ enum Trigger<F: Feature>
     enum WithoutState { }
     
     public
-    enum On<S: FeatureState> where S.ParentFeature == F { }
+    enum In<S: FeatureState> where S.ParentFeature == F { }
     // swiftlint:disable:previous type_name
 }
 
@@ -58,7 +58,7 @@ extension Trigger.WithoutState
 //===
 
 public
-extension Trigger.On
+extension Trigger.In
 {
     static
     func via(

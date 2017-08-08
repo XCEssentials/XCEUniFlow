@@ -63,7 +63,7 @@ extension M.Search
     static
     func begin() -> Action
     {
-        return trigger.On<Ready>.via { _, submit in
+        return trigger.In<Ready>.via { _, submit in
             
             submit { simulate() }
         }
@@ -93,7 +93,7 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualization.At<InProgress>.via { _, mutate, _ in
+        return actualization.In<InProgress>.via { _, mutate, _ in
             
             _ = 0 // Xcode bug workaround
             
