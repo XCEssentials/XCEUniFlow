@@ -127,14 +127,6 @@ extension GlobalModel
     }
 }
 
-// MARK: Operators - Summary
-
-infix operator <== // gets value from GM
-
-infix operator ==> // gets value from GM and returns it to outer scope
-
-infix operator /== // removes value from GM, returns nothing
-
 // MARK: Operators - GET
 
 public

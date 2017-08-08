@@ -6,12 +6,8 @@ public
 extension Dispatcher.Proxy
 {
     public
-    func submit(_ actionGetter: () -> Action)
+    func submit(_ action: Action)
     {
-        let act = actionGetter()
-        
-        //===
-        
         OperationQueue.main.addOperation {
             
             // we add this action to queue async-ly,
@@ -20,15 +16,29 @@ extension Dispatcher.Proxy
             // that allows to submit an Action from
             // another Action safely
             
-            self.dispatcher.process(act)
+            self.dispatcher.process(action)
         }
     }
-    
+
     public
-    func submit(_ actionGetter: @autoclosure () -> Action)
+    func submit(_ actionGetter: () -> Action)
     {
-        submit(actionGetter)
+        submit(actionGetter())
     }
+}
+
+//===
+
+public
+func <== (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
+{
+    proxy.submit(actionGetter)
+}
+
+public
+func <== (proxy: Dispatcher.Proxy, action: Action)
+{
+    proxy.submit(action)
 }
 
 //===

@@ -67,8 +67,11 @@ class Main: XCTestCase
         
         //===
         
-        proxy.submit { Actions.begin() } // option 1
-        // proxy.submit(Actions.begin)   // option 2
+        proxy <== Actions.begin
+        
+        // proxy <== Actions.begin() // option 2
+        // proxy.submit { Actions.begin() } // option 3
+        // proxy.submit(Actions.begin)   // option 4
         
         //===
         
@@ -83,12 +86,6 @@ class Main: XCTestCase
         let ex = expectation(description: "After All Actions")
         
         //===
-        
-        /*
-         
-         proxy = proxy.subscribe
-         
-         */
         
         proxy = disp.proxy.subscribe { globalModel, _ in
             
