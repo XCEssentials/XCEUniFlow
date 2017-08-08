@@ -80,11 +80,11 @@ extension M.Search
             
             //===
             
-            submit { update(progress: 10) }
-            submit { update(progress: 30) }
-            submit { update(progress: 70) }
-            submit { fail() }
-            submit { cleanup() }
+            submit << update(progress: 10)
+            submit << update(progress: 30)
+            submit << update(progress: 70)
+            submit << fail
+            submit << cleanup
         }
     }
     

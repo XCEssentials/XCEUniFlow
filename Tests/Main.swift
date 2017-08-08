@@ -51,7 +51,7 @@ class Main: XCTestCase
         proxy = disp.proxy.subscribe { globalModel, _ in
             
             if
-                let a = M.Arithmetics.Main.self <== globalModel
+                let a = M.Arithmetics.Main.self << globalModel
             {
                 print("The value -->> \(a.val)")
                 
@@ -67,9 +67,9 @@ class Main: XCTestCase
         
         //===
         
-        proxy <== Actions.begin
+        proxy << Actions.begin
         
-        // proxy <== Actions.begin() // option 2
+        // proxy << Actions.begin() // option 2
         // proxy.submit { Actions.begin() } // option 3
         // proxy.submit(Actions.begin)   // option 4
         
@@ -116,8 +116,8 @@ class Main: XCTestCase
         
         //===
         
-        proxy.submit { M.Search.initialize() }
-        proxy.submit { M.Search.begin() }
+        proxy << M.Search.initialize
+        proxy << M.Search.begin
         
         //===
         

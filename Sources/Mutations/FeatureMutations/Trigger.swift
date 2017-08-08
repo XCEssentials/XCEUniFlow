@@ -41,7 +41,7 @@ extension Trigger.WithoutState
             
             try REQ.isNil("\(F.name) is NOT presented yet") {
                 
-                model ==> F.self
+                model >> F.self
             }
             
             //===
@@ -73,7 +73,7 @@ extension Trigger.In
                 
             try REQ.value("\(F.name) is in \(S.self) state") {
                 
-                model ==> S.self
+                model >> S.self
             }
             
             //===

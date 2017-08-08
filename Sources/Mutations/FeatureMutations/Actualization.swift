@@ -40,7 +40,7 @@ extension ActualizationOf.In
                 
             try REQ.value("\(F.name) is in \(S.self) state") {
                 
-                model ==> S.self
+                model >> S.self
             }
             
             //===
@@ -49,7 +49,7 @@ extension ActualizationOf.In
             
             //===
             
-            return ({ $0 <== state }, ActualizationOf<F>.self)
+            return ({ $0 << state }, ActualizationOf<F>.self)
         }
     }
 }

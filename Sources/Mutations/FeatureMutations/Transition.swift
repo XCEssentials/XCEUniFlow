@@ -43,12 +43,12 @@ extension TransitionOf.From
             
             try REQ.isNotNil("\(F.name) is in \(From.self) state") {
                 
-                model ==> From.self
+                model >> From.self
             }
             
             //===
             
-            return ({ $0 <== newState }, TransitionOf<F>.self)
+            return ({ $0 << newState }, TransitionOf<F>.self)
         }
     }
 }
@@ -69,7 +69,7 @@ extension TransitionOf.Between where Into: SimpleState
             
             try REQ.isNotNil("\(F.name) is in \(From.self) state") {
                 
-                model ==> From.self
+                model >> From.self
             }
             
             //===
@@ -78,7 +78,7 @@ extension TransitionOf.Between where Into: SimpleState
             
             //===
             
-            return ({ $0 <== Into.init() }, TransitionOf<F>.self)
+            return ({ $0 << Into.init() }, TransitionOf<F>.self)
         }
     }
 }
@@ -101,7 +101,7 @@ extension TransitionOf.Between
                 
             try REQ.value("\(F.name) is in \(From.self) state") {
                 
-                model ==> From.self
+                model >> From.self
             }
             
             //===
@@ -121,7 +121,7 @@ extension TransitionOf.Between
             
             //===
             
-            return ({ $0 <== newState }, TransitionOf<F>.self)
+            return ({ $0 << newState }, TransitionOf<F>.self)
         }
     }
 }

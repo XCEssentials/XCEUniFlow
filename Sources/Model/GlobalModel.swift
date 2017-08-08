@@ -130,7 +130,7 @@ extension GlobalModel
 // MARK: Operators - GET
 
 public
-func <== <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
+func << <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 {
     return global.extract(state: S.self)
 }
@@ -138,7 +138,7 @@ func <== <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 //===
 
 public
-func <== <F: Feature>(_: F.Type, global: GlobalModel) -> Any?
+func << <F: Feature>(_: F.Type, global: GlobalModel) -> Any?
 {
     return global.extract(feature: F.self)
 }
@@ -146,7 +146,7 @@ func <== <F: Feature>(_: F.Type, global: GlobalModel) -> Any?
 //===
 
 public
-func ==> <F: Feature>(global: GlobalModel, _: F.Type) -> Any?
+func >> <F: Feature>(global: GlobalModel, _: F.Type) -> Any?
 {
     return global.extract(feature: F.self)
 }
@@ -154,7 +154,7 @@ func ==> <F: Feature>(global: GlobalModel, _: F.Type) -> Any?
 //===
 
 public
-func ==> <F, S>(global: GlobalModel, _: F.Type) -> S? where
+func >> <F, S>(global: GlobalModel, _: F.Type) -> S? where
     S: FeatureState,
     S.ParentFeature == F
 {
@@ -164,7 +164,7 @@ func ==> <F, S>(global: GlobalModel, _: F.Type) -> S? where
 //===
 
 public
-func ==> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
+func >> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
 {
     return global.extract(state: S.self)
 }
@@ -172,7 +172,7 @@ func ==> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
 // MARK: Operators - SET
 
 public
-func <== <S: FeatureState>(global: inout GlobalModel, state: S?)
+func << <S: FeatureState>(global: inout GlobalModel, state: S?)
 {
     global.merge(state)
 }
@@ -180,7 +180,7 @@ func <== <S: FeatureState>(global: inout GlobalModel, state: S?)
 // MARK: Operators - REMOVE
 
 public
-func /== <F: Feature>(global: inout GlobalModel, _: F.Type)
+func /< <F: Feature>(global: inout GlobalModel, _: F.Type)
 {
     global.remove(F.self)
 }

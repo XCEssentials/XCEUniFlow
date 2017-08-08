@@ -39,7 +39,7 @@ extension DeinitializationOf
             
             //===
             
-            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
         }
     }
     
@@ -58,7 +58,7 @@ extension DeinitializationOf
             
             //===
             
-            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
         }
     }
 }
@@ -79,7 +79,7 @@ extension DeinitializationOf.From
             
             try REQ.isNotNil("\(F.name) is in \(S.self) state") {
                 
-                model ==> S.self
+                model >> S.self
             }
             
             //===
@@ -88,7 +88,7 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
         }
     }
     
@@ -107,7 +107,7 @@ extension DeinitializationOf.From
                 
             try REQ.value("\(F.name) is in \(S.self) state") {
                 
-                model ==> S.self
+                model >> S.self
             }
             
             //===
@@ -116,7 +116,7 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /== F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
         }
     }
 }

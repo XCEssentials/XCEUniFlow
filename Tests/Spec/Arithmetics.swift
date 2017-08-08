@@ -35,12 +35,12 @@ enum Actions: ActionContext
             
             try REQ.isNil("Feature is not initialized yet") {
                 
-                model ==> M.Arithmetics.self
+                model >> M.Arithmetics.self
             }
             
             //===
             
-            mutate { $0 <== M.Arithmetics.Main(val: 0) }
+            mutate { $0 << M.Arithmetics.Main(val: 0) }
             
             //===
             
@@ -66,7 +66,7 @@ enum Actions: ActionContext
             
             var a = try REQ.value("Feature is initialized") {
                 
-                model ==> M.Arithmetics.Main.self
+                model >> M.Arithmetics.Main.self
             }
             
             //===
@@ -82,7 +82,7 @@ enum Actions: ActionContext
             
             //===
             
-            mutate { $0 <== a }
+            mutate { $0 << a }
         }
     }
     
@@ -93,7 +93,7 @@ enum Actions: ActionContext
             
             var a = try REQ.value("Feature is initialized") {
                 
-                model ==> M.Arithmetics.Main.self
+                model >> M.Arithmetics.Main.self
             }
             
             //===
@@ -102,7 +102,7 @@ enum Actions: ActionContext
             
             //===
             
-            mutate { $0 <== a }
+            mutate { $0 << a }
         }
     }
 }

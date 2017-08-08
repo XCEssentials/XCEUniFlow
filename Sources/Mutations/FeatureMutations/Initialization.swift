@@ -37,7 +37,7 @@ extension InitializationOf.Into where S: SimpleState
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
-                model ==> F.self
+                model >> F.self
             }
             
             //===
@@ -46,7 +46,7 @@ extension InitializationOf.Into where S: SimpleState
             
             //===
             
-            return ({ $0 <== S.init() }, InitializationOf<F>.self)
+            return ({ $0 << S.init() }, InitializationOf<F>.self)
         }
     }
 }
@@ -67,7 +67,7 @@ extension InitializationOf.Into
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
-                model ==> F.self
+                model >> F.self
             }
             
             //===
@@ -83,7 +83,7 @@ extension InitializationOf.Into
             
             //===
             
-            return ({ $0 <== newState }, InitializationOf<F>.self)
+            return ({ $0 << newState }, InitializationOf<F>.self)
         }
     }
 }
