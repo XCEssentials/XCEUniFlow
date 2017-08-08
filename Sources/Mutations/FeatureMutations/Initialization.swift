@@ -18,7 +18,10 @@ public
 enum InitializationOf<F: Feature>
 {
     public
-    enum Into<S: FeatureState> where S.ParentFeature == F { }
+    struct Into<S: FeatureState> where S.ParentFeature == F
+    {
+        let newState: S
+    }
 }
 
 //===
@@ -42,11 +45,15 @@ extension InitializationOf.Into where S: SimpleState
             
             //===
             
+            let newState = S.init()
+            
+            //===
+            
             completion?(submit)
             
             //===
             
-            return ({ $0 << S.init() }, InitializationOf<F>.self)
+            return ({ $0 <<  newState}, self.init(newState: newState))
         }
     }
 }
@@ -83,7 +90,14 @@ extension InitializationOf.Into
             
             //===
             
-            return ({ $0 << newState }, InitializationOf<F>.self)
+            try REQ.isNotNil("New state for \(F.name) is set") {
+                
+                newState
+            }
+            
+            //===
+            
+            return ({ $0 << newState }, self.init(newState: newState))
         }
     }
 }

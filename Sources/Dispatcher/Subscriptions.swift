@@ -3,7 +3,7 @@ final
 class Subscription
 {
     public
-    typealias Body = (GlobalModel, DispatcherNotification.Type) -> Void
+    typealias Body = (GlobalModel, MutationsAnnotation) -> Void
     
     //===
 
@@ -43,7 +43,7 @@ extension Dispatcher.Proxy
         if
             updateNow
         {
-            handler(dispatcher.model, InitialUpdate.self)
+            handler(dispatcher.model, NoMutations())
         }
         
         //===
@@ -59,6 +59,6 @@ extension Dispatcher.Proxy
         _ runOnce: Subscription.Body
         )
     {
-        runOnce(dispatcher.model, InitialUpdate.self)
+        runOnce(dispatcher.model, NoMutations())
     }
 }

@@ -18,7 +18,7 @@
 		94113EE91F37582A00352A9C /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94113EE41F37581100352A9C /* Initialization.swift */; };
 		94113EEA1F37582A00352A9C /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94113EE51F37581100352A9C /* Transition.swift */; };
 		94113EEB1F37582A00352A9C /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94113EE61F37581100352A9C /* Trigger.swift */; };
-		94113EED1F3759BD00352A9C /* DispatcherNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94113EEC1F3759BD00352A9C /* DispatcherNotification.swift */; };
+		94113EED1F3759BD00352A9C /* MutationsAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94113EEC1F3759BD00352A9C /* MutationsAnnotation.swift */; };
 		9443386F1F39FB72008E4836 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9443386E1F39FB72008E4836 /* Operators.swift */; };
 		949CB27C1F23BA3200DDFDFC /* ReportingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949CB27B1F23BA3200DDFDFC /* ReportingHelpers.swift */; };
 		94A7225D1F373D4800F7EADA /* HelperProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A7225C1F373D4800F7EADA /* HelperProtocols.swift */; };
@@ -85,7 +85,7 @@
 		94113EE41F37581100352A9C /* Initialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialization.swift; sourceTree = "<group>"; };
 		94113EE51F37581100352A9C /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		94113EE61F37581100352A9C /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
-		94113EEC1F3759BD00352A9C /* DispatcherNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatcherNotification.swift; sourceTree = "<group>"; };
+		94113EEC1F3759BD00352A9C /* MutationsAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutationsAnnotation.swift; sourceTree = "<group>"; };
 		9443386E1F39FB72008E4836 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		949CB27B1F23BA3200DDFDFC /* ReportingHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportingHelpers.swift; sourceTree = "<group>"; };
 		94A7225C1F373D4800F7EADA /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				94E849BF1F36846F00B8F98D /* Action.swift */,
-				94113EEC1F3759BD00352A9C /* DispatcherNotification.swift */,
+				94113EEC1F3759BD00352A9C /* MutationsAnnotation.swift */,
 				94113EE11F37581100352A9C /* FeatureMutations */,
 				94E849CD1F36857000B8F98D /* GenericActions.swift */,
 			);
@@ -443,7 +443,7 @@
 				D6773130857F3D94609D1D05 /* Aliases.swift in Sources */,
 				94113EE81F37582A00352A9C /* Deinitialization.swift in Sources */,
 				51AC7667DD82FABB70D4DEBF /* Dispatcher.swift in Sources */,
-				94113EED1F3759BD00352A9C /* DispatcherNotification.swift in Sources */,
+				94113EED1F3759BD00352A9C /* MutationsAnnotation.swift in Sources */,
 				94E849BB1F3681A900B8F98D /* Feature.swift in Sources */,
 				94E849BD1F3681DB00B8F98D /* FeatureState.swift in Sources */,
 				94E849CE1F36857000B8F98D /* GenericActions.swift in Sources */,

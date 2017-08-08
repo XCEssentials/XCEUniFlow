@@ -15,10 +15,13 @@ extension Feature
 //===
 
 public
-enum DeinitializationOf<F: Feature>
+struct DeinitializationOf<F: Feature>
 {
     public
-    enum From<S: FeatureState> where S.ParentFeature == F { }
+    struct From<S: FeatureState> where S.ParentFeature == F
+    {
+        let oldState: S
+    }
 }
 
 //===
@@ -35,11 +38,11 @@ extension DeinitializationOf
     {
         return Action(name: action, context: F.self) { _, submit in
             
-            completion?(submit)
+             completion?(submit)
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, self.init())
         }
     }
     
@@ -58,7 +61,7 @@ extension DeinitializationOf
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, self.init())
         }
     }
 }
@@ -77,7 +80,9 @@ extension DeinitializationOf.From
     {
         return Action(name: action, context: F.self) { model, submit in
             
-            try REQ.isNotNil("\(F.name) is in \(S.self) state") {
+            let oldState =
+                
+            try REQ.value("\(F.name) is in \(S.self) state") {
                 
                 model >> S.self
             }
@@ -88,7 +93,7 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, self.init(oldState: oldState))
         }
     }
     
@@ -103,7 +108,7 @@ extension DeinitializationOf.From
     {
         return Action(name: action, context: F.self) { model, submit in
             
-            let currentState =
+            let oldState =
                 
             try REQ.value("\(F.name) is in \(S.self) state") {
                 
@@ -112,11 +117,11 @@ extension DeinitializationOf.From
             
             //===
             
-            try body(currentState, submit)
+            try body(oldState, submit)
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>.self)
+            return ({ $0 /< F.self }, self.init(oldState: oldState))
         }
     }
 }

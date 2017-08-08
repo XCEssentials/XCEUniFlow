@@ -21,10 +21,13 @@ enum TransitionOf<F: Feature>
     enum From<From: FeatureState> where From.ParentFeature == F { }
     
     public
-    enum Between<From: FeatureState, Into: FeatureState> where
+    struct Between<From: FeatureState, Into: FeatureState> where
         From.ParentFeature == F,
         Into.ParentFeature == F
-    { }
+    {
+        let oldState: From
+        let newState: Into
+    }
 }
 
 //===
@@ -41,14 +44,19 @@ extension TransitionOf.From
     {
         return Action(name: action, context: F.self) { model, _ in
             
-            try REQ.isNotNil("\(F.name) is in \(From.self) state") {
+            let oldState =
+            
+            try REQ.value("\(F.name) is in \(From.self) state") {
                 
                 model >> From.self
             }
             
             //===
             
-            return ({ $0 << newState }, TransitionOf<F>.self)
+            return (
+                { $0 << newState },
+                TransitionOf<F>.Between(oldState: oldState, newState: newState)
+            )
         }
     }
 }
@@ -67,10 +75,16 @@ extension TransitionOf.Between where Into: SimpleState
     {
         return Action(name: action, context: F.self) { model, submit in
             
-            try REQ.isNotNil("\(F.name) is in \(From.self) state") {
+            let oldState =
+                
+            try REQ.value("\(F.name) is in \(From.self) state") {
                 
                 model >> From.self
             }
+            
+            //===
+            
+            let newState = Into.init()
             
             //===
             
@@ -78,7 +92,10 @@ extension TransitionOf.Between where Into: SimpleState
             
             //===
             
-            return ({ $0 << Into.init() }, TransitionOf<F>.self)
+            return (
+                { $0 << newState },
+                self.init(oldState: oldState, newState: newState)
+            )
         }
     }
 }
@@ -97,7 +114,7 @@ extension TransitionOf.Between
     {
         return Action(name: action, context: F.self) { model, submit in
             
-            let currentState =
+            let oldState =
                 
             try REQ.value("\(F.name) is in \(From.self) state") {
                 
@@ -106,11 +123,11 @@ extension TransitionOf.Between
             
             //===
             
-            var newState: Into?
+            var newState: Into!
             
             //===
             
-            try body(currentState, { newState = $0() }, submit)
+            try body(oldState, { newState = $0() }, submit)
             
             //===
             
@@ -121,7 +138,10 @@ extension TransitionOf.Between
             
             //===
             
-            return ({ $0 << newState }, TransitionOf<F>.self)
+            return (
+                { $0 << newState },
+                self.init(oldState: oldState, newState: newState)
+            )
         }
     }
 }

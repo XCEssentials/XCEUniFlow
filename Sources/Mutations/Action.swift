@@ -21,7 +21,7 @@ typealias ActionBody = (
     _ model: GlobalModel,
     _ submit: @escaping Wrapped<ActionGetter>
     )
-    throws -> (Mutations<GlobalModel>, DispatcherNotification.Type)?
+    throws -> (Mutations<GlobalModel>, MutationsAnnotation)?
 
 public
 typealias Wrapped<Value> = (Value) -> Void

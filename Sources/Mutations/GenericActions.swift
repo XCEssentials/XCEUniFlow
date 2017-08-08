@@ -22,7 +22,7 @@ extension ActionContext
             
             //===
             
-            return ({ $0 = updatedModel }, UnspecifiedMutation.self)
+            return ({ $0 = updatedModel }, UnspecifiedMutation())
         }
     }
     
