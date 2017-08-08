@@ -29,33 +29,6 @@ extension Dispatcher.Proxy
 
 //===
 
-public
-func << (proxy: Dispatcher.Proxy, action: Action)
-{
-    proxy.submit(action)
-}
-
-public
-func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
-{
-    proxy.submit(actionGetter())
-}
-
-public
-func << (submit: Wrapped<ActionGetter>, action: Action)
-{
-    submit { action }
-}
-
-public
-func << (submit: Wrapped<ActionGetter>, actionGetter: () -> Action)
-{
-    let action = actionGetter()
-    submit { action }
-}
-
-//===
-
 extension Dispatcher
 {
     func process(_ act: Action)

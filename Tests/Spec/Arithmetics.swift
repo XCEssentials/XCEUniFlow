@@ -44,8 +44,8 @@ enum Actions: ActionContext
             
             //===
             
-            submit { setExplicit(value: 10) }
-            submit { incFive() }
+            submit << setExplicit(value: 10)
+            submit << incFive
         }
     }
     

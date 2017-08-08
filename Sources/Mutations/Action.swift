@@ -14,7 +14,7 @@ struct Action
     var fullName: String { return "\(contextDescription).\(name)" }
 }
 
-//===
+// MARK: Helper types
 
 public
 typealias ActionBody = (
@@ -36,3 +36,40 @@ typealias Mutations<Value> = (_: inout Value) -> Void
 
 public
 typealias StateGetter<State: FeatureState> = () -> State
+
+// MARK: Operators - Submit action to proxy
+
+public
+func << (proxy: Dispatcher.Proxy, action: Action)
+{
+    proxy.submit(action)
+}
+
+public
+func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
+{
+    proxy.submit(actionGetter())
+}
+
+// MARK: Operators - Pass action to 'submit' handler
+
+public
+func << (submit: Wrapped<ActionGetter>, action: Action)
+{
+    submit { action }
+}
+
+public
+func << (submit: Wrapped<ActionGetter>, actionGetter: () -> Action)
+{
+    let action = actionGetter()
+    submit { action }
+}
+
+// MARK: Operators - Pass feature state to 'become' handler
+
+public
+func << <S: FeatureState>(become: Wrapped<StateGetter<S>>, state: S)
+{
+    become { state }
+}

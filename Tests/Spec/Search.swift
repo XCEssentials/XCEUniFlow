@@ -65,7 +65,7 @@ extension M.Search
     {
         return trigger.In<Ready>.via { _, submit in
             
-            submit { simulate() }
+            submit << simulate
         }
     }
     
@@ -76,7 +76,7 @@ extension M.Search
     {
         return transition.Between<Ready, InProgress>.via { _, become, submit in
             
-            become { InProgress(progress: 0) }
+            become << InProgress(progress: 0)
             
             //===
             
