@@ -15,9 +15,9 @@ extension GlobalModel
     typealias Key = String
     
     static
-        func key(for feature: Feature.Type) -> Key
+    func key(for feature: Feature.Type) -> Key
     {
-        return Key(reflecting: self)
+        return Key(reflecting: feature)
     }
 }
 
