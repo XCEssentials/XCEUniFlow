@@ -2,14 +2,6 @@ public
 final
 class Subscription
 {
-    public
-    typealias InitialNotification = (GlobalModel) -> Void
-    
-    public
-    typealias Notification = (MutationsAnnotation, GlobalModel) -> Void
-    
-    //===
-
     typealias Identifier = ObjectIdentifier
     
     lazy
@@ -17,11 +9,11 @@ class Subscription
     
     //===
     
-    let notify: Notification
+    let notify: (MutationsAnnotation, GlobalModel) -> Void
     
     //===
     
-    init(_ notify: @escaping Notification)
+    init(_ notify: @escaping (MutationsAnnotation, GlobalModel) -> Void)
     {
         self.notify = notify
     }
@@ -34,8 +26,8 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        _ notifyNow: Subscription.InitialNotification,
-        _ notify: @escaping Subscription.Notification
+        _ notifyNow: (GlobalModel) -> Void,
+        _ notify: @escaping (MutationsAnnotation, GlobalModel) -> Void
         ) -> Dispatcher.Proxy
     {
         notifyNow(dispatcher.model)
@@ -56,7 +48,7 @@ extension Dispatcher.Proxy
     public
     func subscribe(
         notifyNow: Bool = true,
-        _ notify: @escaping Subscription.Notification
+        _ notify: @escaping (MutationsAnnotation, GlobalModel) -> Void
         ) -> Dispatcher.Proxy
     {
         let subscription = Subscription(notify)
@@ -80,7 +72,7 @@ extension Dispatcher.Proxy
     
     public
     func notifyNow(
-        _ runOnce: Subscription.Notification
+        _ runOnce: (MutationsAnnotation, GlobalModel) -> Void
         )
     {
         runOnce(NoMutations(), dispatcher.model)
