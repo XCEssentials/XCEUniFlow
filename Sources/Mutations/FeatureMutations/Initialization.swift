@@ -31,12 +31,13 @@ extension InitializationOf.Into where S: SimpleState
 {
     static
     func automatic(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // submit
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
@@ -65,12 +66,13 @@ extension InitializationOf.Into
 {
     static
     func via(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // become, submit
         body: @escaping (Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 

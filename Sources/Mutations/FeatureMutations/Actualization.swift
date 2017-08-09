@@ -32,12 +32,13 @@ extension ActualizationOf.In
 {
     static
     func via(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // currentState, mutate, submit
         body: @escaping (S, Wrapped<Mutations<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             var state =
                 

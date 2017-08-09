@@ -32,12 +32,13 @@ extension Trigger.WithoutState
 {
     static
     func via(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // model, submit
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT presented yet") {
                 
@@ -62,12 +63,13 @@ extension Trigger.In
 {
     static
     func via(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // currentState, submit
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             let currentState =
                 

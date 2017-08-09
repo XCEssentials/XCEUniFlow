@@ -8,11 +8,12 @@ extension ActionContext
 {
     static
     func action(
-        name: String = #function,
+        scope: String = #file,
+        context: String = #function,
         body: @escaping (GlobalModel, Wrapped<Mutations<GlobalModel>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: name, context: Self.self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             var updatedModel = model
             
@@ -30,12 +31,13 @@ extension ActionContext
     
     static
     func trigger(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // model, submit
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: Self.self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             try body(model, submit)
             

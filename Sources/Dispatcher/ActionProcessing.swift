@@ -53,7 +53,7 @@ extension Dispatcher
             
             //===
             
-            onDidProcessAction?(act.name, act.contextDescription)
+            onDidProcessAction?(act.name, act.typeDescription)
         }
         catch
         {
@@ -61,7 +61,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onDidRejectAction?(act.name, act.contextDescription, error)
+            onDidRejectAction?(act.name, act.typeDescription, error)
         }
     }
 }

@@ -31,12 +31,13 @@ extension DeinitializationOf
 {
     static
     func automatic(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // submit
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: self) { _, submit in
+        return Action(scope, context, self) { _, submit in
             
              completion?(submit)
             
@@ -50,12 +51,13 @@ extension DeinitializationOf
     
     static
     func prepare(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // model, submit
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             try body(model, submit)
             
@@ -73,12 +75,13 @@ extension DeinitializationOf.From
 {
     static
     func automatic(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // submit
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
@@ -101,12 +104,13 @@ extension DeinitializationOf.From
     
     static
     func prepare(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // currentState, submit
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             let oldState =
                 

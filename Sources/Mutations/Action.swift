@@ -1,17 +1,45 @@
 public
 struct Action
 {
-    let name: String
-    let context: Any.Type
+    public
+    let scope: String
+    
+    public
+    let context: String
+    
+    public
+    let type: Any.Type
+    
+    //===
+    
     let body: ActionBody
     
     //===
     
-    public
-    var contextDescription: String { return String(reflecting: context) }
+    // unavailable directly from outside of the module
+    init(
+        _ scope: String,
+        _ context: String,
+        _ type: Any.Type,
+        body: @escaping ActionBody
+        )
+    {
+        self.scope = scope
+        self.context = context
+        self.type = type
+        self.body = body
+    }
+    
+    //===
     
     public
-    var fullName: String { return "\(self.name)/\(self.contextDescription)" }
+    var name: String { return "\(context)@\(scope)" }
+    
+    public
+    var typeDescription: String { return String(reflecting: type) }
+    
+    public
+    var description: String { return "\(typeDescription) // \(name)" }
 }
 
 // MARK: Helper types

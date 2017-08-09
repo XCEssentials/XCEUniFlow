@@ -37,12 +37,13 @@ extension TransitionOf.From
 {
     static
     func into<Into: FeatureState>(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         _ newState: Into
         ) -> Action
         where Into.ParentFeature == F
     {
-        return Action(name: action, context: self) { model, _ in
+        return Action(scope, context, self) { model, _ in
             
             let oldState =
             
@@ -68,12 +69,13 @@ extension TransitionOf.Between where Into: SimpleState
 {
     static
     func automatic(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // submit
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
@@ -107,12 +109,13 @@ extension TransitionOf.Between
 {
     static
     func via(
-        action: String = #function,
+        scope: String = #file,
+        context: String = #function,
         // currentState, become, submit
         body: @escaping (From, Wrapped<StateGetter<Into>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: self) { model, submit in
+        return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
