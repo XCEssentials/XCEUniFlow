@@ -53,16 +53,26 @@ class Dispatcher
     var proxy: Proxy = Proxy(for: self)
     
     public
-    var onDidProcessAction: ((_ action: String, _ context: String) -> Void)?
+    var onDidProcessAction: ((_ action: Action) -> Void)?
     
     public
-    var onDidRejectAction: ((_ action: String, _ context: String, _: Error) -> Void)?
+    var onDidRejectAction: ((_ action: Action, _: Error) -> Void)?
     
     //=== Initializer
     
     public
-    init(defaultReporting: Bool = false)
+    init(defaultReporting: DefaultReporting = .none)
     {
-        if defaultReporting { enableDefaultReporting() }
+        switch defaultReporting
+        {
+            case .short:
+                enableShortDefaultReporting()
+            
+            case .verbose:
+                enableVerboseDefaultReporting()
+            
+            default:
+                break
+        }
     }
 }

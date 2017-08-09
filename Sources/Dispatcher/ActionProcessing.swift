@@ -31,11 +31,11 @@ extension Dispatcher.Proxy
 
 extension Dispatcher
 {
-    func process(_ act: Action)
+    func process(_ action: Action)
     {
         do
         {
-            let result = try act.body(model) { self.proxy.submit($0) }
+            let result = try action.body(model) { self.proxy.submit($0) }
             
             //===
             
@@ -53,7 +53,7 @@ extension Dispatcher
             
             //===
             
-            onDidProcessAction?(act.name, act.typeDescription)
+            onDidProcessAction?(action)
         }
         catch
         {
@@ -61,7 +61,7 @@ extension Dispatcher
             // will NOT notify subscribers
             // about attempt to process this action
             
-            onDidRejectAction?(act.name, act.typeDescription, error)
+            onDidRejectAction?(action, error)
         }
     }
 }

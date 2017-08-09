@@ -1,16 +1,37 @@
 public
+enum DefaultReporting
+{
+    case none, short, verbose
+}
+
+//===
+
+public
 extension Dispatcher
 {
-    func enableDefaultReporting()
+    func enableVerboseDefaultReporting()
     {
         onDidProcessAction = {
             
-            print("XCEUniFlow: [+] PROCESSED '\($0)' / '\($1)'")
+            print("XCEUniFlow: [+] PROCESSED '\($0.name)' / '\($0.typeDescription)'")
         }
         
         onDidRejectAction = {
             
-            print("XCEUniFlow: [-] REJECTED '\($0)' / '\($1)', reason: \($2)")
+            print("XCEUniFlow: [-] REJECTED '\($0.name)' / '\($0.typeDescription)', reason: \($1)")
+        }
+    }
+    
+    func enableShortDefaultReporting()
+    {
+        onDidProcessAction = {
+            
+            print("XCEUniFlow: [+] PROCESSED '\($0.typeDescription)'")
+        }
+        
+        onDidRejectAction = {
+            
+            print("XCEUniFlow: [-] REJECTED '\($0.typeDescription)', reason: \($1)")
         }
     }
     
