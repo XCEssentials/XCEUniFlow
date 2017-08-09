@@ -45,10 +45,10 @@ extension Dispatcher
             //===
             
             if
-                let (mutation, description) = result
+                let (mutation, annotation) = result
             {
                 mutation(&model)
-                subscriptions.forEach{ $0.value.body(model, description) }
+                subscriptions.forEach{ $0.value.notify(annotation, model) }
             }
             
             //===

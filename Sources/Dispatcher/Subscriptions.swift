@@ -3,7 +3,10 @@ final
 class Subscription
 {
     public
-    typealias Body = (GlobalModel, MutationsAnnotation) -> Void
+    typealias InitialNotification = (GlobalModel) -> Void
+    
+    public
+    typealias Notification = (MutationsAnnotation, GlobalModel) -> Void
     
     //===
 
@@ -14,13 +17,13 @@ class Subscription
     
     //===
     
-    let body: Body
+    let notify: Notification
     
     //===
     
-    init(_ body: @escaping Body)
+    init(_ notify: @escaping Notification)
     {
-        self.body = body
+        self.notify = notify
     }
 }
 
@@ -31,19 +34,40 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        updateNow: Bool = true,
-        _ handler: @escaping Subscription.Body
+        _ notifyNow: Subscription.InitialNotification,
+        _ notify: @escaping Subscription.Notification
         ) -> Dispatcher.Proxy
     {
-        let subscription = Subscription(handler)
+        notifyNow(dispatcher.model)
+        
+        //===
+        
+        let subscription = Subscription(notify)
+        dispatcher.subscriptions[subscription.identifier] = subscription
+        
+        //===
+        
+        return Dispatcher.Proxy(
+            for: dispatcher,
+            subscription: subscription
+        )
+    }
+    
+    public
+    func subscribe(
+        notifyNow: Bool = true,
+        _ notify: @escaping Subscription.Notification
+        ) -> Dispatcher.Proxy
+    {
+        let subscription = Subscription(notify)
         dispatcher.subscriptions[subscription.identifier] = subscription
         
         //===
         
         if
-            updateNow
+            notifyNow
         {
-            handler(dispatcher.model, NoMutations())
+            notify(NoMutations(), dispatcher.model)
         }
         
         //===
@@ -55,10 +79,10 @@ extension Dispatcher.Proxy
     }
     
     public
-    func executeNow(
-        _ runOnce: Subscription.Body
+    func notifyNow(
+        _ runOnce: Subscription.Notification
         )
     {
-        runOnce(dispatcher.model, NoMutations())
+        runOnce(NoMutations(), dispatcher.model)
     }
 }

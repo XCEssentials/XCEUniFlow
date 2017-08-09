@@ -48,7 +48,7 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe { globalModel, _ in
+        proxy = disp.proxy.subscribe { _, globalModel in
             
             if
                 let a = M.Arithmetics.Main.self << globalModel
@@ -87,7 +87,7 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe { globalModel, _ in
+        proxy = disp.proxy.subscribe { _, globalModel in
             
             guard
                 M.Search.presented(in: globalModel)
