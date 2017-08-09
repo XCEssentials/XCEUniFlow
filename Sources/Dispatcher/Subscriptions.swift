@@ -9,11 +9,11 @@ class Subscription
     
     //===
     
-    let notify: (MutationsAnnotation, GlobalModel) -> Void
+    let notify: (Mutation, GlobalModel) -> Void
     
     //===
     
-    init(_ notify: @escaping (MutationsAnnotation, GlobalModel) -> Void)
+    init(_ notify: @escaping (Mutation, GlobalModel) -> Void)
     {
         self.notify = notify
     }
@@ -27,7 +27,7 @@ extension Dispatcher.Proxy
     public
     func subscribe(
         _ notifyNow: (GlobalModel) -> Void,
-        _ notify: @escaping (MutationsAnnotation, GlobalModel) -> Void
+        _ notify: @escaping (Mutation, GlobalModel) -> Void
         ) -> Dispatcher.Proxy
     {
         notifyNow(dispatcher.model)
@@ -48,7 +48,7 @@ extension Dispatcher.Proxy
     public
     func subscribe(
         notifyNow: Bool = true,
-        _ notify: @escaping (MutationsAnnotation, GlobalModel) -> Void
+        _ notify: @escaping (Mutation, GlobalModel) -> Void
         ) -> Dispatcher.Proxy
     {
         let subscription = Subscription(notify)
@@ -59,7 +59,7 @@ extension Dispatcher.Proxy
         if
             notifyNow
         {
-            notify(NoMutations(), dispatcher.model)
+            notify(NoMutation(), dispatcher.model)
         }
         
         //===
@@ -72,9 +72,9 @@ extension Dispatcher.Proxy
     
     public
     func notifyNow(
-        _ runOnce: (MutationsAnnotation, GlobalModel) -> Void
+        _ runOnce: (Mutation, GlobalModel) -> Void
         )
     {
-        runOnce(NoMutations(), dispatcher.model)
+        runOnce(NoMutation(), dispatcher.model)
     }
 }

@@ -34,10 +34,10 @@ public
 typealias UFLGlobalModel = GlobalModel
 
 public
-typealias UFLDispatcherNotification = MutationsAnnotation
+typealias UFLMutation = Mutation
 
 public
-typealias UFLInitialUpdate = NoMutations
+typealias UFLNoMutation = NoMutation
 
 public
 typealias UFLUnspecifiedMutation = UnspecifiedMutation

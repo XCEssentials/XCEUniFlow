@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-enum TransitionOf<F: Feature>
+struct TransitionOf<F: Feature>
 {
     public
     enum From<From: FeatureState> where From.ParentFeature == F { }
@@ -24,10 +24,29 @@ enum TransitionOf<F: Feature>
     struct Between<From: FeatureState, Into: FeatureState> where
         From.ParentFeature == F,
         Into.ParentFeature == F
-    {
-        let oldState: From
-        let newState: Into
-    }
+    { }
+    
+    //===
+    
+    public
+    let oldState: Any
+    
+    public
+    let newState: Any
+}
+
+public
+struct TransitionFrom<S: FeatureState>
+{
+    public
+    let oldState: S
+}
+
+public
+struct TransitionInto<S: FeatureState>
+{
+    public
+    let newState: S
 }
 
 //===
@@ -56,7 +75,7 @@ extension TransitionOf.From
             
             return (
                 { $0 << newState },
-                TransitionOf<F>.Between(oldState: oldState, newState: newState)
+                TransitionOf<F>(oldState: oldState, newState: newState)
             )
         }
     }
@@ -96,7 +115,7 @@ extension TransitionOf.Between where Into: SimpleState
             
             return (
                 { $0 << newState },
-                self.init(oldState: oldState, newState: newState)
+                TransitionOf<F>(oldState: oldState, newState: newState)
             )
         }
     }
@@ -143,7 +162,7 @@ extension TransitionOf.Between
             
             return (
                 { $0 << newState },
-                self.init(oldState: oldState, newState: newState)
+                TransitionOf<F>(oldState: oldState, newState: newState)
             )
         }
     }

@@ -15,15 +15,24 @@ extension Feature
 //===
 
 public
-enum ActualizationOf<F: Feature>
+struct ActualizationOf<F: Feature>
 {
     public
     struct In<S: FeatureState> where S.ParentFeature == F
     // swiftlint:disable:previous type_name
     {
+        public
         let state: S
     }
+    
+    //===
+    
+    public
+    let state: Any
 }
+
+public
+typealias ActualizationIn<S: FeatureState> = ActualizationOf<S.ParentFeature>.In<S>
 
 //===
 
@@ -53,7 +62,7 @@ extension ActualizationOf.In
             
             //===
             
-            return ({ $0 << state }, self.init(state: state))
+            return ({ $0 << state }, ActualizationOf<F>(state: state))
         }
     }
 }

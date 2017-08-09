@@ -49,7 +49,7 @@ typealias ActionBody = (
     _ model: GlobalModel,
     _ submit: @escaping Wrapped<ActionGetter>
     )
-    throws -> (Mutations<GlobalModel>, MutationsAnnotation)?
+    throws -> (Mutations<GlobalModel>, Mutation)?
 
 public
 typealias Wrapped<Value> = (Value) -> Void

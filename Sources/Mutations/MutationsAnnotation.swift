@@ -1,105 +1,261 @@
 public
-protocol MutationsAnnotation { }
+protocol Mutation { }
+
+//===
+
+//public
+//extension Feature
+//{
+//    static
+//    func wasMutated(_ changes: MutationsAnnotation) -> Bool
+//    {
+//        return (changes as? FeatureMutation)?.feature == self
+//    }
+//}
 
 //===
 
 public
-extension Feature
+struct NoMutation: Mutation { } // like initial update
+
+//===
+
+public
+struct UnspecifiedMutation: Mutation { } // maybe multiple mutations???
+
+//===
+
+public
+protocol FeatureMutation: Mutation
 {
     static
-    func wasMutated(_ changes: MutationsAnnotation) -> Bool
-    {
-        return (changes as? FeatureMutation)?.feature == self
-    }
-}
-
-//===
-
-public
-struct NoMutations: MutationsAnnotation { } // like initial update
-
-//===
-
-public
-struct UnspecifiedMutation: MutationsAnnotation { } // maybe multiple mutations???
-
-//===
-
-public
-protocol FeatureMutation: MutationsAnnotation
-{
     var feature: Feature.Type { get }
-    var currentState: Any? { get }
 }
 
-//===
+// MARK: FeatureMutation variants - Initialization
 
-public
-protocol FeatureDeinitialization: FeatureMutation { }
-
-//===
-
-public
-extension FeatureState
+extension InitializationOf: FeatureMutation
 {
+    public
     static
-    func wasMutated(_ changes: MutationsAnnotation) -> Self?
+    var feature: Feature.Type { return F.self }
+    
+    //===
+    
+    // if let newRunning = InitializationOf<M.App>(mutations).newState
+    
+    public
+    init?(_ changes: Mutation)
     {
-        return (changes as? FeatureMutation)?.currentState as? Self
+        guard
+            let mutation = changes as? InitializationOf<F>
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = mutation
     }
 }
 
-// MARK: FeatureMutation variants
+//===
 
-extension InitializationOf.Into: FeatureMutation
+extension InitializationInto
 {
-    public
-    var feature: Feature.Type { return F.self }
+    // if let newRunning = InitializationInto<M.App.Running>(mutations).newState
     
     public
-    var currentState: Any? { return newState }
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? InitializationOf<S.ParentFeature>,
+            let newState = mutation.newState as? S
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = InitializationInto(newState: newState)
+    }
+}
+
+// MARK: FeatureMutation variants - Actualization
+
+extension ActualizationOf: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+    
+    //===
+    
+    // if let running = ActualizationOf<M.App>(mutations).state
+    
+    public
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? ActualizationOf<F>
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = mutation
+    }
 }
 
 //===
 
-extension ActualizationOf.In: FeatureMutation
+extension ActualizationIn
 {
-    public
-    var feature: Feature.Type { return F.self }
+    // if let running = ActualizationIn<M.App.Running>(mutations).state
     
     public
-    var currentState: Any? { return state }
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? ActualizationOf<S.ParentFeature>,
+            let state = mutation.state as? S
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = ActualizationIn(state: state)
+    }
+}
+
+// MARK: FeatureMutation variants - Transition
+
+extension TransitionOf: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+    
+    //===
+    
+    // if let oldRunning = TransitionOf<M.App>(mutations).oldState
+    // if let newRunning = TransitionOf<M.App>(mutations).newState
+    
+    public
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? TransitionOf<F>
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = mutation
+    }
 }
 
 //===
 
-extension TransitionOf.Between: FeatureMutation
+extension TransitionFrom
 {
-    public
-    var feature: Feature.Type { return F.self }
+    // if let oldRunning = TransitionFrom<M.App.Running>(mutations).oldState
     
     public
-    var currentState: Any? { return newState }
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? TransitionOf<S.ParentFeature>,
+            let oldState = mutation.oldState as? S
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = TransitionFrom(oldState: oldState)
+    }
 }
 
 //===
 
-extension DeinitializationOf: FeatureDeinitialization
+extension TransitionInto
 {
-    public
-    var feature: Feature.Type { return F.self }
+    // if let newRunning = TransitionInto<M.App.Running>(mutations).newState
     
     public
-    var currentState: Any? { return nil }
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? TransitionOf<S.ParentFeature>,
+            let newState = mutation.newState as? S
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = TransitionInto(newState: newState)
+    }
+}
+
+// MARK: FeatureMutation variants - Deinitialization
+
+extension DeinitializationOf: FeatureMutation
+{
+    public
+    static
+    var feature: Feature.Type { return F.self }
+    
+    //===
+    
+    // if let oldRunning = DeinitializationOf<M.App>(mutations).oldState
+    
+    public
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? DeinitializationOf<F>
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = mutation
+    }
 }
 
 //===
 
-extension DeinitializationOf.From: FeatureDeinitialization
+extension DeinitializationFrom
 {
-    public
-    var feature: Feature.Type { return F.self }
+    // if let oldRunning = DeinitializationFrom<M.App.Running>(mutations).oldState
     
     public
-    var currentState: Any? { return nil }
+    init?(_ changes: Mutation)
+    {
+        guard
+            let mutation = changes as? DeinitializationOf<S.ParentFeature>,
+            let oldState = mutation.oldState as? S
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = DeinitializationFrom(oldState: oldState)
+    }
 }

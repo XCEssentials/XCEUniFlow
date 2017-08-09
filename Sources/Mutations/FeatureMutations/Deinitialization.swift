@@ -20,9 +20,18 @@ struct DeinitializationOf<F: Feature>
     public
     struct From<S: FeatureState> where S.ParentFeature == F
     {
+        public
         let oldState: S
     }
+    
+    //===
+    
+    public
+    let oldState: Any
 }
+
+public
+typealias DeinitializationFrom<S: FeatureState> = DeinitializationOf<S.ParentFeature>.From<S>
 
 //===
 
@@ -37,13 +46,22 @@ extension DeinitializationOf
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(scope, context, self) { _, submit in
+        return Action(scope, context, self) { model, submit in
             
-             completion?(submit)
+            let oldState =
+                
+            try REQ.value("\(F.name) is presented") {
+                
+                model >> F.self
+            }
             
             //===
             
-            return ({ $0 /< F.self }, self.init())
+            completion?(submit)
+            
+            //===
+            
+            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
         }
     }
     
@@ -59,11 +77,20 @@ extension DeinitializationOf
     {
         return Action(scope, context, self) { model, submit in
             
+            let oldState =
+                
+            try REQ.value("\(F.name) is presented") {
+                
+                model >> F.self
+            }
+            
+            //===
+            
             try body(model, submit)
             
             //===
             
-            return ({ $0 /< F.self }, self.init())
+            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
         }
     }
 }
@@ -96,7 +123,7 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /< F.self }, self.init(oldState: oldState))
+            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
         }
     }
     
@@ -125,7 +152,7 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /< F.self }, self.init(oldState: oldState))
+            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
         }
     }
 }

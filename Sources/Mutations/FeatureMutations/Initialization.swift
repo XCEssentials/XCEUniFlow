@@ -15,14 +15,23 @@ extension Feature
 //===
 
 public
-enum InitializationOf<F: Feature>
+struct InitializationOf<F: Feature>
 {
     public
     struct Into<S: FeatureState> where S.ParentFeature == F
     {
+        public
         let newState: S
     }
+    
+    //===
+    
+    public
+    let newState: Any
 }
+
+public
+typealias InitializationInto<S: FeatureState> = InitializationOf<S.ParentFeature>.Into<S>
 
 //===
 
@@ -54,7 +63,7 @@ extension InitializationOf.Into where S: SimpleState
             
             //===
             
-            return ({ $0 <<  newState}, self.init(newState: newState))
+            return ({ $0 <<  newState}, InitializationOf<F>(newState: newState))
         }
     }
 }
@@ -99,7 +108,7 @@ extension InitializationOf.Into
             
             //===
             
-            return ({ $0 << newState }, self.init(newState: newState))
+            return ({ $0 << newState }, InitializationOf<F>(newState: newState))
         }
     }
 }
