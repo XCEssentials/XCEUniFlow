@@ -11,7 +11,7 @@ struct Action
     var contextDescription: String { return String(reflecting: context) }
     
     public
-    var fullName: String { return "\(contextDescription).\(name)" }
+    var fullName: String { return "\(self.name)/\(self.contextDescription)" }
 }
 
 // MARK: Helper types

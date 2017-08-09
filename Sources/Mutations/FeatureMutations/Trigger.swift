@@ -37,7 +37,7 @@ extension Trigger.WithoutState
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT presented yet") {
                 
@@ -67,7 +67,7 @@ extension Trigger.In
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             let currentState =
                 

@@ -42,7 +42,7 @@ extension TransitionOf.From
         ) -> Action
         where Into.ParentFeature == F
     {
-        return Action(name: action, context: F.self) { model, _ in
+        return Action(name: action, context: self) { model, _ in
             
             let oldState =
             
@@ -73,7 +73,7 @@ extension TransitionOf.Between where Into: SimpleState
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             let oldState =
                 
@@ -112,7 +112,7 @@ extension TransitionOf.Between
         body: @escaping (From, Wrapped<StateGetter<Into>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             let oldState =
                 

@@ -36,7 +36,7 @@ extension InitializationOf.Into where S: SimpleState
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 
@@ -70,7 +70,7 @@ extension InitializationOf.Into
         body: @escaping (Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             try REQ.isNil("\(F.name) is NOT initialized yet") {
                 

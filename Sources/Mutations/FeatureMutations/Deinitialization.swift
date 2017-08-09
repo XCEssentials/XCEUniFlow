@@ -36,7 +36,7 @@ extension DeinitializationOf
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: F.self) { _, submit in
+        return Action(name: action, context: self) { _, submit in
             
              completion?(submit)
             
@@ -55,7 +55,7 @@ extension DeinitializationOf
         body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             try body(model, submit)
             
@@ -78,7 +78,7 @@ extension DeinitializationOf.From
         completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             let oldState =
                 
@@ -106,7 +106,7 @@ extension DeinitializationOf.From
         body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
-        return Action(name: action, context: F.self) { model, submit in
+        return Action(name: action, context: self) { model, submit in
             
             let oldState =
                 
