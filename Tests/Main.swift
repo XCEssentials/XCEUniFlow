@@ -14,7 +14,7 @@ import XCEUniFlow
 
 class Main: XCTestCase
 {
-    let disp = Dispatcher(defaultReporting: true)
+    let disp = Dispatcher(defaultReporting: .short)
     
     var proxy: Dispatcher.Proxy!
     
