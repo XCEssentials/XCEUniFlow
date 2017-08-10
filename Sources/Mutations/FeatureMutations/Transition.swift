@@ -79,6 +79,21 @@ extension TransitionOf.From
             )
         }
     }
+    
+    static
+    func into<Into: FeatureState>(
+        scope: String = #file,
+        context: String = #function,
+        newStateGetter: () -> Into
+        ) -> Action
+        where Into.ParentFeature == F
+    {
+        let newState = newStateGetter()
+        
+        //===
+        
+        return into(scope: scope, context: context, newState)
+    }
 }
 
 //===
