@@ -1,3 +1,7 @@
+import Foundation
+
+//===
+
 public
 final
 class Subscription
@@ -26,11 +30,14 @@ extension Dispatcher.Proxy
 {
     public
     func subscribe(
-        _ notifyNow: (GlobalModel) -> Void,
+        _ notifyNow: @escaping (GlobalModel) -> Void,
         _ notify: @escaping (Mutation, GlobalModel) -> Void
         ) -> Dispatcher.Proxy
     {
-        notifyNow(dispatcher.model)
+        DispatchQueue.main.async {
+            
+            notifyNow(self.dispatcher.model)
+        }
         
         //===
         
@@ -59,7 +66,10 @@ extension Dispatcher.Proxy
         if
             notifyNow
         {
-            notify(NoMutation(), dispatcher.model)
+            DispatchQueue.main.async {
+                
+                notify(NoMutation(), self.dispatcher.model)
+            }
         }
         
         //===
@@ -70,11 +80,17 @@ extension Dispatcher.Proxy
         )
     }
     
+    @discardableResult
     public
     func notifyNow(
-        _ runOnce: (Mutation, GlobalModel) -> Void
-        )
+        _ runOnce: @escaping (Mutation, GlobalModel) -> Void
+        ) -> Dispatcher.Proxy
     {
-        runOnce(NoMutation(), dispatcher.model)
+        DispatchQueue.main.async {
+            
+            runOnce(NoMutation(), self.dispatcher.model)
+        }
+        
+        return self
     }
 }

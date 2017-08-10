@@ -8,7 +8,7 @@ extension Dispatcher.Proxy
     public
     func submit(_ action: Action)
     {
-        OperationQueue.main.addOperation {
+        DispatchQueue.main.async {
             
             // we add this action to queue async-ly,
             // to make sure it will be processed AFTER
