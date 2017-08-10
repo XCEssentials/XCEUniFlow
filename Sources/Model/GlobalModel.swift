@@ -123,7 +123,7 @@ extension GlobalModel
     mutating
     func remove<F: Feature>(_: F.Type)
     {
-        data.removeValue(forKey: GlobalModel.key(for: F.self))
+        data[GlobalModel.key(for: F.self)] = nil
     }
 }
 
