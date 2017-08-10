@@ -21,6 +21,9 @@ enum Trigger<F: Feature>
     enum WithoutState { }
     
     public
+    enum AnyState { }
+    
+    public
     enum In<S: FeatureState> where S.ParentFeature == F { }
     // swiftlint:disable:previous type_name
 }
@@ -48,6 +51,39 @@ extension Trigger.WithoutState
             //===
             
             try body(model, submit)
+            
+            //===
+            
+            return nil
+        }
+    }
+}
+
+//===
+
+public
+extension Trigger.AnyState
+{
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        // model, submit
+        body: @escaping (Any, @escaping Wrapped<ActionGetter>) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
+            let state =
+            
+            try REQ.value("\(F.name) is presented") {
+                
+                model >> F.self
+            }
+            
+            //===
+            
+            try body(state, submit)
             
             //===
             
