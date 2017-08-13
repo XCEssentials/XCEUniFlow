@@ -6,91 +6,214 @@ public
 final
 class Subscription
 {
+    // MARK: - Private members
+    
+    private
+    weak
+    var observer: AnyObject?
+    
+    // MARK: - Initializers
+    
+    init(with observer: PassiveObserver)
+    {
+        self.observer = observer
+    }
+    
+    init(with observer: ActiveObserver)
+    {
+        self.observer = observer
+    }
+    
+    // MARK: - Internal types
+    
     typealias Identifier = ObjectIdentifier
+    
+    // MARK: - Internal members
     
     lazy
     var identifier: Identifier = Identifier(self)
     
     //===
     
-    let notify: (Mutation, GlobalModel) -> Void
-    
-    //===
-    
-    init(_ notify: @escaping (Mutation, GlobalModel) -> Void)
+    @discardableResult
+    func notifyAndKeep(with mutation: Mutation,
+                       model: GlobalModel,
+                       submit: @escaping Wrapped<ActionGetter>) -> Bool
     {
-        self.notify = notify
+        switch observer
+        {
+            case let observer as PassiveObserver:
+                observer.update(with: mutation, model: model)
+                return true
+            
+            case let observer as ActiveObserver:
+                observer.update(with: mutation, model: model, submit: submit)
+                return true
+            
+            default:
+                return false // either 'nil' or not of any of expected protocols
+        }
+    }
+    
+    // MARK: - Public methods
+    
+    public
+    func cancel()
+    {
+        observer = nil
     }
 }
+
+//===
+
+public
+protocol InitializableObserver: AnyObject
+{
+    func setup(with model: GlobalModel)
+}
+
+public
+protocol PassiveObserver: AnyObject
+{
+    func update(with mutation: Mutation, model: GlobalModel)
+}
+
+public
+protocol InitializablePassiveObserver: InitializableObserver, PassiveObserver { }
+
+public
+protocol ActiveObserver: AnyObject
+{
+    func update(with mutation: Mutation,
+                model: GlobalModel,
+                submit: @escaping Wrapped<ActionGetter>)
+}
+
+public
+protocol InitializableActiveObserver: InitializableObserver, ActiveObserver { }
 
 // MARK: Proxy extensions
 
 public
 extension Dispatcher.Proxy
 {
+    @discardableResult
     public
-    func subscribe(
-        _ notifyNow: @escaping (GlobalModel) -> Void,
-        _ notify: @escaping (Mutation, GlobalModel) -> Void
-        ) -> Dispatcher.Proxy
+    func subscribe(_ observer: PassiveObserver,
+                   updateNow: Bool = true) -> Subscription
     {
-        DispatchQueue.main.async {
-            
-            notifyNow(self.dispatcher.model)
-        }
-        
-        //===
-        
-        let subscription = Subscription(notify)
-        dispatcher.subscriptions[subscription.identifier] = subscription
-        
-        //===
-        
-        return Dispatcher.Proxy(
-            for: dispatcher,
-            subscription: subscription
-        )
-    }
-    
-    public
-    func subscribe(
-        notifyNow: Bool = true,
-        _ notify: @escaping (Mutation, GlobalModel) -> Void
-        ) -> Dispatcher.Proxy
-    {
-        let subscription = Subscription(notify)
-        dispatcher.subscriptions[subscription.identifier] = subscription
+        let result = Subscription(with: observer)
+        dispatcher.subscriptions[result.identifier] = result
         
         //===
         
         if
-            notifyNow
+            updateNow
         {
             DispatchQueue.main.async {
                 
-                notify(NoMutation(), self.dispatcher.model)
+                result.notifyAndKeep(with: NoMutation(),
+                                           model: self.dispatcher.model,
+                                           submit: self.submit)
             }
         }
         
         //===
         
-        return Dispatcher.Proxy(
-            for: dispatcher,
-            subscription: subscription
-        )
+        return result
     }
     
     @discardableResult
     public
-    func notifyNow(
-        _ runOnce: @escaping (Mutation, GlobalModel) -> Void
-        ) -> Dispatcher.Proxy
+    func subscribe(_ observer: InitializablePassiveObserver) -> Subscription
+    {
+        let result = Subscription(with: observer)
+        dispatcher.subscriptions[result.identifier] = result
+        
+        //===
+        
+        DispatchQueue.main.async {
+            
+            observer.setup(with: self.dispatcher.model)
+        }
+        
+        //===
+        
+        return result
+    }
+    
+    @discardableResult
+    public
+    func subscribe(_ observer: ActiveObserver,
+                   updateNow: Bool = true) -> Subscription
+    {
+        let result = Subscription(with: observer)
+        dispatcher.subscriptions[result.identifier] = result
+        
+        //===
+        
+        if
+            updateNow
+        {
+            DispatchQueue.main.async {
+                
+                result.notifyAndKeep(with: NoMutation(),
+                                           model: self.dispatcher.model,
+                                           submit: self.submit)
+            }
+        }
+        
+        //===
+        
+        return result
+    }
+    
+    @discardableResult
+    public
+    func subscribe(_ observer: InitializableActiveObserver) -> Subscription
+    {
+        let result = Subscription(with: observer)
+        dispatcher.subscriptions[result.identifier] = result
+        
+        //===
+        
+        DispatchQueue.main.async {
+            
+            observer.setup(with: self.dispatcher.model)
+        }
+        
+        //===
+        
+        return result
+    }
+    
+    public
+    func setup(_ observer: InitializableObserver)
     {
         DispatchQueue.main.async {
             
-            runOnce(NoMutation(), self.dispatcher.model)
+            observer.setup(with: self.dispatcher.model)
         }
-        
-        return self
+    }
+    
+    public
+    func updateNow(_ observer: PassiveObserver)
+    {
+        DispatchQueue.main.async {
+            
+            observer.update(with: NoMutation(),
+                            model: self.dispatcher.model)
+        }
+    }
+    
+    public
+    func updateNow(_ observer: ActiveObserver)
+    {
+        DispatchQueue.main.async {
+            
+            observer.update(with: NoMutation(),
+                            model: self.dispatcher.model,
+                            submit: self.submit)
+        }
     }
 }

@@ -12,11 +12,35 @@ import XCEUniFlow
 
 //===
 
+class Observer: PassiveObserver
+{
+    let onUpdate: (Mutation, GlobalModel) -> Void
+    
+    //===
+    
+    init(with onUpdate: @escaping (Mutation, GlobalModel) -> Void)
+    {
+        self.onUpdate = onUpdate
+    }
+    
+    //===
+    
+    func update(with mutation: Mutation, model: GlobalModel)
+    {
+        onUpdate(mutation, model)
+    }
+}
+
+//===
+
 class Main: XCTestCase
 {
     let disp = Dispatcher(defaultReporting: .short)
     
-    var proxy: Dispatcher.Proxy!
+    lazy
+    var proxy: Dispatcher.Proxy! = self.disp.proxy
+    
+    var observer: Observer!
     
     //===
     
@@ -33,6 +57,7 @@ class Main: XCTestCase
     override
     func tearDown()
     {
+        observer = nil
         proxy = nil
         
         //===
@@ -48,7 +73,7 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe { _, globalModel in
+        observer = Observer { _, globalModel in
             
             if
                 let a = M.Arithmetics.Main.self << globalModel
@@ -64,6 +89,8 @@ class Main: XCTestCase
                 }
             }
         }
+        
+        disp.proxy.subscribe(observer)
         
         //===
         
@@ -87,11 +114,11 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe { _, globalModel in
+        observer = Observer { _, globalModel in
             
             guard
                 M.Search.presented(in: globalModel)
-            else
+                else
             {
                 return
             }
@@ -113,6 +140,8 @@ class Main: XCTestCase
                 ex.fulfill()
             }
         }
+        
+        disp.proxy.subscribe(observer)
         
         //===
         

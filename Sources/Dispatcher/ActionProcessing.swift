@@ -35,7 +35,7 @@ extension Dispatcher
     {
         do
         {
-            let result = try action.body(model) { self.proxy.submit($0) }
+            let result = try action.body(model, proxy.submit)
             
             //===
             
@@ -48,7 +48,16 @@ extension Dispatcher
                 let (mutation, annotation) = result
             {
                 mutation(&model)
-                subscriptions.forEach{ $0.value.notify(annotation, model) }
+                
+                subscriptions
+                    .filter {
+                        
+                        !$0.value.notifyAndKeep(with: annotation,
+                                                model: model,
+                                                submit: proxy.submit)
+                    }
+                    .map { $0.key }
+                    .forEach { subscriptions[$0] = nil }
             }
             
             //===

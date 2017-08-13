@@ -22,27 +22,11 @@ class Dispatcher
         
         let dispatcher: Dispatcher
         
-        weak
-        var subscription: Subscription?
-        
         //===
         
-        init(
-            for dispatcher: Dispatcher,
-            subscription: Subscription? = nil
-            )
+        init(for dispatcher: Dispatcher)
         {
             self.dispatcher = dispatcher
-            self.subscription = subscription
-        }
-        
-        deinit
-        {
-            if
-                let subscription = subscription
-            {
-                dispatcher.subscriptions[subscription.identifier] = nil
-            }
         }
     }
     
