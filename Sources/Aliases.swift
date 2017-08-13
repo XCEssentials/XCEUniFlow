@@ -34,7 +34,7 @@ public
 typealias UFLGlobalModel = GlobalModel
 
 public
-typealias UFLMutation = Mutation
+typealias UFLMutation = GlobalDiff
 
 public
 typealias UFLNoMutation = NoMutation

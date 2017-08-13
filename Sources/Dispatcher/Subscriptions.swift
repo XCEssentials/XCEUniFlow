@@ -36,7 +36,7 @@ class Subscription
     //===
     
     @discardableResult
-    func notifyAndKeep(with mutation: Mutation,
+    func notifyAndKeep(with mutation: GlobalDiff,
                        model: GlobalModel,
                        submit: @escaping Wrapped<ActionGetter>) -> Bool
     {
@@ -75,7 +75,7 @@ protocol InitializableObserver: AnyObject
 public
 protocol PassiveObserver: AnyObject
 {
-    func update(with mutation: Mutation, model: GlobalModel)
+    func update(with mutation: GlobalDiff, model: GlobalModel)
 }
 
 public
@@ -84,7 +84,7 @@ protocol InitializablePassiveObserver: InitializableObserver, PassiveObserver { 
 public
 protocol ActiveObserver: AnyObject
 {
-    func update(with mutation: Mutation,
+    func update(with mutation: GlobalDiff,
                 model: GlobalModel,
                 submit: @escaping Wrapped<ActionGetter>)
 }
