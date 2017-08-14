@@ -30,13 +30,13 @@ extension InitializationOf: FeatureMutation
     
     //===
     
-    // if let newRunning = InitializationOf<M.App>(mutations).newState
+    // if let newRunning = InitializationOf<M.App>(diff).newState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? InitializationOf<F>
+            let mutation = diff as? InitializationOf<F>
         else
         {
             return nil
@@ -52,13 +52,13 @@ extension InitializationOf: FeatureMutation
 
 extension InitializationInto
 {
-    // if let newRunning = InitializationInto<M.App.Running>(mutations).newState
+    // if let newRunning = InitializationInto<M.App.Running>(diff).newState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? InitializationOf<S.ParentFeature>,
+            let mutation = diff as? InitializationOf<S.ParentFeature>,
             let newState = mutation.newState as? S
         else
         {
@@ -81,13 +81,13 @@ extension ActualizationOf: FeatureMutation
     
     //===
     
-    // if let running = ActualizationOf<M.App>(mutations).state
+    // if let running = ActualizationOf<M.App>(diff).state
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? ActualizationOf<F>
+            let mutation = diff as? ActualizationOf<F>
         else
         {
             return nil
@@ -103,13 +103,13 @@ extension ActualizationOf: FeatureMutation
 
 extension ActualizationIn
 {
-    // if let running = ActualizationIn<M.App.Running>(mutations).state
+    // if let running = ActualizationIn<M.App.Running>(diff).state
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? ActualizationOf<S.ParentFeature>,
+            let mutation = diff as? ActualizationOf<S.ParentFeature>,
             let state = mutation.state as? S
         else
         {
@@ -132,14 +132,14 @@ extension TransitionOf: FeatureMutation
     
     //===
     
-    // if let oldRunning = TransitionOf<M.App>(mutations).oldState
-    // if let newRunning = TransitionOf<M.App>(mutations).newState
+    // if let oldRunning = TransitionOf<M.App>(diff).oldState
+    // if let newRunning = TransitionOf<M.App>(diff).newState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? TransitionOf<F>
+            let mutation = diff as? TransitionOf<F>
         else
         {
             return nil
@@ -155,13 +155,13 @@ extension TransitionOf: FeatureMutation
 
 extension TransitionFrom
 {
-    // if let oldRunning = TransitionFrom<M.App.Running>(mutations).oldState
+    // if let oldRunning = TransitionFrom<M.App.Running>(diff).oldState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? TransitionOf<S.ParentFeature>,
+            let mutation = diff as? TransitionOf<S.ParentFeature>,
             let oldState = mutation.oldState as? S
         else
         {
@@ -178,13 +178,13 @@ extension TransitionFrom
 
 extension TransitionInto
 {
-    // if let newRunning = TransitionInto<M.App.Running>(mutations).newState
+    // if let newRunning = TransitionInto<M.App.Running>(diff).newState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? TransitionOf<S.ParentFeature>,
+            let mutation = diff as? TransitionOf<S.ParentFeature>,
             let newState = mutation.newState as? S
         else
         {
@@ -207,13 +207,13 @@ extension DeinitializationOf: FeatureMutation
     
     //===
     
-    // if let oldRunning = DeinitializationOf<M.App>(mutations).oldState
+    // if let oldRunning = DeinitializationOf<M.App>(diff).oldState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? DeinitializationOf<F>
+            let mutation = diff as? DeinitializationOf<F>
         else
         {
             return nil
@@ -229,13 +229,13 @@ extension DeinitializationOf: FeatureMutation
 
 extension DeinitializationFrom
 {
-    // if let oldRunning = DeinitializationFrom<M.App.Running>(mutations).oldState
+    // if let oldRunning = DeinitializationFrom<M.App.Running>(diff).oldState
     
     public
-    init?(_ changes: GlobalDiff)
+    init?(_ diff: GlobalDiff)
     {
         guard
-            let mutation = changes as? DeinitializationOf<S.ParentFeature>,
+            let mutation = diff as? DeinitializationOf<S.ParentFeature>,
             let oldState = mutation.oldState as? S
         else
         {

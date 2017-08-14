@@ -3,68 +3,69 @@ import Foundation
 //===
 
 public
-final
-class Subscription
+extension Dispatcher
 {
-    // MARK: - Private members
-    
-    private
-    weak
-    var observer: AnyObject?
-    
-    // MARK: - Initializers
-    
-    init(with observer: PassiveObserver)
+    final
+    class Subscription
     {
-        self.observer = observer
+        fileprivate(set)
+        weak
+        var observer: AnyObject?
+        
+        init(with observer: PassiveObserver)
+        {
+            self.observer = observer
+        }
+        
+        init(with observer: ActiveObserver)
+        {
+            self.observer = observer
+        }
+        
+        typealias Identifier = ObjectIdentifier
+        
+        lazy
+        var identifier: Identifier = Identifier(self)
     }
-    
-    init(with observer: ActiveObserver)
-    {
-        self.observer = observer
-    }
-    
-    // MARK: - Internal types
-    
-    typealias Identifier = ObjectIdentifier
-    
-    // MARK: - Internal members
-    
-    lazy
-    var identifier: Identifier = Identifier(self)
-    
-    //===
-    
+}
+
+// MARK: - Subscription - internal methods
+
+extension Dispatcher.Subscription
+{
     @discardableResult
-    func notifyAndKeep(with mutation: GlobalDiff,
+    func notifyAndKeep(with diff: GlobalDiff,
                        model: GlobalModel,
                        submit: @escaping Wrapped<ActionGetter>) -> Bool
     {
         switch observer
         {
             case let observer as PassiveObserver:
-                observer.update(with: mutation, model: model)
+                observer.update(with: diff, model: model)
                 return true
             
             case let observer as ActiveObserver:
-                observer.update(with: mutation, model: model, submit: submit)
+                observer.update(with: diff, model: model, submit: submit)
                 return true
             
             default:
                 return false // either 'nil' or not of any of expected protocols
         }
     }
-    
-    // MARK: - Public methods
-    
-    public
+}
+
+// MARK: - Subscription - public methods
+
+public
+extension Dispatcher.Subscription
+{
     func cancel()
     {
         observer = nil
     }
 }
 
-//===
+// MARK: - Observer protocols
 
 public
 protocol InitializableObserver: AnyObject
@@ -92,7 +93,7 @@ protocol ActiveObserver: AnyObject
 public
 protocol InitializableActiveObserver: InitializableObserver, ActiveObserver { }
 
-// MARK: Proxy extensions
+// MARK: Proxy extensions for subscriptions
 
 public
 extension Dispatcher.Proxy
@@ -100,9 +101,9 @@ extension Dispatcher.Proxy
     @discardableResult
     public
     func subscribe(_ observer: PassiveObserver,
-                   updateNow: Bool = true) -> Subscription
+                   updateNow: Bool = true) -> Dispatcher.Subscription
     {
-        let result = Subscription(with: observer)
+        let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
         
         //===
@@ -125,9 +126,9 @@ extension Dispatcher.Proxy
     
     @discardableResult
     public
-    func subscribe(_ observer: InitializablePassiveObserver) -> Subscription
+    func subscribe(_ observer: InitializablePassiveObserver) -> Dispatcher.Subscription
     {
-        let result = Subscription(with: observer)
+        let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
         
         //===
@@ -145,9 +146,9 @@ extension Dispatcher.Proxy
     @discardableResult
     public
     func subscribe(_ observer: ActiveObserver,
-                   updateNow: Bool = true) -> Subscription
+                   updateNow: Bool = true) -> Dispatcher.Subscription
     {
-        let result = Subscription(with: observer)
+        let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
         
         //===
@@ -170,9 +171,9 @@ extension Dispatcher.Proxy
     
     @discardableResult
     public
-    func subscribe(_ observer: InitializableActiveObserver) -> Subscription
+    func subscribe(_ observer: InitializableActiveObserver) -> Dispatcher.Subscription
     {
-        let result = Subscription(with: observer)
+        let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
         
         //===

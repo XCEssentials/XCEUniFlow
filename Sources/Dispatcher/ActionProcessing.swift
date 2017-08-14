@@ -45,14 +45,17 @@ extension Dispatcher
             //===
             
             if
-                let (mutation, annotation) = result
+                let (mutation, diff) = result
             {
                 mutation(&model)
+                
+                middleware
+                    .forEach { $0(diff, model, proxy.submit) }
                 
                 subscriptions
                     .filter {
                         
-                        !$0.value.notifyAndKeep(with: annotation,
+                        !$0.value.notifyAndKeep(with: diff,
                                                 model: model,
                                                 submit: proxy.submit)
                     }

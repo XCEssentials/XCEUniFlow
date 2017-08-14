@@ -6,31 +6,15 @@ public
 final
 class Dispatcher
 {
-    //=== MARK: Private members
+    // MARK: - Private members
     
     var model = GlobalModel()
     
+    var middleware: [Middleware] = []
+    
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
-    //=== MARK: Nested public types
-    
-    public
-    final
-    class Proxy
-    {
-        //  https://en.wikipedia.org/wiki/Proxy_pattern
-        
-        let dispatcher: Dispatcher
-        
-        //===
-        
-        init(for dispatcher: Dispatcher)
-        {
-            self.dispatcher = dispatcher
-        }
-    }
-    
-    //=== MARK: Public members
+    // MARK: - Public members
     
     public
     lazy
@@ -42,7 +26,7 @@ class Dispatcher
     public
     var onDidRejectAction: ((_ action: Action, _: Error) -> Void)?
     
-    //=== Initializer
+    // MARK: - Public initializers
     
     public
     init(defaultReporting: DefaultReporting = .none)
@@ -57,6 +41,22 @@ class Dispatcher
             
             default:
                 break
+        }
+    }
+    
+    // MARK: - Public nested types
+    
+    public
+    final
+    class Proxy
+    {
+        //  https://en.wikipedia.org/wiki/Proxy_pattern
+        
+        let dispatcher: Dispatcher
+        
+        init(for dispatcher: Dispatcher)
+        {
+            self.dispatcher = dispatcher
         }
     }
 }
