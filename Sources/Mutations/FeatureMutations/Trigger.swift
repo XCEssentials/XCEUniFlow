@@ -69,21 +69,19 @@ extension Trigger.AnyState
         scope: String = #file,
         context: String = #function,
         // model, submit
-        body: @escaping (Any, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
-            let state =
-            
-            try REQ.value("\(F.name) is presented") {
+            try REQ.isNotNil("\(F.name) is presented") {
                 
                 model >> F.self
             }
             
             //===
             
-            try body(state, submit)
+            try body(model, submit)
             
             //===
             
