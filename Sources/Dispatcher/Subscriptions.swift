@@ -76,7 +76,7 @@ protocol InitializableObserver: AnyObject
 public
 protocol PassiveObserver: AnyObject
 {
-    func update(with mutation: GlobalDiff, model: GlobalModel)
+    func update(with diff: GlobalDiff, model: GlobalModel)
 }
 
 public
@@ -85,7 +85,7 @@ protocol InitializablePassiveObserver: InitializableObserver, PassiveObserver { 
 public
 protocol ActiveObserver: AnyObject
 {
-    func update(with mutation: GlobalDiff,
+    func update(with diff: GlobalDiff,
                 model: GlobalModel,
                 submit: @escaping Wrapped<ActionGetter>)
 }
