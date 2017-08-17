@@ -197,6 +197,35 @@ extension TransitionInto
     }
 }
 
+//===
+
+#if swift(>=3.2)
+    
+extension TransitionBetween
+{
+    // if let oldPreparing = TransitionBetween<M.App.Preparing, M.App.Running>(diff).oldState
+    // if let newRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff).newState
+    
+    public
+    init?(_ diff: GlobalDiff)
+    {
+        guard
+            let mutation = diff as? TransitionOf<From.ParentFeature>,
+            let oldState = mutation.oldState as? From,
+            let newState = mutation.newState as? Into
+        else
+        {
+            return nil
+        }
+        
+        //===
+        
+        self = TransitionBetween(oldState: oldState, newState: newState)
+    }
+}
+    
+#endif
+
 // MARK: FeatureMutation variants - Deinitialization
 
 extension DeinitializationOf: FeatureMutation

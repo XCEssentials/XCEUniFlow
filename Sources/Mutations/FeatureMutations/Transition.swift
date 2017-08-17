@@ -24,7 +24,13 @@ struct TransitionOf<F: Feature>
     struct Between<From: FeatureState, Into: FeatureState> where
         From.ParentFeature == F,
         Into.ParentFeature == F
-    { }
+    {
+        public
+        let oldState: From
+        
+        public
+        let newState: Into
+    }
     
     //===
     
@@ -34,6 +40,15 @@ struct TransitionOf<F: Feature>
     public
     let newState: Any
 }
+
+#if swift(>=3.2)
+    
+public
+typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
+    TransitionOf<From.ParentFeature>.Between<From, Into>
+    where From.ParentFeature == Into.ParentFeature
+    
+#endif
 
 public
 struct TransitionFrom<S: FeatureState>
