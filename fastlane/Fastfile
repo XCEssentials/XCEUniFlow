@@ -176,15 +176,7 @@ platform :ios do
 
     # === Add custom 'Run Script Phase' entries
 
-    sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + pr
-    # === Sort all project entries
-
-    sh 'cd ./.. && xcodeproj sort'
-
-    # === Add custom 'Run Script Phase' entries
-
     sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + projName
-ojName
 
   end
 
