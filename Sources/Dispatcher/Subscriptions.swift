@@ -101,7 +101,7 @@ extension Dispatcher.Proxy
     @discardableResult
     public
     func subscribe(_ observer: PassiveObserver,
-                   updateNow: Bool = true) -> Dispatcher.Subscription
+                   updateNow: Bool = false) -> Dispatcher.Subscription
     {
         let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
@@ -111,12 +111,12 @@ extension Dispatcher.Proxy
         if
             updateNow
         {
-            DispatchQueue.main.async {
-                
+//            DispatchQueue.main.async {
+            
                 result.notifyAndKeep(with: NoMutation(),
-                                           model: self.dispatcher.model,
-                                           submit: self.submit)
-            }
+                                     model: self.dispatcher.model,
+                                     submit: self.submit)
+//            }
         }
         
         //===
@@ -133,10 +133,10 @@ extension Dispatcher.Proxy
         
         //===
         
-        DispatchQueue.main.async {
-            
+//        DispatchQueue.main.async {
+        
             observer.setup(with: self.dispatcher.model)
-        }
+//        }
         
         //===
         
@@ -146,7 +146,7 @@ extension Dispatcher.Proxy
     @discardableResult
     public
     func subscribe(_ observer: ActiveObserver,
-                   updateNow: Bool = true) -> Dispatcher.Subscription
+                   updateNow: Bool = false) -> Dispatcher.Subscription
     {
         let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
@@ -156,12 +156,12 @@ extension Dispatcher.Proxy
         if
             updateNow
         {
-            DispatchQueue.main.async {
-                
+//            DispatchQueue.main.async {
+            
                 result.notifyAndKeep(with: NoMutation(),
-                                           model: self.dispatcher.model,
-                                           submit: self.submit)
-            }
+                                     model: self.dispatcher.model,
+                                     submit: self.submit)
+//            }
         }
         
         //===
@@ -178,10 +178,10 @@ extension Dispatcher.Proxy
         
         //===
         
-        DispatchQueue.main.async {
-            
+//        DispatchQueue.main.async {
+        
             observer.setup(with: self.dispatcher.model)
-        }
+//        }
         
         //===
         
@@ -191,30 +191,30 @@ extension Dispatcher.Proxy
     public
     func setup(_ observer: InitializableObserver)
     {
-        DispatchQueue.main.async {
-            
+//        DispatchQueue.main.async {
+        
             observer.setup(with: self.dispatcher.model)
-        }
+//        }
     }
     
     public
     func updateNow(_ observer: PassiveObserver)
     {
-        DispatchQueue.main.async {
-            
+//        DispatchQueue.main.async {
+        
             observer.update(with: NoMutation(),
                             model: self.dispatcher.model)
-        }
+//        }
     }
     
     public
     func updateNow(_ observer: ActiveObserver)
     {
-        DispatchQueue.main.async {
-            
+//        DispatchQueue.main.async {
+        
             observer.update(with: NoMutation(),
                             model: self.dispatcher.model,
                             submit: self.submit)
-        }
+//        }
     }
 }

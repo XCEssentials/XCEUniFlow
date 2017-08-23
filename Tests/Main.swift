@@ -14,20 +14,20 @@ import XCEUniFlow
 
 class Observer: PassiveObserver
 {
-    let onUpdate: (Diff, GlobalModel) -> Void
+    let onUpdate: (GlobalDiff, GlobalModel) -> Void
     
     //===
     
-    init(with onUpdate: @escaping (Diff, GlobalModel) -> Void)
+    init(with onUpdate: @escaping (GlobalDiff, GlobalModel) -> Void)
     {
         self.onUpdate = onUpdate
     }
     
     //===
     
-    func update(with mutation: Diff, model: GlobalModel)
+    func update(with diff: GlobalDiff, model: GlobalModel)
     {
-        onUpdate(mutation, model)
+        onUpdate(diff, model)
     }
 }
 
