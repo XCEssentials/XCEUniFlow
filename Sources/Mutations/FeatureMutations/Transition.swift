@@ -18,7 +18,18 @@ public
 struct TransitionOf<F: Feature>
 {
     public
-    enum From<From: FeatureState> where From.ParentFeature == F { }
+    struct Into<S: FeatureState> where S.ParentFeature == F
+    {
+        public
+        let newState: S
+    }
+    
+    public
+    struct From<S: FeatureState> where S.ParentFeature == F
+    {
+        public
+        let oldState: S
+    }
     
     public
     struct Between<From: FeatureState, Into: FeatureState> where
@@ -41,6 +52,12 @@ struct TransitionOf<F: Feature>
     let newState: Any
 }
 
+public
+typealias TransitionInto<S: FeatureState> = TransitionOf<S.ParentFeature>.Into<S>
+
+public
+typealias TransitionFrom<S: FeatureState> = TransitionOf<S.ParentFeature>.From<S>
+
 #if swift(>=3.2)
     
 public
@@ -50,18 +67,51 @@ typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
     
 #endif
 
-public
-struct TransitionFrom<S: FeatureState>
-{
-    public
-    let oldState: S
-}
+//===
 
 public
-struct TransitionInto<S: FeatureState>
+extension TransitionOf.Into
 {
-    public
-    let newState: S
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        // globalModel, become, submit
+        body: @escaping (GlobalModel, Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
+            let oldState =
+                
+            try REQ.value("\(F.name) is presented") {
+                
+                model >> F.self
+            }
+            
+            //===
+            
+            var newState: S!
+            
+            //===
+            
+            try body(model, { newState = $0() }, submit)
+            
+            //===
+            
+            try REQ.isNotNil("New state for \(F.name) is set") {
+                
+                newState
+            }
+            
+            //===
+            
+            return (
+                { $0 << newState },
+                TransitionOf<F>(oldState: oldState, newState: newState)
+            )
+        }
+    }
 }
 
 //===
@@ -81,9 +131,9 @@ extension TransitionOf.From
             
             let oldState =
             
-            try REQ.value("\(F.name) is in \(From.self) state") {
+            try REQ.value("\(F.name) is in \(S.self) state") {
                 
-                model >> From.self
+                model >> S.self
             }
             
             //===
