@@ -117,6 +117,46 @@ extension TransitionOf.Into
 //===
 
 public
+extension TransitionOf.Into where S: SimpleState
+{
+    static
+    func automatic(
+        scope: String = #file,
+        context: String = #function,
+        // submit
+        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
+            let oldState =
+                
+            try REQ.value("\(F.name) is presented") {
+                
+                model >> F.self
+            }
+            
+            //===
+            
+            let newState = S.init()
+            
+            //===
+            
+            completion?(submit)
+            
+            //===
+            
+            return (
+                { $0 << newState },
+                TransitionOf<F>(oldState: oldState, newState: newState)
+            )
+        }
+    }
+}
+
+//===
+
+public
 extension TransitionOf.From
 {
     static
