@@ -18,10 +18,16 @@ public
 enum Trigger<F: Feature>
 {
     public
-    enum WithoutState { }
+    enum NoState { }
+    
+    public
+    typealias Uninitialized = NoState
     
     public
     enum AnyState { }
+    
+    public
+    typealias Initialized = AnyState
     
     public
     enum In<S: FeatureState> where S.ParentFeature == F { }
@@ -31,7 +37,7 @@ enum Trigger<F: Feature>
 //===
 
 public
-extension Trigger.WithoutState
+extension Trigger.NoState
 {
     static
     func via(
