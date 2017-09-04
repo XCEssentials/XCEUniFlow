@@ -111,12 +111,9 @@ extension Dispatcher.Proxy
         if
             updateNow
         {
-//            DispatchQueue.main.async {
-            
-                result.notifyAndKeep(with: NoMutation(),
-                                     model: self.dispatcher.model,
-                                     submit: self.submit)
-//            }
+            result.notifyAndKeep(with: NoMutation(),
+                                 model: self.dispatcher.model,
+                                 submit: self.submit)
         }
         
         //===
@@ -133,10 +130,7 @@ extension Dispatcher.Proxy
         
         //===
         
-//        DispatchQueue.main.async {
-        
-            observer.setup(with: self.dispatcher.model)
-//        }
+        observer.setup(with: self.dispatcher.model)
         
         //===
         
@@ -156,12 +150,9 @@ extension Dispatcher.Proxy
         if
             updateNow
         {
-//            DispatchQueue.main.async {
-            
-                result.notifyAndKeep(with: NoMutation(),
-                                     model: self.dispatcher.model,
-                                     submit: self.submit)
-//            }
+            result.notifyAndKeep(with: NoMutation(),
+                                 model: self.dispatcher.model,
+                                 submit: self.submit)
         }
         
         //===
@@ -178,10 +169,7 @@ extension Dispatcher.Proxy
         
         //===
         
-//        DispatchQueue.main.async {
-        
-            observer.setup(with: self.dispatcher.model)
-//        }
+        observer.setup(with: self.dispatcher.model)
         
         //===
         
@@ -191,30 +179,21 @@ extension Dispatcher.Proxy
     public
     func setup(_ observer: InitializableObserver)
     {
-//        DispatchQueue.main.async {
-        
-            observer.setup(with: self.dispatcher.model)
-//        }
+        observer.setup(with: self.dispatcher.model)
     }
     
     public
     func updateNow(_ observer: PassiveObserver)
     {
-//        DispatchQueue.main.async {
-        
-            observer.update(with: NoMutation(),
-                            model: self.dispatcher.model)
-//        }
+        observer.update(with: NoMutation(),
+                        model: self.dispatcher.model)
     }
     
     public
     func updateNow(_ observer: ActiveObserver)
     {
-//        DispatchQueue.main.async {
-        
-            observer.update(with: NoMutation(),
-                            model: self.dispatcher.model,
-                            submit: self.submit)
-//        }
+        observer.update(with: NoMutation(),
+                        model: self.dispatcher.model,
+                        submit: self.submit)
     }
 }
