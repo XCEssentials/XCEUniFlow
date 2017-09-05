@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target     = '8.0'
   s.requires_arc              = true
   
-  s.dependency                  'XCERequirement', '~> 1.4'
+  s.dependency                  'XCERequirement', '~> 1.5'
   s.dependency                  'XCEByTypeStorage', '~> 1.1'
 
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
