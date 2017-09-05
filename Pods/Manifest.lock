@@ -1,0 +1,19 @@
+PODS:
+  - XCEByTypeStorage (1.1.0)
+  - XCERequirement (1.5.0)
+  - XCETesting (1.2.0):
+    - XCERequirement (~> 1.5)
+
+DEPENDENCIES:
+  - XCEByTypeStorage (~> 1.1)
+  - XCERequirement (~> 1.5)
+  - XCETesting (~> 1.2)
+
+SPEC CHECKSUMS:
+  XCEByTypeStorage: 6b1a428c48730a59fff50f13de79861059dd776a
+  XCERequirement: e7a066e283e06b72463c924bee2e736494d057d7
+  XCETesting: d675bc94b51d9deff7c628b0e77aebdac306e591
+
+PODFILE CHECKSUM: e481b60a1145a3e0ededc2344453a1dcf5bedecb
+
+COCOAPODS: 1.3.1
