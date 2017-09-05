@@ -12,7 +12,7 @@ use_frameworks!
 def sharedPods
 
 	pod 'XCERequirement', '~> 1.4'
-	# pod 'XCEStaticState', '~> 1.2'
+	pod 'XCEByTypeStorage', '~> 1.1'
 
 end
 
