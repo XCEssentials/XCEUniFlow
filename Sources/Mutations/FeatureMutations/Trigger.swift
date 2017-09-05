@@ -49,10 +49,10 @@ extension Trigger.NoState
     {
         return Action(scope, context, self) { model, submit in
             
-            try REQ.isNil("\(F.name) is NOT presented yet") {
+            try Require("\(F.name) is NOT presented yet").isNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -80,10 +80,10 @@ extension Trigger.AnyState
     {
         return Action(scope, context, self) { model, submit in
             
-            try REQ.isNotNil("\(F.name) is presented") {
+            try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -113,10 +113,10 @@ extension Trigger.In
             
             let currentState =
                 
-            try REQ.value("\(F.name) is in \(S.self) state") {
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
-            }
+            )
             
             //===
             

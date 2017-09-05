@@ -84,10 +84,10 @@ extension TransitionOf.Into
             
             let oldState =
                 
-            try REQ.value("\(F.name) is presented") {
+            try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -99,10 +99,10 @@ extension TransitionOf.Into
             
             //===
             
-            try REQ.isNotNil("New state for \(F.name) is set") {
+            try Require("New state for \(F.name) is set").isNotNil(
                 
                 newState
-            }
+            )
             
             //===
             
@@ -131,10 +131,10 @@ extension TransitionOf.Into where S: SimpleState
             
             let oldState =
                 
-            try REQ.value("\(F.name) is presented") {
+            try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -171,10 +171,10 @@ extension TransitionOf.From
             
             let oldState =
             
-            try REQ.value("\(F.name) is in \(S.self) state") {
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
-            }
+            )
             
             //===
             
@@ -218,10 +218,10 @@ extension TransitionOf.Between where Into: SimpleState
             
             let oldState =
                 
-            try REQ.value("\(F.name) is in \(From.self) state") {
+            try Require("\(F.name) is in \(From.self) state").isNotNil(
                 
                 model >> From.self
-            }
+            )
             
             //===
             
@@ -258,10 +258,10 @@ extension TransitionOf.Between
             
             let oldState =
                 
-            try REQ.value("\(F.name) is in \(From.self) state") {
+            try Require("\(F.name) is in \(From.self) state").isNotNil(
                 
                 model >> From.self
-            }
+            )
             
             //===
             
@@ -273,10 +273,10 @@ extension TransitionOf.Between
             
             //===
             
-            try REQ.isNotNil("New state for \(F.name) is set") {
+            try Require("New state for \(F.name) is set").isNotNil(
                 
                 newState
-            }
+            )
             
             //===
             

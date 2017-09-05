@@ -50,10 +50,10 @@ extension DeinitializationOf
             
             let oldState =
                 
-            try REQ.value("\(F.name) is presented") {
+            try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -79,10 +79,10 @@ extension DeinitializationOf
             
             let oldState =
                 
-            try REQ.value("\(F.name) is presented") {
+            try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -112,10 +112,10 @@ extension DeinitializationOf.From
             
             let oldState =
                 
-            try REQ.value("\(F.name) is in \(S.self) state") {
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
-            }
+            )
             
             //===
             
@@ -141,10 +141,10 @@ extension DeinitializationOf.From
             
             let oldState =
                 
-            try REQ.value("\(F.name) is in \(S.self) state") {
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
-            }
+            )
             
             //===
             

@@ -48,10 +48,10 @@ extension InitializationOf.Into where S: SimpleState
     {
         return Action(scope, context, self) { model, submit in
             
-            try REQ.isNil("\(F.name) is NOT initialized yet") {
+            try Require("\(F.name) is NOT initialized yet").isNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -83,10 +83,10 @@ extension InitializationOf.Into
     {
         return Action(scope, context, self) { model, submit in
             
-            try REQ.isNil("\(F.name) is NOT initialized yet") {
+            try Require("\(F.name) is NOT initialized yet").isNil(
                 
                 model >> F.self
-            }
+            )
             
             //===
             
@@ -101,10 +101,10 @@ extension InitializationOf.Into
             
             //===
             
-            try REQ.isNotNil("New state for \(F.name) is set") {
+            try Require("New state for \(F.name) is set").isNotNil(
                 
                 newState
-            }
+            )
             
             //===
             

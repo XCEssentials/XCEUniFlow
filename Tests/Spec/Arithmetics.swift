@@ -33,10 +33,10 @@ enum Actions: ActionContext
     {
         return action { model, mutate, submit in
             
-            try REQ.isNil("Feature is not initialized yet") {
+            try Require("Feature is not initialized yet").isNil(
                 
                 model >> M.Arithmetics.self
-            }
+            )
             
             //===
             
@@ -64,17 +64,17 @@ enum Actions: ActionContext
             // not getting the "parameter may not have 'var' specifier"
             // LOL Xcode bug, I guess...
             
-            var a = try REQ.value("Feature is initialized") {
+            var a = try Require("Feature is initialized").isNotNil(
                 
                 model >> M.Arithmetics.Main.self
-            }
+            )
             
             //===
             
-            try REQ.isTrue("Current value is not equal to desired new value") {
+            try Require("Current value is != to desired new value").isTrue(
                 
-                return a.val != value
-            }
+                a.val != value
+            )
             
             //===
             
@@ -91,10 +91,10 @@ enum Actions: ActionContext
     {
         return action { model, mutate, _ in
             
-            var a = try REQ.value("Feature is initialized") {
+            var a = try Require("Feature is initialized").isNotNil(
                 
                 model >> M.Arithmetics.Main.self
-            }
+            )
             
             //===
             

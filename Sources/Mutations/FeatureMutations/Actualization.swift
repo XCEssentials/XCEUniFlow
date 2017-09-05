@@ -51,10 +51,10 @@ extension ActualizationOf.In
             
             var state =
                 
-            try REQ.value("\(F.name) is in \(S.self) state") {
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
-            }
+            )
             
             //===
             
