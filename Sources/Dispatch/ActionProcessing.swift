@@ -63,18 +63,18 @@ extension Dispatcher
                 
                 //---
                 
-//                middleware
-//                    .forEach { $0(model, mutation, proxy.submit) }
+                middleware.values.joined().forEach{
+                    
+                    $0(state, mutation, proxy.submit)
+                }
 
-//                subscriptions
-//                    .filter {
-//
-//                        !$0.value.notifyAndKeep(with: diff,
-//                                                model: model,
-//                                                submit: proxy.submit)
-//                    }
-//                    .map { $0.key }
-//                    .forEach { subscriptions[$0] = nil }
+                //---
+                
+                // in one pass notify observers and release cancelled subscriptions
+                subscriptions
+                    .filter { !$0.value.notifyAndKeep(with: state, mutation: mutation) }
+                    .map { $0.key }
+                    .forEach { subscriptions[$0] = nil }
             }
             
             //===

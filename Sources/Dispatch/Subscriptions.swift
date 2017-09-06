@@ -5,7 +5,7 @@ import Foundation
 public
 protocol StateObserver: class
 {
-    func update(with: GlobalModel, diff: GlobalMutation?) // @escaping SubmitAction
+    func update(with: GlobalModel, mutation: GlobalMutation?) // @escaping SubmitAction
 }
 
 //===
@@ -37,7 +37,7 @@ extension Dispatcher
 extension Dispatcher.Subscription
 {
     @discardableResult
-    func notifyAndKeep(with state: GlobalModel, diff: GlobalMutation) -> Bool
+    func notifyAndKeep(with state: GlobalModel, mutation: GlobalMutation) -> Bool
     {
         guard
             let observer = observer
@@ -48,7 +48,7 @@ extension Dispatcher.Subscription
         
         //---
         
-        observer.update(with: state, diff: diff)
+        observer.update(with: state, mutation: mutation)
         
         //---
         
@@ -98,6 +98,6 @@ extension Dispatcher.Proxy
     public
     func updateNow(_ observer: StateObserver)
     {
-        observer.update(with: self.dispatcher.state, diff: nil)
+        observer.update(with: self.dispatcher.state, mutation: nil)
     }
 }
