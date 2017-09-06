@@ -98,6 +98,6 @@ extension Dispatcher.Proxy
     public
     func updateNow(_ observer: StateObserver)
     {
-        observer.update(with: self.dispatcher.state.itself, diff: nil)
+        observer.update(with: self.dispatcher.state, diff: nil)
     }
 }

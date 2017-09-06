@@ -164,48 +164,19 @@ func >> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
     return global.state(ofType: S.self)
 }
 
-// MARK: - Mutation metadata
-
-extension GlobalModel
-{
-    enum MutationDiff
-    {
-        case addition(Feature.Type)
-        case update(Feature.Type)
-        case removal(Feature.Type)
-    }
-    
-    typealias MutationResult = (storage: GlobalModel, diff: MutationDiff)
-}
-
 // MARK: - SET data
 
 extension GlobalModel
 {
     @discardableResult
-    func store<S: FeatureRepresentation>(_ state: S) -> MutationResult
+    func store<S: FeatureRepresentation>(_ state: S) -> GlobalModel
     {
-        let diff: MutationDiff
-
-        if
-            hasState(ofType: S.self)
-        {
-            diff = .update(S.feature.self)
-        }
-        else
-        {
-            diff = .addition(S.feature.self)
-        }
+        var result = self
+        result.data[S.feature.name] = state
 
         //---
 
-        var storage = self
-
-        storage.data[S.feature.name] = state
-
-        //---
-
-        return (storage, diff)
+        return result
     }
 }
 
@@ -238,53 +209,43 @@ extension GlobalModel
 extension GlobalModel
 {
     @discardableResult
-    func removeState<S: FeatureState>(ofType _: S.Type) -> MutationResult?
+    func removeState<S: FeatureState>(ofType _: S.Type) -> GlobalModel
     {
         guard
             hasState(ofType: S.self)
         else
         {
-            return nil
+            return self
         }
         
         //---
         
-        let diff: MutationDiff = .removal(S.ParentFeature.self)
+        var result = self
+        result.data[S.ParentFeature.name] = nil
         
         //---
         
-        var storage = self
-        
-        storage.data[S.ParentFeature.name] = nil
-        
-        //---
-        
-        return (storage, diff)
+        return result
     }
 
     @discardableResult
-    func removeRepresentation<F: Feature>(ofFeature _: F.Type) -> MutationResult?
+    func removeRepresentation<F: Feature>(ofFeature _: F.Type) -> GlobalModel
     {
         guard
             hasState(forFeature: F.self)
         else
         {
-            return nil
+            return self
         }
 
         //---
 
-        let diff: MutationDiff = .removal(F.self)
+        var result = self
+        result.data[F.name] = nil
 
         //---
 
-        var storage = self
-
-        storage.data[F.name] = nil
-
-        //---
-
-        return (storage, diff)
+        return result
     }
 }
 
@@ -339,4 +300,3 @@ extension GlobalModel
 //{
 //    global.removeRepresentation(ofFeature: F.self)
 //}
-

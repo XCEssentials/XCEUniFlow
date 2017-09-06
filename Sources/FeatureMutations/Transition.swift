@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-struct TransitionOf<F: Feature>: ApplyDiff
+struct TransitionOf<F: Feature>: GlobalMutationExt
 {
     public
     struct Into<S: FeatureState> where S.ParentFeature == F
@@ -45,13 +45,18 @@ struct TransitionOf<F: Feature>: ApplyDiff
     
     //===
     
+    static
+    var kind: FeatureMutationKind { return .update }
+    
+    let apply: (GlobalModel) -> GlobalModel
+    
+    //===
+    
     public
     let oldState: FeatureRepresentation
     
     public
     let newState: FeatureRepresentation
-    
-    let apply: (GlobalModel) -> GlobalModel.MutationResult?
     
     //===
     
@@ -123,7 +128,7 @@ extension TransitionOf.Into
 //                TransitionOf<F>(oldState: oldState, newState: newState)
 //            )
 //            return [ Store(state: newState) ]
-            return [ TransitionOf(from: oldState, into: newState) ]
+            return TransitionOf(from: oldState, into: newState)
         }
     }
 }
@@ -164,7 +169,7 @@ extension TransitionOf.Into where S: SimpleState
 //                TransitionOf<F>(oldState: oldState, newState: newState)
 //            )
 //            return [ Store(state: newState) ]
-            return [ TransitionOf(from: oldState, into: newState) ]
+            return TransitionOf(from: oldState, into: newState)
         }
     }
 }
@@ -197,7 +202,7 @@ extension TransitionOf.From
 //                { $0 << newState },
 //                TransitionOf<F>(oldState: oldState, newState: newState)
 //            )
-            return [ TransitionOf(from: oldState, into: newState) ]
+            return TransitionOf(from: oldState, into: newState)
         }
     }
 }
@@ -238,7 +243,7 @@ extension TransitionOf.Between where Into: SimpleState
 //                TransitionOf<F>(oldState: oldState, newState: newState)
 //            )
 //            return [ Store(state: newState) ]
-            return [ TransitionOf(from: oldState, into: newState) ]
+            return TransitionOf(from: oldState, into: newState)
         }
     }
 }
@@ -286,7 +291,7 @@ extension TransitionOf.Between
 //                TransitionOf<F>(oldState: oldState, newState: newState)
 //            )
 //            return [ Store(state: newState) ]
-            return [ TransitionOf(from: oldState, into: newState) ]
+            return TransitionOf(from: oldState, into: newState)
         }
     }
 }

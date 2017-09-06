@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-struct DeinitializationOf<F: Feature>: ApplyDiff
+struct DeinitializationOf<F: Feature>: GlobalMutationExt
 {
     public
     struct From<S: FeatureState> where S.ParentFeature == F
@@ -26,10 +26,15 @@ struct DeinitializationOf<F: Feature>: ApplyDiff
     
     //===
     
+    static
+    var kind: FeatureMutationKind { return .removal }
+    
+    let apply: (GlobalModel) -> GlobalModel
+    
+    //===
+    
     public
     let oldState: FeatureRepresentation
-    
-    let apply: (GlobalModel) -> GlobalModel.MutationResult?
     
     //===
     
@@ -72,7 +77,7 @@ extension DeinitializationOf
             
 //            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
 //            return [ Remove(feature: F.self) ]
-            return [ DeinitializationOf(from: oldState) ]
+            return DeinitializationOf(from: oldState)
         }
     }
     
@@ -102,7 +107,7 @@ extension DeinitializationOf
             
 //            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
 //            return [ Remove(feature: F.self) ]
-            return [ DeinitializationOf(from: oldState) ]
+            return DeinitializationOf(from: oldState)
         }
     }
 }
@@ -136,7 +141,7 @@ extension DeinitializationOf.From
             
 //            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
 //            return [ Remove(feature: F.self) ]
-            return [ DeinitializationOf(from: oldState) ]
+            return DeinitializationOf(from: oldState)
         }
     }
     
@@ -166,7 +171,7 @@ extension DeinitializationOf.From
             
 //            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
 //            return [ Remove(feature: F.self) ]
-            return [ DeinitializationOf(from: oldState) ]
+            return DeinitializationOf(from: oldState)
         }
     }
 }

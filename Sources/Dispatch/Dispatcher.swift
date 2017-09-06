@@ -6,21 +6,14 @@ public
 final
 class Dispatcher
 {
-    typealias State =
-        (itself: GlobalModel, recentChange: GlobalModel.MutationDiff?)
-    
     // MARK: - Private members
     
-    var state: State = (GlobalModel(), nil)
-    {
-        didSet
-        {
-//            state.recentChange
-//                .map{ notifyObservers(with: state.itself, diff: $0) }
-        }
-    }
+    var state = GlobalModel()
     
-    var middleware: [Middleware] = []
+    public
+    typealias Middleware = (GlobalModel, GlobalMutation, SubmitAction) -> Void
+    
+    var middleware: [GlobalModel.Key: [Middleware]] = [:]
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     

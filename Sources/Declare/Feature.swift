@@ -1,5 +1,21 @@
 public
-protocol Feature {}
+protocol Feature
+{
+    static
+    var middleware: [Dispatcher.Middleware] { get }
+}
+
+//===
+
+public
+extension Feature
+{
+    static
+    var middleware: [Dispatcher.Middleware]
+    {
+        return []
+    }
+}
 
 //===
 

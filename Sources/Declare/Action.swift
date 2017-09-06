@@ -44,9 +44,8 @@ struct Action
 
 // MARK: Helper types
 
-public
 typealias ActionBody =
-    (GlobalModel, @escaping SubmitAction) throws -> [GlobalMutation]?
+    (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
 
 public
 typealias SubmitAction = (Action) -> Void

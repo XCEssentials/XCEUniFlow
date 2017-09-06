@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-struct ActualizationOf<F: Feature>
+struct ActualizationOf<F: Feature>: GlobalMutationExt
 {
     public
     struct In<S: FeatureState> where S.ParentFeature == F
@@ -27,10 +27,15 @@ struct ActualizationOf<F: Feature>
     
     //===
     
+    static
+    var kind: FeatureMutationKind { return .update }
+    
+    let apply: (GlobalModel) -> GlobalModel
+    
+    //===
+    
     public
     let state: FeatureRepresentation
-    
-    let apply: (GlobalModel) -> GlobalModel.MutationResult?
     
     //===
     
@@ -73,7 +78,7 @@ extension ActualizationOf.In
             
 //            return ({ $0 << state }, ActualizationOf<F>(state: state))
 //            return [ Store(state: state) ]
-            return [ ActualizationOf(in: state) ]
+            return ActualizationOf(in: state)
         }
     }
 }

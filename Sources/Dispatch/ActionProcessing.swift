@@ -25,17 +25,22 @@ extension Dispatcher.Proxy
 
 extension Dispatcher
 {
-    func apply(mutations: [ApplyDiff]) -> [GlobalModel.MutationDiff]
+    func syncMiddleware(_ mutation: GlobalMutationExt)
     {
-        var result: [GlobalModel.MutationDiff] = []
+        let mutationType = type(of: mutation)
+        let key = mutationType.feature.name
         
-        //---
-        
-        for mutation in mutations
+        switch mutationType.kind
         {
-            mutation.apply(state.itself)
+            case .addition:
+                middleware[key] = mutationType.feature.middleware
+            
+            case .update:
+                break
+            
+            case .removal:
+                middleware[key] = nil
         }
-        
     }
     
     func process(_ action: Action)
@@ -43,20 +48,24 @@ extension Dispatcher
         do
         {
             if
-                let request = try action.body(state.itself, proxy.submit)
+                let mutation = try action.body(state, proxy.submit)
             {
                 // NOTE: if body will throw,
                 // then mutations will not be applied to global model
                 
                 //---
                 
-                apply(mutations: request) // mutation(&model)
+                state = mutation.apply(state) // mutation(&model)
+                
+                //---
+                
+                syncMiddleware(mutation)
                 
                 //---
                 
 //                middleware
-//                    .forEach { $0(diff, model, proxy.submit) }
-//
+//                    .forEach { $0(model, mutation, proxy.submit) }
+
 //                subscriptions
 //                    .filter {
 //

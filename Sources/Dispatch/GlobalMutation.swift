@@ -1,21 +1,37 @@
 public
 protocol GlobalMutation
 {
+//    /**
+//     Feature to which this mutation is related.
+//     */
+//    static
+//    var feature: Feature.Type { get }
+}
+
+//===
+
+enum FeatureMutationKind: String
+{
+    case addition, update, removal
+}
+
+protocol GlobalMutationExt: GlobalMutation
+{
     /**
      Feature to which this mutation is related.
      */
     static
     var feature: Feature.Type { get }
-}
-
-protocol ApplyDiff
-{
-    var apply: (GlobalModel) -> GlobalModel.MutationResult? { get }
+    
+    static
+    var kind: FeatureMutationKind { get }
+    
+    var apply: (GlobalModel) -> GlobalModel { get }
 }
 
 // MARK: - Initialization
 
-extension InitializationOf: GlobalMutation
+extension InitializationOf
 {
     public
     static
@@ -66,7 +82,7 @@ extension InitializationInto
 
 // MARK: - Actualization
 
-extension ActualizationOf: GlobalMutation
+extension ActualizationOf
 {
     public
     static
@@ -117,7 +133,7 @@ extension ActualizationIn
 
 // MARK: - Transition
 
-extension TransitionOf: GlobalMutation
+extension TransitionOf
 {
     public
     static
@@ -221,7 +237,7 @@ extension TransitionBetween
 
 // MARK: Deinitialization
 
-extension DeinitializationOf: GlobalMutation
+extension DeinitializationOf
 {
     public
     static

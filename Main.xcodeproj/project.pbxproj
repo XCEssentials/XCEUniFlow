@@ -19,13 +19,12 @@
 		9421DC961F5F9BD900C838BB /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC8F1F5F92C300C838BB /* Initialization.swift */; };
 		9421DC971F5F9BD900C838BB /* Actualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC8C1F5F92C300C838BB /* Actualization.swift */; };
 		9421DC981F5F9BD900C838BB /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC901F5F92C300C838BB /* Transition.swift */; };
-		9421DC991F5F9BD900C838BB /* TriggerOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC911F5F92C300C838BB /* TriggerOf.swift */; };
+		9421DC991F5F9BD900C838BB /* Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC911F5F92C300C838BB /* Trigger.swift */; };
 		9421DC9A1F5F9BD900C838BB /* Deinitialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC8D1F5F92C300C838BB /* Deinitialization.swift */; };
 		9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC7F1F5F915C00C838BB /* ActionProcessing.swift */; };
 		9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC801F5F915C00C838BB /* Dispatcher.swift */; };
 		9421DC9D1F5F9BDC00C838BB /* GlobalMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC811F5F915C00C838BB /* GlobalMutation.swift */; };
 		9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC841F5F915C00C838BB /* HelperProtocols.swift */; };
-		9421DCA11F5F9BDC00C838BB /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC851F5F915C00C838BB /* Middleware.swift */; };
 		9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC861F5F915C00C838BB /* GlobalModel.swift */; };
 		9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC871F5F915C00C838BB /* ReportingHelpers.swift */; };
 		9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC881F5F915C00C838BB /* Subscriptions.swift */; };
@@ -87,7 +86,6 @@
 		9421DC801F5F915C00C838BB /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		9421DC811F5F915C00C838BB /* GlobalMutation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalMutation.swift; sourceTree = "<group>"; };
 		9421DC841F5F915C00C838BB /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
-		9421DC851F5F915C00C838BB /* Middleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		9421DC861F5F915C00C838BB /* GlobalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalModel.swift; sourceTree = "<group>"; };
 		9421DC871F5F915C00C838BB /* ReportingHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportingHelpers.swift; sourceTree = "<group>"; };
 		9421DC881F5F915C00C838BB /* Subscriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
@@ -97,7 +95,7 @@
 		9421DC8E1F5F92C300C838BB /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		9421DC8F1F5F92C300C838BB /* Initialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialization.swift; sourceTree = "<group>"; };
 		9421DC901F5F92C300C838BB /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
-		9421DC911F5F92C300C838BB /* TriggerOf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerOf.swift; sourceTree = "<group>"; };
+		9421DC911F5F92C300C838BB /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
 		9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
@@ -199,7 +197,6 @@
 				9421DC7F1F5F915C00C838BB /* ActionProcessing.swift */,
 				9421DC801F5F915C00C838BB /* Dispatcher.swift */,
 				9421DC841F5F915C00C838BB /* HelperProtocols.swift */,
-				9421DC851F5F915C00C838BB /* Middleware.swift */,
 				9421DC871F5F915C00C838BB /* ReportingHelpers.swift */,
 				9421DC881F5F915C00C838BB /* Subscriptions.swift */,
 			);
@@ -213,7 +210,7 @@
 				9421DC8F1F5F92C300C838BB /* Initialization.swift */,
 				9421DC8C1F5F92C300C838BB /* Actualization.swift */,
 				9421DC901F5F92C300C838BB /* Transition.swift */,
-				9421DC911F5F92C300C838BB /* TriggerOf.swift */,
+				9421DC911F5F92C300C838BB /* Trigger.swift */,
 				9421DC8D1F5F92C300C838BB /* Deinitialization.swift */,
 			);
 			path = FeatureMutations;
@@ -455,14 +452,13 @@
 				9421DC931F5F9BD600C838BB /* Feature.swift in Sources */,
 				9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
 				9421DC8A1F5F915C00C838BB /* CustomOperators.swift in Sources */,
-				9421DCA11F5F9BDC00C838BB /* Middleware.swift in Sources */,
 				9421DC921F5F9BD600C838BB /* Action.swift in Sources */,
 				D6773130857F3D94609D1D05 /* Aliases.swift in Sources */,
 				9421DC961F5F9BD900C838BB /* Initialization.swift in Sources */,
 				9421DC9D1F5F9BDC00C838BB /* GlobalMutation.swift in Sources */,
 				9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */,
 				9421DC971F5F9BD900C838BB /* Actualization.swift in Sources */,
-				9421DC991F5F9BD900C838BB /* TriggerOf.swift in Sources */,
+				9421DC991F5F9BD900C838BB /* Trigger.swift in Sources */,
 				9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
