@@ -43,15 +43,6 @@ extension Feature
 public
 struct Initialization<F: Feature>: GlobalMutationExt
 {
-    public
-    struct Into<S: FeatureState> where S.ParentFeature == F
-    {
-        public
-        let newState: S
-    }
-    
-    //===
-    
     static
     var kind: FeatureMutationKind { return .addition }
     
@@ -68,83 +59,5 @@ struct Initialization<F: Feature>: GlobalMutationExt
     {
         self.newState = newState
         self.apply = { $0.store(newState) }
-    }
-}
-
-public
-typealias InitializationInto<S: FeatureState> = Initialization<S.ParentFeature>.Into<S>
-
-//===
-
-public
-extension Initialization.Into where S: SimpleState
-{
-    static
-    func automatic(
-        scope: String = #file,
-        context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            try Require("\(F.name) is NOT initialized yet").isNil(
-                
-                model >> F.self
-            )
-            
-            //---
-            
-            let newState = S.init()
-            
-            //---
-            
-            completion?(submit)
-            
-            //---
-            
-            return Initialization(into: newState)
-        }
-    }
-}
-
-//===
-
-public
-extension Initialization.Into
-{
-    static
-    func via(
-        scope: String = #file,
-        context: String = #function,
-        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            try Require("\(F.name) is NOT initialized yet").isNil(
-                
-                model >> F.self
-            )
-            
-            //---
-            
-            var newState: S!
-            
-            //---
-            
-            try body({ newState = $0 }, submit)
-            
-            //---
-            
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
-            
-            //---
-            
-            return Initialization(into: newState)
-        }
     }
 }

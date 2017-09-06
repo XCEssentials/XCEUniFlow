@@ -76,29 +76,6 @@ extension Initialization
     }
 }
 
-//===
-
-extension InitializationInto
-{
-    // if let appRunning = InitializationInto<M.App.Running>(diff)?.newState
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Initialization<F>,
-            let newState = mutation.newState as? S
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = InitializationInto(newState: newState)
-    }
-}
-
 // MARK: - Actualization
 
 extension Actualization
