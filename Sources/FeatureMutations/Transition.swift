@@ -40,6 +40,9 @@ public
 struct Transition<F: Feature>: GlobalMutationExt
 {
     static
+    var feature: Feature.Type { return F.self }
+    
+    static
     var kind: FeatureMutationKind { return .update }
     
     let apply: (GlobalModel) -> GlobalModel
@@ -61,5 +64,30 @@ struct Transition<F: Feature>: GlobalMutationExt
         self.oldState = oldState
         self.newState = newState
         self.apply = { $0.store(newState) }
+    }
+    
+    //===
+    
+    /**
+     Usage:
+     
+     ```swift
+     let someOldAppState = TransitionOf<M.App>(diff)?.oldState
+     let someNewAppState = TransitionOf<M.App>(diff)?.newState
+     ```
+     */
+    public
+    init?(_ diff: GlobalMutation)
+    {
+        guard
+            let mutation = diff as? Transition<F>
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self = mutation
     }
 }
