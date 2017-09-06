@@ -7,11 +7,11 @@ final
 class Dispatcher
 {
     typealias State =
-        (itself: NewModel, recentChange: NewModel.MutationDiff?)
+        (itself: GlobalModel, recentChange: GlobalModel.MutationDiff?)
     
     // MARK: - Private members
     
-    var state: State = (NewModel(), nil)
+    var state: State = (GlobalModel(), nil)
     {
         didSet
         {

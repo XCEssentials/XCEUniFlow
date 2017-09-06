@@ -25,7 +25,7 @@
  */
 
 public
-struct NewModel
+struct GlobalModel
 {
     public
     init() {}
@@ -40,7 +40,7 @@ struct NewModel
 // MARK: - GET data
 
 public
-extension NewModel
+extension GlobalModel
 {
     func state<S: FeatureState>(ofType _: S.Type) -> S?
     {
@@ -78,7 +78,7 @@ public
 extension Feature
 {
     static
-    func state(from globalModel: NewModel) -> FeatureRepresentation?
+    func state(from globalModel: GlobalModel) -> FeatureRepresentation?
     {
         return globalModel.state(forFeature: self)
     }
@@ -86,7 +86,7 @@ extension Feature
     //===
     
     static
-    func state<S>(from globalModel: NewModel) -> S? where
+    func state<S>(from globalModel: GlobalModel) -> S? where
         S: FeatureState,
         S.ParentFeature == Self
     {
@@ -96,7 +96,7 @@ extension Feature
     //===
 
     static
-    func presented(in globalModel: NewModel) -> Bool
+    func presented(in globalModel: GlobalModel) -> Bool
     {
         return globalModel.hasState(forFeature: self)
     }
@@ -108,7 +108,7 @@ public
 extension FeatureState
 {
     static
-    func from(_ globalModel: NewModel) -> Self?
+    func from(_ globalModel: GlobalModel) -> Self?
     {
         return globalModel.state(ofType: self)
     }
@@ -116,7 +116,7 @@ extension FeatureState
     //===
     
     static
-    func presented(in globalModel: NewModel) -> Bool
+    func presented(in globalModel: GlobalModel) -> Bool
     {
         return globalModel.hasState(ofType: self)
     }
@@ -125,7 +125,7 @@ extension FeatureState
 // MARK: - GET data -Operators
 
 public
-func << <S: FeatureState>(_: S.Type, global: NewModel) -> S?
+func << <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 {
     return global.state(ofType: S.self)
 }
@@ -133,7 +133,7 @@ func << <S: FeatureState>(_: S.Type, global: NewModel) -> S?
 //===
 
 public
-func << <F: Feature>(_: F.Type, global: NewModel) -> FeatureRepresentation?
+func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
 {
     return global.state(forFeature: F.self)
 }
@@ -141,7 +141,7 @@ func << <F: Feature>(_: F.Type, global: NewModel) -> FeatureRepresentation?
 //===
 
 public
-func >> <F: Feature>(global: NewModel, _: F.Type) -> FeatureRepresentation?
+func >> <F: Feature>(global: GlobalModel, _: F.Type) -> FeatureRepresentation?
 {
     return global.state(forFeature: F.self)
 }
@@ -149,7 +149,7 @@ func >> <F: Feature>(global: NewModel, _: F.Type) -> FeatureRepresentation?
 //===
 
 public
-func >> <F, S>(global: NewModel, _: F.Type) -> S? where
+func >> <F, S>(global: GlobalModel, _: F.Type) -> S? where
     S: FeatureState,
     S.ParentFeature == F
 {
@@ -159,14 +159,14 @@ func >> <F, S>(global: NewModel, _: F.Type) -> S? where
 //===
 
 public
-func >> <S: FeatureState>(global: NewModel, _: S.Type) -> S?
+func >> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
 {
     return global.state(ofType: S.self)
 }
 
 // MARK: - Mutation metadata
 
-extension NewModel
+extension GlobalModel
 {
     enum MutationDiff
     {
@@ -175,12 +175,12 @@ extension NewModel
         case removal(Feature.Type)
     }
     
-    typealias MutationResult = (storage: NewModel, diff: MutationDiff)
+    typealias MutationResult = (storage: GlobalModel, diff: MutationDiff)
 }
 
 // MARK: - SET data
 
-extension NewModel
+extension GlobalModel
 {
     @discardableResult
     func store<S: FeatureState>(_ state: S?) -> MutationResult
@@ -215,7 +215,7 @@ extension NewModel
 //extension FeatureState
 //{
 //    @discardableResult
-//    func store(in storage: inout NewModel) -> Self
+//    func store(in storage: inout GlobalModel) -> Self
 //    {
 //        storage.store(self)
 //
@@ -228,14 +228,14 @@ extension NewModel
 // MARK: - SET data - Operators
 
 //public
-//func << <S: FeatureState>(global: inout NewModel, state: S?)
+//func << <S: FeatureState>(global: inout GlobalModel, state: S?)
 //{
 //    global.store(state)
 //}
 
 // MARK: - REMOVE data
 
-extension NewModel
+extension GlobalModel
 {
     @discardableResult
     func removeState<S: FeatureState>(ofType _: S.Type) -> MutationResult?
@@ -295,7 +295,7 @@ extension NewModel
 //{
 //    @discardableResult
 //    static
-//    func remove(from storage: inout NewModel) -> Self.Type
+//    func remove(from storage: inout GlobalModel) -> Self.Type
 //    {
 //        storage.removeRepresentation(ofFeature: self)
 //
@@ -311,7 +311,7 @@ extension NewModel
 //extension FeatureState
 //{
 //    @discardableResult
-//    func remove(from storage: inout NewModel) -> Self
+//    func remove(from storage: inout GlobalModel) -> Self
 //    {
 //        storage.removeState(ofType: type(of: self))
 //
@@ -322,7 +322,7 @@ extension NewModel
 //
 //    @discardableResult
 //    static
-//    func remove(from storage: inout NewModel) -> Self.Type
+//    func remove(from storage: inout GlobalModel) -> Self.Type
 //    {
 //        storage.removeState(ofType: self)
 //
@@ -335,7 +335,7 @@ extension NewModel
 // MARK: Operators - REMOVE
 
 //public
-//func /< <F: Feature>(global: inout NewModel, _: F.Type)
+//func /< <F: Feature>(global: inout GlobalModel, _: F.Type)
 //{
 //    global.removeRepresentation(ofFeature: F.self)
 //}

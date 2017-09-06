@@ -1,7 +1,7 @@
 public
 extension Dispatcher
 {
-    typealias Middleware = (GlobalDiff, NewModel, SubmitAction) -> Void
+    typealias Middleware = (GlobalDiff, GlobalModel, SubmitAction) -> Void
 }
 
 //===

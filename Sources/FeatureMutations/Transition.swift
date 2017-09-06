@@ -84,7 +84,7 @@ extension TransitionOf.Into
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (NewModel, Become<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in

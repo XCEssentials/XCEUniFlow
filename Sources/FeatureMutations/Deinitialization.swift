@@ -77,7 +77,7 @@ extension DeinitializationOf
     func prepare(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in

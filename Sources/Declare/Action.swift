@@ -46,7 +46,7 @@ struct Action
 
 public
 typealias ActionBody =
-    (NewModel, @escaping SubmitAction) throws -> [GlobalDiff]?
+    (GlobalModel, @escaping SubmitAction) throws -> [GlobalDiff]?
 
 public
 typealias SubmitAction = (Action) -> Void

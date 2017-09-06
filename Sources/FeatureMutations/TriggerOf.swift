@@ -43,7 +43,7 @@ extension TriggerOf.NoState
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -73,7 +73,7 @@ extension TriggerOf.AnyState
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in

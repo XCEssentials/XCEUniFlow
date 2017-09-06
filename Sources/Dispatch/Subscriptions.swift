@@ -5,7 +5,7 @@ import Foundation
 public
 protocol StateObserver: class
 {
-    func update(with: NewModel, diff: GlobalDiff?) // @escaping SubmitAction
+    func update(with: GlobalModel, diff: GlobalDiff?) // @escaping SubmitAction
 }
 
 //===
@@ -37,7 +37,7 @@ extension Dispatcher
 extension Dispatcher.Subscription
 {
     @discardableResult
-    func notifyAndKeep(with state: NewModel, diff: GlobalDiff) -> Bool
+    func notifyAndKeep(with state: GlobalModel, diff: GlobalDiff) -> Bool
     {
         guard
             let observer = observer

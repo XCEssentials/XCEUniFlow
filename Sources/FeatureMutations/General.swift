@@ -10,7 +10,7 @@ extension ActionContext
     func action(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (NewModel, SubmitMutations, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, SubmitMutations, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -33,7 +33,7 @@ extension ActionContext
     func trigger(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
