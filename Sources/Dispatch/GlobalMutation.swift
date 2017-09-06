@@ -179,26 +179,3 @@ extension Deinitialization
         self = mutation
     }
 }
-
-//===
-
-extension DeinitializationFrom
-{
-    // let appRunning = DeinitializationFrom<M.App.Running>(diff)?.oldState
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Deinitialization<S.ParentFeature>,
-            let oldState = mutation.oldState as? S
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = DeinitializationFrom(oldState: oldState)
-    }
-}

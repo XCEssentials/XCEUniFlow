@@ -29,46 +29,59 @@ import XCERequirement
 //===
 
 public
-extension Feature
-{
-    static
-    var deinitialize: Deinitialization<Self>.Type
-    {
-        return Deinitialization<Self>.self
-    }
-}
-
-//===
-
-public
-struct Deinitialization<F: Feature>: GlobalMutationExt
-{
-    static
-    var kind: FeatureMutationKind { return .removal }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //---
-    
-    public
-    let oldState: FeatureRepresentation
-    
-    //---
-    
-    init(from oldState: FeatureRepresentation)
-    {
-        self.oldState = oldState
-        self.apply = { $0.removeRepresentation(ofFeature: F.self) }
-    }
-}
-
-//===
-
-public
 extension Deinitialization
 {
+    struct From<S: FeatureState> where S.ParentFeature == F
+    {
+        public
+        let oldState: S
+        
+        //===
+        
+        init(_ oldState: S)
+        {
+            self.oldState = oldState
+        }
+        
+        //===
+        
+        /**
+         Usage:
+         
+         ```swift
+         let appRunning = DeinitializationFrom<M.App.Running>(diff)?.oldState
+         ```
+         */
+        public
+        init?(_ diff: GlobalMutation)
+        {
+            guard
+                let mutation = diff as? Deinitialization<S.ParentFeature>,
+                let oldState = mutation.oldState as? S
+                else
+            {
+                return nil
+            }
+            
+            //---
+            
+            self = DeinitializationFrom(oldState)
+        }
+    }
+}
+
+//===
+
+public
+typealias DeinitializationFrom<S: FeatureState> = Deinitialization<S.ParentFeature>.From<S>
+
+//===
+
+public
+extension Deinitialization.From
+{
     static
-    func automatic(
+    func automatically(
         scope: String = #file,
         context: String = #function,
         completion: ((@escaping SubmitAction) -> Void)? = nil
@@ -77,10 +90,10 @@ extension Deinitialization
         return Action(scope, context, self) { model, submit in
             
             let oldState =
-            
-            try Require("\(F.name) is presented").isNotNil(
                 
-                model >> F.self
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
+                
+                model >> S.self
             )
             
             //---
@@ -99,21 +112,21 @@ extension Deinitialization
     func prepare(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        body: @escaping (S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
-            try Require("\(F.name) is presented").isNotNil(
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
-                model >> F.self
+                model >> S.self
             )
             
             //---
             
-            try body(model, submit)
+            try body(oldState, submit)
             
             //---
             
