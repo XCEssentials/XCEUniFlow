@@ -24,7 +24,6 @@
 		9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC7F1F5F915C00C838BB /* ActionProcessing.swift */; };
 		9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC801F5F915C00C838BB /* Dispatcher.swift */; };
 		9421DC9D1F5F9BDC00C838BB /* GlobalDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC811F5F915C00C838BB /* GlobalDiff.swift */; };
-		9421DC9E1F5F9BDC00C838BB /* GlobalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC821F5F915C00C838BB /* GlobalModel.swift */; };
 		9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC841F5F915C00C838BB /* HelperProtocols.swift */; };
 		9421DCA11F5F9BDC00C838BB /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC851F5F915C00C838BB /* Middleware.swift */; };
 		9421DCA21F5F9BDC00C838BB /* NewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC861F5F915C00C838BB /* NewModel.swift */; };
@@ -87,7 +86,6 @@
 		9421DC7F1F5F915C00C838BB /* ActionProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionProcessing.swift; sourceTree = "<group>"; };
 		9421DC801F5F915C00C838BB /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 		9421DC811F5F915C00C838BB /* GlobalDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDiff.swift; sourceTree = "<group>"; };
-		9421DC821F5F915C00C838BB /* GlobalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalModel.swift; sourceTree = "<group>"; };
 		9421DC841F5F915C00C838BB /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
 		9421DC851F5F915C00C838BB /* Middleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		9421DC861F5F915C00C838BB /* NewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewModel.swift; sourceTree = "<group>"; };
@@ -199,7 +197,6 @@
 				9421DC7F1F5F915C00C838BB /* ActionProcessing.swift */,
 				9421DC801F5F915C00C838BB /* Dispatcher.swift */,
 				9421DC811F5F915C00C838BB /* GlobalDiff.swift */,
-				9421DC821F5F915C00C838BB /* GlobalModel.swift */,
 				9421DC841F5F915C00C838BB /* HelperProtocols.swift */,
 				9421DC851F5F915C00C838BB /* Middleware.swift */,
 				9421DC861F5F915C00C838BB /* NewModel.swift */,
@@ -452,7 +449,6 @@
 				9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */,
 				9421DC981F5F9BD900C838BB /* Transition.swift in Sources */,
 				9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */,
-				9421DC9E1F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
 				9421DC951F5F9BD900C838BB /* General.swift in Sources */,
 				9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */,
 				9421DC9A1F5F9BD900C838BB /* Deinitialization.swift in Sources */,
