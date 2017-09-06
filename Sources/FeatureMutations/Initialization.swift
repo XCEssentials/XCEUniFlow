@@ -24,10 +24,6 @@
  
  */
 
-import XCERequirement
-
-//===
-
 public
 extension Feature
 {
@@ -70,7 +66,7 @@ struct Initialization<F: Feature>: GlobalMutationExt
      Usage:
      
      ```swift
-     if let someAppState = InitializationOf<M.App>(diff)?.newState
+     let someAppState = InitializationOf<M.App>(diff)?.newState
      ```
      */
     public

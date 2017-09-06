@@ -58,7 +58,7 @@ extension Actualization
     
     //===
     
-    // if let someAppState = Actualization<M.App>(diff)?.state
+    // let someAppState = Actualization<M.App>(diff)?.state
     
     public
     init?(_ diff: GlobalMutation)
@@ -76,29 +76,6 @@ extension Actualization
     }
 }
 
-//===
-
-extension ActualizationOf
-{
-    // if let appRunning = ActualizationOf<M.App.Running>(diff)?.state
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Actualization<F>,
-            let state = mutation.state as? S
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = ActualizationOf(state: state)
-    }
-}
-
 // MARK: - Transition
 
 extension Transition
@@ -109,8 +86,8 @@ extension Transition
     
     //===
     
-    // if let someOldAppState = TransitionOf<M.App>(diff)?.oldState
-    // if let someNewAppState = TransitionOf<M.App>(diff)?.newState
+    // let someOldAppState = TransitionOf<M.App>(diff)?.oldState
+    // let someNewAppState = TransitionOf<M.App>(diff)?.newState
     
     public
     init?(_ diff: GlobalMutation)
@@ -132,7 +109,7 @@ extension Transition
 
 extension TransitionFrom
 {
-    // if let appRunning = TransitionFrom<M.App.Running>(diff)?.oldState
+    // let appRunning = TransitionFrom<M.App.Running>(diff)?.oldState
     
     public
     init?(_ diff: GlobalMutation)
@@ -155,7 +132,7 @@ extension TransitionFrom
 
 extension TransitionInto
 {
-    // if let appRunning = TransitionInto<M.App.Running>(diff)?.newState
+    // let appRunning = TransitionInto<M.App.Running>(diff)?.newState
     
     public
     init?(_ diff: GlobalMutation)
@@ -180,8 +157,8 @@ extension TransitionInto
     
 extension TransitionBetween
 {
-    // if let appPreparing = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.oldState
-    // if let appRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.newState
+    // let appPreparing = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.oldState
+    // let appRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.newState
     
     public
     init?(_ diff: GlobalMutation)
@@ -213,7 +190,7 @@ extension Deinitialization
     
     //===
     
-    // if let someAppState = Deinitialization<M.App>(diff)?.oldState
+    // let someAppState = Deinitialization<M.App>(diff)?.oldState
     
     public
     init?(_ diff: GlobalMutation)
@@ -235,7 +212,7 @@ extension Deinitialization
 
 extension DeinitializationFrom
 {
-    // if let appRunning = DeinitializationFrom<M.App.Running>(diff)?.oldState
+    // let appRunning = DeinitializationFrom<M.App.Running>(diff)?.oldState
     
     public
     init?(_ diff: GlobalMutation)

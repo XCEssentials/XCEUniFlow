@@ -29,18 +29,19 @@ import XCERequirement
 //===
 
 public
-extension Initialization
+extension Actualization
 {
-    struct Into<S: FeatureState> where S.ParentFeature == F
+    struct Of<S: FeatureState> where S.ParentFeature == F
+        // swiftlint:disable:previous type_name
     {
         public
-        let newState: S
+        let state: S
         
         //===
         
-        init(_ newState: S)
+        init(_ state: S)
         {
-            self.newState = newState
+            self.state = state
         }
         
         //===
@@ -49,15 +50,15 @@ extension Initialization
          Usage:
          
          ```swift
-         let appRunning = InitializationInto<M.App.Running>(diff)?.newState
+         let appRunning = ActualizationOf<M.App.Running>(diff)?.state
          ```
          */
         public
         init?(_ diff: GlobalMutation)
         {
             guard
-                let mutation = diff as? Initialization<F>,
-                let newState = mutation.newState as? S
+                let mutation = diff as? Actualization<F>,
+                let state = mutation.state as? S
             else
             {
                 return nil
@@ -65,7 +66,7 @@ extension Initialization
             
             //---
             
-            self = InitializationInto(newState)
+            self = ActualizationOf(state)
         }
     }
 }
@@ -73,79 +74,36 @@ extension Initialization
 //===
 
 public
-typealias InitializationInto<S: FeatureState> = Initialization<S.ParentFeature>.Into<S>
+typealias ActualizationOf<S: FeatureState> = Actualization<S.ParentFeature>.Of<S>
 
 //===
 
 public
-extension Initialization.Into where S: SimpleState
-{
-    static
-    func automatically(
-        scope: String = #file,
-        context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            try Require("\(F.name) is NOT initialized yet").isNil(
-                
-                model >> F.self
-            )
-            
-            //---
-            
-            let newState = S.init()
-            
-            //---
-            
-            completion?(submit)
-            
-            //---
-            
-            return Initialization(into: newState)
-        }
-    }
-}
-
-//===
-
-public
-extension Initialization.Into
+extension Actualization.Of
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (S, Mutate<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
-            try Require("\(F.name) is NOT initialized yet").isNil(
+            var state =
                 
-                model >> F.self
+            try Require("\(S.ParentFeature.name) is in \(S.self) state").isNotNil(
+                
+                model >> S.self
             )
             
             //---
             
-            var newState: S!
+            try body(state, { state = $0 }, submit)
             
             //---
             
-            try body({ newState = $0 }, submit)
-            
-            //---
-            
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
-            
-            //---
-            
-            return Initialization(into: newState)
+            return Actualization(in: state)
         }
     }
 }
