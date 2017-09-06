@@ -29,103 +29,43 @@ import XCERequirement
 //===
 
 public
-extension Feature
+extension Transition
 {
-    static
-    var transition: Transition<Self>.Type
-    {
-        return Transition<Self>.self
-    }
-}
-
-//===
-
-public
-struct Transition<F: Feature>: GlobalMutationExt
-{
-    public
-    struct From<S: FeatureState> where S.ParentFeature == F
+    struct Into<S: FeatureState> where S.ParentFeature == F
     {
         public
-        let oldState: S
-    }
-    
-    public
-    struct Between<From: FeatureState, Into: FeatureState> where
-        From.ParentFeature == F,
-        Into.ParentFeature == F
-    {
-        public
-        let oldState: From
+        let newState: S
         
+        //===
+        
+        init(_ newState: S)
+        {
+            self.newState = newState
+        }
+        
+        //===
+        
+        /**
+         Usage:
+         
+         ```swift
+         let appRunning = TransitionInto<M.App.Running>(diff)?.newState
+         ```
+         */
         public
-        let newState: Into
-    }
-    
-    //===
-    
-    static
-    var kind: FeatureMutationKind { return .update }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
-    
-    public
-    let oldState: FeatureRepresentation
-    
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<Into>(from oldState: FeatureRepresentation, into newState: Into) where
-        Into: FeatureState,
-        Into.ParentFeature == F
-    {
-        self.oldState = oldState
-        self.newState = newState
-        self.apply = { $0.store(newState) }
-    }
-}
-
-public
-typealias TransitionFrom<S: FeatureState> = Transition<S.ParentFeature>.From<S>
-
-#if swift(>=3.2)
-    
-public
-typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
-    Transition<From.ParentFeature>.Between<From, Into>
-    where From.ParentFeature == Into.ParentFeature
-    
-#endif
-
-//===
-
-public
-extension Transition.From
-{
-    static
-    func into<Into: FeatureState>(
-        scope: String = #file,
-        context: String = #function,
-        _ newState: Into
-        ) -> Action
-        where Into.ParentFeature == F
-    {
-        return Action(scope, context, self) { model, _ in
-            
-            let oldState =
-            
-            try Require("\(F.name) is in \(S.self) state").isNotNil(
-                
-                model >> S.self
-            )
+        init?(_ diff: GlobalMutation)
+        {
+            guard
+                let mutation = diff as? Transition<S.ParentFeature>,
+                let newState = mutation.newState as? S
+            else
+            {
+                return nil
+            }
             
             //---
             
-            return Transition(from: oldState, into: newState)
+            self = TransitionInto(newState)
         }
     }
 }
@@ -133,10 +73,15 @@ extension Transition.From
 //===
 
 public
-extension Transition.Between where Into: SimpleState
+typealias TransitionInto<S: FeatureState> = Transition<S.ParentFeature>.Into<S>
+
+//===
+
+public
+extension Transition.Into where S: SimpleState
 {
     static
-    func automatic(
+    func automatically(
         scope: String = #file,
         context: String = #function,
         completion: ((@escaping SubmitAction) -> Void)? = nil
@@ -146,14 +91,14 @@ extension Transition.Between where Into: SimpleState
             
             let oldState =
                 
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
+            try Require("\(F.name) is presented").isNotNil(
                 
-                model >> From.self
+                model >> F.self
             )
             
             //---
             
-            let newState = Into.init()
+            let newState = S.init()
             
             //---
             
@@ -169,31 +114,31 @@ extension Transition.Between where Into: SimpleState
 //===
 
 public
-extension Transition.Between
+extension Transition.Into
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
+            try Require("\(F.name) is presented").isNotNil(
                 
-                model >> From.self
+                model >> F.self
             )
             
             //---
             
-            var newState: Into!
+            var newState: S!
             
             //---
             
-            try body(oldState, { newState = $0 }, submit)
+            try body(model, { newState = $0 }, submit)
             
             //---
             

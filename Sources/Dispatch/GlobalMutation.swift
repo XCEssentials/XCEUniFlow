@@ -102,29 +102,6 @@ extension TransitionFrom
 
 //===
 
-extension TransitionInto
-{
-    // let appRunning = TransitionInto<M.App.Running>(diff)?.newState
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Transition<S.ParentFeature>,
-            let newState = mutation.newState as? S
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = TransitionInto(newState: newState)
-    }
-}
-
-//===
-
 #if swift(>=3.2)
     
 extension TransitionBetween
