@@ -29,6 +29,29 @@ import XCERequirement
 //===
 
 public
+extension ActionContext
+{
+    static
+    func trigger(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
+            try body(model, submit)
+            
+            //---
+            
+            return nil
+        }
+    }
+}
+
+//===
+
+public
 extension Feature
 {
     static
