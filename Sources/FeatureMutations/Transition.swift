@@ -72,8 +72,8 @@ struct Transition<F: Feature>: GlobalMutationExt
      Usage:
      
      ```swift
-     let someOldAppState = TransitionOf<M.App>(diff)?.oldState
-     let someNewAppState = TransitionOf<M.App>(diff)?.newState
+     let someOldAppState = Transition<M.App>(diff)?.oldState
+     let someNewAppState = Transition<M.App>(diff)?.newState
      ```
      */
     public

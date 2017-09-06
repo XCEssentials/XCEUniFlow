@@ -66,7 +66,7 @@ struct Initialization<F: Feature>: GlobalMutationExt
      Usage:
      
      ```swift
-     let someAppState = InitializationOf<M.App>(diff)?.newState
+     let someAppState = Initialization<M.App>(diff)?.newState
      ```
      */
     public
