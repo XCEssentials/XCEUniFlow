@@ -44,13 +44,6 @@ public
 struct Transition<F: Feature>: GlobalMutationExt
 {
     public
-    struct From<S: FeatureState> where S.ParentFeature == F
-    {
-        public
-        let oldState: S
-    }
-    
-    public
     struct Between<From: FeatureState, Into: FeatureState> where
         From.ParentFeature == F,
         Into.ParentFeature == F
@@ -89,9 +82,6 @@ struct Transition<F: Feature>: GlobalMutationExt
     }
 }
 
-public
-typealias TransitionFrom<S: FeatureState> = Transition<S.ParentFeature>.From<S>
-
 #if swift(>=3.2)
     
 public
@@ -100,35 +90,6 @@ typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
     where From.ParentFeature == Into.ParentFeature
     
 #endif
-
-//===
-
-public
-extension Transition.From
-{
-    static
-    func into<Into: FeatureState>(
-        scope: String = #file,
-        context: String = #function,
-        _ newState: Into
-        ) -> Action
-        where Into.ParentFeature == F
-    {
-        return Action(scope, context, self) { model, _ in
-            
-            let oldState =
-            
-            try Require("\(F.name) is in \(S.self) state").isNotNil(
-                
-                model >> S.self
-            )
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
-        }
-    }
-}
 
 //===
 
