@@ -44,21 +44,48 @@ public
 struct Deinitialization<F: Feature>: GlobalMutationExt
 {
     static
+    var feature: Feature.Type { return F.self }
+    
+    static
     var kind: FeatureMutationKind { return .removal }
     
     let apply: (GlobalModel) -> GlobalModel
     
-    //---
+    //===
     
     public
     let oldState: FeatureRepresentation
     
-    //---
+    //===
     
     init(from oldState: FeatureRepresentation)
     {
         self.oldState = oldState
         self.apply = { $0.removeRepresentation(ofFeature: F.self) }
+    }
+    
+    //===
+    
+    /**
+     Usage:
+     
+     ```swift
+     let someAppState = Deinitialization<M.App>(diff)?.oldState
+     ```
+     */
+    public
+    init?(_ diff: GlobalMutation)
+    {
+        guard
+            let mutation = diff as? Deinitialization<F>
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self = mutation
     }
 }
 

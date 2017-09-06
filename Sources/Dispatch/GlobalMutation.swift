@@ -151,31 +151,3 @@ extension TransitionBetween
 }
     
 #endif
-
-// MARK: Deinitialization
-
-extension Deinitialization
-{
-    public
-    static
-    var feature: Feature.Type { return F.self }
-    
-    //===
-    
-    // let someAppState = Deinitialization<M.App>(diff)?.oldState
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Deinitialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
-    }
-}
