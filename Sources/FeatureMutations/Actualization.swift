@@ -40,6 +40,9 @@ public
 struct Actualization<F: Feature>: GlobalMutationExt
 {
     static
+    var feature: Feature.Type { return F.self }
+    
+    static
     var kind: FeatureMutationKind { return .update }
     
     let apply: (GlobalModel) -> GlobalModel
@@ -55,5 +58,29 @@ struct Actualization<F: Feature>: GlobalMutationExt
     {
         self.state = state
         self.apply = { $0.store(state) }
+    }
+    
+    //===
+    
+    /**
+     Usage:
+ 
+     ```swift
+     let someAppState = Actualization<M.App>(diff)?.state
+     ```
+     */
+    public
+    init?(_ diff: GlobalMutation)
+    {
+        guard
+            let mutation = diff as? Actualization<F>
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self = mutation
     }
 }

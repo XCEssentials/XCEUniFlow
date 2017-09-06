@@ -48,34 +48,6 @@ protocol GlobalMutationExt: GlobalMutation
     var apply: (GlobalModel) -> GlobalModel { get }
 }
 
-// MARK: - Actualization
-
-extension Actualization
-{
-    public
-    static
-    var feature: Feature.Type { return F.self }
-    
-    //===
-    
-    // let someAppState = Actualization<M.App>(diff)?.state
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Actualization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
-    }
-}
-
 // MARK: - Transition
 
 extension Transition
