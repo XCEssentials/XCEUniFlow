@@ -44,6 +44,9 @@ public
 struct Initialization<F: Feature>: GlobalMutationExt
 {
     static
+    var feature: Feature.Type { return F.self }
+    
+    static
     var kind: FeatureMutationKind { return .addition }
     
     let apply: (GlobalModel) -> GlobalModel
@@ -59,5 +62,29 @@ struct Initialization<F: Feature>: GlobalMutationExt
     {
         self.newState = newState
         self.apply = { $0.store(newState) }
+    }
+    
+    //===
+    
+    /**
+     Usage:
+     
+     ```swift
+     if let someAppState = InitializationOf<M.App>(diff)?.newState
+     ```
+     */
+    public
+    init?(_ diff: GlobalMutation)
+    {
+        guard
+            let mutation = diff as? Initialization<F>
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self = mutation
     }
 }
