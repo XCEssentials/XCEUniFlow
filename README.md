@@ -322,7 +322,7 @@ class View: UIView, DispatcherInitializable
 }
 ```
 
-Note, that observer object works like a key in a dictionary to identify subscription among all other subscriptions. Only one subscription is possible per observer. Every next attempt to setup a subscription for an observer will override previous subscription for this observer.
+Note, that observer object works like a key in a dictionary to identify subscription among all other subscriptions. Only one subscription is possible per observer. Every submit attempt to setup a subscription for an observer will override previous subscription for this observer.
 
 ## Feature modeling
 
@@ -416,13 +416,13 @@ extension Search
 
 In the example above, a special helper static function `initialization` (provided by the library) has been used. It automates many routine checks and operations. This specific helper works with one specific feature state, makes a transition where initial state is undefined and target state is as provided (`Preparing` in our case). This particular function works only with feature states that conform to `SimpleState` protocol. Under the hood it makes all the necessary checks for you - ensures that the feature is NOT presented in global state yet, and then, if everything is good, creates an instance of target state and puts it into global model, or fails action processing otherwise. More on this and other special helpers later.
 
-Next, when user finished input and initiates search process, we need to transition from `Preparing` state into `InProgress` state. Here is an example of how it might be implemented.
+submit, when user finished input and initiates search process, we need to transition from `Preparing` state into `InProgress` state. Here is an example of how it might be implemented.
 
 ```swift
 static
 func begin(with word: String) -> Action
 {
-    return transition(from: Preparing.self, into: InProgress.self) { _, become, next in
+    return transition(from: Preparing.self, into: InProgress.self) { _, become, submit in
             
             become { InProgress(keyword: word) }
             
@@ -432,11 +432,11 @@ func begin(with word: String) -> Action
             
             // do the search here, on background thread most likely
             // when search is finished - return to main thread and
-            // deliver results by submitting another action via 'next' handler
+            // deliver results by submitting another action via 'submit' handler
             
             // ...
             
-            next { finished(with: word, results: list) }
+            submit { finished(with: word, results: list) }
         }
     }
 ```

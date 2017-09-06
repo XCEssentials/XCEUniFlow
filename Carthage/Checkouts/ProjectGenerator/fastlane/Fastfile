@@ -1,0 +1,103 @@
+# Customise this file, documentation can be found here:
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# By default, fastlane will send which actions are used
+# No personal data is shared, more information on https://github.com/fastlane/enhancer
+# Uncomment the following line to opt out
+# opt_out_usage
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version '1.100.0'
+
+default_platform :ios
+
+#===
+
+projName = 'ProjectGenerator'
+projFileName = projName + '.xcodeproj'
+
+#===
+
+platform :ios do
+
+  lane :inc_version_and_commit do
+
+    ensure_git_status_clean
+
+    # ===
+
+    versionNumber = get_version_number(xcodeproj: projFileName)
+    puts 'Current VERSION number: ' + versionNumber
+
+    # === Infer new version number, suppose we are using GitFlow
+
+    currentBranch = git_branch
+
+    if currentBranch.include? 'release/'
+
+      # we are on a release branch
+
+      defaultNewVersion = currentBranch.split('/').last
+
+    else
+
+      # we are NOT on a release branch
+
+      defaultNewVersion = ''
+
+    end
+
+    # === Define new version number
+
+    useInferredNEWVersionNumber = prompt(
+      text: 'Proceed with inferred NEW version number (' + defaultNewVersion + ')?',
+      boolean: true
+    )
+
+    if useInferredNEWVersionNumber
+
+      newVersionNumber = defaultNewVersion
+
+    else
+
+      newVersionNumber = prompt(text: 'New VERSION number:')
+
+    end
+    
+    # === Apply NEW version number and increment build number
+
+    increment_version_number(
+      xcodeproj: projFileName,
+      version_number: newVersionNumber
+    )
+
+    increment_build_number(
+      xcodeproj: projFileName
+    )
+
+    # ===
+
+    newBuildNumber = get_build_number(xcodeproj: projFileName)
+
+    commit_version_bump( # it will fail if more than version bump
+      xcodeproj: projFileName,
+      message: 'Version Bump to ' + newVersionNumber + ' (' + newBuildNumber + ')'
+    )
+
+  end
+
+end
+
+
+
+# More information about multiple platforms in fastlane: https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md

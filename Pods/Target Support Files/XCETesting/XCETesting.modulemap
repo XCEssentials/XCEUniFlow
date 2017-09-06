@@ -1,0 +1,6 @@
+framework module XCETesting {
+  umbrella header "XCETesting-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -22,41 +22,40 @@ default_platform :ios
 
 #===
 
+companyName = 'XCEssentials'
 companyPrefix = 'XCE'
-projName = 'UniFlow'
-projFileName = projName + '.xcodeproj'
-podspecFilePath = './' + companyPrefix + projName + '.podspec'
+repoName = 'UniFlow'
+repoURL = 'https://github.com/' + companyName + '/' + repoName
+moduleName = companyPrefix + repoName
+projName = 'Main' + '.xcodeproj'
+podspecFilePath = './' + moduleName + '.podspec'
 
 #===
 
 platform :ios do
 
-  lane :inc_version_and_commit do
+  lane :finalize_release do
+
+    ensure_git_branch(
+      branch: 'release/*'
+    )
+
+    # ===
 
     ensure_git_status_clean
 
     # ===
 
-    versionNumber = get_version_number(xcodeproj: projFileName)
+    pod_lib_lint
+
+    # ===
+
+    versionNumber = get_version_number(xcodeproj: projName)
     puts 'Current VERSION number: ' + versionNumber
 
     # === Infer new version number
 
-    currentBranch = git_branch
-
-    if currentBranch.include? 'release/'
-
-      # we are on a release branch
-
-      defaultNewVersion = currentBranch.split('/').last
-
-    else
-
-      # we are NOT on a release branch
-
-      defaultNewVersion = ''
-
-    end
+    defaultNewVersion = git_branch.split('/').last
 
     # === Define new version number
 
@@ -78,20 +77,20 @@ platform :ios do
     # === Apply NEW version number and increment build number
 
     increment_version_number(
-      xcodeproj: projFileName,
+      xcodeproj: projName,
       version_number: newVersionNumber
     )
 
     increment_build_number(
-      xcodeproj: projFileName
+      xcodeproj: projName
     )
 
     # ===
 
-    newBuildNumber = get_build_number(xcodeproj: projFileName)
+    newBuildNumber = get_build_number(xcodeproj: projName)
 
     commit_version_bump( # it will fail if more than version bump
-      xcodeproj: projFileName,
+      xcodeproj: projName,
       message: 'Version Bump to ' + newVersionNumber + ' (' + newBuildNumber + ')'
     )
 
@@ -115,12 +114,12 @@ platform :ios do
 
     # === Remember current version and build numbers
 
-    versionNumber = get_version_number(xcodeproj: projFileName)
-    buildNumber = get_build_number(xcodeproj: projFileName)
+    versionNumber = get_version_number(xcodeproj: projName)
+    buildNumber = get_build_number(xcodeproj: projName)
 
     # === Remove completely current project file/folder
     
-    sh 'cd ./.. && rm -r ./' + projFileName
+    sh 'cd ./.. && rm -r ./' + projName
 
     # === Regenerate project
 
@@ -132,14 +131,22 @@ platform :ios do
     # === Set proper current version and build numbers
 
     increment_version_number(
-      xcodeproj: projFileName,
+      xcodeproj: projName,
       version_number: versionNumber
     )
 
     increment_build_number(
-      xcodeproj: projFileName,
+      xcodeproj: projName,
       build_number: buildNumber
     )
+
+    # === Sort all project entries
+
+    sh 'cd ./.. && xcodeproj sort'
+
+    # === Add custom 'Run Script Phase' entries
+
+    sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + projName
 
   end
 
@@ -159,9 +166,17 @@ platform :ios do
     newBuildNumber = prompt(text: 'Desired BUILD number:')
 
     increment_build_number(
-      xcodeproj: projFileName,
+      xcodeproj: projName,
       build_number: newBuildNumber
     )
+
+    # === Sort all project entries
+
+    sh 'cd ./.. && xcodeproj sort'
+
+    # === Add custom 'Run Script Phase' entries
+
+    sh 'cd ./.. && ruby ./Scripts/AfterReGenerateProject.rb ' + projName
 
   end
 

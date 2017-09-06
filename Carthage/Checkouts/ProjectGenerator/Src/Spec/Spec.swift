@@ -1,11 +1,3 @@
-//
-//  Spec.swift
-//  MKHProjGen
-//
-//  Created by Maxim Khatskevich on 3/17/17.
-//  Copyright © 2017 Maxim Khatskevich. All rights reserved.
-//
-
 import Foundation
 
 //===
@@ -35,7 +27,9 @@ enum Spec
     {
         case
             v1_2_1 = "1.2.1",
-            v1_3_0 = "1.3.0"
+            v1_3_0 = "1.3.0",
+            v2_0_0 = "2.0.0",
+            v2_1_0 = "2.1.0"
     }
 }
 

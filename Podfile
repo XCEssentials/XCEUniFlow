@@ -1,8 +1,9 @@
-projName = 'UniFlow'
+repoName = 'UniFlow'
+projName = 'Main'
 
 platform :ios, '8.0'
 
-workspace projName
+workspace repoName
 
 use_frameworks!
 
@@ -10,7 +11,8 @@ use_frameworks!
 
 def sharedPods
 
-	pod 'XCERequirement', '~> 1.4'
+	pod 'XCERequirement', '~> 1.5'
+	pod 'XCEByTypeStorage', :path => './../ByTypeStorage' # , '~> 1.1'
 
 end
 
@@ -34,4 +36,11 @@ target 'Tests' do
 
 	sharedPods
 
+    #===
+    
+    pod 'XCETesting', '~> 1.2'
+
 end
+
+
+

@@ -1,11 +1,3 @@
-//
-//  Spec.1.3.0.swift
-//  MKHProjGen
-//
-//  Created by Maxim Khatskevich on 3/17/17.
-//  Copyright © 2017 Maxim Khatskevich. All rights reserved.
-//
-
 import Foundation
 
 //===
@@ -28,7 +20,7 @@ enum Spec_1_3_0
         
         // https://github.com/workshop/struct/wiki/Spec-format:-v1.3#version-number
         
-        result <<< (idention, Spec.key("version") + " 1.3.0")
+        result <<< (idention, Spec.key("version") + " \(Spec.Format.v1_3_0.rawValue)")
         
         //===
         
@@ -614,9 +606,23 @@ enum Spec_1_3_0
             
             //===
             
-            result <<< processScripts(&idention, regulars: scripts.regulars)
-            result <<< processScripts(&idention, beforeBuild: scripts.beforeBuilds)
-            result <<< processScripts(&idention, afterBuild: scripts.afterBuilds)
+            if
+                !scripts.regulars.isEmpty
+            {
+                result <<< processScripts(&idention, regulars: scripts.regulars)
+            }
+            
+            if
+                !scripts.beforeBuilds.isEmpty
+            {
+                result <<< processScripts(&idention, beforeBuild: scripts.beforeBuilds)
+            }
+            
+            if
+                !scripts.afterBuilds.isEmpty
+            {
+                result <<< processScripts(&idention, afterBuild: scripts.afterBuilds)
+            }
             
             //===
             

@@ -1,0 +1,6 @@
+framework module XCERequirement {
+  umbrella header "XCERequirement-umbrella.h"
+
+  export *
+  module * { export * }
+}
