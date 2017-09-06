@@ -73,7 +73,7 @@ extension Transition
             
             //---
             
-            self = TransitionBetween(oldState, newState)
+            self = Transition<F>.Between(oldState, newState)
         }
     }
 }

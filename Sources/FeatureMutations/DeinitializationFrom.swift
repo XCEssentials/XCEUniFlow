@@ -58,7 +58,7 @@ extension Deinitialization
             guard
                 let mutation = diff as? Deinitialization<S.ParentFeature>,
                 let oldState = mutation.oldState as? S
-                else
+            else
             {
                 return nil
             }
@@ -102,7 +102,7 @@ extension Deinitialization.From
             
             //---
             
-            return Deinitialization(from: oldState)
+            return Deinitialization<F>(from: oldState)
         }
     }
     
@@ -130,7 +130,7 @@ extension Deinitialization.From
             
             //---
             
-            return Deinitialization(from: oldState)
+            return Deinitialization<F>(from: oldState)
         }
     }
 }
