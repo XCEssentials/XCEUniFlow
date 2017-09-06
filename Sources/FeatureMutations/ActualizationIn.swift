@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Actualization
 {
-    struct Of<S: FeatureState> where S.ParentFeature == F
+    struct In<S: FeatureState> where S.ParentFeature == F
         // swiftlint:disable:previous type_name
     {
         public
@@ -66,7 +66,7 @@ extension Actualization
             
             //---
             
-            self = ActualizationOf(state)
+            self = ActualizationIn(state)
         }
     }
 }
@@ -74,12 +74,12 @@ extension Actualization
 //===
 
 public
-typealias ActualizationOf<S: FeatureState> = Actualization<S.ParentFeature>.Of<S>
+typealias ActualizationIn<S: FeatureState> = Actualization<S.ParentFeature>.In<S>
 
 //===
 
 public
-extension Actualization.Of
+extension Actualization.In
 {
     static
     func via(
@@ -103,7 +103,7 @@ extension Actualization.Of
             
             //---
             
-            return Actualization(of: state)
+            return Actualization(in: state)
         }
     }
 }

@@ -42,7 +42,7 @@ extension Arithmetics
     static
     func setExplicit(value: Int) -> Action
     {
-        return actualize.Of<Main>.via { current, _ in
+        return actualize.In<Main>.via { current, _ in
             
             try Require("Current value is != to desired new value").isTrue(
                 
@@ -58,7 +58,7 @@ extension Arithmetics
     static
     func incFive() -> Action
     {
-        return actualize.Of<Main>.via { current, _ in
+        return actualize.In<Main>.via { current, _ in
             
             current.val += 5
         }

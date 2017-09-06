@@ -26,7 +26,7 @@
 		9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC881F5F915C00C838BB /* Subscriptions.swift */; };
 		946964D91F607C4500DE8A62 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946964D81F607C4500DE8A62 /* Operators.swift */; };
 		94930BC81F60889300EB8BBF /* InitializationInto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BC71F60889300EB8BBF /* InitializationInto.swift */; };
-		94930BCA1F608BEA00EB8BBF /* ActualizationOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BC91F608BEA00EB8BBF /* ActualizationOf.swift */; };
+		94930BCA1F608BEA00EB8BBF /* ActualizationIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BC91F608BEA00EB8BBF /* ActualizationIn.swift */; };
 		94930BCC1F60957200EB8BBF /* DeinitializationFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BCB1F60957200EB8BBF /* DeinitializationFrom.swift */; };
 		94930BCE1F60996400EB8BBF /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BCD1F60996400EB8BBF /* ActionContext.swift */; };
 		94930BD01F609ACF00EB8BBF /* TransitionInto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */; };
@@ -97,7 +97,7 @@
 		9421DC911F5F92C300C838BB /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
 		946964D81F607C4500DE8A62 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		94930BC71F60889300EB8BBF /* InitializationInto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationInto.swift; sourceTree = "<group>"; };
-		94930BC91F608BEA00EB8BBF /* ActualizationOf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActualizationOf.swift; sourceTree = "<group>"; };
+		94930BC91F608BEA00EB8BBF /* ActualizationIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActualizationIn.swift; sourceTree = "<group>"; };
 		94930BCB1F60957200EB8BBF /* DeinitializationFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeinitializationFrom.swift; sourceTree = "<group>"; };
 		94930BCD1F60996400EB8BBF /* ActionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionContext.swift; sourceTree = "<group>"; };
 		94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionInto.swift; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = $local;
+			name = "$local";
 			sourceTree = "<group>";
 		};
 		91C96DEB87338EEDC8EDD43A /* Tests */ = {
@@ -202,9 +202,9 @@
 		9421DC7E1F5F915C00C838BB /* Dispatch */ = {
 			isa = PBXGroup;
 			children = (
-				9421DC861F5F915C00C838BB /* GlobalModel.swift */,
 				9421DC7F1F5F915C00C838BB /* ActionProcessing.swift */,
 				9421DC801F5F915C00C838BB /* Dispatcher.swift */,
+				9421DC861F5F915C00C838BB /* GlobalModel.swift */,
 				9421DC841F5F915C00C838BB /* HelperProtocols.swift */,
 				9421DC871F5F915C00C838BB /* ReportingHelpers.swift */,
 				9421DC881F5F915C00C838BB /* Subscriptions.swift */,
@@ -215,17 +215,17 @@
 		9421DC8B1F5F92C300C838BB /* FeatureMutations */ = {
 			isa = PBXGroup;
 			children = (
-				94930BD51F60A00100EB8BBF /* GlobalMutation.swift */,
 				9421DC8C1F5F92C300C838BB /* Actualization.swift */,
-				94930BC91F608BEA00EB8BBF /* ActualizationOf.swift */,
+				94930BC91F608BEA00EB8BBF /* ActualizationIn.swift */,
 				9421DC8D1F5F92C300C838BB /* Deinitialization.swift */,
 				94930BCB1F60957200EB8BBF /* DeinitializationFrom.swift */,
+				94930BD51F60A00100EB8BBF /* GlobalMutation.swift */,
 				9421DC8F1F5F92C300C838BB /* Initialization.swift */,
 				94930BC71F60889300EB8BBF /* InitializationInto.swift */,
 				9421DC901F5F92C300C838BB /* Transition.swift */,
-				94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */,
-				94930BD11F609BEB00EB8BBF /* TransitionFrom.swift */,
 				94930BD31F609CD000EB8BBF /* TransitionBetween.swift */,
+				94930BD11F609BEB00EB8BBF /* TransitionFrom.swift */,
+				94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */,
 				9421DC911F5F92C300C838BB /* Trigger.swift */,
 			);
 			path = FeatureMutations;
@@ -454,18 +454,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				9421DC921F5F9BD600C838BB /* Action.swift in Sources */,
-				94930BD61F60A00100EB8BBF /* GlobalMutation.swift in Sources */,
 				94930BCE1F60996400EB8BBF /* ActionContext.swift in Sources */,
 				9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */,
 				9421DC971F5F9BD900C838BB /* Actualization.swift in Sources */,
-				94930BCA1F608BEA00EB8BBF /* ActualizationOf.swift in Sources */,
+				94930BCA1F608BEA00EB8BBF /* ActualizationIn.swift in Sources */,
 				9421DC9A1F5F9BD900C838BB /* Deinitialization.swift in Sources */,
 				94930BCC1F60957200EB8BBF /* DeinitializationFrom.swift in Sources */,
 				9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */,
 				9421DC931F5F9BD600C838BB /* Feature.swift in Sources */,
 				9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */,
-				94930BD41F609CD000EB8BBF /* TransitionBetween.swift in Sources */,
 				9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
+				94930BD61F60A00100EB8BBF /* GlobalMutation.swift in Sources */,
 				9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */,
 				9421DC961F5F9BD900C838BB /* Initialization.swift in Sources */,
 				94930BC81F60889300EB8BBF /* InitializationInto.swift in Sources */,
@@ -473,8 +472,9 @@
 				9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */,
 				9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */,
 				9421DC981F5F9BD900C838BB /* Transition.swift in Sources */,
-				94930BD01F609ACF00EB8BBF /* TransitionInto.swift in Sources */,
+				94930BD41F609CD000EB8BBF /* TransitionBetween.swift in Sources */,
 				94930BD21F609BEB00EB8BBF /* TransitionFrom.swift in Sources */,
+				94930BD01F609ACF00EB8BBF /* TransitionInto.swift in Sources */,
 				9421DC991F5F9BD900C838BB /* Trigger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -90,7 +90,7 @@ extension Search
     static
     func update(progress: Int) -> Action
     {
-        return actualize.Of<InProgress>.via { current, _ in
+        return actualize.In<InProgress>.via { current, _ in
             
             current.progress = progress
         }
