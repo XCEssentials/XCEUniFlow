@@ -19,12 +19,6 @@ extension Dispatcher.Proxy
             self.dispatcher.process(action)
         }
     }
-
-    public
-    func submit(_ actionGetter: () -> Action)
-    {
-        submit(actionGetter())
-    }
 }
 
 //===
@@ -35,7 +29,7 @@ extension Dispatcher
     {
         do
         {
-            let result = try action.body(model, proxy.submit)
+            let result = try action.body(state.itself, proxy.submit)
             
             //===
             
@@ -45,22 +39,22 @@ extension Dispatcher
             //===
             
             if
-                let (mutation, diff) = result
+                let request = result
             {
-                mutation(&model)
-                
-                middleware
-                    .forEach { $0(diff, model, proxy.submit) }
-                
-                subscriptions
-                    .filter {
-                        
-                        !$0.value.notifyAndKeep(with: diff,
-                                                model: model,
-                                                submit: proxy.submit)
-                    }
-                    .map { $0.key }
-                    .forEach { subscriptions[$0] = nil }
+//                mutation(&model)
+//                
+//                middleware
+//                    .forEach { $0(diff, model, proxy.submit) }
+//                
+//                subscriptions
+//                    .filter {
+//                        
+//                        !$0.value.notifyAndKeep(with: diff,
+//                                                model: model,
+//                                                submit: proxy.submit)
+//                    }
+//                    .map { $0.key }
+//                    .forEach { subscriptions[$0] = nil }
             }
             
             //===

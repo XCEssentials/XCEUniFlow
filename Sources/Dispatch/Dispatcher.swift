@@ -6,9 +6,19 @@ public
 final
 class Dispatcher
 {
+    typealias State =
+        (itself: NewModel, recentChange: NewModel.MutationDiff?)
+    
     // MARK: - Private members
     
-    var model = GlobalModel()
+    var state: State = (NewModel(), nil)
+    {
+        didSet
+        {
+//            state.recentChange
+//                .map{ notifyObservers(with: state.itself, diff: $0) }
+        }
+    }
     
     var middleware: [Middleware] = []
     

@@ -27,7 +27,12 @@ struct InitializationOf<F: Feature>
     //===
     
     public
-    let newState: Any
+    let newState: FeatureRepresentation
+    
+    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    {
+        self.newState = newState
+    }
 }
 
 public
@@ -42,8 +47,7 @@ extension InitializationOf.Into where S: SimpleState
     func automatic(
         scope: String = #file,
         context: String = #function,
-        // submit
-        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -53,17 +57,19 @@ extension InitializationOf.Into where S: SimpleState
                 model >> F.self
             )
             
-            //===
+            //---
             
             let newState = S.init()
             
-            //===
+            //---
             
             completion?(submit)
             
-            //===
+            //---
             
-            return ({ $0 <<  newState}, InitializationOf<F>(newState: newState))
+//            return ({ $0 <<  newState}, InitializationOf<F>(newState: newState))
+//            return [ Store(state: newState) ]
+            return [ InitializationOf(into: newState) ]
         }
     }
 }
@@ -77,8 +83,7 @@ extension InitializationOf.Into
     func via(
         scope: String = #file,
         context: String = #function,
-        // become, submit
-        body: @escaping (Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -88,27 +93,26 @@ extension InitializationOf.Into
                 model >> F.self
             )
             
-            //===
+            //---
             
             var newState: S!
             
-            //===
+            //---
             
-            // http://alisoftware.github.io/swift/closures/2016/07/25/closure-capture-1/
-            // capture 'var' value by reference here!
+            try body({ newState = $0 }, submit)
             
-            try body({ newState = $0() }, submit)
-            
-            //===
+            //---
             
             try Require("New state for \(F.name) is set").isNotNil(
                 
                 newState
             )
             
-            //===
+            //---
             
-            return ({ $0 << newState }, InitializationOf<F>(newState: newState))
+//            return ({ $0 << newState }, InitializationOf<F>(newState: newState))
+//            return [ Store(state: newState) ]
+            return [ InitializationOf(into: newState) ]
         }
     }
 }

@@ -27,7 +27,12 @@ struct DeinitializationOf<F: Feature>
     //===
     
     public
-    let oldState: Any
+    let oldState: FeatureRepresentation
+    
+    init(from oldState: FeatureRepresentation)
+    {
+        self.oldState = oldState
+    }
 }
 
 public
@@ -42,14 +47,13 @@ extension DeinitializationOf
     func automatic(
         scope: String = #file,
         context: String = #function,
-        // submit
-        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
             let oldState =
-                
+            
             try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
@@ -61,7 +65,9 @@ extension DeinitializationOf
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return [ Remove(feature: F.self) ]
+            return [ DeinitializationOf(from: oldState) ]
         }
     }
     
@@ -71,8 +77,7 @@ extension DeinitializationOf
     func prepare(
         scope: String = #file,
         context: String = #function,
-        // model, submit
-        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -90,7 +95,9 @@ extension DeinitializationOf
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return [ Remove(feature: F.self) ]
+            return [ DeinitializationOf(from: oldState) ]
         }
     }
 }
@@ -104,8 +111,7 @@ extension DeinitializationOf.From
     func automatic(
         scope: String = #file,
         context: String = #function,
-        // submit
-        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -123,7 +129,9 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return [ Remove(feature: F.self) ]
+            return [ DeinitializationOf(from: oldState) ]
         }
     }
     
@@ -133,8 +141,7 @@ extension DeinitializationOf.From
     func prepare(
         scope: String = #file,
         context: String = #function,
-        // currentState, submit
-        body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -152,7 +159,9 @@ extension DeinitializationOf.From
             
             //===
             
-            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
+//            return [ Remove(feature: F.self) ]
+            return [ DeinitializationOf(from: oldState) ]
         }
     }
 }

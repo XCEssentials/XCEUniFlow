@@ -24,6 +24,19 @@
  
  */
 
+public
+struct NewModel
+{
+    public
+    init() {}
+    
+    //===
+    
+    typealias Key = String
+    
+    var data = [Key: FeatureRepresentation]()
+}
+
 // MARK: - GET data
 
 public

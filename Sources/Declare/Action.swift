@@ -21,7 +21,7 @@ struct Action
         _ scope: String,
         _ context: String,
         _ type: Any.Type,
-        body: @escaping ActionBody
+        _ body: @escaping ActionBody
         )
     {
         self.scope = scope
@@ -45,20 +45,37 @@ struct Action
 // MARK: Helper types
 
 public
-typealias ActionBody = (
-    _ model: GlobalModel,
-    _ submit: @escaping Wrapped<ActionGetter>
-    )
-    throws -> (Mutations<GlobalModel>, GlobalDiff)?
+typealias ActionBody =
+    (NewModel, @escaping SubmitAction) throws -> [GlobalDiff]?
 
 public
-typealias Wrapped<Value> = (Value) -> Void
+typealias SubmitAction = (Action) -> Void
+
+//===
 
 public
-typealias ActionGetter = () -> Action
+typealias SubmitMutations = ([GlobalDiff]) -> Void
+
+//===
 
 public
-typealias Mutations<Value> = (_: inout Value) -> Void
+typealias Become<S: FeatureState> = (S) -> Void
+
+//===
+
+public
+typealias Mutate<S: FeatureState> = (inout S) -> Void
+
+//===
+
+//public
+//typealias Wrapped<Value> = (Value) -> Void
+//
+//public
+//typealias ActionGetter = () -> Action
+//
+//public
+//typealias Mutations<Value> = (_: inout Value) -> Void
 
 //===
 
@@ -82,22 +99,21 @@ func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
 // MARK: Operators - Pass action to 'submit' handler
 
 public
-func << (submit: Wrapped<ActionGetter>, action: Action)
+func << (submit: SubmitAction, action: Action)
 {
-    submit { action }
+    submit(action)
 }
 
 public
-func << (submit: Wrapped<ActionGetter>, actionGetter: () -> Action)
+func << (submit: SubmitAction, actionGetter: () -> Action)
 {
-    let action = actionGetter()
-    submit { action }
+    submit(actionGetter())
 }
 
 // MARK: Operators - Pass feature state to 'become' handler
 
 public
-func << <S: FeatureState>(become: Wrapped<StateGetter<S>>, state: S)
+func << <S: FeatureState>(become: Become<S>, state: S)
 {
-    become { state }
+    become(state)
 }

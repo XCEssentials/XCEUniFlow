@@ -46,10 +46,18 @@ struct TransitionOf<F: Feature>
     //===
     
     public
-    let oldState: Any
+    let oldState: FeatureRepresentation
     
     public
-    let newState: Any
+    let newState: FeatureRepresentation
+    
+    init<Into>(from oldState: FeatureRepresentation, into newState: Into) where
+        Into: FeatureState,
+        Into.ParentFeature == F
+    {
+        self.oldState = oldState
+        self.newState = newState
+    }
 }
 
 public
@@ -76,8 +84,7 @@ extension TransitionOf.Into
     func via(
         scope: String = #file,
         context: String = #function,
-        // globalModel, become, submit
-        body: @escaping (GlobalModel, Wrapped<StateGetter<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (NewModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -95,7 +102,7 @@ extension TransitionOf.Into
             
             //===
             
-            try body(model, { newState = $0() }, submit)
+            try body(model, { newState = $0 }, submit)
             
             //===
             
@@ -106,10 +113,12 @@ extension TransitionOf.Into
             
             //===
             
-            return (
-                { $0 << newState },
-                TransitionOf<F>(oldState: oldState, newState: newState)
-            )
+//            return (
+//                { $0 << newState },
+//                TransitionOf<F>(oldState: oldState, newState: newState)
+//            )
+//            return [ Store(state: newState) ]
+            return [ TransitionOf(from: oldState, into: newState) ]
         }
     }
 }
@@ -123,8 +132,7 @@ extension TransitionOf.Into where S: SimpleState
     func automatic(
         scope: String = #file,
         context: String = #function,
-        // submit
-        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -146,10 +154,12 @@ extension TransitionOf.Into where S: SimpleState
             
             //===
             
-            return (
-                { $0 << newState },
-                TransitionOf<F>(oldState: oldState, newState: newState)
-            )
+//            return (
+//                { $0 << newState },
+//                TransitionOf<F>(oldState: oldState, newState: newState)
+//            )
+//            return [ Store(state: newState) ]
+            return [ TransitionOf(from: oldState, into: newState) ]
         }
     }
 }
@@ -178,26 +188,12 @@ extension TransitionOf.From
             
             //===
             
-            return (
-                { $0 << newState },
-                TransitionOf<F>(oldState: oldState, newState: newState)
-            )
+//            return (
+//                { $0 << newState },
+//                TransitionOf<F>(oldState: oldState, newState: newState)
+//            )
+            return [ TransitionOf(from: oldState, into: newState) ]
         }
-    }
-    
-    static
-    func into<Into: FeatureState>(
-        scope: String = #file,
-        context: String = #function,
-        newStateGetter: () -> Into
-        ) -> Action
-        where Into.ParentFeature == F
-    {
-        let newState = newStateGetter()
-        
-        //===
-        
-        return into(scope: scope, context: context, newState)
     }
 }
 
@@ -210,8 +206,7 @@ extension TransitionOf.Between where Into: SimpleState
     func automatic(
         scope: String = #file,
         context: String = #function,
-        // submit
-        completion: ((@escaping Wrapped<ActionGetter>) -> Void)? = nil
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -233,10 +228,12 @@ extension TransitionOf.Between where Into: SimpleState
             
             //===
             
-            return (
-                { $0 << newState },
-                TransitionOf<F>(oldState: oldState, newState: newState)
-            )
+//            return (
+//                { $0 << newState },
+//                TransitionOf<F>(oldState: oldState, newState: newState)
+//            )
+//            return [ Store(state: newState) ]
+            return [ TransitionOf(from: oldState, into: newState) ]
         }
     }
 }
@@ -250,8 +247,7 @@ extension TransitionOf.Between
     func via(
         scope: String = #file,
         context: String = #function,
-        // currentState, become, submit
-        body: @escaping (From, Wrapped<StateGetter<Into>>, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -269,7 +265,7 @@ extension TransitionOf.Between
             
             //===
             
-            try body(oldState, { newState = $0() }, submit)
+            try body(oldState, { newState = $0 }, submit)
             
             //===
             
@@ -280,10 +276,12 @@ extension TransitionOf.Between
             
             //===
             
-            return (
-                { $0 << newState },
-                TransitionOf<F>(oldState: oldState, newState: newState)
-            )
+//            return (
+//                { $0 << newState },
+//                TransitionOf<F>(oldState: oldState, newState: newState)
+//            )
+//            return [ Store(state: newState) ]
+            return [ TransitionOf(from: oldState, into: newState) ]
         }
     }
 }

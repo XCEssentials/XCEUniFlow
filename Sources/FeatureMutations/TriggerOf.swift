@@ -6,16 +6,16 @@ public
 extension Feature
 {
     static
-    var trigger: Trigger<Self>.Type
+    var trigger: TriggerOf<Self>.Type
     {
-        return Trigger<Self>.self
+        return TriggerOf<Self>.self
     }
 }
 
 //===
 
 public
-enum Trigger<F: Feature>
+enum TriggerOf<F: Feature>
 {
     public
     enum NoState { }
@@ -37,14 +37,13 @@ enum Trigger<F: Feature>
 //===
 
 public
-extension Trigger.NoState
+extension TriggerOf.NoState
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        // model, submit
-        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -68,14 +67,13 @@ extension Trigger.NoState
 //===
 
 public
-extension Trigger.AnyState
+extension TriggerOf.AnyState
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        // model, submit
-        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -99,14 +97,13 @@ extension Trigger.AnyState
 //===
 
 public
-extension Trigger.In
+extension TriggerOf.In
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        // currentState, submit
-        body: @escaping (S, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in

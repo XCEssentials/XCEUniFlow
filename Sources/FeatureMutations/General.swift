@@ -10,20 +10,20 @@ extension ActionContext
     func action(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (GlobalModel, Wrapped<Mutations<GlobalModel>>, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (NewModel, SubmitMutations, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
-            var updatedModel = model
+            var mutations: [GlobalDiff] = []
             
-            //===
+            //---
             
-            try body(model, { $0(&updatedModel) }, submit)
+            try body(model, { mutations.append(contentsOf: $0) }, submit)
             
-            //===
+            //---
             
-            return ({ $0 = updatedModel }, UnspecifiedMutation())
+            return mutations
         }
     }
     
@@ -33,15 +33,14 @@ extension ActionContext
     func trigger(
         scope: String = #file,
         context: String = #function,
-        // model, submit
-        body: @escaping (GlobalModel, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (NewModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
             try body(model, submit)
             
-            //===
+            //---
             
             return nil
         }

@@ -28,7 +28,12 @@ struct ActualizationOf<F: Feature>
     //===
     
     public
-    let state: Any
+    let state: FeatureRepresentation
+    
+    init<S: FeatureState>(in state: S) where S.ParentFeature == F
+    {
+        self.state = state
+    }
 }
 
 public
@@ -43,26 +48,27 @@ extension ActualizationOf.In
     func via(
         scope: String = #file,
         context: String = #function,
-        // currentState, mutate, submit
-        body: @escaping (S, Wrapped<Mutations<S>>, @escaping Wrapped<ActionGetter>) throws -> Void
+        body: @escaping (S, Mutate<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
             var state =
                 
-            try Require("\(F.name) is in \(S.self) state").isNotNil(
+            try Require("\(S.ParentFeature.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
             )
             
-            //===
+            //---
             
-            try body(state, { $0(&state) }, submit)
+            try body(state, { state = $0 }, submit)
             
-            //===
+            //---
             
-            return ({ $0 << state }, ActualizationOf<F>(state: state))
+//            return ({ $0 << state }, ActualizationOf<F>(state: state))
+//            return [ Store(state: state) ]
+            return [ ActualizationOf(in: state) ]
         }
     }
 }
