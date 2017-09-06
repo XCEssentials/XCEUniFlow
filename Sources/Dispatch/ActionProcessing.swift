@@ -86,7 +86,7 @@ extension Dispatcher
         
         //---
         
-        syncMiddleware(mutation)
+        addMiddlewareIfNeeded(mutation)
         
         //---
         
@@ -94,6 +94,10 @@ extension Dispatcher
             
             $0(state, mutation, proxy.submit)
         }
+        
+        //---
+        
+        removeMiddlewareIfNeeded(mutation)
         
         //---
         
@@ -106,21 +110,27 @@ extension Dispatcher
     
     //===
     
-    func syncMiddleware(_ mutation: GlobalMutationExt)
+    func addMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
     {
         let mutationType = type(of: mutation)
         let key = mutationType.feature.name
         
-        switch mutationType.kind
+        if
+            mutationType.kind == .addition
         {
-            case .addition:
-                middleware[key] = mutationType.feature.middleware
-            
-            case .update:
-                break
-            
-            case .removal:
-                middleware[key] = nil
+            middleware[key] = mutationType.feature.middleware
+        }
+    }
+    
+    func removeMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
+    {
+        let mutationType = type(of: mutation)
+        let key = mutationType.feature.name
+        
+        if
+            mutationType.kind == .removal
+        {
+            middleware[key] = nil
         }
     }
 }
