@@ -1,5 +1,12 @@
 public
-protocol FeatureRepresentation { } // SomeFeatureState ?? AnyFeatureState ??
+protocol FeatureRepresentation // SomeFeatureState ?? AnyFeatureState ??
+{
+    /**
+     Feature to which this mutation is related.
+     */
+    static
+    var feature: Feature.Type { get }
+}
 
 //===
 
@@ -7,6 +14,13 @@ public
 protocol FeatureState: FeatureRepresentation
 {
     associatedtype ParentFeature: Feature
+}
+
+public
+extension FeatureState
+{
+    static
+    var feature: Feature.Type { return ParentFeature.self }
 }
 
 //===

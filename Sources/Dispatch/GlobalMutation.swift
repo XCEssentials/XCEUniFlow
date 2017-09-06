@@ -1,5 +1,5 @@
 public
-protocol GlobalDiff
+protocol GlobalMutation
 {
     /**
      Feature to which this mutation is related.
@@ -8,9 +8,14 @@ protocol GlobalDiff
     var feature: Feature.Type { get }
 }
 
+protocol ApplyDiff
+{
+    var apply: (GlobalModel) -> GlobalModel.MutationResult? { get }
+}
+
 // MARK: - Initialization
 
-extension InitializationOf: GlobalDiff
+extension InitializationOf: GlobalMutation
 {
     public
     static
@@ -21,7 +26,7 @@ extension InitializationOf: GlobalDiff
     // if let someAppState = InitializationOf<M.App>(diff)?.newState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? InitializationOf<F>
@@ -43,7 +48,7 @@ extension InitializationInto
     // if let appRunning = InitializationInto<M.App.Running>(diff)?.newState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? InitializationOf<F>,
@@ -61,7 +66,7 @@ extension InitializationInto
 
 // MARK: - Actualization
 
-extension ActualizationOf: GlobalDiff
+extension ActualizationOf: GlobalMutation
 {
     public
     static
@@ -72,7 +77,7 @@ extension ActualizationOf: GlobalDiff
     // if let someAppState = ActualizationOf<M.App>(diff)?.state
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? ActualizationOf<F>
@@ -94,7 +99,7 @@ extension ActualizationIn
     // if let appRunning = ActualizationIn<M.App.Running>(diff)?.state
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? ActualizationOf<F>,
@@ -112,7 +117,7 @@ extension ActualizationIn
 
 // MARK: - Transition
 
-extension TransitionOf: GlobalDiff
+extension TransitionOf: GlobalMutation
 {
     public
     static
@@ -124,7 +129,7 @@ extension TransitionOf: GlobalDiff
     // if let someNewAppState = TransitionOf<M.App>(diff)?.newState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? TransitionOf<F>
@@ -146,7 +151,7 @@ extension TransitionFrom
     // if let appRunning = TransitionFrom<M.App.Running>(diff)?.oldState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? TransitionOf<S.ParentFeature>,
@@ -169,7 +174,7 @@ extension TransitionInto
     // if let appRunning = TransitionInto<M.App.Running>(diff)?.newState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? TransitionOf<S.ParentFeature>,
@@ -195,7 +200,7 @@ extension TransitionBetween
     // if let appRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.newState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? TransitionOf<From.ParentFeature>,
@@ -216,7 +221,7 @@ extension TransitionBetween
 
 // MARK: Deinitialization
 
-extension DeinitializationOf: GlobalDiff
+extension DeinitializationOf: GlobalMutation
 {
     public
     static
@@ -227,7 +232,7 @@ extension DeinitializationOf: GlobalDiff
     // if let someAppState = DeinitializationOf<M.App>(diff)?.oldState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? DeinitializationOf<F>
@@ -249,7 +254,7 @@ extension DeinitializationFrom
     // if let appRunning = DeinitializationFrom<M.App.Running>(diff)?.oldState
     
     public
-    init?(_ diff: GlobalDiff)
+    init?(_ diff: GlobalMutation)
     {
         guard
             let mutation = diff as? DeinitializationOf<S.ParentFeature>,

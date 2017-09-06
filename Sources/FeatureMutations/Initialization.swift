@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-struct InitializationOf<F: Feature>
+struct InitializationOf<F: Feature>: ApplyDiff
 {
     public
     struct Into<S: FeatureState> where S.ParentFeature == F
@@ -29,9 +29,14 @@ struct InitializationOf<F: Feature>
     public
     let newState: FeatureRepresentation
     
+    let apply: (GlobalModel) -> GlobalModel.MutationResult?
+    
+    //===
+    
     init<S: FeatureState>(into newState: S) where S.ParentFeature == F
     {
         self.newState = newState
+        self.apply = { $0.store(newState) }
     }
 }
 

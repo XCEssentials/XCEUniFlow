@@ -46,7 +46,7 @@ struct Action
 
 public
 typealias ActionBody =
-    (GlobalModel, @escaping SubmitAction) throws -> [GlobalDiff]?
+    (GlobalModel, @escaping SubmitAction) throws -> [GlobalMutation]?
 
 public
 typealias SubmitAction = (Action) -> Void
@@ -54,7 +54,7 @@ typealias SubmitAction = (Action) -> Void
 //===
 
 public
-typealias SubmitMutations = ([GlobalDiff]) -> Void
+typealias SubmitMutations = ([GlobalMutation]) -> Void
 
 //===
 

@@ -42,9 +42,9 @@ struct GlobalModel
 public
 extension GlobalModel
 {
-    func state<S: FeatureState>(ofType _: S.Type) -> S?
+    func state<S: FeatureRepresentation>(ofType _: S.Type) -> S?
     {
-        return data[S.ParentFeature.name] as? S
+        return data[S.feature.name] as? S
     }
 
     func state<F: Feature>(forFeature _: F.Type) -> FeatureRepresentation?
@@ -61,7 +61,7 @@ extension GlobalModel
 
     //===
 
-    func hasState<S: FeatureState>(ofType _: S.Type) -> Bool
+    func hasState<S: FeatureRepresentation>(ofType _: S.Type) -> Bool
     {
         return state(ofType: S.self) != nil
     }
@@ -183,25 +183,25 @@ extension GlobalModel
 extension GlobalModel
 {
     @discardableResult
-    func store<S: FeatureState>(_ state: S?) -> MutationResult
+    func store<S: FeatureRepresentation>(_ state: S) -> MutationResult
     {
         let diff: MutationDiff
 
         if
             hasState(ofType: S.self)
         {
-            diff = .update(S.ParentFeature.self)
+            diff = .update(S.feature.self)
         }
         else
         {
-            diff = .addition(S.ParentFeature.self)
+            diff = .addition(S.feature.self)
         }
 
         //---
 
         var storage = self
 
-        storage.data[S.ParentFeature.name] = state
+        storage.data[S.feature.name] = state
 
         //---
 

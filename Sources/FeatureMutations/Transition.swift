@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-struct TransitionOf<F: Feature>
+struct TransitionOf<F: Feature>: ApplyDiff
 {
     public
     struct Into<S: FeatureState> where S.ParentFeature == F
@@ -51,12 +51,17 @@ struct TransitionOf<F: Feature>
     public
     let newState: FeatureRepresentation
     
+    let apply: (GlobalModel) -> GlobalModel.MutationResult?
+    
+    //===
+    
     init<Into>(from oldState: FeatureRepresentation, into newState: Into) where
         Into: FeatureState,
         Into.ParentFeature == F
     {
         self.oldState = oldState
         self.newState = newState
+        self.apply = { $0.store(newState) }
     }
 }
 

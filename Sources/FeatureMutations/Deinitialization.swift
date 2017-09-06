@@ -15,7 +15,7 @@ extension Feature
 //===
 
 public
-struct DeinitializationOf<F: Feature>
+struct DeinitializationOf<F: Feature>: ApplyDiff
 {
     public
     struct From<S: FeatureState> where S.ParentFeature == F
@@ -29,9 +29,14 @@ struct DeinitializationOf<F: Feature>
     public
     let oldState: FeatureRepresentation
     
+    let apply: (GlobalModel) -> GlobalModel.MutationResult?
+    
+    //===
+    
     init(from oldState: FeatureRepresentation)
     {
         self.oldState = oldState
+        self.apply = { $0.removeRepresentation(ofFeature: F.self) }
     }
 }
 

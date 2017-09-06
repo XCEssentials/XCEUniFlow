@@ -30,9 +30,14 @@ struct ActualizationOf<F: Feature>
     public
     let state: FeatureRepresentation
     
+    let apply: (GlobalModel) -> GlobalModel.MutationResult?
+    
+    //===
+    
     init<S: FeatureState>(in state: S) where S.ParentFeature == F
     {
         self.state = state
+        self.apply = { $0.store(state) }
     }
 }
 

@@ -15,7 +15,7 @@ extension ActionContext
     {
         return Action(scope, context, self) { model, submit in
             
-            var mutations: [GlobalDiff] = []
+            var mutations: [GlobalMutation] = []
             
             //---
             
@@ -23,7 +23,7 @@ extension ActionContext
             
             //---
             
-            return mutations
+            return mutations.isEmpty ? nil : mutations
         }
     }
     
