@@ -14,7 +14,6 @@
 		9421DC921F5F9BD600C838BB /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC741F5F915C00C838BB /* Action.swift */; };
 		9421DC931F5F9BD600C838BB /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC751F5F915C00C838BB /* Feature.swift */; };
 		9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC7C1F5F915C00C838BB /* FeatureState.swift */; };
-		9421DC951F5F9BD900C838BB /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC8E1F5F92C300C838BB /* General.swift */; };
 		9421DC961F5F9BD900C838BB /* Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC8F1F5F92C300C838BB /* Initialization.swift */; };
 		9421DC971F5F9BD900C838BB /* Actualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC8C1F5F92C300C838BB /* Actualization.swift */; };
 		9421DC981F5F9BD900C838BB /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC901F5F92C300C838BB /* Transition.swift */; };
@@ -93,7 +92,6 @@
 		9421DC881F5F915C00C838BB /* Subscriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
 		9421DC8C1F5F92C300C838BB /* Actualization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actualization.swift; sourceTree = "<group>"; };
 		9421DC8D1F5F92C300C838BB /* Deinitialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deinitialization.swift; sourceTree = "<group>"; };
-		9421DC8E1F5F92C300C838BB /* General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		9421DC8F1F5F92C300C838BB /* Initialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Initialization.swift; sourceTree = "<group>"; };
 		9421DC901F5F92C300C838BB /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		9421DC911F5F92C300C838BB /* Trigger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trigger.swift; sourceTree = "<group>"; };
@@ -218,7 +216,6 @@
 				94930BC91F608BEA00EB8BBF /* ActualizationOf.swift */,
 				9421DC8D1F5F92C300C838BB /* Deinitialization.swift */,
 				94930BCB1F60957200EB8BBF /* DeinitializationFrom.swift */,
-				9421DC8E1F5F92C300C838BB /* General.swift */,
 				9421DC8F1F5F92C300C838BB /* Initialization.swift */,
 				94930BC71F60889300EB8BBF /* InitializationInto.swift */,
 				9421DC901F5F92C300C838BB /* Transition.swift */,
@@ -460,7 +457,6 @@
 				9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */,
 				9421DC931F5F9BD600C838BB /* Feature.swift in Sources */,
 				9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */,
-				9421DC951F5F9BD900C838BB /* General.swift in Sources */,
 				9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
 				9421DC9D1F5F9BDC00C838BB /* GlobalMutation.swift in Sources */,
 				9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */,
