@@ -32,16 +32,16 @@ public
 extension Feature
 {
     static
-    var deinitialization: DeinitializationOf<Self>.Type
+    var deinitialize: Deinitialization<Self>.Type
     {
-        return DeinitializationOf<Self>.self
+        return Deinitialization<Self>.self
     }
 }
 
 //===
 
 public
-struct DeinitializationOf<F: Feature>: GlobalMutationExt
+struct Deinitialization<F: Feature>: GlobalMutationExt
 {
     public
     struct From<S: FeatureState> where S.ParentFeature == F
@@ -72,12 +72,12 @@ struct DeinitializationOf<F: Feature>: GlobalMutationExt
 }
 
 public
-typealias DeinitializationFrom<S: FeatureState> = DeinitializationOf<S.ParentFeature>.From<S>
+typealias DeinitializationFrom<S: FeatureState> = Deinitialization<S.ParentFeature>.From<S>
 
 //===
 
 public
-extension DeinitializationOf
+extension Deinitialization
 {
     static
     func automatic(
@@ -101,7 +101,7 @@ extension DeinitializationOf
             
             //---
             
-            return DeinitializationOf(from: oldState)
+            return Deinitialization(from: oldState)
         }
     }
     
@@ -129,7 +129,7 @@ extension DeinitializationOf
             
             //---
             
-            return DeinitializationOf(from: oldState)
+            return Deinitialization(from: oldState)
         }
     }
 }
@@ -137,7 +137,7 @@ extension DeinitializationOf
 //===
 
 public
-extension DeinitializationOf.From
+extension Deinitialization.From
 {
     static
     func automatic(
@@ -161,7 +161,7 @@ extension DeinitializationOf.From
             
             //---
             
-            return DeinitializationOf(from: oldState)
+            return Deinitialization(from: oldState)
         }
     }
     
@@ -189,7 +189,7 @@ extension DeinitializationOf.From
             
             //---
             
-            return DeinitializationOf(from: oldState)
+            return Deinitialization(from: oldState)
         }
     }
 }

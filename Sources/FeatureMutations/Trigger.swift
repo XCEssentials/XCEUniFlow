@@ -32,16 +32,16 @@ public
 extension Feature
 {
     static
-    var trigger: TriggerOf<Self>.Type
+    var trigger: Trigger<Self>.Type
     {
-        return TriggerOf<Self>.self
+        return Trigger<Self>.self
     }
 }
 
 //===
 
 public
-enum TriggerOf<F: Feature>
+enum Trigger<F: Feature>
 {
     public
     enum NoState { }
@@ -63,7 +63,7 @@ enum TriggerOf<F: Feature>
 //===
 
 public
-extension TriggerOf.NoState
+extension Trigger.NoState
 {
     static
     func via(
@@ -93,7 +93,7 @@ extension TriggerOf.NoState
 //===
 
 public
-extension TriggerOf.AnyState
+extension Trigger.AnyState
 {
     static
     func via(
@@ -123,7 +123,7 @@ extension TriggerOf.AnyState
 //===
 
 public
-extension TriggerOf.In
+extension Trigger.In
 {
     static
     func via(

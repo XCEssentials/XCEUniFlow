@@ -32,16 +32,16 @@ public
 extension Feature
 {
     static
-    var actualization: ActualizationOf<Self>.Type
+    var actualize: Actualization<Self>.Type
     {
-        return ActualizationOf<Self>.self
+        return Actualization<Self>.self
     }
 }
 
 //===
 
 public
-struct ActualizationOf<F: Feature>: GlobalMutationExt
+struct Actualization<F: Feature>: GlobalMutationExt
 {
     public
     struct In<S: FeatureState> where S.ParentFeature == F
@@ -73,12 +73,12 @@ struct ActualizationOf<F: Feature>: GlobalMutationExt
 }
 
 public
-typealias ActualizationIn<S: FeatureState> = ActualizationOf<S.ParentFeature>.In<S>
+typealias ActualizationIn<S: FeatureState> = Actualization<S.ParentFeature>.In<S>
 
 //===
 
 public
-extension ActualizationOf.In
+extension Actualization.In
 {
     static
     func via(
@@ -102,7 +102,7 @@ extension ActualizationOf.In
             
             //---
             
-            return ActualizationOf(in: state)
+            return Actualization(in: state)
         }
     }
 }

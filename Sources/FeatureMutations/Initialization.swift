@@ -32,16 +32,16 @@ public
 extension Feature
 {
     static
-    var initialization: InitializationOf<Self>.Type
+    var initialize: Initialization<Self>.Type
     {
-        return InitializationOf<Self>.self
+        return Initialization<Self>.self
     }
 }
 
 //===
 
 public
-struct InitializationOf<F: Feature>: GlobalMutationExt
+struct Initialization<F: Feature>: GlobalMutationExt
 {
     public
     struct Into<S: FeatureState> where S.ParentFeature == F
@@ -72,12 +72,12 @@ struct InitializationOf<F: Feature>: GlobalMutationExt
 }
 
 public
-typealias InitializationInto<S: FeatureState> = InitializationOf<S.ParentFeature>.Into<S>
+typealias InitializationInto<S: FeatureState> = Initialization<S.ParentFeature>.Into<S>
 
 //===
 
 public
-extension InitializationOf.Into where S: SimpleState
+extension Initialization.Into where S: SimpleState
 {
     static
     func automatic(
@@ -103,7 +103,7 @@ extension InitializationOf.Into where S: SimpleState
             
             //---
             
-            return InitializationOf(into: newState)
+            return Initialization(into: newState)
         }
     }
 }
@@ -111,7 +111,7 @@ extension InitializationOf.Into where S: SimpleState
 //===
 
 public
-extension InitializationOf.Into
+extension Initialization.Into
 {
     static
     func via(
@@ -144,7 +144,7 @@ extension InitializationOf.Into
             
             //---
             
-            return InitializationOf(into: newState)
+            return Initialization(into: newState)
         }
     }
 }

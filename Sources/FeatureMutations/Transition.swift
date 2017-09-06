@@ -32,16 +32,16 @@ public
 extension Feature
 {
     static
-    var transition: TransitionOf<Self>.Type
+    var transition: Transition<Self>.Type
     {
-        return TransitionOf<Self>.self
+        return Transition<Self>.self
     }
 }
 
 //===
 
 public
-struct TransitionOf<F: Feature>: GlobalMutationExt
+struct Transition<F: Feature>: GlobalMutationExt
 {
     public
     struct Into<S: FeatureState> where S.ParentFeature == F
@@ -97,16 +97,16 @@ struct TransitionOf<F: Feature>: GlobalMutationExt
 }
 
 public
-typealias TransitionInto<S: FeatureState> = TransitionOf<S.ParentFeature>.Into<S>
+typealias TransitionInto<S: FeatureState> = Transition<S.ParentFeature>.Into<S>
 
 public
-typealias TransitionFrom<S: FeatureState> = TransitionOf<S.ParentFeature>.From<S>
+typealias TransitionFrom<S: FeatureState> = Transition<S.ParentFeature>.From<S>
 
 #if swift(>=3.2)
     
 public
 typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
-    TransitionOf<From.ParentFeature>.Between<From, Into>
+    Transition<From.ParentFeature>.Between<From, Into>
     where From.ParentFeature == Into.ParentFeature
     
 #endif
@@ -114,7 +114,7 @@ typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
 //===
 
 public
-extension TransitionOf.Into
+extension Transition.Into
 {
     static
     func via(
@@ -149,7 +149,7 @@ extension TransitionOf.Into
             
             //---
             
-            return TransitionOf(from: oldState, into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }
@@ -157,7 +157,7 @@ extension TransitionOf.Into
 //===
 
 public
-extension TransitionOf.Into where S: SimpleState
+extension Transition.Into where S: SimpleState
 {
     static
     func automatic(
@@ -185,7 +185,7 @@ extension TransitionOf.Into where S: SimpleState
             
             //---
             
-            return TransitionOf(from: oldState, into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }
@@ -193,7 +193,7 @@ extension TransitionOf.Into where S: SimpleState
 //===
 
 public
-extension TransitionOf.From
+extension Transition.From
 {
     static
     func into<Into: FeatureState>(
@@ -214,7 +214,7 @@ extension TransitionOf.From
             
             //---
             
-            return TransitionOf(from: oldState, into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }
@@ -222,7 +222,7 @@ extension TransitionOf.From
 //===
 
 public
-extension TransitionOf.Between where Into: SimpleState
+extension Transition.Between where Into: SimpleState
 {
     static
     func automatic(
@@ -250,7 +250,7 @@ extension TransitionOf.Between where Into: SimpleState
             
             //---
             
-            return TransitionOf(from: oldState, into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }
@@ -258,7 +258,7 @@ extension TransitionOf.Between where Into: SimpleState
 //===
 
 public
-extension TransitionOf.Between
+extension Transition.Between
 {
     static
     func via(
@@ -293,7 +293,7 @@ extension TransitionOf.Between
             
             //---
             
-            return TransitionOf(from: oldState, into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }

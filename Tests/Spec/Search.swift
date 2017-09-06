@@ -55,7 +55,7 @@ extension M.Search
     static
     func initialize() -> Action
     {
-        return initialization.Into<Ready>.automatic()
+        return initialize.Into<Ready>.automatic()
     }
     
     //===
@@ -93,7 +93,7 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualization.In<InProgress>.via { _, mutate, _ in
+        return actualize.In<InProgress>.via { _, mutate, _ in
             
             _ = 0 // Xcode bug workaround
             
@@ -114,6 +114,6 @@ extension M.Search
     static
     func cleanup() -> Action
     {
-        return deinitialization.From<Failed>.automatic()
+        return deinitialize.From<Failed>.automatic()
     }
 }

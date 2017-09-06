@@ -50,7 +50,7 @@ protocol GlobalMutationExt: GlobalMutation
 
 // MARK: - Initialization
 
-extension InitializationOf
+extension Initialization
 {
     public
     static
@@ -64,7 +64,7 @@ extension InitializationOf
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? InitializationOf<F>
+            let mutation = diff as? Initialization<F>
         else
         {
             return nil
@@ -86,7 +86,7 @@ extension InitializationInto
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? InitializationOf<F>,
+            let mutation = diff as? Initialization<F>,
             let newState = mutation.newState as? S
         else
         {
@@ -101,7 +101,7 @@ extension InitializationInto
 
 // MARK: - Actualization
 
-extension ActualizationOf
+extension Actualization
 {
     public
     static
@@ -109,13 +109,13 @@ extension ActualizationOf
     
     //===
     
-    // if let someAppState = ActualizationOf<M.App>(diff)?.state
+    // if let someAppState = Actualization<M.App>(diff)?.state
     
     public
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? ActualizationOf<F>
+            let mutation = diff as? Actualization<F>
         else
         {
             return nil
@@ -137,7 +137,7 @@ extension ActualizationIn
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? ActualizationOf<F>,
+            let mutation = diff as? Actualization<F>,
             let state = mutation.state as? S
         else
         {
@@ -152,7 +152,7 @@ extension ActualizationIn
 
 // MARK: - Transition
 
-extension TransitionOf
+extension Transition
 {
     public
     static
@@ -167,7 +167,7 @@ extension TransitionOf
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? TransitionOf<F>
+            let mutation = diff as? Transition<F>
         else
         {
             return nil
@@ -189,7 +189,7 @@ extension TransitionFrom
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? TransitionOf<S.ParentFeature>,
+            let mutation = diff as? Transition<S.ParentFeature>,
             let oldState = mutation.oldState as? S
         else
         {
@@ -212,7 +212,7 @@ extension TransitionInto
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? TransitionOf<S.ParentFeature>,
+            let mutation = diff as? Transition<S.ParentFeature>,
             let newState = mutation.newState as? S
         else
         {
@@ -238,7 +238,7 @@ extension TransitionBetween
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? TransitionOf<From.ParentFeature>,
+            let mutation = diff as? Transition<From.ParentFeature>,
             let oldState = mutation.oldState as? From,
             let newState = mutation.newState as? Into
         else
@@ -256,7 +256,7 @@ extension TransitionBetween
 
 // MARK: Deinitialization
 
-extension DeinitializationOf
+extension Deinitialization
 {
     public
     static
@@ -264,13 +264,13 @@ extension DeinitializationOf
     
     //===
     
-    // if let someAppState = DeinitializationOf<M.App>(diff)?.oldState
+    // if let someAppState = Deinitialization<M.App>(diff)?.oldState
     
     public
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? DeinitializationOf<F>
+            let mutation = diff as? Deinitialization<F>
         else
         {
             return nil
@@ -292,7 +292,7 @@ extension DeinitializationFrom
     init?(_ diff: GlobalMutation)
     {
         guard
-            let mutation = diff as? DeinitializationOf<S.ParentFeature>,
+            let mutation = diff as? Deinitialization<S.ParentFeature>,
             let oldState = mutation.oldState as? S
         else
         {

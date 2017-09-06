@@ -30,7 +30,6 @@
 		946964D91F607C4500DE8A62 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946964D81F607C4500DE8A62 /* Operators.swift */; };
 		B685E60037F407D3CE0E2C3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 		C3D9ABD77F5AFD6A8F67A861 /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B963C5720D1093F4F08FB3F /* Arithmetics.swift */; };
-		D6773130857F3D94609D1D05 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4142B908C02F508B7B837D0F /* Aliases.swift */; };
 		D74EF5AAF28A897E24ACAF13 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03186E114271BE51700CA6F9 /* Search.swift */; };
 		FDA7C253BAB8420D6C290EA8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -75,7 +74,6 @@
 		170D95578C5313F01B6F8B37 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		1B963C5720D1093F4F08FB3F /* Arithmetics.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Arithmetics.swift; sourceTree = "<group>"; };
 		39A348AE64DDC3F62111FEFA /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4142B908C02F508B7B837D0F /* Aliases.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		509F6DDCB0B1A14921DEB015 /* Fwk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Fwk.framework; path = XCEUniFlow.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		541FA9F6EB0DE5C17CF1FC7D /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D399AC9179409F657A9CD8 /* Pods_Fwk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Fwk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,7 +239,6 @@
 		F93CCBA4EE1207F54A25CEAF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				4142B908C02F508B7B837D0F /* Aliases.swift */,
 				9421DC731F5F915C00C838BB /* Declare */,
 				9421DC8B1F5F92C300C838BB /* FeatureMutations */,
 				9421DC7E1F5F915C00C838BB /* Dispatch */,
@@ -452,7 +449,6 @@
 				9421DC931F5F9BD600C838BB /* Feature.swift in Sources */,
 				9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
 				9421DC921F5F9BD600C838BB /* Action.swift in Sources */,
-				D6773130857F3D94609D1D05 /* Aliases.swift in Sources */,
 				9421DC961F5F9BD900C838BB /* Initialization.swift in Sources */,
 				9421DC9D1F5F9BDC00C838BB /* GlobalMutation.swift in Sources */,
 				9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */,
