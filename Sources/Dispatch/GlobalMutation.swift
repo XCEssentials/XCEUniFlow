@@ -78,9 +78,9 @@ extension Actualization
 
 //===
 
-extension ActualizationIn
+extension ActualizationOf
 {
-    // if let appRunning = ActualizationIn<M.App.Running>(diff)?.state
+    // if let appRunning = ActualizationOf<M.App.Running>(diff)?.state
     
     public
     init?(_ diff: GlobalMutation)
@@ -95,7 +95,7 @@ extension ActualizationIn
         
         //---
         
-        self = ActualizationIn(state: state)
+        self = ActualizationOf(state: state)
     }
 }
 

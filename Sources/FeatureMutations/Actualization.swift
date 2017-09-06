@@ -44,7 +44,7 @@ public
 struct Actualization<F: Feature>: GlobalMutationExt
 {
     public
-    struct In<S: FeatureState> where S.ParentFeature == F
+    struct Of<S: FeatureState> where S.ParentFeature == F
     // swiftlint:disable:previous type_name
     {
         public
@@ -73,12 +73,12 @@ struct Actualization<F: Feature>: GlobalMutationExt
 }
 
 public
-typealias ActualizationIn<S: FeatureState> = Actualization<S.ParentFeature>.In<S>
+typealias ActualizationOf<S: FeatureState> = Actualization<S.ParentFeature>.Of<S>
 
 //===
 
 public
-extension Actualization.In
+extension Actualization.Of
 {
     static
     func via(
