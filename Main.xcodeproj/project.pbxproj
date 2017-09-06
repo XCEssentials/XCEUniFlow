@@ -33,6 +33,7 @@
 		94930BCE1F60996400EB8BBF /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BCD1F60996400EB8BBF /* ActionContext.swift */; };
 		94930BD01F609ACF00EB8BBF /* TransitionInto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */; };
 		94930BD21F609BEB00EB8BBF /* TransitionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BD11F609BEB00EB8BBF /* TransitionFrom.swift */; };
+		94930BD41F609CD000EB8BBF /* TransitionBetween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BD31F609CD000EB8BBF /* TransitionBetween.swift */; };
 		B685E60037F407D3CE0E2C3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 		C3D9ABD77F5AFD6A8F67A861 /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B963C5720D1093F4F08FB3F /* Arithmetics.swift */; };
 		D74EF5AAF28A897E24ACAF13 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03186E114271BE51700CA6F9 /* Search.swift */; };
@@ -104,6 +105,7 @@
 		94930BCD1F60996400EB8BBF /* ActionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionContext.swift; sourceTree = "<group>"; };
 		94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionInto.swift; sourceTree = "<group>"; };
 		94930BD11F609BEB00EB8BBF /* TransitionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionFrom.swift; sourceTree = "<group>"; };
+		94930BD31F609CD000EB8BBF /* TransitionBetween.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionBetween.swift; sourceTree = "<group>"; };
 		9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				9421DC901F5F92C300C838BB /* Transition.swift */,
 				94930BCF1F609ACF00EB8BBF /* TransitionInto.swift */,
 				94930BD11F609BEB00EB8BBF /* TransitionFrom.swift */,
+				94930BD31F609CD000EB8BBF /* TransitionBetween.swift */,
 				9421DC911F5F92C300C838BB /* Trigger.swift */,
 			);
 			path = FeatureMutations;
@@ -464,6 +467,7 @@
 				9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */,
 				9421DC931F5F9BD600C838BB /* Feature.swift in Sources */,
 				9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */,
+				94930BD41F609CD000EB8BBF /* TransitionBetween.swift in Sources */,
 				9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
 				9421DC9D1F5F9BDC00C838BB /* GlobalMutation.swift in Sources */,
 				9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */,

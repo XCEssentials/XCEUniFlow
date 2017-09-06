@@ -76,32 +76,3 @@ extension Transition
         self = mutation
     }
 }
-
-//===
-
-#if swift(>=3.2)
-    
-extension TransitionBetween
-{
-    // let appPreparing = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.oldState
-    // let appRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.newState
-    
-    public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Transition<From.ParentFeature>,
-            let oldState = mutation.oldState as? From,
-            let newState = mutation.newState as? Into
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = TransitionBetween(oldState: oldState, newState: newState)
-    }
-}
-    
-#endif

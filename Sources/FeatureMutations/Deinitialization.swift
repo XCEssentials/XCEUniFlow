@@ -95,7 +95,7 @@ public
 extension Deinitialization
 {
     static
-    func automatic(
+    func automatically(
         scope: String = #file,
         context: String = #function,
         completion: ((@escaping SubmitAction) -> Void)? = nil

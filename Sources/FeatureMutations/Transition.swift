@@ -24,10 +24,6 @@
  
  */
 
-import XCERequirement
-
-//===
-
 public
 extension Feature
 {
@@ -43,20 +39,6 @@ extension Feature
 public
 struct Transition<F: Feature>: GlobalMutationExt
 {
-    public
-    struct Between<From: FeatureState, Into: FeatureState> where
-        From.ParentFeature == F,
-        Into.ParentFeature == F
-    {
-        public
-        let oldState: From
-        
-        public
-        let newState: Into
-    }
-    
-    //===
-    
     static
     var kind: FeatureMutationKind { return .update }
     
@@ -79,93 +61,5 @@ struct Transition<F: Feature>: GlobalMutationExt
         self.oldState = oldState
         self.newState = newState
         self.apply = { $0.store(newState) }
-    }
-}
-
-#if swift(>=3.2)
-    
-public
-typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
-    Transition<From.ParentFeature>.Between<From, Into>
-    where From.ParentFeature == Into.ParentFeature
-    
-#endif
-
-//===
-
-public
-extension Transition.Between where Into: SimpleState
-{
-    static
-    func automatic(
-        scope: String = #file,
-        context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            let oldState =
-                
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
-                
-                model >> From.self
-            )
-            
-            //---
-            
-            let newState = Into.init()
-            
-            //---
-            
-            completion?(submit)
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
-        }
-    }
-}
-
-//===
-
-public
-extension Transition.Between
-{
-    static
-    func via(
-        scope: String = #file,
-        context: String = #function,
-        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            let oldState =
-                
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
-                
-                model >> From.self
-            )
-            
-            //---
-            
-            var newState: Into!
-            
-            //---
-            
-            try body(oldState, { newState = $0 }, submit)
-            
-            //---
-            
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
-        }
     }
 }
