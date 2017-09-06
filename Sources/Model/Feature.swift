@@ -7,5 +7,5 @@ public
 extension Feature
 {
     static
-    var name: String { return String(reflecting: Self.self) }
+    var name: String { return String(reflecting: self) }
 }

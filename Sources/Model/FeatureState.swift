@@ -1,5 +1,10 @@
 public
-protocol FeatureState
+protocol FeatureRepresentation { } // SomeFeatureState ?? AnyFeatureState ??
+
+//===
+
+public
+protocol FeatureState: FeatureRepresentation
 {
     associatedtype ParentFeature: Feature
 }

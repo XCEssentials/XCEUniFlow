@@ -64,7 +64,33 @@ class Main: XCTestCase
         
         super.tearDown()
     }
-     
+    
+    //===
+    
+//    enum MyF: Feature
+//    {
+//        struct MyS: FeatureState
+//        {
+//            typealias ParentFeature = MyF
+//            
+////            static var key: Any.Type = Int.self
+//        }
+//    }
+//
+//    func testNew()
+//    {
+//        var mut: GlobalMutationRequest = Store(state: MyF.MyS())
+//        
+//        print(mut)
+//        
+//        if
+//            type(of: mut).feature.self is MyF.Type
+//        {
+//            mut = Remove<MyF>()
+//            print(mut)
+//        }
+//    }
+    
     //===
     
     func testArithmetics()
