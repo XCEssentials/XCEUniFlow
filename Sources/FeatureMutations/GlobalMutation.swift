@@ -34,6 +34,8 @@ enum FeatureMutationKind: String
     case addition, update, removal
 }
 
+//===
+
 protocol GlobalMutationExt: GlobalMutation
 {
     /**
@@ -47,4 +49,3 @@ protocol GlobalMutationExt: GlobalMutation
     
     var apply: (GlobalModel) -> GlobalModel { get }
 }
-

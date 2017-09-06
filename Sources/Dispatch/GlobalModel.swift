@@ -148,6 +148,10 @@ extension GlobalModel
 
 extension GlobalModel
 {
+    /*
+ 
+     // This function is not in use anywhere internally and is not supposed for external usage.
+     
     @discardableResult
     func removeState<S: FeatureState>(ofType _: S.Type) -> GlobalModel
     {
@@ -167,6 +171,8 @@ extension GlobalModel
         
         return result
     }
+ 
+     */
 
     //===
 
