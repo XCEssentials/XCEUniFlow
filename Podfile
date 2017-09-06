@@ -11,8 +11,8 @@ use_frameworks!
 
 def sharedPods
 
-	pod 'XCERequirement', '~> 1.4'
-	# pod 'XCEStaticState', '~> 1.2'
+	pod 'XCERequirement', '~> 1.5'
+	pod 'XCEByTypeStorage', :path => './../ByTypeStorage' # , '~> 1.1'
 
 end
 
@@ -38,7 +38,7 @@ target 'Tests' do
 
     #===
     
-    pod 'XCETesting', '~> 1.1'
+    pod 'XCETesting', '~> 1.2'
 
 end
 

@@ -12,11 +12,35 @@ import XCEUniFlow
 
 //===
 
+class Observer: StateObserver
+{
+    let onUpdate: (GlobalModel, GlobalMutation?) -> Void
+    
+    //===
+    
+    init(with onUpdate: @escaping (GlobalModel, GlobalMutation?) -> Void)
+    {
+        self.onUpdate = onUpdate
+    }
+    
+    //===
+    
+    func update(with globalModel: GlobalModel, mutation: GlobalMutation?)
+    {
+        onUpdate(globalModel, mutation)
+    }
+}
+
+//===
+
 class Main: XCTestCase
 {
-    let disp = Dispatcher(defaultReporting: true)
+    let disp = Dispatcher(defaultReporting: .short)
     
-    var proxy: Dispatcher.Proxy!
+    lazy
+    var proxy: Dispatcher.Proxy! = self.disp.proxy
+    
+    var observer: Observer!
     
     //===
     
@@ -33,13 +57,14 @@ class Main: XCTestCase
     override
     func tearDown()
     {
+        observer = nil
         proxy = nil
         
         //===
         
         super.tearDown()
     }
-     
+    
     //===
     
     func testArithmetics()
@@ -48,10 +73,10 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe {
+        observer = Observer { globalModel, _ in
             
             if
-                let a = $0 ==> M.Arithmetics.Main.self
+                let a = Arithmetics.Main.self << globalModel
             {
                 print("The value -->> \(a.val)")
                 
@@ -65,10 +90,11 @@ class Main: XCTestCase
             }
         }
         
+        disp.proxy.subscribe(observer)
+        
         //===
         
-        proxy.submit { M.Arithmetics.begin() } // option 1
-        // proxy.submit(M.Arithmetics.begin)   // option 2
+        proxy << Arithmetics.begin
         
         //===
         
@@ -84,36 +110,39 @@ class Main: XCTestCase
         
         //===
         
-        proxy = disp.proxy.subscribe {
-                
-            if
-                let s = $0 ==> M.Search.self
+        observer = Observer { globalModel, _ in
+            
+            guard
+                Search.presented(in: globalModel)
+            else
             {
-                print("The search -->> \(s)")
-                
-                //===
-                
-                if
-                    let p = s as? M.Search.InProgress,
-                    p.progress == 70
-                {
-                    progressEx.fulfill()
-                }
-                
-                //===
-                
-                if
-                    s is M.Search.Failed
-                {
-                    ex.fulfill()
-                }
+                return
+            }
+            
+            //===
+            
+            if
+                let p = Search.InProgress.from(globalModel),
+                p.progress == 70
+            {
+                progressEx.fulfill()
+            }
+            
+            //===
+            
+            if
+                Search.Failed.presented(in: globalModel)
+            {
+                ex.fulfill()
             }
         }
         
+        disp.proxy.subscribe(observer)
+        
         //===
         
-        proxy.submit { M.Search.initialize() }
-        proxy.submit { M.Search.begin() }
+        proxy << Search.setup
+        proxy << Search.begin
         
         //===
         

@@ -13,96 +13,54 @@ import XCERequirement
 
 //===
 
-extension M
+enum Arithmetics: Feature
 {
-    enum Arithmetics: Feature
-    {
-        struct Main: FeatureState { typealias ParentFeature = Arithmetics
-            
-            var val: Int
-        }
+    struct Main: FeatureState { typealias ParentFeature = Arithmetics
+        
+        var val: Int
     }
 }
 
 //===
 
-extension M.Arithmetics
+extension Arithmetics
 {
     static
     func begin() -> Action
     {
-        return action { model, mutate, submit in
+        return initialize.Into<Main>.via { become, submit in
             
-            try REQ.isNil("Feature is not initialized yet") {
-                
-                model ==> M.Arithmetics.self
-            }
+            become << Main(val: 0)
             
-            //===
+            //---
             
-            mutate { $0 <== Main(val: 0) }
-            
-            //===
-            
-            submit { setExplicit(value: 10) }
-            submit { incFive() }
+            submit << setExplicit(value: 10)
+            submit << incFive
         }
     }
     
     static
     func setExplicit(value: Int) -> Action
     {
-        return action { model, mutate, _ in
+        return actualize.In<Main>.via { current, _ in
             
-            // you have to check at least one precondition to
-            // definitely avoid doing the same action twice:
-            
-            // also you need to put at least something before
-            // writing mutation code
-            // to be able to use short closure notation
-            // (without explicit input parameters type declaration) and
-            // not getting the "parameter may not have 'var' specifier"
-            // LOL Xcode bug, I guess...
-            
-            var a = try REQ.value("Feature is initialized") {
+            try Require("Current value is != to desired new value").isTrue(
                 
-                model ==> Main.self
-            }
+                current.val != value
+            )
             
             //===
             
-            try REQ.isTrue("Current value is not equal to desired new value") {
-                
-                return a.val != value
-            }
-            
-            //===
-            
-            a.val = value
-            
-            //===
-            
-            mutate { $0 <== a }
+            current.val = value
         }
     }
     
     static
     func incFive() -> Action
     {
-        return action { model, mutate, _ in
+        return actualize.In<Main>.via { current, _ in
             
-            var a = try REQ.value("Feature is initialized") {
-                
-                model ==> Main.self
-            }
-            
-            //===
-            
-            a.val += 5
-            
-            //===
-            
-            mutate { $0 <== a }
+            current.val += 5
         }
     }
 }
