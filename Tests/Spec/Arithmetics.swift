@@ -13,36 +13,26 @@ import XCERequirement
 
 //===
 
-extension M
+enum Arithmetics: Feature
 {
-    enum Arithmetics: Feature
-    {
-        struct Main: FeatureState { typealias ParentFeature = Arithmetics
-            
-            var val: Int
-        }
+    struct Main: FeatureState { typealias ParentFeature = Arithmetics
+        
+        var val: Int
     }
 }
 
 //===
 
-enum Actions: ActionContext
+extension Arithmetics
 {
     static
     func begin() -> Action
     {
-        return action { model, mutate, submit in
+        return initialize.Into<Main>.via { become, submit in
             
-            try Require("Feature is not initialized yet").isNil(
-                
-                model >> M.Arithmetics.self
-            )
+            become << Main(val: 0)
             
-            //===
-            
-            mutate { $0 << M.Arithmetics.Main(val: 0) }
-            
-            //===
+            //---
             
             submit << setExplicit(value: 10)
             submit << incFive
@@ -52,57 +42,25 @@ enum Actions: ActionContext
     static
     func setExplicit(value: Int) -> Action
     {
-        return action { model, mutate, _ in
-            
-            // you have to check at least one precondition to
-            // definitely avoid doing the same action twice:
-            
-            // also you need to put at least something before
-            // writing mutation code
-            // to be able to use short closure notation
-            // (without explicit input parameters type declaration) and
-            // not getting the "parameter may not have 'var' specifier"
-            // LOL Xcode bug, I guess...
-            
-            var a = try Require("Feature is initialized").isNotNil(
-                
-                model >> M.Arithmetics.Main.self
-            )
-            
-            //===
+        return actualize.Of<Main>.via { current, _ in
             
             try Require("Current value is != to desired new value").isTrue(
                 
-                a.val != value
+                current.val != value
             )
             
             //===
             
-            a.val = value
-            
-            //===
-            
-            mutate { $0 << a }
+            current.val = value
         }
     }
     
     static
     func incFive() -> Action
     {
-        return action { model, mutate, _ in
+        return actualize.Of<Main>.via { current, _ in
             
-            var a = try Require("Feature is initialized").isNotNil(
-                
-                model >> M.Arithmetics.Main.self
-            )
-            
-            //===
-            
-            a.val += 5
-            
-            //===
-            
-            mutate { $0 << a }
+            current.val += 5
         }
     }
 }

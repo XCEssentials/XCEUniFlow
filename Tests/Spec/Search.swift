@@ -12,50 +12,47 @@ import XCEUniFlow
 
 //===
 
-extension M
+enum Search: Feature
 {
-    enum Search: Feature
-    {
-        // it's a feature, but actual feature params
-        // are split between different feature states,
-        // which will be introduced as nested types
+    // it's a feature, but actual feature params
+    // are split between different feature states,
+    // which will be introduced as nested types
+    
+    //===
+    
+    struct Ready: SimpleState { typealias ParentFeature = Search
         
-        //===
+    }
+    
+    //===
+    
+    struct InProgress: FeatureState { typealias ParentFeature = Search
         
-        struct Ready: SimpleState { typealias ParentFeature = Search
-            
-        }
+        var progress: Int
+    }
+    
+    //===
+    
+    struct Complete: FeatureState { typealias ParentFeature = Search
         
-        //===
+        var results: [String]
+    }
+    
+    //===
+    
+    struct Failed: SimpleState { typealias ParentFeature = Search
         
-        struct InProgress: FeatureState { typealias ParentFeature = Search
-            
-            var progress: Int
-        }
-        
-        //===
-        
-        struct Complete: FeatureState { typealias ParentFeature = Search
-            
-            var results: [String]
-        }
-        
-        //===
-        
-        struct Failed: SimpleState { typealias ParentFeature = Search
-            
-        }
     }
 }
 
 //===
 
-extension M.Search
+extension Search
 {
     static
-    func initialize() -> Action
+    func setup() -> Action
     {
-        return initialize.Into<Ready>.automatic()
+        return initialize.Into<Ready>.automatically()
     }
     
     //===
@@ -93,11 +90,9 @@ extension M.Search
     static
     func update(progress: Int) -> Action
     {
-        return actualize.Of<InProgress>.via { _, mutate, _ in
+        return actualize.Of<InProgress>.via { current, _ in
             
-            _ = 0 // Xcode bug workaround
-            
-            mutate { $0.progress = progress }
+            current.progress = progress
         }
     }
     
@@ -106,7 +101,7 @@ extension M.Search
     static
     func fail() -> Action
     {
-        return transition.Between<InProgress, Failed>.automatic()
+        return transition.Between<InProgress, Failed>.automatically()
     }
     
     //===
@@ -114,6 +109,6 @@ extension M.Search
     static
     func cleanup() -> Action
     {
-        return deinitialize.From<Failed>.automatic()
+        return deinitialize.From<Failed>.automatically()
     }
 }

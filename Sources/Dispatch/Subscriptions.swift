@@ -31,7 +31,7 @@ import Foundation
 public
 protocol StateObserver: class
 {
-    func update(with: GlobalModel, mutation: GlobalMutation?) // @escaping SubmitAction
+    func update(with globalModel: GlobalModel, mutation: GlobalMutation?)
 }
 
 //===

@@ -12,22 +12,22 @@ import XCEUniFlow
 
 //===
 
-class Observer: PassiveObserver
+class Observer: StateObserver
 {
-    let onUpdate: (GlobalMutation, GlobalModel) -> Void
+    let onUpdate: (GlobalModel, GlobalMutation?) -> Void
     
     //===
     
-    init(with onUpdate: @escaping (GlobalMutation, GlobalModel) -> Void)
+    init(with onUpdate: @escaping (GlobalModel, GlobalMutation?) -> Void)
     {
         self.onUpdate = onUpdate
     }
     
     //===
     
-    func update(with diff: GlobalMutation, model: GlobalModel)
+    func update(with globalModel: GlobalModel, mutation: GlobalMutation?)
     {
-        onUpdate(diff, model)
+        onUpdate(globalModel, mutation)
     }
 }
 
@@ -67,42 +67,16 @@ class Main: XCTestCase
     
     //===
     
-//    enum MyF: Feature
-//    {
-//        struct MyS: FeatureState
-//        {
-//            typealias ParentFeature = MyF
-//            
-////            static var key: Any.Type = Int.self
-//        }
-//    }
-//
-//    func testNew()
-//    {
-//        var mut: GlobalMutationRequest = Store(state: MyF.MyS())
-//        
-//        print(mut)
-//        
-//        if
-//            type(of: mut).feature.self is MyF.Type
-//        {
-//            mut = Remove<MyF>()
-//            print(mut)
-//        }
-//    }
-    
-    //===
-    
     func testArithmetics()
     {
         let ex = expectation(description: "After All Actions")
         
         //===
         
-        observer = Observer { _, globalModel in
+        observer = Observer { globalModel, _ in
             
             if
-                let a = M.Arithmetics.Main.self << globalModel
+                let a = Arithmetics.Main.self << globalModel
             {
                 print("The value -->> \(a.val)")
                 
@@ -120,11 +94,7 @@ class Main: XCTestCase
         
         //===
         
-        proxy << Actions.begin
-        
-        // proxy << Actions.begin() // option 2
-        // proxy.submit { Actions.begin() } // option 3
-        // proxy.submit(Actions.begin)   // option 4
+        proxy << Arithmetics.begin
         
         //===
         
@@ -140,11 +110,11 @@ class Main: XCTestCase
         
         //===
         
-        observer = Observer { _, globalModel in
+        observer = Observer { globalModel, _ in
             
             guard
-                M.Search.presented(in: globalModel)
-                else
+                Search.presented(in: globalModel)
+            else
             {
                 return
             }
@@ -152,7 +122,7 @@ class Main: XCTestCase
             //===
             
             if
-                let p = M.Search.InProgress.from(globalModel),
+                let p = Search.InProgress.from(globalModel),
                 p.progress == 70
             {
                 progressEx.fulfill()
@@ -161,7 +131,7 @@ class Main: XCTestCase
             //===
             
             if
-                M.Search.Failed.presented(in: globalModel)
+                Search.Failed.presented(in: globalModel)
             {
                 ex.fulfill()
             }
@@ -171,8 +141,8 @@ class Main: XCTestCase
         
         //===
         
-        proxy << M.Search.initialize
-        proxy << M.Search.begin
+        proxy << Search.setup
+        proxy << Search.begin
         
         //===
         

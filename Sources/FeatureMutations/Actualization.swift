@@ -54,7 +54,7 @@ struct Actualization<F: Feature>: GlobalMutationExt
     
     //===
     
-    init<S: FeatureState>(in state: S) where S.ParentFeature == F
+    init<S: FeatureState>(of state: S) where S.ParentFeature == F
     {
         self.state = state
         self.apply = { $0.store(state) }

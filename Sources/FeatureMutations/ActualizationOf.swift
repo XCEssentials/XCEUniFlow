@@ -85,7 +85,7 @@ extension Actualization.Of
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (S, Mutate<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (inout S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
@@ -99,11 +99,11 @@ extension Actualization.Of
             
             //---
             
-            try body(state, { state = $0 }, submit)
+            try body(&state, submit)
             
             //---
             
-            return Actualization(in: state)
+            return Actualization(of: state)
         }
     }
 }

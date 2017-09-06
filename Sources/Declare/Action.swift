@@ -82,9 +82,3 @@ typealias SubmitAction = (Action) -> Void
 
 public
 typealias Become<S: FeatureState> = (S) -> Void
-
-//===
-
-public
-typealias Mutate<S: FeatureState> = (inout S) -> Void
-
