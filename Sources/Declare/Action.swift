@@ -24,6 +24,11 @@
  
  */
 
+typealias ActionBody =
+    (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
+
+//===
+
 public
 struct Action
 {
@@ -70,18 +75,8 @@ struct Action
 
 //===
 
-typealias ActionBody =
-    (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
-
-//===
-
 public
 typealias SubmitAction = (Action) -> Void
-
-//===
-
-public
-typealias SubmitMutations = ([GlobalMutation]) -> Void
 
 //===
 
@@ -93,43 +88,3 @@ typealias Become<S: FeatureState> = (S) -> Void
 public
 typealias Mutate<S: FeatureState> = (inout S) -> Void
 
-//===
-
-public
-typealias StateGetter<State: FeatureState> = () -> State
-
-// MARK: Operators - Submit action to proxy
-
-public
-func << (proxy: Dispatcher.Proxy, action: Action)
-{
-    proxy.submit(action)
-}
-
-public
-func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
-{
-    proxy.submit(actionGetter())
-}
-
-// MARK: Operators - Pass action to 'submit' handler
-
-public
-func << (submit: SubmitAction, action: Action)
-{
-    submit(action)
-}
-
-public
-func << (submit: SubmitAction, actionGetter: () -> Action)
-{
-    submit(actionGetter())
-}
-
-// MARK: Operators - Pass feature state to 'become' handler
-
-public
-func << <S: FeatureState>(become: Become<S>, state: S)
-{
-    become(state)
-}
