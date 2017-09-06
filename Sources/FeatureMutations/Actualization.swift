@@ -76,8 +76,6 @@ extension ActualizationOf.In
             
             //---
             
-//            return ({ $0 << state }, ActualizationOf<F>(state: state))
-//            return [ Store(state: state) ]
             return ActualizationOf(in: state)
         }
     }

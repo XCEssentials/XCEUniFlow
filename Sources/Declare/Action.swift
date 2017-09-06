@@ -42,10 +42,12 @@ struct Action
     var description: String { return "\(typeDescription) // \(name)" }
 }
 
-// MARK: Helper types
+//===
 
 typealias ActionBody =
     (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
+
+//===
 
 public
 typealias SubmitAction = (Action) -> Void
@@ -64,17 +66,6 @@ typealias Become<S: FeatureState> = (S) -> Void
 
 public
 typealias Mutate<S: FeatureState> = (inout S) -> Void
-
-//===
-
-//public
-//typealias Wrapped<Value> = (Value) -> Void
-//
-//public
-//typealias ActionGetter = () -> Action
-//
-//public
-//typealias Mutations<Value> = (_: inout Value) -> Void
 
 //===
 

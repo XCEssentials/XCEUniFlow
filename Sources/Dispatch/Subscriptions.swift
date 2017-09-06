@@ -82,7 +82,7 @@ extension Dispatcher.Proxy
         let result = Dispatcher.Subscription(with: observer)
         dispatcher.subscriptions[result.identifier] = result
         
-        //===
+        //---
         
         if
             forceUpdateNow
@@ -90,11 +90,13 @@ extension Dispatcher.Proxy
             updateNow(observer)
         }
         
-        //===
+        //---
         
         return result
     }
     
+    //===
+
     public
     func updateNow(_ observer: StateObserver)
     {

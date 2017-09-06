@@ -1,5 +1,5 @@
 public
-protocol FeatureRepresentation // SomeFeatureState ?? AnyFeatureState ??
+protocol FeatureRepresentation
 {
     /**
      Feature to which this mutation is related.
@@ -15,6 +15,8 @@ protocol FeatureState: FeatureRepresentation
 {
     associatedtype ParentFeature: Feature
 }
+
+//===
 
 public
 extension FeatureState

@@ -1,12 +1,5 @@
 public
-protocol GlobalMutation
-{
-//    /**
-//     Feature to which this mutation is related.
-//     */
-//    static
-//    var feature: Feature.Type { get }
-}
+protocol GlobalMutation { }
 
 //===
 
@@ -51,7 +44,7 @@ extension InitializationOf
             return nil
         }
         
-        //===
+        //---
         
         self = mutation
     }
@@ -74,7 +67,7 @@ extension InitializationInto
             return nil
         }
         
-        //===
+        //---
         
         self = InitializationInto(newState: newState)
     }
@@ -102,7 +95,7 @@ extension ActualizationOf
             return nil
         }
         
-        //===
+        //---
         
         self = mutation
     }
@@ -125,7 +118,7 @@ extension ActualizationIn
             return nil
         }
         
-        //===
+        //---
         
         self = ActualizationIn(state: state)
     }
@@ -154,7 +147,7 @@ extension TransitionOf
             return nil
         }
         
-        //===
+        //---
         
         self = mutation
     }
@@ -177,7 +170,7 @@ extension TransitionFrom
             return nil
         }
         
-        //===
+        //---
         
         self = TransitionFrom(oldState: oldState)
     }
@@ -200,7 +193,7 @@ extension TransitionInto
             return nil
         }
         
-        //===
+        //---
         
         self = TransitionInto(newState: newState)
     }
@@ -227,7 +220,7 @@ extension TransitionBetween
             return nil
         }
         
-        //===
+        //---
         
         self = TransitionBetween(oldState: oldState, newState: newState)
     }
@@ -257,7 +250,7 @@ extension DeinitializationOf
             return nil
         }
         
-        //===
+        //---
         
         self = mutation
     }
@@ -280,7 +273,7 @@ extension DeinitializationFrom
             return nil
         }
         
-        //===
+        //---
         
         self = DeinitializationFrom(oldState: oldState)
     }

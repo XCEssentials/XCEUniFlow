@@ -24,19 +24,19 @@ struct DeinitializationOf<F: Feature>: GlobalMutationExt
         let oldState: S
     }
     
-    //===
+    //---
     
     static
     var kind: FeatureMutationKind { return .removal }
     
     let apply: (GlobalModel) -> GlobalModel
     
-    //===
+    //---
     
     public
     let oldState: FeatureRepresentation
     
-    //===
+    //---
     
     init(from oldState: FeatureRepresentation)
     {
@@ -69,14 +69,12 @@ extension DeinitializationOf
                 model >> F.self
             )
             
-            //===
+            //---
             
             completion?(submit)
             
-            //===
+            //---
             
-//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
-//            return [ Remove(feature: F.self) ]
             return DeinitializationOf(from: oldState)
         }
     }
@@ -99,14 +97,12 @@ extension DeinitializationOf
                 model >> F.self
             )
             
-            //===
+            //---
             
             try body(model, submit)
             
-            //===
+            //---
             
-//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
-//            return [ Remove(feature: F.self) ]
             return DeinitializationOf(from: oldState)
         }
     }
@@ -133,14 +129,12 @@ extension DeinitializationOf.From
                 model >> S.self
             )
             
-            //===
+            //---
             
             completion?(submit)
             
-            //===
+            //---
             
-//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
-//            return [ Remove(feature: F.self) ]
             return DeinitializationOf(from: oldState)
         }
     }
@@ -163,14 +157,12 @@ extension DeinitializationOf.From
                 model >> S.self
             )
             
-            //===
+            //---
             
             try body(oldState, submit)
             
-            //===
+            //---
             
-//            return ({ $0 /< F.self }, DeinitializationOf<F>(oldState: oldState))
-//            return [ Remove(feature: F.self) ]
             return DeinitializationOf(from: oldState)
         }
     }

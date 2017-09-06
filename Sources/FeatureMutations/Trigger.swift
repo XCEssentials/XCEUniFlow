@@ -53,11 +53,11 @@ extension TriggerOf.NoState
                 model >> F.self
             )
             
-            //===
+            //---
             
             try body(model, submit)
             
-            //===
+            //---
             
             return nil
         }
@@ -83,11 +83,11 @@ extension TriggerOf.AnyState
                 model >> F.self
             )
             
-            //===
+            //---
             
             try body(model, submit)
             
-            //===
+            //---
             
             return nil
         }
@@ -115,11 +115,11 @@ extension TriggerOf.In
                 model >> S.self
             )
             
-            //===
+            //---
             
             try body(currentState, submit)
             
-            //===
+            //---
             
             return nil
         }

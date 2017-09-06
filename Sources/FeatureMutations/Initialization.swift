@@ -77,8 +77,6 @@ extension InitializationOf.Into where S: SimpleState
             
             //---
             
-//            return ({ $0 <<  newState}, InitializationOf<F>(newState: newState))
-//            return [ Store(state: newState) ]
             return InitializationOf(into: newState)
         }
     }
@@ -120,8 +118,6 @@ extension InitializationOf.Into
             
             //---
             
-//            return ({ $0 << newState }, InitializationOf<F>(newState: newState))
-//            return [ Store(state: newState) ]
             return InitializationOf(into: newState)
         }
     }

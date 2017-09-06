@@ -106,28 +106,23 @@ extension TransitionOf.Into
                 model >> F.self
             )
             
-            //===
+            //---
             
             var newState: S!
             
-            //===
+            //---
             
             try body(model, { newState = $0 }, submit)
             
-            //===
+            //---
             
             try Require("New state for \(F.name) is set").isNotNil(
                 
                 newState
             )
             
-            //===
+            //---
             
-//            return (
-//                { $0 << newState },
-//                TransitionOf<F>(oldState: oldState, newState: newState)
-//            )
-//            return [ Store(state: newState) ]
             return TransitionOf(from: oldState, into: newState)
         }
     }
@@ -154,21 +149,16 @@ extension TransitionOf.Into where S: SimpleState
                 model >> F.self
             )
             
-            //===
+            //---
             
             let newState = S.init()
             
-            //===
+            //---
             
             completion?(submit)
             
-            //===
+            //---
             
-//            return (
-//                { $0 << newState },
-//                TransitionOf<F>(oldState: oldState, newState: newState)
-//            )
-//            return [ Store(state: newState) ]
             return TransitionOf(from: oldState, into: newState)
         }
     }
@@ -196,12 +186,8 @@ extension TransitionOf.From
                 model >> S.self
             )
             
-            //===
+            //---
             
-//            return (
-//                { $0 << newState },
-//                TransitionOf<F>(oldState: oldState, newState: newState)
-//            )
             return TransitionOf(from: oldState, into: newState)
         }
     }
@@ -228,21 +214,16 @@ extension TransitionOf.Between where Into: SimpleState
                 model >> From.self
             )
             
-            //===
+            //---
             
             let newState = Into.init()
             
-            //===
+            //---
             
             completion?(submit)
             
-            //===
+            //---
             
-//            return (
-//                { $0 << newState },
-//                TransitionOf<F>(oldState: oldState, newState: newState)
-//            )
-//            return [ Store(state: newState) ]
             return TransitionOf(from: oldState, into: newState)
         }
     }
@@ -269,28 +250,23 @@ extension TransitionOf.Between
                 model >> From.self
             )
             
-            //===
+            //---
             
             var newState: Into!
             
-            //===
+            //---
             
             try body(oldState, { newState = $0 }, submit)
             
-            //===
+            //---
             
             try Require("New state for \(F.name) is set").isNotNil(
                 
                 newState
             )
             
-            //===
+            //---
             
-//            return (
-//                { $0 << newState },
-//                TransitionOf<F>(oldState: oldState, newState: newState)
-//            )
-//            return [ Store(state: newState) ]
             return TransitionOf(from: oldState, into: newState)
         }
     }

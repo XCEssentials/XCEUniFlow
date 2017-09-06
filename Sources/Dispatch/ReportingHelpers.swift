@@ -22,6 +22,8 @@ extension Dispatcher
         }
     }
     
+    //===
+
     func enableShortDefaultReporting()
     {
         onDidProcessAction = {
@@ -35,6 +37,8 @@ extension Dispatcher
         }
     }
     
+    //===
+
     func resetReporting()
     {
         onDidProcessAction = nil

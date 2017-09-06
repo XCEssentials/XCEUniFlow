@@ -25,6 +25,61 @@ extension Dispatcher.Proxy
 
 extension Dispatcher
 {
+    func process(_ action: Action)
+    {
+        do
+        {
+            if
+                let mutation = try action.body(state, proxy.submit)
+            {
+                // NOTE: if body will throw,
+                // then mutations will not be applied to global model
+                
+                process(mutation)
+            }
+            
+            //---
+            
+            onDidProcessAction?(action)
+        }
+        catch
+        {
+            // action has thrown,
+            // will NOT notify subscribers
+            // about attempt to process this action
+            
+            onDidRejectAction?(action, error)
+        }
+    }
+    
+    //===
+    
+    func process(_ mutation: GlobalMutationExt)
+    {
+        state = mutation.apply(state)
+        
+        //---
+        
+        syncMiddleware(mutation)
+        
+        //---
+        
+        middleware.values.joined().forEach{
+            
+            $0(state, mutation, proxy.submit)
+        }
+        
+        //---
+        
+        // in one pass notify observers and release cancelled subscriptions
+        subscriptions
+            .filter { !$0.value.notifyAndKeep(with: state, mutation: mutation) }
+            .map { $0.key }
+            .forEach { subscriptions[$0] = nil }
+    }
+    
+    //===
+    
     func syncMiddleware(_ mutation: GlobalMutationExt)
     {
         let mutationType = type(of: mutation)
@@ -40,54 +95,6 @@ extension Dispatcher
             
             case .removal:
                 middleware[key] = nil
-        }
-    }
-    
-    func process(_ action: Action)
-    {
-        do
-        {
-            if
-                let mutation = try action.body(state, proxy.submit)
-            {
-                // NOTE: if body will throw,
-                // then mutations will not be applied to global model
-                
-                //---
-                
-                state = mutation.apply(state) // mutation(&model)
-                
-                //---
-                
-                syncMiddleware(mutation)
-                
-                //---
-                
-                middleware.values.joined().forEach{
-                    
-                    $0(state, mutation, proxy.submit)
-                }
-
-                //---
-                
-                // in one pass notify observers and release cancelled subscriptions
-                subscriptions
-                    .filter { !$0.value.notifyAndKeep(with: state, mutation: mutation) }
-                    .map { $0.key }
-                    .forEach { subscriptions[$0] = nil }
-            }
-            
-            //===
-            
-            onDidProcessAction?(action)
-        }
-        catch
-        {
-            // action has thrown,
-            // will NOT notify subscribers
-            // about attempt to process this action
-            
-            onDidRejectAction?(action, error)
         }
     }
 }

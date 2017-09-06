@@ -47,10 +47,14 @@ extension GlobalModel
         return data[S.feature.name] as? S
     }
 
+    //===
+
     func state<F: Feature>(forFeature _: F.Type) -> FeatureRepresentation?
     {
         return data[F.name]
     }
+
+    //===
 
     func state<F, S>(forFeature _: F.Type) -> S? where
         S: FeatureState,
@@ -65,6 +69,8 @@ extension GlobalModel
     {
         return state(ofType: S.self) != nil
     }
+
+    //===
 
     func hasState<F: Feature>(forFeature _: F.Type) -> Bool
     {
@@ -180,30 +186,6 @@ extension GlobalModel
     }
 }
 
-// MARK: - SET data - from FeatureState
-
-//public
-//extension FeatureState
-//{
-//    @discardableResult
-//    func store(in storage: inout GlobalModel) -> Self
-//    {
-//        storage.store(self)
-//
-//        //---
-//
-//        return self
-//    }
-//}
-
-// MARK: - SET data - Operators
-
-//public
-//func << <S: FeatureState>(global: inout GlobalModel, state: S?)
-//{
-//    global.store(state)
-//}
-
 // MARK: - REMOVE data
 
 extension GlobalModel
@@ -228,6 +210,8 @@ extension GlobalModel
         return result
     }
 
+    //===
+
     @discardableResult
     func removeRepresentation<F: Feature>(ofFeature _: F.Type) -> GlobalModel
     {
@@ -248,55 +232,3 @@ extension GlobalModel
         return result
     }
 }
-
-// MARK: - REMOVE data - from Feature
-
-//public
-//extension Feature
-//{
-//    @discardableResult
-//    static
-//    func remove(from storage: inout GlobalModel) -> Self.Type
-//    {
-//        storage.removeRepresentation(ofFeature: self)
-//
-//        //---
-//
-//        return self
-//    }
-//}
-
-// MARK: - REMOVE data - from FeatureState
-
-//public
-//extension FeatureState
-//{
-//    @discardableResult
-//    func remove(from storage: inout GlobalModel) -> Self
-//    {
-//        storage.removeState(ofType: type(of: self))
-//
-//        //---
-//
-//        return self
-//    }
-//
-//    @discardableResult
-//    static
-//    func remove(from storage: inout GlobalModel) -> Self.Type
-//    {
-//        storage.removeState(ofType: self)
-//
-//        //---
-//
-//        return self
-//    }
-//}
-
-// MARK: Operators - REMOVE
-
-//public
-//func /< <F: Feature>(global: inout GlobalModel, _: F.Type)
-//{
-//    global.removeRepresentation(ofFeature: F.self)
-//}
