@@ -78,7 +78,7 @@ typealias TransitionInto<S: FeatureState> = Transition<S.ParentFeature>.Into<S>
 //===
 
 public
-extension Transition.Into where S: SimpleState
+extension Transition.Into where S: AutoInitializable
 {
     static
     func automatically(

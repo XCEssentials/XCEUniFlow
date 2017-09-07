@@ -93,7 +93,7 @@ typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
 //===
 
 public
-extension Transition.Between where Into: SimpleState
+extension Transition.Between where Into: AutoInitializable
 {
     static
     func automatically(

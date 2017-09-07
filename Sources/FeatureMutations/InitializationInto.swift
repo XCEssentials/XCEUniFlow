@@ -78,7 +78,7 @@ typealias InitializationInto<S: FeatureState> = Initialization<S.ParentFeature>.
 //===
 
 public
-extension Initialization.Into where S: SimpleState
+extension Initialization.Into where S: AutoInitializable
 {
     static
     func automatically(
