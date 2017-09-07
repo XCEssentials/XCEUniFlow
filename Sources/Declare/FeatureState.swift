@@ -54,7 +54,12 @@ extension FeatureState
 //===
 
 public
-protocol SimpleState: FeatureState
+protocol AutoInitializable
 {
     init()
 }
+
+//===
+
+public
+protocol FeatureStateAuto: FeatureState, AutoInitializable { }

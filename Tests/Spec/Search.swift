@@ -20,7 +20,7 @@ enum Search: Feature
     
     //===
     
-    struct Ready: SimpleState { typealias ParentFeature = Search
+    struct Ready: FeatureStateAuto { typealias ParentFeature = Search
         
     }
     
@@ -40,7 +40,7 @@ enum Search: Feature
     
     //===
     
-    struct Failed: SimpleState { typealias ParentFeature = Search
+    struct Failed: FeatureStateAuto { typealias ParentFeature = Search
         
     }
 }
