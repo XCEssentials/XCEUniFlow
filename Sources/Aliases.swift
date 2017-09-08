@@ -92,6 +92,8 @@ typealias UFLTransition<F: UFLFeature> = Transition<F>
 public
 typealias UFLTransitionBetween<From: UFLFeatureState, Into: UFLFeatureState> =
     TransitionBetween<From, Into>
+    where
+    From.ParentFeature == Into.ParentFeature
     
 #endif
 
