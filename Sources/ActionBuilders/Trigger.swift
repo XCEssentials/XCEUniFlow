@@ -32,98 +32,41 @@ public
 extension Feature
 {
     static
-    var deinitialize: Deinitialization<Self>.Type
+    var trigger: Trigger<Self>.Type
     {
-        return Deinitialization<Self>.self
+        return Trigger<Self>.self
     }
 }
 
 //===
 
 public
-struct Deinitialization<F: Feature>: GlobalMutationExt
+enum Trigger<F: Feature>
 {
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .removal }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
+    public
+    enum NoState: ActionKind { }
     
     public
-    let oldState: FeatureRepresentation
+    typealias Uninitialized = NoState
     
-    //===
-    
-    init(from oldState: FeatureRepresentation)
-    {
-        self.oldState = oldState
-        self.apply = { $0.removeRepresentation(ofFeature: F.self) }
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Deinitialization<M.App>(diff)?.oldState
-     ```
-     */
     public
-    init?(_ diff: GlobalMutation)
-    {
-        guard
-            let mutation = diff as? Deinitialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
-    }
+    enum AnyState: ActionKind { }
+    
+    public
+    typealias Initialized = AnyState
+    
+    public
+    enum In<S: FeatureState>: ActionKind where S.ParentFeature == F { }
+    // swiftlint:disable:previous type_name
 }
 
-//===
+// MARK: - Action builders
 
 public
-extension Deinitialization
+extension Trigger.NoState
 {
     static
-    func automatically(
-        scope: String = #file,
-        context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            let oldState =
-            
-            try Require("\(F.name) is presented").isNotNil(
-                
-                model >> F.self
-            )
-            
-            //---
-            
-            completion?(submit)
-            
-            //---
-            
-            return Deinitialization<F>(from: oldState)
-        }
-    }
-    
-    //===
-    
-    static
-    func prepare(
+    func via(
         scope: String = #file,
         context: String = #function,
         body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
@@ -131,8 +74,36 @@ extension Deinitialization
     {
         return Action(scope, context, self) { model, submit in
             
-            let oldState =
+            try Require("\(F.name) is NOT presented yet").isNil(
                 
+                model >> F.self
+            )
+            
+            //---
+            
+            try body(model, submit)
+            
+            //---
+            
+            return nil
+        }
+    }
+}
+
+//===
+
+public
+extension Trigger.AnyState
+{
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
             try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
@@ -144,7 +115,39 @@ extension Deinitialization
             
             //---
             
-            return Deinitialization<F>(from: oldState)
+            return nil
+        }
+    }
+}
+
+//===
+
+public
+extension Trigger.In
+{
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (S, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
+            let currentState =
+                
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
+                
+                model >> S.self
+            )
+            
+            //---
+            
+            try body(currentState, submit)
+            
+            //---
+            
+            return nil
         }
     }
 }

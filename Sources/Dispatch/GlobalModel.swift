@@ -27,7 +27,6 @@
 public
 struct GlobalModel
 {
-    public
     init() {}
     
     //===

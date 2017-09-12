@@ -25,49 +25,27 @@
  */
 
 public
-enum DefaultReporting
-{
-    case none, short, verbose
-}
+enum TriggerGlobal: ActionKind { } // Not attached to any feature
 
 //===
 
 public
-extension Dispatcher
+extension ActionContext
 {
-    func enableVerboseDefaultReporting()
+    static
+    func trigger(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        ) -> Action
     {
-        onDidProcessAction = {
+        return Action(scope, context, TriggerGlobal.self) { model, submit in
             
-            print("XCEUniFlow: [+] PROCESSED '\($0.name)' >> '\($0.kindDescription)'")
-        }
-        
-        onDidRejectAction = {
+            try body(model, submit)
             
-            print("XCEUniFlow: [-] REJECTED '\($0.name)' >> '\($0.kindDescription)', reason: \($1)")
-        }
-    }
-    
-    //===
-
-    func enableShortDefaultReporting()
-    {
-        onDidProcessAction = {
+            //---
             
-            print("XCEUniFlow: [+] PROCESSED '\($0.context)' >> '\($0.kindDescription)'")
+            return nil
         }
-        
-        onDidRejectAction = {
-            
-            print("XCEUniFlow: [-] REJECTED '\($0.context)' >>  '\($0.kindDescription)', reason: \($1)")
-        }
-    }
-    
-    //===
-
-    func resetReporting()
-    {
-        onDidProcessAction = nil
-        onDidRejectAction = nil
     }
 }
