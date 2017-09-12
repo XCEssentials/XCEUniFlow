@@ -102,12 +102,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/XCEByTypeStorage/XCEByTypeStorage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/XCERequirement/XCERequirement.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/XCETesting/XCETesting.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/XCEByTypeStorage/XCEByTypeStorage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/XCERequirement/XCERequirement.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/XCETesting/XCETesting.framework"
 fi
