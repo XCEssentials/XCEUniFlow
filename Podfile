@@ -12,7 +12,6 @@ use_frameworks!
 def sharedPods
 
 	pod 'XCERequirement', '~> 1.5'
-	pod 'XCEByTypeStorage', :path => './../ByTypeStorage' # , '~> 1.1'
 
 end
 

@@ -24,8 +24,28 @@
  
  */
 
+//===
+
+public
+typealias SubmitAction = (Action) -> Void
+
+//===
+
+public
+typealias Become<S: FeatureState> = (S) -> Void
+
+//===
+
 typealias ActionBody =
     (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
+
+//===
+
+/**
+ A type that conforms to this protocol has a semantic value and represents a distinctive set of actions.
+ */
+public
+protocol ActionKind { }
 
 //===
 
@@ -39,7 +59,7 @@ struct Action
     let context: String
     
     public
-    let type: Any.Type
+    let kind: ActionKind.Type
     
     //===
     
@@ -47,38 +67,43 @@ struct Action
     
     //===
     
-    // unavailable directly from outside of the module
+    /**
+     NOTE: constructor is unavailable directly from outside of the module!
+     */
     init(
         _ scope: String,
         _ context: String,
-        _ type: Any.Type,
+        _ kind: ActionKind.Type,
         _ body: @escaping ActionBody
         )
     {
         self.scope = scope
         self.context = context
-        self.type = type
+        self.kind = kind
         self.body = body
     }
-    
-    //===
-    
-    public
-    var name: String { return "\(context)@\(scope)" }
-    
-    public
-    var typeDescription: String { return String(reflecting: type) }
-    
-    public
-    var description: String { return "\(typeDescription) // \(name)" }
 }
 
-//===
+// MARK: - Debug helpers
 
 public
-typealias SubmitAction = (Action) -> Void
+extension Action
+{
+    var name: String { return "\(context)@\(scope)" }
+    var kindDescription: String { return String(reflecting: kind) }
+    var description: String { return "\(kindDescription) // \(name)" }
+}
 
-//===
+// MARK: - Direct execution helper (mostly unit tests helper)
 
 public
-typealias Become<S: FeatureState> = (S) -> Void
+extension Action
+{
+    func perform(
+        with currentState: GlobalModel,
+        submitHandler: @escaping SubmitAction
+        ) throws -> GlobalMutation?
+    {
+        return try body(currentState, submitHandler)
+    }
+}

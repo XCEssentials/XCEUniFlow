@@ -29,18 +29,19 @@ import XCERequirement
 //===
 
 public
-extension Transition
+extension Actualization
 {
-    struct Into<S: FeatureState> where S.ParentFeature == F
+    struct In<S: FeatureState>: ActionKind where S.ParentFeature == F
+        // swiftlint:disable:previous type_name
     {
         public
-        let newState: S
+        let state: S
         
         //===
         
-        init(_ newState: S)
+        init(_ state: S)
         {
-            self.newState = newState
+            self.state = state
         }
         
         //===
@@ -49,15 +50,15 @@ extension Transition
          Usage:
          
          ```swift
-         let appRunning = TransitionInto<M.App.Running>(diff)?.newState
+         let appRunning = ActualizationOf<M.App.Running>(diff)?.state
          ```
          */
         public
         init?(_ diff: GlobalMutation)
         {
             guard
-                let mutation = diff as? Transition<S.ParentFeature>,
-                let newState = mutation.newState as? S
+                let mutation = diff as? Actualization<F>,
+                let state = mutation.state as? S
             else
             {
                 return nil
@@ -65,7 +66,7 @@ extension Transition
             
             //---
             
-            self = TransitionInto(newState)
+            self = ActualizationIn(state)
         }
     }
 }
@@ -73,83 +74,36 @@ extension Transition
 //===
 
 public
-typealias TransitionInto<S: FeatureState> = Transition<S.ParentFeature>.Into<S>
+typealias ActualizationIn<S: FeatureState> = Actualization<S.ParentFeature>.In<S>
 
-//===
-
-public
-extension Transition.Into where S: AutoInitializable
-{
-    static
-    func automatically(
-        scope: String = #file,
-        context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            let oldState =
-                
-            try Require("\(F.name) is presented").isNotNil(
-                
-                model >> F.self
-            )
-            
-            //---
-            
-            let newState = S.init()
-            
-            //---
-            
-            completion?(submit)
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
-        }
-    }
-}
-
-//===
+// MARK: - Action builders
 
 public
-extension Transition.Into
+extension Actualization.In
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (inout S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
-            let oldState =
+            var state =
                 
-            try Require("\(F.name) is presented").isNotNil(
+            try Require("\(S.ParentFeature.name) is in \(S.self) state").isNotNil(
                 
-                model >> F.self
+                model >> S.self
             )
             
             //---
             
-            var newState: S!
+            try body(&state, submit)
             
             //---
             
-            try body(model, { newState = $0 }, submit)
-            
-            //---
-            
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
+            return Actualization(in: state)
         }
     }
 }

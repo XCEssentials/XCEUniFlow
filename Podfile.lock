@@ -1,23 +1,16 @@
 PODS:
-  - XCEByTypeStorage (1.1.0)
   - XCERequirement (1.5.0)
   - XCETesting (1.2.0):
     - XCERequirement (~> 1.5)
 
 DEPENDENCIES:
-  - XCEByTypeStorage (from `./../ByTypeStorage`)
   - XCERequirement (~> 1.5)
   - XCETesting (~> 1.2)
 
-EXTERNAL SOURCES:
-  XCEByTypeStorage:
-    :path: ./../ByTypeStorage
-
 SPEC CHECKSUMS:
-  XCEByTypeStorage: d681c54b468283191bf41a21d229bb5319d33d39
   XCERequirement: e7a066e283e06b72463c924bee2e736494d057d7
   XCETesting: d675bc94b51d9deff7c628b0e77aebdac306e591
 
-PODFILE CHECKSUM: 54457c160b28c3f49bd2e60405bbad6e6a7e465f
+PODFILE CHECKSUM: 13c7f9bbe55ecc35523c15eaa765fdf187bfa3aa
 
 COCOAPODS: 1.3.1

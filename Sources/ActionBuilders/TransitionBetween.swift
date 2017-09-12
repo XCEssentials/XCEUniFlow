@@ -29,17 +29,23 @@ import XCERequirement
 //===
 
 public
-extension Initialization
+extension Transition
 {
-    struct Into<S: FeatureState> where S.ParentFeature == F
+    struct Between<From: FeatureState, Into: FeatureState>: ActionKind where
+        From.ParentFeature == F,
+        Into.ParentFeature == F
     {
         public
-        let newState: S
+        let oldState: From
+        
+        public
+        let newState: Into
         
         //===
         
-        init(_ newState: S)
+        init(_ oldState: From, _ newState: Into)
         {
+            self.oldState = oldState
             self.newState = newState
         }
         
@@ -49,15 +55,17 @@ extension Initialization
          Usage:
          
          ```swift
-         let appRunning = InitializationInto<M.App.Running>(diff)?.newState
+         let appPreparing = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.oldState
+         let appRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.newState
          ```
          */
         public
         init?(_ diff: GlobalMutation)
         {
             guard
-                let mutation = diff as? Initialization<F>,
-                let newState = mutation.newState as? S
+                let mutation = diff as? Transition<From.ParentFeature>,
+                let oldState = mutation.oldState as? From,
+                let newState = mutation.newState as? Into
             else
             {
                 return nil
@@ -65,20 +73,27 @@ extension Initialization
             
             //---
             
-            self = InitializationInto(newState)
+            self = Transition<F>.Between(oldState, newState)
         }
     }
 }
 
 //===
 
+#if swift(>=3.2)
+    
 public
-typealias InitializationInto<S: FeatureState> = Initialization<S.ParentFeature>.Into<S>
+typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
+    Transition<From.ParentFeature>.Between<From, Into>
+    where
+    From.ParentFeature == Into.ParentFeature
+    
+#endif
 
-//===
+// MARK: - Action builders
 
 public
-extension Initialization.Into where S: AutoInitializable
+extension Transition.Between where Into: AutoInitializable
 {
     static
     func automatically(
@@ -89,14 +104,16 @@ extension Initialization.Into where S: AutoInitializable
     {
         return Action(scope, context, self) { model, submit in
             
-            try Require("\(F.name) is NOT initialized yet").isNil(
+            let oldState =
                 
-                model >> F.self
+            try Require("\(F.name) is in \(From.self) state").isNotNil(
+                
+                model >> From.self
             )
             
             //---
             
-            let newState = S.init()
+            let newState = Into.init()
             
             //---
             
@@ -104,7 +121,7 @@ extension Initialization.Into where S: AutoInitializable
             
             //---
             
-            return Initialization(into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }
@@ -112,29 +129,31 @@ extension Initialization.Into where S: AutoInitializable
 //===
 
 public
-extension Initialization.Into
+extension Transition.Between
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
-            try Require("\(F.name) is NOT initialized yet").isNil(
+            let oldState =
                 
-                model >> F.self
+            try Require("\(F.name) is in \(From.self) state").isNotNil(
+                
+                model >> From.self
             )
             
             //---
             
-            var newState: S!
+            var newState: Into!
             
             //---
             
-            try body({ newState = $0 }, submit)
+            try body(oldState, { newState = $0 }, submit)
             
             //---
             
@@ -145,7 +164,7 @@ extension Initialization.Into
             
             //---
             
-            return Initialization(into: newState)
+            return Transition(from: oldState, into: newState)
         }
     }
 }

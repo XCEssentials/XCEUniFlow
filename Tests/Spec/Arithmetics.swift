@@ -34,8 +34,8 @@ extension Arithmetics
             
             //---
             
-            submit << setExplicit(value: 10)
-            submit << incFive
+            submit << [ setExplicit(value: 10),
+                        incFive() ]
         }
     }
     

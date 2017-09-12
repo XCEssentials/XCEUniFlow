@@ -31,21 +31,15 @@ import XCERequirement
 public
 extension Transition
 {
-    struct Between<From: FeatureState, Into: FeatureState> where
-        From.ParentFeature == F,
-        Into.ParentFeature == F
+    struct Into<S: FeatureState>: ActionKind where S.ParentFeature == F
     {
         public
-        let oldState: From
-        
-        public
-        let newState: Into
+        let newState: S
         
         //===
         
-        init(_ oldState: From, _ newState: Into)
+        init(_ newState: S)
         {
-            self.oldState = oldState
             self.newState = newState
         }
         
@@ -55,17 +49,15 @@ extension Transition
          Usage:
          
          ```swift
-         let appPreparing = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.oldState
-         let appRunning = TransitionBetween<M.App.Preparing, M.App.Running>(diff)?.newState
+         let appRunning = TransitionInto<M.App.Running>(diff)?.newState
          ```
          */
         public
         init?(_ diff: GlobalMutation)
         {
             guard
-                let mutation = diff as? Transition<From.ParentFeature>,
-                let oldState = mutation.oldState as? From,
-                let newState = mutation.newState as? Into
+                let mutation = diff as? Transition<S.ParentFeature>,
+                let newState = mutation.newState as? S
             else
             {
                 return nil
@@ -73,27 +65,20 @@ extension Transition
             
             //---
             
-            self = Transition<F>.Between(oldState, newState)
+            self = TransitionInto(newState)
         }
     }
 }
 
 //===
 
-#if swift(>=3.2)
-    
 public
-typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
-    Transition<From.ParentFeature>.Between<From, Into>
-    where
-    From.ParentFeature == Into.ParentFeature
-    
-#endif
+typealias TransitionInto<S: FeatureState> = Transition<S.ParentFeature>.Into<S>
 
-//===
+// MARK: - Action builders
 
 public
-extension Transition.Between where Into: AutoInitializable
+extension Transition.Into where S: AutoInitializable
 {
     static
     func automatically(
@@ -106,14 +91,14 @@ extension Transition.Between where Into: AutoInitializable
             
             let oldState =
                 
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
+            try Require("\(F.name) is presented").isNotNil(
                 
-                model >> From.self
+                model >> F.self
             )
             
             //---
             
-            let newState = Into.init()
+            let newState = S.init()
             
             //---
             
@@ -129,31 +114,31 @@ extension Transition.Between where Into: AutoInitializable
 //===
 
 public
-extension Transition.Between
+extension Transition.Into
 {
     static
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
+            try Require("\(F.name) is presented").isNotNil(
                 
-                model >> From.self
+                model >> F.self
             )
             
             //---
             
-            var newState: Into!
+            var newState: S!
             
             //---
             
-            try body(oldState, { newState = $0 }, submit)
+            try body(model, { newState = $0 }, submit)
             
             //---
             

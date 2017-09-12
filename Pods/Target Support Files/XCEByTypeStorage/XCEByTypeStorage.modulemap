@@ -1,6 +1,0 @@
-framework module XCEByTypeStorage {
-  umbrella header "XCEByTypeStorage-umbrella.h"
-
-  export *
-  module * { export * }
-}
