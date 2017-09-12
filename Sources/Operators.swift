@@ -77,9 +77,25 @@ func << (proxy: Dispatcher.Proxy, action: Action)
 //===
 
 public
+func << (proxy: Dispatcher.Proxy, actions: [Action])
+{
+    actions.forEach{ proxy.submit($0) }
+}
+
+//===
+
+public
 func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
 {
     proxy.submit(actionGetter())
+}
+
+//===
+
+public
+func << (proxy: Dispatcher.Proxy, actionGetters: [() -> Action])
+{
+    actionGetters.forEach{ proxy.submit($0()) }
 }
 
 // MARK: - Pass action to 'submit' handler
@@ -88,6 +104,22 @@ public
 func << (submit: SubmitAction, action: Action)
 {
     submit(action)
+}
+
+//===
+
+public
+func << (submit: SubmitAction, actions: [Action])
+{
+    actions.forEach{ submit($0) }
+}
+
+//===
+
+public
+func << (submit: SubmitAction, actionGetters: [() -> Action])
+{
+    actionGetters.forEach{ submit($0()) }
 }
 
 //===

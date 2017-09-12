@@ -39,12 +39,12 @@ extension Dispatcher
     {
         onDidProcessAction = {
             
-            print("XCEUniFlow: [+] PROCESSED '\($0.name)' >> '\($0.typeDescription)'")
+            print("XCEUniFlow: [+] PROCESSED '\($0.name)' >> '\($0.kindDescription)'")
         }
         
         onDidRejectAction = {
             
-            print("XCEUniFlow: [-] REJECTED '\($0.name)' >> '\($0.typeDescription)', reason: \($1)")
+            print("XCEUniFlow: [-] REJECTED '\($0.name)' >> '\($0.kindDescription)', reason: \($1)")
         }
     }
     
@@ -54,12 +54,12 @@ extension Dispatcher
     {
         onDidProcessAction = {
             
-            print("XCEUniFlow: [+] PROCESSED '\($0.context)' >> '\($0.typeDescription)'")
+            print("XCEUniFlow: [+] PROCESSED '\($0.context)' >> '\($0.kindDescription)'")
         }
         
         onDidRejectAction = {
             
-            print("XCEUniFlow: [-] REJECTED '\($0.context)' >>  '\($0.typeDescription)', reason: \($1)")
+            print("XCEUniFlow: [-] REJECTED '\($0.context)' >>  '\($0.kindDescription)', reason: \($1)")
         }
     }
     

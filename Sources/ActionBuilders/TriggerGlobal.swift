@@ -24,50 +24,28 @@
  
  */
 
-infix operator /<
-
-// MARK: - GET operators
-
 public
-func << <T: Storable>(_: T.Type, storage: ByTypeStorage) -> T?
-{
-    return storage.value(of: T.self)
-}
+enum TriggerGlobal: ActionKind { } // Not attached to any feature
 
 //===
 
 public
-func << <T: Storable>(target: inout T?, pair: (T.Type, ByTypeStorage))
+extension ActionContext
 {
-    target = pair.1.value(of: T.self)
-}
-
-//===
-
-public
-func >> <T: Storable>(storage: ByTypeStorage, _: T.Type) -> T?
-{
-    return storage.value(of: T.self)
-}
-
-// MARK: - SET operators
-
-public
-func << <T: Storable>(storage: ByTypeStorage, value: T?)
-{
-    storage.storeValue(value)
-}
-
-public
-func >> <T: Storable>(value: T?, storage: ByTypeStorage)
-{
-    storage.storeValue(value)
-}
-
-// MARK: - REMOVE operators
-
-public
-func /< <T: Storable>(storage: ByTypeStorage, _: T.Type)
-{
-    storage.removeValue(of: T.self)
+    static
+    func trigger(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, TriggerGlobal.self) { model, submit in
+            
+            try body(model, submit)
+            
+            //---
+            
+            return nil
+        }
+    }
 }

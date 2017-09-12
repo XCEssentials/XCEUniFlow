@@ -29,97 +29,101 @@ import XCERequirement
 //===
 
 public
-extension ActionContext
-{
-    static
-    func trigger(
-        scope: String = #file,
-        context: String = #function,
-        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            try body(model, submit)
-            
-            //---
-            
-            return nil
-        }
-    }
-}
-
-//===
-
-public
 extension Feature
 {
     static
-    var trigger: Trigger<Self>.Type
+    var deinitialize: Deinitialization<Self>.Type
     {
-        return Trigger<Self>.self
+        return Deinitialization<Self>.self
     }
 }
 
 //===
 
 public
-enum Trigger<F: Feature>
-{
-    public
-    enum NoState { }
-    
-    public
-    typealias Uninitialized = NoState
-    
-    public
-    enum AnyState { }
-    
-    public
-    typealias Initialized = AnyState
-    
-    public
-    enum In<S: FeatureState> where S.ParentFeature == F { }
-    // swiftlint:disable:previous type_name
-}
-
-//===
-
-public
-extension Trigger.NoState
+struct Deinitialization<F: Feature>: GlobalMutationExt, ActionKind
 {
     static
-    func via(
+    var feature: Feature.Type { return F.self }
+    
+    static
+    var kind: FeatureMutationKind { return .removal }
+    
+    let apply: (GlobalModel) -> GlobalModel
+    
+    //===
+    
+    public
+    let oldState: FeatureRepresentation
+    
+    //===
+    
+    init(from oldState: FeatureRepresentation)
+    {
+        self.oldState = oldState
+        self.apply = { $0.removeRepresentation(ofFeature: F.self) }
+    }
+    
+    //===
+    
+    /**
+     Usage:
+     
+     ```swift
+     let someAppState = Deinitialization<M.App>(diff)?.oldState
+     ```
+     */
+    public
+    init?(_ diff: GlobalMutation)
+    {
+        guard
+            let mutation = diff as? Deinitialization<F>
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self = mutation
+    }
+}
+
+// MARK: - Action builders
+
+public
+extension Deinitialization
+{
+    static
+    func automatically(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self) { model, submit in
             
-            try Require("\(F.name) is NOT presented yet").isNil(
+            let oldState =
+            
+            try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
             )
             
             //---
             
-            try body(model, submit)
+            completion?(submit)
             
             //---
             
-            return nil
+            return Deinitialization<F>(from: oldState)
         }
     }
-}
-
-//===
-
-public
-extension Trigger.AnyState
-{
+    
+    //===
+    
     static
-    func via(
+    func prepare(
         scope: String = #file,
         context: String = #function,
         body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
@@ -127,6 +131,8 @@ extension Trigger.AnyState
     {
         return Action(scope, context, self) { model, submit in
             
+            let oldState =
+                
             try Require("\(F.name) is presented").isNotNil(
                 
                 model >> F.self
@@ -138,39 +144,7 @@ extension Trigger.AnyState
             
             //---
             
-            return nil
-        }
-    }
-}
-
-//===
-
-public
-extension Trigger.In
-{
-    static
-    func via(
-        scope: String = #file,
-        context: String = #function,
-        body: @escaping (S, @escaping SubmitAction) throws -> Void
-        ) -> Action
-    {
-        return Action(scope, context, self) { model, submit in
-            
-            let currentState =
-                
-            try Require("\(F.name) is in \(S.self) state").isNotNil(
-                
-                model >> S.self
-            )
-            
-            //---
-            
-            try body(currentState, submit)
-            
-            //---
-            
-            return nil
+            return Deinitialization<F>(from: oldState)
         }
     }
 }

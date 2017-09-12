@@ -29,9 +29,9 @@ import XCERequirement
 //===
 
 public
-extension Transition
+extension Deinitialization
 {
-    struct From<S: FeatureState> where S.ParentFeature == F
+    struct From<S: FeatureState>: ActionKind where S.ParentFeature == F
     {
         public
         let oldState: S
@@ -49,14 +49,14 @@ extension Transition
          Usage:
          
          ```swift
-         let appRunning = TransitionFrom<M.App.Running>(diff)?.oldState
+         let appRunning = DeinitializationFrom<M.App.Running>(diff)?.oldState
          ```
          */
         public
         init?(_ diff: GlobalMutation)
         {
             guard
-                let mutation = diff as? Transition<S.ParentFeature>,
+                let mutation = diff as? Deinitialization<S.ParentFeature>,
                 let oldState = mutation.oldState as? S
             else
             {
@@ -65,7 +65,7 @@ extension Transition
             
             //---
             
-            self = TransitionFrom(oldState)
+            self = DeinitializationFrom(oldState)
         }
     }
 }
@@ -73,22 +73,21 @@ extension Transition
 //===
 
 public
-typealias TransitionFrom<S: FeatureState> = Transition<S.ParentFeature>.From<S>
+typealias DeinitializationFrom<S: FeatureState> = Deinitialization<S.ParentFeature>.From<S>
 
-//===
+// MARK: - Action builders
 
 public
-extension Transition.From
+extension Deinitialization.From
 {
     static
-    func into<Into: FeatureState>(
+    func automatically(
         scope: String = #file,
         context: String = #function,
-        _ newState: Into
+        completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
-        where Into.ParentFeature == F
     {
-        return Action(scope, context, self) { model, _ in
+        return Action(scope, context, self) { model, submit in
             
             let oldState =
                 
@@ -99,7 +98,39 @@ extension Transition.From
             
             //---
             
-            return Transition(from: oldState, into: newState)
+            completion?(submit)
+            
+            //---
+            
+            return Deinitialization<F>(from: oldState)
+        }
+    }
+    
+    //===
+    
+    static
+    func prepare(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (S, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return Action(scope, context, self) { model, submit in
+            
+            let oldState =
+                
+            try Require("\(F.name) is in \(S.self) state").isNotNil(
+                
+                model >> S.self
+            )
+            
+            //---
+            
+            try body(oldState, submit)
+            
+            //---
+            
+            return Deinitialization<F>(from: oldState)
         }
     }
 }
