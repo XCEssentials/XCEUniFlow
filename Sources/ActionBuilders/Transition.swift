@@ -77,10 +77,10 @@ struct Transition<F: Feature>: GlobalMutationExt
      ```
      */
     public
-    init?(_ diff: GlobalMutation)
+    init?(_ mutation: GlobalMutation)
     {
         guard
-            let mutation = diff as? Transition<F>
+            let mutation = mutation as? Transition<F>
         else
         {
             return nil

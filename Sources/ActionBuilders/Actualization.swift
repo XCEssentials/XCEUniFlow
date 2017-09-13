@@ -37,7 +37,7 @@ extension Feature
 //===
 
 public
-struct Actualization<F: Feature>: GlobalMutationExt
+struct Actualization<F: Feature>: GlobalMutationExt, MutationConvertible
 {
     static
     var feature: Feature.Type { return F.self }
@@ -70,7 +70,7 @@ struct Actualization<F: Feature>: GlobalMutationExt
      ```
      */
     public
-    init?(_ diff: GlobalMutation)
+    init?(_ mutation: GlobalMutation)
     {
         guard
             let mutation = diff as? Actualization<F>

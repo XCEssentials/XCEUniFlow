@@ -53,10 +53,10 @@ extension Transition
          ```
          */
         public
-        init?(_ diff: GlobalMutation)
+        init?(_ mutation: GlobalMutation)
         {
             guard
-                let mutation = diff as? Transition<S.ParentFeature>,
+                let mutation = mutation as? Transition<S.ParentFeature>,
                 let oldState = mutation.oldState as? S
             else
             {

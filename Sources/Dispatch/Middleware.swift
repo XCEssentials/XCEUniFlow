@@ -25,62 +25,11 @@
  */
 
 public
-extension Feature
+extension Dispatcher
 {
-    static
-    var initialize: Initialization<Self>.Type
-    {
-        return Initialization<Self>.self
-    }
+    typealias Middleware = (GlobalModel, GlobalMutation, SubmitAction) -> Void
 }
 
 //===
 
-public
-struct Initialization<F: Feature>: GlobalMutationExt, MutationConvertible
-{
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .addition }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
-    
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
-    {
-        self.newState = newState
-        self.apply = { $0.store(newState) }
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
-    }
-}
+

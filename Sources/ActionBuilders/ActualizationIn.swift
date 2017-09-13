@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Actualization
 {
-    struct In<S: FeatureState>: ActionKind where S.ParentFeature == F
+    struct In<S: FeatureState>: MutationConvertible where S.ParentFeature == F
         // swiftlint:disable:previous type_name
     {
         public
@@ -54,10 +54,10 @@ extension Actualization
          ```
          */
         public
-        init?(_ diff: GlobalMutation)
+        init?(_ mutation: GlobalMutation)
         {
             guard
-                let mutation = diff as? Actualization<F>,
+                let mutation = mutation as? Actualization<F>,
                 let state = mutation.state as? S
             else
             {

@@ -41,7 +41,7 @@ extension Feature
 //===
 
 public
-struct Deinitialization<F: Feature>: GlobalMutationExt, ActionKind
+struct Deinitialization<F: Feature>: GlobalMutationExt, MutationConvertible
 {
     static
     var feature: Feature.Type { return F.self }
@@ -74,10 +74,10 @@ struct Deinitialization<F: Feature>: GlobalMutationExt, ActionKind
      ```
      */
     public
-    init?(_ diff: GlobalMutation)
+    init?(_ mutation: GlobalMutation)
     {
         guard
-            let mutation = diff as? Deinitialization<F>
+            let mutation = mutation as? Deinitialization<F>
         else
         {
             return nil

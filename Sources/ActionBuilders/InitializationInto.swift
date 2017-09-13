@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Initialization
 {
-    struct Into<S: FeatureState>: ActionKind where S.ParentFeature == F
+    struct Into<S: FeatureState>: MutationConvertible where S.ParentFeature == F
     {
         public
         let newState: S
@@ -53,10 +53,10 @@ extension Initialization
          ```
          */
         public
-        init?(_ diff: GlobalMutation)
+        init?(_ mutation: GlobalMutation)
         {
             guard
-                let mutation = diff as? Initialization<F>,
+                let mutation = mutation as? Initialization<F>,
                 let newState = mutation.newState as? S
             else
             {

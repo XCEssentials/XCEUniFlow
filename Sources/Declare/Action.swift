@@ -50,6 +50,14 @@ protocol ActionKind { }
 //===
 
 public
+protocol MutationConvertible: ActionKind
+{
+    init?(_ mutation: GlobalMutation)
+}
+
+//===
+
+public
 struct Action
 {
     public
