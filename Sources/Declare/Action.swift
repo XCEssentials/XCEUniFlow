@@ -96,7 +96,6 @@ extension Action
 
 // MARK: - Direct execution helper (mostly unit tests helper)
 
-public
 extension Action
 {
     func perform(
