@@ -147,34 +147,6 @@ extension GlobalModel
 
 extension GlobalModel
 {
-    /*
- 
-     // This function is not in use anywhere internally and is not supposed for external usage.
-     
-    @discardableResult
-    func removeState<S: FeatureState>(ofType _: S.Type) -> GlobalModel
-    {
-        guard
-            hasState(ofType: S.self)
-        else
-        {
-            return self
-        }
-        
-        //---
-        
-        var result = self
-        result.data[S.ParentFeature.name] = nil
-        
-        //---
-        
-        return result
-    }
- 
-     */
-
-    //===
-
     @discardableResult
     func removeRepresentation(of feature: Feature.Type) -> GlobalModel
     {

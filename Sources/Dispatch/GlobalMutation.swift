@@ -29,7 +29,7 @@ protocol GlobalMutation { }
 
 //===
 
-protocol GlobalMutationExt: GlobalMutation // GlobalMutationExt
+protocol GlobalMutationExt: GlobalMutation
 {
     var relatedToFeature: Feature.Type { get }
     
