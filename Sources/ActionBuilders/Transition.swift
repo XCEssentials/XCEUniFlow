@@ -37,7 +37,7 @@ extension Feature
 //===
 
 public
-struct Transition<F: Feature>: FeatureUpdate
+struct Transition<F: Feature>: FeatureUpdate, MutationConvertible
 {
     public
     let oldState: FeatureRepresentation
