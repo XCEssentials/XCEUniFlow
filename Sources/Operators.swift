@@ -37,7 +37,7 @@ func << <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 public
 func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
 {
-    return global.state(forFeature: F.self)
+    return global.state(for: F.self)
 }
 
 //===
@@ -45,7 +45,7 @@ func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
 public
 func >> <F: Feature>(global: GlobalModel, _: F.Type) -> FeatureRepresentation?
 {
-    return global.state(forFeature: F.self)
+    return global.state(for: F.self)
 }
 
 //===
@@ -55,7 +55,7 @@ func >> <F, S>(global: GlobalModel, _: F.Type) -> S? where
     S: FeatureState,
     S.ParentFeature == F
 {
-    return global.state(forFeature: F.self)
+    return global.state(for: F.self)
 }
 
 //===

@@ -37,27 +37,16 @@ extension Feature
 //===
 
 public
-struct Actualization<F: Feature>: GlobalMutationExt, MutationConvertible
+struct Actualization<F: Feature>: FeatureUpdate, MutationConvertible
 {
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .update }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
-    
     public
-    let state: FeatureRepresentation
+    let newState: FeatureRepresentation
     
     //===
     
-    init<S: FeatureState>(in state: S) where S.ParentFeature == F
+    init<S: FeatureState>(with newState: S) where S.ParentFeature == F
     {
-        self.state = state
-        self.apply = { $0.store(state) }
+        self.newState = newState
     }
     
     //===

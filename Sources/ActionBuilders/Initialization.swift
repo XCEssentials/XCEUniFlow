@@ -37,18 +37,8 @@ extension Feature
 //===
 
 public
-struct Initialization<F: Feature>: GlobalMutationExt, MutationConvertible
+struct Initialization<F: Feature>: FeatureAddition, MutationConvertible
 {
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .addition }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
-    
     public
     let newState: FeatureRepresentation
     
@@ -57,7 +47,6 @@ struct Initialization<F: Feature>: GlobalMutationExt, MutationConvertible
     init<S: FeatureState>(into newState: S) where S.ParentFeature == F
     {
         self.newState = newState
-        self.apply = { $0.store(newState) }
     }
     
     //===

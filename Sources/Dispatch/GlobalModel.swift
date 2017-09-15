@@ -48,14 +48,14 @@ extension GlobalModel
 
     //===
 
-    func state<F: Feature>(forFeature _: F.Type) -> FeatureRepresentation?
+    func state(for feature: Feature.Type) -> FeatureRepresentation?
     {
-        return data[F.name]
+        return data[feature.name]
     }
 
     //===
 
-    func state<F, S>(forFeature _: F.Type) -> S? where
+    func state<F, S>(for _: F.Type) -> S? where
         S: FeatureState,
         S.ParentFeature == F
     {
@@ -71,9 +71,9 @@ extension GlobalModel
 
     //===
 
-    func hasState<F: Feature>(forFeature _: F.Type) -> Bool
+    func hasState(for feature: Feature.Type) -> Bool
     {
-        return state(forFeature: F.self) != nil
+        return state(for: feature) != nil
     }
 }
 
@@ -85,7 +85,7 @@ extension Feature
     static
     func state(from globalModel: GlobalModel) -> FeatureRepresentation?
     {
-        return globalModel.state(forFeature: self)
+        return globalModel.state(for: self)
     }
     
     //===
@@ -95,7 +95,7 @@ extension Feature
         S: FeatureState,
         S.ParentFeature == Self
     {
-        return globalModel.state(forFeature: self)
+        return globalModel.state(for: self)
     }
 
     //===
@@ -103,7 +103,7 @@ extension Feature
     static
     func presented(in globalModel: GlobalModel) -> Bool
     {
-        return globalModel.hasState(forFeature: self)
+        return globalModel.hasState(for: self)
     }
 }
 
@@ -132,10 +132,10 @@ extension FeatureState
 extension GlobalModel
 {
     @discardableResult
-    func store<S: FeatureRepresentation>(_ state: S) -> GlobalModel
+    func store(_ state: FeatureRepresentation) -> GlobalModel
     {
         var result = self
-        result.data[S.feature.name] = state
+        result.data[type(of: state).feature.name] = state
 
         //---
 
@@ -176,10 +176,10 @@ extension GlobalModel
     //===
 
     @discardableResult
-    func removeRepresentation<F: Feature>(ofFeature _: F.Type) -> GlobalModel
+    func removeRepresentation(of feature: Feature.Type) -> GlobalModel
     {
         guard
-            hasState(forFeature: F.self)
+            hasState(for: feature)
         else
         {
             return self
@@ -188,7 +188,7 @@ extension GlobalModel
         //---
 
         var result = self
-        result.data[F.name] = nil
+        result.data[feature.name] = nil
 
         //---
 

@@ -29,23 +29,49 @@ protocol GlobalMutation { }
 
 //===
 
-enum FeatureMutationKind: String
+protocol MutationCategory: GlobalMutation // GlobalMutationExt
 {
-    case addition, update, removal
+    var relatedToFeature: Feature.Type { get }
+    
+    var apply: (GlobalModel) -> GlobalModel { get }
 }
 
 //===
 
-protocol GlobalMutationExt: GlobalMutation
+protocol FeatureSetting: MutationCategory
 {
-    /**
-     Feature to which this mutation is related.
-     */
-    static
-    var feature: Feature.Type { get }
+    var newState: FeatureRepresentation { get }
+}
+
+extension FeatureSetting
+{
+    var relatedToFeature: Feature.Type
+    {
+        return type(of: newState).feature
+    }
     
-    static
-    var kind: FeatureMutationKind { get }
-    
-    var apply: (GlobalModel) -> GlobalModel { get }
+    var apply: (GlobalModel) -> GlobalModel
+    {
+        return { $0.store(self.newState) }
+    }
+}
+
+//===
+
+protocol FeatureAddition: FeatureSetting {}
+
+//===
+
+protocol FeatureUpdate: FeatureSetting {}
+
+//===
+
+protocol FeatureRemoval: MutationCategory { }
+
+extension FeatureRemoval
+{
+    var apply: (GlobalModel) -> GlobalModel
+    {
+        return { $0.removeRepresentation(of: self.relatedToFeature) }
+    }
 }

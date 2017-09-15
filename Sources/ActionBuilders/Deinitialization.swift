@@ -41,17 +41,12 @@ extension Feature
 //===
 
 public
-struct Deinitialization<F: Feature>: GlobalMutationExt, MutationConvertible
+struct Deinitialization<F: Feature>: FeatureRemoval, MutationConvertible
 {
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .removal }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
+    var relatedToFeature: Feature.Type
+    {
+        return F.self
+    }
     
     public
     let oldState: FeatureRepresentation
@@ -61,7 +56,6 @@ struct Deinitialization<F: Feature>: GlobalMutationExt, MutationConvertible
     init(from oldState: FeatureRepresentation)
     {
         self.oldState = oldState
-        self.apply = { $0.removeRepresentation(ofFeature: F.self) }
     }
     
     //===

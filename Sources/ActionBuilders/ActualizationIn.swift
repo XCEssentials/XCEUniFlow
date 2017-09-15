@@ -58,7 +58,7 @@ extension Actualization
         {
             guard
                 let mutation = mutation as? Actualization<F>,
-                let state = mutation.state as? S
+                let state = mutation.newState as? S
             else
             {
                 return nil
@@ -103,7 +103,7 @@ extension Actualization.In
             
             //---
             
-            return Actualization(in: state)
+            return Actualization(with: state)
         }
     }
 }
