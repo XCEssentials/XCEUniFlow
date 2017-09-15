@@ -73,7 +73,7 @@ struct Actualization<F: Feature>: GlobalMutationExt, MutationConvertible
     init?(_ mutation: GlobalMutation)
     {
         guard
-            let mutation = diff as? Actualization<F>
+            let mutation = mutation as? Actualization<F>
         else
         {
             return nil
