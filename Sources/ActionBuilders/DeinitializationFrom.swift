@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Deinitialization
 {
-    struct From<S: FeatureState>: MutationConvertible where S.ParentFeature == F
+    struct From<S: FeatureState>: ActionKind where S.ParentFeature == F
     {
         public
         let oldState: S

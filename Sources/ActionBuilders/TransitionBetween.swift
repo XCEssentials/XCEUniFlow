@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Transition
 {
-    struct Between<From: FeatureState, Into: FeatureState>: MutationConvertible where
+    struct Between<From: FeatureState, Into: FeatureState>: ActionKind where
         From.ParentFeature == F,
         Into.ParentFeature == F
     {

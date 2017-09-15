@@ -37,7 +37,7 @@ extension Feature
 //===
 
 public
-struct Initialization<F: Feature>: FeatureAddition, MutationConvertible
+struct Initialization<F: Feature>: ActionKind, FeatureAddition
 {
     public
     let newState: FeatureRepresentation

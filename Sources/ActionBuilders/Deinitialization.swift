@@ -41,7 +41,7 @@ extension Feature
 //===
 
 public
-struct Deinitialization<F: Feature>: FeatureRemoval, MutationConvertible
+struct Deinitialization<F: Feature>: ActionKind, FeatureRemoval
 {
     var relatedToFeature: Feature.Type
     {

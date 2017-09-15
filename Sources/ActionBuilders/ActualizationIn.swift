@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Actualization
 {
-    struct In<S: FeatureState>: MutationConvertible where S.ParentFeature == F
+    struct In<S: FeatureState>: ActionKind where S.ParentFeature == F
         // swiftlint:disable:previous type_name
     {
         public

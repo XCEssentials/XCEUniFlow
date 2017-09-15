@@ -37,7 +37,7 @@ extension Feature
 //===
 
 public
-struct Actualization<F: Feature>: FeatureUpdate, MutationConvertible
+struct Actualization<F: Feature>: ActionKind, FeatureUpdate
 {
     public
     let newState: FeatureRepresentation

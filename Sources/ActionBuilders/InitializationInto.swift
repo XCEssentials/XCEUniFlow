@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Initialization
 {
-    struct Into<S: FeatureState>: MutationConvertible where S.ParentFeature == F
+    struct Into<S: FeatureState>: ActionKind where S.ParentFeature == F
     {
         public
         let newState: S

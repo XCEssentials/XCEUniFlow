@@ -45,14 +45,20 @@ typealias ActionBody =
  A type that conforms to this protocol has a semantic value and represents a distinctive set of actions.
  */
 public
-protocol ActionKind { }
+protocol ActionKind
+{
+    init?(_ mutation: GlobalMutation)
+}
 
 //===
 
 public
-protocol MutationConvertible: ActionKind
+extension ActionKind
 {
     init?(_ mutation: GlobalMutation)
+    {
+        return nil
+    }
 }
 
 //===
