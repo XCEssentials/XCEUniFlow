@@ -116,7 +116,7 @@ extension Deinitialization
             
             //---
             
-            return Deinitialization<F>(from: oldState)
+            return self.init(from: oldState)
         }
     }
     
@@ -144,7 +144,7 @@ extension Deinitialization
             
             //---
             
-            return Deinitialization<F>(from: oldState)
+            return self.init(from: oldState)
         }
     }
 }
