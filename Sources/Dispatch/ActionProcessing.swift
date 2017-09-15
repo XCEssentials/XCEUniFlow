@@ -80,7 +80,7 @@ extension Dispatcher
     
     //===
     
-    func process(_ mutation: MutationCategory)
+    func process(_ mutation: GlobalMutationExt)
     {
         state = mutation.apply(state)
         
@@ -110,7 +110,7 @@ extension Dispatcher
     
     //===
     
-    func addMiddlewareIfNeeded(_ mutation: MutationCategory)
+    func addMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
     {
         if
             mutation is FeatureAddition
@@ -121,7 +121,7 @@ extension Dispatcher
         }
     }
     
-    func removeMiddlewareIfNeeded(_ mutation: MutationCategory)
+    func removeMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
     {
         if
             mutation is FeatureRemoval

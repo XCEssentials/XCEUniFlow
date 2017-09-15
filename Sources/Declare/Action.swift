@@ -37,7 +37,7 @@ typealias Become<S: FeatureState> = (S) -> Void
 //===
 
 typealias ActionBody =
-    (GlobalModel, @escaping SubmitAction) throws -> MutationCategory?
+    (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
 
 //===
 

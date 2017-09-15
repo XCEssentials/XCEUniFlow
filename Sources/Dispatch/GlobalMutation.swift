@@ -29,7 +29,7 @@ protocol GlobalMutation { }
 
 //===
 
-protocol MutationCategory: GlobalMutation // GlobalMutationExt
+protocol GlobalMutationExt: GlobalMutation // GlobalMutationExt
 {
     var relatedToFeature: Feature.Type { get }
     
@@ -38,7 +38,7 @@ protocol MutationCategory: GlobalMutation // GlobalMutationExt
 
 //===
 
-protocol FeatureSetting: MutationCategory
+protocol FeatureSetting: GlobalMutationExt
 {
     var newState: FeatureRepresentation { get }
 }
@@ -66,7 +66,7 @@ protocol FeatureUpdate: FeatureSetting {}
 
 //===
 
-protocol FeatureRemoval: MutationCategory { }
+protocol FeatureRemoval: GlobalMutationExt { }
 
 extension FeatureRemoval
 {
