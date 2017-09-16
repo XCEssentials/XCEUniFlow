@@ -27,8 +27,47 @@
 public
 struct When
 {
+    // MARK: - Intenral types
+    
+    typealias Handler = (GlobalMutation) throws -> MutationConvertible
+    
+    // MARK: - Public types
+    
+    public
+    struct Failed: ScenarioClauseFailure
+    {
+        public
+        let specification: String
+        
+        public
+        let reason: Error
+    }
+    
+    // MARK: - Internal members
+    
     let specification: String
-    let implementation: (GlobalMutation) -> MutationConvertible?
+    let implementation: Handler
+    
+    // MARK: - Initializers
+    
+    init(
+        _ specification: String,
+        _ implementation: @escaping Handler
+        )
+    {
+        self.specification = specification
+        self.implementation = {
+            
+            do
+            {
+                return try implementation($0)
+            }
+            catch
+            {
+                throw Failed(specification: specification, reason: error)
+            }
+        }
+    }
 }
 
 // MARK: - Connector

@@ -37,6 +37,18 @@ struct Given
     typealias Result = Any
     typealias Handler = (GlobalModel, PreviousResult) throws -> Result
     
+    // MARK: - Public types
+    
+    public
+    struct Failed: ScenarioClauseFailure
+    {
+        public
+        let specification: String
+        
+        public
+        let reason: Error
+    }
+    
     // MARK: - Internal members
     
     let specification: String
@@ -50,7 +62,17 @@ struct Given
         )
     {
         self.specification = specification
-        self.implementation = implementation
+        self.implementation = {
+            
+            do
+            {
+                return try implementation($0, $1)
+            }
+            catch
+            {
+                throw Failed(specification: specification, reason: error)
+            }
+        }
     }
 }
 

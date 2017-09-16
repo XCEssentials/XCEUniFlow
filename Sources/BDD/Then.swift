@@ -27,10 +27,24 @@
 public
 struct Then
 {
+    // MARK: - Intenral types
+    
     typealias GivenResult = Any
     typealias Handler = (@escaping SubmitAction, GivenResult) throws -> Void
     
-    //===
+    // MARK: - Public types
+    
+    public
+    struct Failed: ScenarioClauseFailure
+    {
+        public
+        let specification: String
+        
+        public
+        let reason: Error
+    }
+    
+    // MARK: - Internal members
     
     let specification: String
     let implementation: Handler
@@ -43,6 +57,16 @@ struct Then
         )
     {
         self.specification = specification
-        self.implementation = implementation
+        self.implementation = {
+            
+            do
+            {
+                return try implementation($0, $1)
+            }
+            catch
+            {
+                throw Failed(specification: specification, reason: error)
+            }
+        }
     }
 }

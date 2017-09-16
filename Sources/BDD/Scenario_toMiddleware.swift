@@ -24,19 +24,28 @@
  
  */
 
-public
-struct Scenario
-{
-    let when: When
-    let given: [Given]
-    let then: Then
-}
+import XCERequirement
 
-// MARK: - Scenario error protocol
+//===
 
-public
-protocol ScenarioClauseFailure: Error
+extension Scenario
 {
-    var specification: String { get }
-    var reason: Error { get }
+    var asMiddleware: Dispatcher.Middleware
+    {
+        return { globalModel, mutation, submit in
+            
+            var input: Any = try self.when.implementation(mutation)
+            
+            //---
+            
+            for item in self.given
+            {
+                input = try item.implementation(globalModel, input)
+            }
+            
+            //--
+            
+            try self.then.implementation(submit, input)
+        }
+    }
 }

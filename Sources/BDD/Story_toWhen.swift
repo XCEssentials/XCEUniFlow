@@ -24,6 +24,10 @@
  
  */
 
+import XCERequirement
+
+//===
+
 public
 extension Story
 {
@@ -36,7 +40,13 @@ extension Story
         ) -> When.Connector<T>
     {
         return When.Connector<T>(
-            when: When(specification: specification, implementation: T.init)
+            when: When(specification) {
+                
+                return try Require("Mutation is of type \(T.self)").isNotNil(
+                    
+                    T($0)
+                )
+            }
         )
     }
 }
