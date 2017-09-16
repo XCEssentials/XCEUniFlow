@@ -64,7 +64,7 @@ extension Scenario
 
                 //---
 
-                input = item.implementation(globalModel, givenInput)
+                input = try item.implementation(globalModel, givenInput)
             }
 
             //--

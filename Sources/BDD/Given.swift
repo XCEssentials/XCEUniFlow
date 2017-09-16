@@ -24,18 +24,22 @@
  
  */
 
+import XCERequirement
+
+//===
+
 public
 struct Given
 {
     // MARK: - Intenral types
     
     typealias WhenResult = Any
-    typealias Handler = (GlobalModel, WhenResult) -> Any?
+    typealias Handler = (GlobalModel, WhenResult) throws -> Any?
     
     // MARK: - Public types
     
     public
-    typealias SpecializedHandler<Input, Output> = (GlobalModel, Input) -> Output?
+    typealias SpecializedHandler<Input, Output> = (GlobalModel, Input) throws -> Output?
     
     // MARK: - Internal members
     
@@ -53,16 +57,16 @@ struct Given
         
         self.implementation = { globalModel, previousResult in
             
-            guard
-                let typedPreviousResult = previousResult as? Input
-            else
-            {
-                return nil
-            }
+            let typedPreviousResult =
+            
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+                
+                previousResult as? Input
+            )
             
             //===
             
-            return handler(globalModel, typedPreviousResult)
+            return try handler(globalModel, typedPreviousResult)
         }
     }
 }
