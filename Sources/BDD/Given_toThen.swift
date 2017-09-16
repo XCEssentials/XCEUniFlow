@@ -24,18 +24,63 @@
  
  */
 
+import XCERequirement
+
+//===
+
+public
+extension Given.Connector where GivenOutput == Void
+{
+    func then(
+        _ specification: String,
+        _ handler: @escaping (@escaping SubmitAction) -> Void
+        ) -> Scenario
+    {
+        typealias Input = GivenOutput
+        
+        //---
+        
+        return Scenario(
+            when: when,
+            given: previousClauses,
+            then: Then(specification) { submit, _ in
+                
+                handler(submit)
+            }
+        )
+    }
+}
+
+//===
+
 public
 extension Given.Connector
 {
     func then(
         _ specification: String,
-        _ handler: @escaping Then.SpecializedHandler<GivenOutput>
+        _ handler: @escaping (@escaping SubmitAction, GivenOutput) -> Void
         ) -> Scenario
     {
+        typealias Input = GivenOutput
+        
+        //---
+        
         return Scenario(
             when: when,
             given: previousClauses,
-            then: Then(specification, handler)
+            then: Then(specification) { submit, previousResult in
+                
+                let typedPreviousResult =
+                
+                try Require("Previous result is of type \(Input.self)").isNotNil(
+                    
+                    previousResult as? Input
+                )
+                
+                //===
+                
+                handler(submit, typedPreviousResult)
+            }
         )
     }
     
@@ -46,22 +91,22 @@ extension Given.Connector
         return Scenario(
             when: when,
             given: previousClauses,
-            then: Then(specification) { (submit, _: GivenOutput) in
-                
+            then: Then(specification) { (submit, _: Any) in
+
                 submit << action
             }
         )
     }
-    
+
     //===
-    
+
     func then(_ specification: String, submit actions: [Action]) -> Scenario
     {
         return Scenario(
             when: when,
             given: previousClauses,
-            then: Then(specification) { (submit, _: GivenOutput) in
-                
+            then: Then(specification) { (submit, _: Any) in
+
                 submit << actions
             }
         )

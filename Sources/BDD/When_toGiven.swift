@@ -24,6 +24,10 @@
  
  */
 
+import XCERequirement
+
+//===
+
 public
 extension When.Connector
 {
@@ -32,12 +36,72 @@ extension When.Connector
      */
     func given<Output>(
         _ specification: String,
-        _ handler: @escaping Given.SpecializedHandler<WhenOutput, Output>
+        _ handler: @escaping (GlobalModel, WhenOutput) throws -> Output
         ) -> Given.Connector<Output>
     {
+        typealias Input = WhenOutput
+        
+        //---
+        
+        let firstGiven = Given(specification) { globalModel, previousResult in
+            
+            let typedPreviousResult =
+                
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+                
+                previousResult as? Input
+            )
+            
+            //---
+            
+            return try handler(globalModel, typedPreviousResult)
+        }
+        
+        //---
         
         return Given.Connector<Output>(
-            when: when, previousClauses: [Given(specification, handler)]
+            when: when,
+            previousClauses: [firstGiven]
+        )
+    }
+    
+    //===
+    
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func given(
+        _ specification: String,
+        _ handler: @escaping (GlobalModel, WhenOutput) throws -> Void
+        ) -> Given.Connector<Void>
+    {
+        typealias Input = WhenOutput
+        
+        //---
+        
+        let firstGiven = Given(specification) { globalModel, previousResult in
+            
+            let typedPreviousResult =
+                
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+                
+                previousResult as? Input
+            )
+            
+            //---
+            
+            try handler(globalModel, typedPreviousResult)
+            
+            //---
+            
+            return ()
+        }
+        
+        //---
+        
+        return Given.Connector<Void>(
+            when: when,
+            previousClauses: [firstGiven]
         )
     }
 }

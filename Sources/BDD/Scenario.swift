@@ -44,7 +44,7 @@ extension Scenario
     {
         return { globalModel, mutation, submit in
             
-            var input: Any? =
+            var input: Any =
             
             try Require(self.when.specification).isNotNil(
             
@@ -55,30 +55,12 @@ extension Scenario
             
             for item in self.given
             {
-                guard
-                    let givenInput = input
-                else
-                {
-                    break
-                }
-
-                //---
-
-                input = try item.implementation(globalModel, givenInput)
+                input = try item.implementation(globalModel, input)
             }
 
             //--
 
-            guard
-                let thenInput = input
-            else
-            {
-                return
-            }
-
-            //--
-
-            self.then.implementation(submit, thenInput)
+            try self.then.implementation(submit, input)
         }
     }
 }

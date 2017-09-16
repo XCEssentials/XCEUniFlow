@@ -33,41 +33,24 @@ struct Given
 {
     // MARK: - Intenral types
     
-    typealias WhenResult = Any
-    typealias Handler = (GlobalModel, WhenResult) throws -> Any?
-    
-    // MARK: - Public types
-    
-    public
-    typealias SpecializedHandler<Input, Output> = (GlobalModel, Input) throws -> Output?
+    typealias PreviousResult = Any
+    typealias Result = Any
+    typealias Handler = (GlobalModel, PreviousResult) throws -> Result
     
     // MARK: - Internal members
     
     let specification: String
     let implementation: Handler
     
-    // MARK: - Initializers=
+    // MARK: - Initializers
     
-    init<Input, Output>(
+    init(
         _ specification: String,
-        _ handler: @escaping SpecializedHandler<Input, Output>
+        _ implementation: @escaping Handler
         )
     {
         self.specification = specification
-        
-        self.implementation = { globalModel, previousResult in
-            
-            let typedPreviousResult =
-            
-            try Require("Previous result is of type \(Input.self)").isNotNil(
-                
-                previousResult as? Input
-            )
-            
-            //===
-            
-            return try handler(globalModel, typedPreviousResult)
-        }
+        self.implementation = implementation
     }
 }
 
@@ -80,23 +63,147 @@ extension Given
     {
         let when: When
         let previousClauses: [Given]
+    }
+}
+
+//===
+
+public
+extension Given.Connector
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario.
+     */
+    func and<Output>(
+        _ specification: String,
+        _ handler: @escaping (GlobalModel, GivenOutput) throws -> Output
+        ) -> Given.Connector<Output>
+    {
+        typealias Input = GivenOutput
         
-        //===
+        //---
         
-        /**
-         Adds subsequent 'GIVEN' clauses in Scenario.
-         */
-        func and<Output>(
-            _ specification: String,
-            _ subsequentHandler: @escaping SpecializedHandler<GivenOutput, Output>
-            ) -> Connector<Output>
-        {
-            var items = self.previousClauses
-            items.append(Given(specification, subsequentHandler))
+        let nextGiven = Given(specification) { globalModel, previousResult in
             
-            //---
+            let typedPreviousResult =
+                
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+                
+                previousResult as? Input
+            )
             
-            return Connector<Output>(when: when, previousClauses: items)
+            //===
+            
+            return try handler(globalModel, typedPreviousResult)
         }
+        
+        //---
+        
+        var items = self.previousClauses
+        items.append(nextGiven)
+
+        //---
+
+        return Given.Connector<Output>(when: when, previousClauses: items)
+    }
+    
+    //===
+    
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func and(
+        _ specification: String,
+        _ handler: @escaping (GlobalModel, GivenOutput) throws -> Void
+        ) -> Given.Connector<Void>
+    {
+        typealias Input = GivenOutput
+        
+        //---
+        
+        let nextGiven = Given(specification) { globalModel, previousResult in
+            
+            let typedPreviousResult =
+                
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+                
+                previousResult as? Input
+            )
+            
+            //===
+            
+            try handler(globalModel, typedPreviousResult)
+            
+            //===
+            
+            return ()
+        }
+        
+        //---
+        
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.Connector<Void>(when: when, previousClauses: items)
+    }
+}
+
+// MARK: - Add subsequent GIVEN clauses AFTER one that returns nothing
+
+public
+extension Given.Connector where GivenOutput == Void
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario.
+     */
+    func and<Output>(
+        _ specification: String,
+        _ handler: @escaping (GlobalModel) throws -> Output
+        ) -> Given.Connector<Output>
+    {
+        let nextGiven = Given(specification) { globalModel, _ in
+            
+            return try handler(globalModel)
+        }
+        
+        //---
+        
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.Connector<Output>(when: when, previousClauses: items)
+    }
+    
+    //===
+    
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func and(
+        _ specification: String,
+        _ handler: @escaping (GlobalModel) throws -> Void
+        ) -> Given.Connector<Void>
+    {
+        let nextGiven = Given(specification) { globalModel, _ in
+            
+            try handler(globalModel)
+            
+            //===
+            
+            return ()
+        }
+        
+        //---
+        
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.Connector<Void>(when: when, previousClauses: items)
     }
 }

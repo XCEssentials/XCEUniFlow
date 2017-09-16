@@ -28,10 +28,7 @@ public
 struct Then
 {
     typealias GivenResult = Any
-    typealias Handler = (@escaping SubmitAction, GivenResult) -> Void
-    
-    public
-    typealias SpecializedHandler<Input> = (@escaping SubmitAction, Input) -> Void
+    typealias Handler = (@escaping SubmitAction, GivenResult) throws -> Void
     
     //===
     
@@ -40,25 +37,12 @@ struct Then
     
     // MARK: - Initializers
     
-    init<Input>(
+    init(
         _ specification: String,
-        _ handler: @escaping SpecializedHandler<Input>
+        _ implementation: @escaping Handler
         )
     {
         self.specification = specification
-        
-        self.implementation = { submit, previousResult in
-            
-            guard
-                let typedPreviousResult = previousResult as? Input
-            else
-            {
-                return
-            }
-            
-            //===
-            
-            return handler(submit, typedPreviousResult)
-        }
+        self.implementation = implementation
     }
 }
