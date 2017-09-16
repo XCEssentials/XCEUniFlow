@@ -70,7 +70,9 @@ extension Story where Self: Feature
 public
 struct Given
 {
-    typealias TypelessHandler = (GlobalModel, Any) -> Any?
+    typealias PreviousResult = Any
+    
+    typealias TypelessHandler = (GlobalModel, PreviousResult) -> Any?
     
     public
     typealias Handler<Input, Output> = (GlobalModel, Input) -> Output?
@@ -213,8 +215,12 @@ struct When
     public
     typealias SpecialHandler = (GlobalMutation) -> GlobalMutation?
     
+    //===
+    
     let specification: String
     let implementation: Handler
+    
+    // MARK: - Initializers
     
     fileprivate
     init(
@@ -349,7 +355,7 @@ struct Scenario
 {
     let given: [Given]
     let when: When
-    let then: Any
+    let then: Then
 }
 
 //===
@@ -357,9 +363,55 @@ struct Scenario
 // internal!!!
 extension Scenario
 {
+    func shouldReact(on mutation: GlobalMutation) -> Bool
+    {
+        return when.implementation(mutation)
+    }
+    
+    //===
+    
     var asMiddleware: Dispatcher.Middleware
     {
-        return { _, _, _ in }
+        return { globalModel, mutation, submit in
+        
+            guard
+                self.shouldReact(on: mutation)
+            else
+            {
+                return
+            }
+            
+            //--
+            
+            var givenResult: Given.PreviousResult? = ()
+            
+            for item in self.given
+            {
+                guard
+                    let input = givenResult
+                else
+                {
+                    break
+                }
+                
+                //---
+                
+                givenResult = item.implementation(globalModel, input)
+            }
+            
+            //--
+            
+            guard
+                let thenInput = givenResult
+            else
+            {
+                return
+            }
+            
+            //--
+            
+            self.then.implementation(submit, thenInput)
+        }
     }
 }
 
