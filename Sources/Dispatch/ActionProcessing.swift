@@ -92,7 +92,7 @@ extension Dispatcher
         
         middleware.values.joined().forEach{
             
-            $0(state, mutation, proxy.submit)
+            try? $0(state, mutation, proxy.submit)
         }
         
         //---

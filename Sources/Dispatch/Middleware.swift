@@ -27,9 +27,146 @@
 public
 extension Dispatcher
 {
-    typealias Middleware = (GlobalModel, GlobalMutation, SubmitAction) -> Void
+    typealias Middleware =
+        (GlobalModel, GlobalMutation, @escaping SubmitAction)throws -> Void
+}
+
+// MARK: - Register global middleware
+
+public
+extension Dispatcher
+{
+    private
+    enum GlobalMiddleware
+    {
+        static
+        var key: GlobalModel.Key
+        {
+            return GlobalModel.Key(reflecting: self)
+        }
+    }
+    
+    //===
+    
+    func registerGlobalMiddleware(_ handler: @escaping Middleware)
+    {
+        var globals = middleware[GlobalMiddleware.key] ?? []
+        globals.append(handler)
+        middleware[GlobalMiddleware.key] = globals
+    }
+    
+    //===
+    
+    func registerGlobalMiddleware(_ handlers: [Middleware])
+    {
+        var globals = middleware[GlobalMiddleware.key] ?? []
+        globals.append(contentsOf: handlers)
+        middleware[GlobalMiddleware.key] = globals
+    }
+}
+
+// MARK: - Semantic middleware builders
+
+public
+typealias ActionKindBinding<AK: ActionKind> =
+    (GlobalModel, AK, @escaping SubmitAction) -> Void
+
+public
+extension ActionKind
+{
+    static
+    func bind(
+        _ handler: @escaping ActionKindBinding<Self>
+        ) -> Dispatcher.Middleware
+    {
+        return { globalModel, mutation, submit in
+
+            self.init(mutation).map { handler(globalModel, $0, submit) }
+        }
+    }
+    
+//    static
+//    var chain: Connector<Self>
+//    {
+//        return
+//    }
+    
+//    static
+//    func map(_ handler: @escaping ActionKindBinding<Self>) -> Connector
+//    {
+//        return Connector { globalModel, mutation, submit in
+//
+//            self.init(mutation).map { handler(globalModel, $0, submit) }
+//        }
+//    }
 }
 
 //===
 
+public
+struct Connector<T>
+{
+    let value: T
+    let handler: Dispatcher.Middleware
+}
 
+public
+extension Connector
+{
+//    func finally()
+}
+
+//===
+
+//public
+//struct ActionBindingConnector<AK: ActionKind>
+//{
+//    public
+//    func submit(_ actions: [Action]) -> Dispatcher.Middleware
+//    {
+//        return { globalModel, mutation, submit in
+//
+//            AK.init(mutation).map {
+//
+//                submit << actions
+//            }
+//        }
+//    }
+//
+//    public
+//    func submit(_ action: Action) -> Dispatcher.Middleware
+//    {
+//        return submit([action])
+//    }
+//}
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
