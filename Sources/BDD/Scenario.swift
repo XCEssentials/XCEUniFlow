@@ -24,6 +24,10 @@
  
  */
 
+import XCERequirement
+
+//===
+
 public
 struct Scenario
 {
@@ -40,15 +44,15 @@ extension Scenario
     {
         return { globalModel, mutation, submit in
             
-            guard
-                var input: Any? = self.when.implementation(mutation)
-            else
-            {
-                return
-            }
-
-            //--
-
+            var input: Any? =
+            
+            try Require(self.when.specification).isNotNil(
+            
+                self.when.implementation(mutation)
+            )
+            
+            //---
+            
             for item in self.given
             {
                 guard
