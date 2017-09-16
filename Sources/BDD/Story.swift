@@ -42,9 +42,6 @@ public
 protocol Story
 {
     static
-    var name: String { get }
-
-    static
     var summary: StorySummary { get }
     
     static
@@ -56,12 +53,6 @@ protocol Story
 public
 extension Story
 {
-    static
-    var name: String
-    {
-        return String(reflecting: self)
-    }
-    
     static
     var summary: StorySummary
     {
