@@ -28,7 +28,7 @@ public
 extension Dispatcher
 {
     typealias Middleware =
-        (GlobalModel, GlobalMutation, @escaping SubmitAction)throws -> Void
+        (GlobalModel, GlobalMutation, @escaping SubmitAction) throws -> Void
 }
 
 // MARK: - Register global middleware
@@ -65,18 +65,14 @@ extension Dispatcher
     }
 }
 
-// MARK: - Semantic middleware builders
-
-public
-typealias ActionKindBinding<AK: ActionKind> =
-    (GlobalModel, AK, @escaping SubmitAction) -> Void
+// MARK: - Helper middleware builder
 
 public
 extension ActionKind
 {
     static
     func bind(
-        _ handler: @escaping ActionKindBinding<Self>
+        _ handler: @escaping (GlobalModel, Self, @escaping SubmitAction) -> Void
         ) -> Dispatcher.Middleware
     {
         return { globalModel, mutation, submit in
@@ -84,89 +80,4 @@ extension ActionKind
             self.init(mutation).map { handler(globalModel, $0, submit) }
         }
     }
-    
-//    static
-//    var chain: Connector<Self>
-//    {
-//        return
-//    }
-    
-//    static
-//    func map(_ handler: @escaping ActionKindBinding<Self>) -> Connector
-//    {
-//        return Connector { globalModel, mutation, submit in
-//
-//            self.init(mutation).map { handler(globalModel, $0, submit) }
-//        }
-//    }
 }
-
-//===
-
-public
-struct Connector<T>
-{
-    let value: T
-    let handler: Dispatcher.Middleware
-}
-
-public
-extension Connector
-{
-//    func finally()
-}
-
-//===
-
-//public
-//struct ActionBindingConnector<AK: ActionKind>
-//{
-//    public
-//    func submit(_ actions: [Action]) -> Dispatcher.Middleware
-//    {
-//        return { globalModel, mutation, submit in
-//
-//            AK.init(mutation).map {
-//
-//                submit << actions
-//            }
-//        }
-//    }
-//
-//    public
-//    func submit(_ action: Action) -> Dispatcher.Middleware
-//    {
-//        return submit([action])
-//    }
-//}
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
