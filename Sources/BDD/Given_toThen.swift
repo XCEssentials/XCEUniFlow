@@ -25,16 +25,16 @@
  */
 
 public
-extension When.Connector
+extension Given.Connector
 {
     func then(
         _ specification: String,
-        _ handler: @escaping Then.Handler<GivenResult>
+        _ handler: @escaping Then.SpecializedHandler<GivenOutput>
         ) -> Scenario
     {
         return Scenario(
-            given: given,
             when: when,
+            given: previousClauses,
             then: Then(specification, handler)
         )
     }
@@ -44,9 +44,9 @@ extension When.Connector
     func then(_ specification: String, submit action: Action) -> Scenario
     {
         return Scenario(
-            given: given,
             when: when,
-            then: Then(specification) { (submit, _: GivenResult) in
+            given: previousClauses,
+            then: Then(specification) { (submit, _: GivenOutput) in
                 
                 submit << action
             }
@@ -58,9 +58,9 @@ extension When.Connector
     func then(_ specification: String, submit actions: [Action]) -> Scenario
     {
         return Scenario(
-            given: given,
             when: when,
-            then: Then(specification) { (submit, _: GivenResult) in
+            given: previousClauses,
+            then: Then(specification) { (submit, _: GivenOutput) in
                 
                 submit << actions
             }

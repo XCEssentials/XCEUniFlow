@@ -27,7 +27,7 @@
 public
 protocol GlobalMutation { }
 
-//===
+// MARK: - GlobalMutationExt
 
 protocol GlobalMutationExt: GlobalMutation
 {
@@ -73,5 +73,24 @@ extension FeatureRemoval
     var apply: (GlobalModel) -> GlobalModel
     {
         return { $0.removeRepresentation(of: self.relatedToFeature) }
+    }
+}
+
+// MARK: - MutationConvertible
+
+public
+protocol MutationConvertible
+{
+    init?(_ mutation: GlobalMutation)
+}
+
+//===
+
+public
+extension MutationConvertible
+{
+    init?(_ mutation: GlobalMutation)
+    {
+        return nil
     }
 }

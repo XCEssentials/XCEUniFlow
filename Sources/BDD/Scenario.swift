@@ -27,8 +27,8 @@
 public
 struct Scenario
 {
-    let given: [Given]
     let when: When
+    let given: [Given]
     let then: Then
 }
 
@@ -36,10 +36,10 @@ struct Scenario
 
 extension Scenario
 {
-    func shouldReact(on mutation: GlobalMutation) -> Bool
-    {
-        return when.implementation(mutation) != nil
-    }
+//    func shouldReact(on mutation: GlobalMutation) -> Bool
+//    {
+//        return when.implementation(mutation) != nil
+//    }
     
     //===
     
@@ -47,43 +47,43 @@ extension Scenario
     {
         return { globalModel, mutation, submit in
             
-            guard
-                self.shouldReact(on: mutation)
-            else
-            {
-                return
-            }
-            
-            //--
-            
-            var givenResult: Given.PreviousResult? = ()
-            
-            for item in self.given
-            {
-                guard
-                    let input = givenResult
-                else
-                {
-                    break
-                }
-                
-                //---
-                
-                givenResult = item.implementation(globalModel, input)
-            }
-            
-            //--
-            
-            guard
-                let thenInput = givenResult
-            else
-            {
-                return
-            }
-            
-            //--
-            
-            self.then.implementation(submit, thenInput)
+//            guard
+//                self.shouldReact(on: mutation)
+//            else
+//            {
+//                return
+//            }
+//
+//            //--
+//
+//            var givenResult: Given.PreviousResult? = ()
+//
+//            for item in self.given
+//            {
+//                guard
+//                    let input = givenResult
+//                else
+//                {
+//                    break
+//                }
+//
+//                //---
+//
+//                givenResult = item.implementation(globalModel, input)
+//            }
+//
+//            //--
+//
+//            guard
+//                let thenInput = givenResult
+//            else
+//            {
+//                return
+//            }
+//
+//            //--
+//
+//            self.then.implementation(submit, thenInput)
         }
     }
 }

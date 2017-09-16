@@ -29,43 +29,24 @@ struct Given
 {
     // MARK: - Intenral types
     
-    typealias PreviousResult = Any
-    
-    typealias TypelessHandler = (GlobalModel, PreviousResult) -> Any?
+    typealias WhenResult = Any
+    typealias Handler = (GlobalModel, WhenResult) -> Any?
     
     // MARK: - Public types
     
     public
-    typealias Handler<Input, Output> = (GlobalModel, Input) -> Output?
-    
-    public
-    typealias FirstHandler<Output> = (GlobalModel) -> Output?
+    typealias SpecializedHandler<Input, Output> = (GlobalModel, Input) -> Output?
     
     // MARK: - Internal members
     
-    // declaration / definition
-    
     let specification: String
-    let implementation: TypelessHandler
+    let implementation: Handler
     
-    // MARK: - Initializers (internal)
-    
-    init<Output>(
-        _ specification: String,
-        _ firstHandler: @escaping FirstHandler<Output>
-        )
-    {
-        self.specification = specification
-        
-        self.implementation = { globalModel, _ in
-            
-            return firstHandler(globalModel)
-        }
-    }
+    // MARK: - Initializers=
     
     init<Input, Output>(
         _ specification: String,
-        _ subsequentHandler: @escaping Handler<Input, Output>
+        _ handler: @escaping SpecializedHandler<Input, Output>
         )
     {
         self.specification = specification
@@ -81,7 +62,7 @@ struct Given
             
             //===
             
-            return subsequentHandler(globalModel, typedPreviousResult)
+            return handler(globalModel, typedPreviousResult)
         }
     }
 }
@@ -91,16 +72,10 @@ struct Given
 public
 extension Given
 {
-    struct Connector<Result>
+    struct Connector<GivenOutput>
     {
-        let previousEntries: [Given]
-        
-        //===
-        
-        init(with previousEntries: [Given])
-        {
-            self.previousEntries = previousEntries
-        }
+        let when: When
+        let previousClauses: [Given]
         
         //===
         
@@ -109,15 +84,15 @@ extension Given
          */
         func and<Output>(
             _ specification: String,
-            _ subsequentHandler: @escaping Handler<Result, Output>
+            _ subsequentHandler: @escaping SpecializedHandler<GivenOutput, Output>
             ) -> Connector<Output>
         {
-            var items = self.previousEntries
+            var items = self.previousClauses
             items.append(Given(specification, subsequentHandler))
             
             //---
             
-            return Connector<Output>(with: items)
+            return Connector<Output>(when: when, previousClauses: items)
         }
     }
 }

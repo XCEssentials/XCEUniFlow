@@ -27,22 +27,22 @@
 public
 struct Then
 {
-    public
-    typealias TypelessHandler = (SubmitAction, Any) -> Void
+    typealias GivenResult = Any
+    typealias Handler = (@escaping SubmitAction, GivenResult) -> Void
     
     public
-    typealias Handler<Input> = (SubmitAction, Input) -> Void
+    typealias SpecializedHandler<Input> = (@escaping SubmitAction, Input) -> Void
     
     //===
     
     let specification: String
-    let implementation: TypelessHandler
+    let implementation: Handler
     
     // MARK: - Initializers
     
     init<Input>(
         _ specification: String,
-        _ handler: @escaping Handler<Input>
+        _ handler: @escaping SpecializedHandler<Input>
         )
     {
         self.specification = specification

@@ -28,14 +28,15 @@ public
 extension Story
 {
     /**
-     Defines first "given" clause, starts entire Scenario definition.
+     Defines 'WHEN' clause that starts definition of a given Scenario.
      */
-    static
-    func given<Output>(
+    func when<T: MutationConvertible>(
         _ specification: String,
-        _ firstHandler: @escaping Given.FirstHandler<Output>
-        ) -> Given.Connector<Output>
+        _: T.Type
+        ) -> When.Connector<T>
     {
-        return Given.Connector<Output>(with: [Given(specification, firstHandler)])
+        return When.Connector<T>(
+            when: When(specification: specification, implementation: T.init)
+        )
     }
 }

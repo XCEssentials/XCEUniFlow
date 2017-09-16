@@ -25,16 +25,19 @@
  */
 
 public
-extension Given.Connector
+extension When.Connector
 {
-    func when<T: GlobalMutation>(
+    /**
+     Defines first 'GIVEN' clause in a Scenario.
+     */
+    func given<Output>(
         _ specification: String,
-        _ specializedHandler: @escaping When.SpecializedHandler<T>
-        ) -> When.Connector<Result>
+        _ handler: @escaping Given.SpecializedHandler<WhenOutput, Output>
+        ) -> Given.Connector<Output>
     {
-        return When.Connector(
-            with: previousEntries,
-            when: When(specification, specializedHandler)
+        
+        return Given.Connector<Output>(
+            when: when, previousClauses: [Given(specification, handler)]
         )
     }
 }

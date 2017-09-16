@@ -27,27 +27,8 @@
 public
 struct When
 {
-    public
-    typealias Handler = (GlobalMutation) -> GlobalMutation?
-    
-    public
-    typealias SpecializedHandler<T: GlobalMutation> = (GlobalMutation) -> T?
-    
-    //===
-    
     let specification: String
-    let implementation: Handler
-    
-    // MARK: - Initializers
-    
-    init<T: GlobalMutation>(
-        _ specification: String,
-        _ implementation: @escaping SpecializedHandler<T>
-        )
-    {
-        self.specification = specification
-        self.implementation = implementation
-    }
+    let implementation: (GlobalMutation) -> MutationConvertible?
 }
 
 // MARK: - Connector
@@ -56,17 +37,8 @@ public
 extension When
 {
     public
-    struct Connector<GivenResult>
+    struct Connector<WhenOutput: MutationConvertible>
     {
-        let given: [Given]
         let when: When
-        
-        // MARK: - Initializers
-        
-        init(with given: [Given], when: When)
-        {
-            self.given = given
-            self.when = when
-        }
     }
 }

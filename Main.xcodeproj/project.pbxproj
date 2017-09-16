@@ -35,16 +35,16 @@
 		9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC881F5F915C00C838BB /* Subscriptions.swift */; };
 		9466768C1F62A698002FC086 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9466768B1F62A698002FC086 /* Aliases.swift */; };
 		9483BF8C1F6DA1A500718F61 /* When.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483BF8B1F6DA1A500718F61 /* When.swift */; };
-		9483BF8E1F6DA20100718F61 /* When_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483BF8D1F6DA20100718F61 /* When_toThen.swift */; };
 		9483BF901F6DA23300718F61 /* Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483BF8F1F6DA23300718F61 /* Then.swift */; };
 		9483BF921F6DA77200718F61 /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483BF911F6DA77200718F61 /* Scenario.swift */; };
+		9483BF941F6DB0F300718F61 /* Story_toWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483BF931F6DB0F300718F61 /* Story_toWhen.swift */; };
+		9483BF961F6DB4C400718F61 /* When_toGiven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9483BF951F6DB4C400718F61 /* When_toGiven.swift */; };
 		94930BCE1F60996400EB8BBF /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94930BCD1F60996400EB8BBF /* ActionContext.swift */; };
 		949B57CD1F69D9DD00EABFD4 /* Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949B57CC1F69D9DD00EABFD4 /* Middleware.swift */; };
 		94F157481F6D9C69007A1F5E /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F157471F6D9C69007A1F5E /* Story.swift */; };
 		94F1574A1F6D9D49007A1F5E /* Story+Feature+Middleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F157491F6D9D49007A1F5E /* Story+Feature+Middleware.swift */; };
 		94F1574C1F6D9D9C007A1F5E /* Given.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574B1F6D9D9C007A1F5E /* Given.swift */; };
-		94F1574E1F6D9F52007A1F5E /* Story_toGiven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574D1F6D9F52007A1F5E /* Story_toGiven.swift */; };
-		94F157501F6DA062007A1F5E /* Given_toWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574F1F6DA062007A1F5E /* Given_toWhen.swift */; };
+		94F157501F6DA062007A1F5E /* Given_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574F1F6DA062007A1F5E /* Given_toThen.swift */; };
 		B685E60037F407D3CE0E2C3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 		C3D9ABD77F5AFD6A8F67A861 /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B963C5720D1093F4F08FB3F /* Arithmetics.swift */; };
 		D74EF5AAF28A897E24ACAF13 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03186E114271BE51700CA6F9 /* Search.swift */; };
@@ -118,16 +118,16 @@
 		9421DC881F5F915C00C838BB /* Subscriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
 		9466768B1F62A698002FC086 /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		9483BF8B1F6DA1A500718F61 /* When.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = When.swift; sourceTree = "<group>"; };
-		9483BF8D1F6DA20100718F61 /* When_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = When_toThen.swift; sourceTree = "<group>"; };
 		9483BF8F1F6DA23300718F61 /* Then.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Then.swift; sourceTree = "<group>"; };
 		9483BF911F6DA77200718F61 /* Scenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario.swift; sourceTree = "<group>"; };
+		9483BF931F6DB0F300718F61 /* Story_toWhen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story_toWhen.swift; sourceTree = "<group>"; };
+		9483BF951F6DB4C400718F61 /* When_toGiven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = When_toGiven.swift; sourceTree = "<group>"; };
 		94930BCD1F60996400EB8BBF /* ActionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionContext.swift; sourceTree = "<group>"; };
 		949B57CC1F69D9DD00EABFD4 /* Middleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middleware.swift; sourceTree = "<group>"; };
 		94F157471F6D9C69007A1F5E /* Story.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 		94F157491F6D9D49007A1F5E /* Story+Feature+Middleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Story+Feature+Middleware.swift"; sourceTree = "<group>"; };
 		94F1574B1F6D9D9C007A1F5E /* Given.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given.swift; sourceTree = "<group>"; };
-		94F1574D1F6D9F52007A1F5E /* Story_toGiven.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Story_toGiven.swift; sourceTree = "<group>"; };
-		94F1574F1F6DA062007A1F5E /* Given_toWhen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given_toWhen.swift; sourceTree = "<group>"; };
+		94F1574F1F6DA062007A1F5E /* Given_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given_toThen.swift; sourceTree = "<group>"; };
 		9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
@@ -259,13 +259,13 @@
 		94F157461F6D9C0B007A1F5E /* BDD */ = {
 			isa = PBXGroup;
 			children = (
-				94F1574B1F6D9D9C007A1F5E /* Given.swift */,
-				94F1574F1F6DA062007A1F5E /* Given_toWhen.swift */,
 				94F157471F6D9C69007A1F5E /* Story.swift */,
 				94F157491F6D9D49007A1F5E /* Story+Feature+Middleware.swift */,
-				94F1574D1F6D9F52007A1F5E /* Story_toGiven.swift */,
+				9483BF931F6DB0F300718F61 /* Story_toWhen.swift */,
 				9483BF8B1F6DA1A500718F61 /* When.swift */,
-				9483BF8D1F6DA20100718F61 /* When_toThen.swift */,
+				9483BF951F6DB4C400718F61 /* When_toGiven.swift */,
+				94F1574B1F6D9D9C007A1F5E /* Given.swift */,
+				94F1574F1F6DA062007A1F5E /* Given_toThen.swift */,
 				9483BF8F1F6DA23300718F61 /* Then.swift */,
 				9483BF911F6DA77200718F61 /* Scenario.swift */,
 			);
@@ -497,6 +497,7 @@
 			files = (
 				9421DC921F5F9BD600C838BB /* Action.swift in Sources */,
 				94930BCE1F60996400EB8BBF /* ActionContext.swift in Sources */,
+				9483BF941F6DB0F300718F61 /* Story_toWhen.swift in Sources */,
 				9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */,
 				9412C7F41F68272E00015C9B /* Actualization.swift in Sources */,
 				9412C7F51F68272E00015C9B /* ActualizationIn.swift in Sources */,
@@ -508,7 +509,7 @@
 				9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */,
 				94F1574C1F6D9D9C007A1F5E /* Given.swift in Sources */,
 				9483BF901F6DA23300718F61 /* Then.swift in Sources */,
-				94F157501F6DA062007A1F5E /* Given_toWhen.swift in Sources */,
+				94F157501F6DA062007A1F5E /* Given_toThen.swift in Sources */,
 				9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */,
 				9412C7E61F68262E00015C9B /* GlobalMutation.swift in Sources */,
 				9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */,
@@ -519,7 +520,6 @@
 				9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */,
 				94F1574A1F6D9D49007A1F5E /* Story+Feature+Middleware.swift in Sources */,
 				94F157481F6D9C69007A1F5E /* Story.swift in Sources */,
-				94F1574E1F6D9F52007A1F5E /* Story_toGiven.swift in Sources */,
 				9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */,
 				9412C7FA1F68272E00015C9B /* Transition.swift in Sources */,
 				9412C7FB1F68272E00015C9B /* TransitionBetween.swift in Sources */,
@@ -529,7 +529,7 @@
 				9412C7FF1F68272E00015C9B /* TriggerGlobal.swift in Sources */,
 				9483BF921F6DA77200718F61 /* Scenario.swift in Sources */,
 				9483BF8C1F6DA1A500718F61 /* When.swift in Sources */,
-				9483BF8E1F6DA20100718F61 /* When_toThen.swift in Sources */,
+				9483BF961F6DB4C400718F61 /* When_toGiven.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
