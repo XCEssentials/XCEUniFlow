@@ -36,54 +36,45 @@ struct Scenario
 
 extension Scenario
 {
-//    func shouldReact(on mutation: GlobalMutation) -> Bool
-//    {
-//        return when.implementation(mutation) != nil
-//    }
-    
-    //===
-    
     var asMiddleware: Dispatcher.Middleware
     {
         return { globalModel, mutation, submit in
             
-//            guard
-//                self.shouldReact(on: mutation)
-//            else
-//            {
-//                return
-//            }
-//
-//            //--
-//
-//            var givenResult: Given.PreviousResult? = ()
-//
-//            for item in self.given
-//            {
-//                guard
-//                    let input = givenResult
-//                else
-//                {
-//                    break
-//                }
-//
-//                //---
-//
-//                givenResult = item.implementation(globalModel, input)
-//            }
-//
-//            //--
-//
-//            guard
-//                let thenInput = givenResult
-//            else
-//            {
-//                return
-//            }
-//
-//            //--
-//
-//            self.then.implementation(submit, thenInput)
+            guard
+                var input: Any? = self.when.implementation(mutation)
+            else
+            {
+                return
+            }
+
+            //--
+
+            for item in self.given
+            {
+                guard
+                    let givenInput = input
+                else
+                {
+                    break
+                }
+
+                //---
+
+                input = item.implementation(globalModel, givenInput)
+            }
+
+            //--
+
+            guard
+                let thenInput = input
+            else
+            {
+                return
+            }
+
+            //--
+
+            self.then.implementation(submit, thenInput)
         }
     }
 }
