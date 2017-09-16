@@ -28,10 +28,10 @@ public
 struct When
 {
     public
-    typealias Handler = (GlobalMutation) -> Bool // continue if -> YES
+    typealias Handler = (GlobalMutation) -> GlobalMutation?
     
     public
-    typealias SpecialHandler = (GlobalMutation) -> GlobalMutation?
+    typealias SpecializedHandler<T: GlobalMutation> = (GlobalMutation) -> T?
     
     //===
     
@@ -40,22 +40,13 @@ struct When
     
     // MARK: - Initializers
     
-    init(
+    init<T: GlobalMutation>(
         _ specification: String,
-        _ standardHanlder: @escaping Handler
+        _ implementation: @escaping SpecializedHandler<T>
         )
     {
         self.specification = specification
-        self.implementation = standardHanlder
-    }
-    
-    init(
-        _ specification: String,
-        _ specialHanlder: @escaping SpecialHandler
-        )
-    {
-        self.specification = specification
-        self.implementation = { return specialHanlder($0) != nil }
+        self.implementation = implementation
     }
 }
 

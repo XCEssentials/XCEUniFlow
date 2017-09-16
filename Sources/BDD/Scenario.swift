@@ -38,7 +38,7 @@ extension Scenario
 {
     func shouldReact(on mutation: GlobalMutation) -> Bool
     {
-        return when.implementation(mutation)
+        return when.implementation(mutation) != nil
     }
     
     //===

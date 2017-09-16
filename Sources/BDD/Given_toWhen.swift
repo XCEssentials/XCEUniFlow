@@ -27,27 +27,14 @@
 public
 extension Given.Connector
 {
-    func when(
+    func when<T: GlobalMutation>(
         _ specification: String,
-        _ standardHanlder: @escaping (GlobalMutation) -> Bool
+        _ specializedHandler: @escaping When.SpecializedHandler<T>
         ) -> When.Connector<Result>
     {
         return When.Connector(
             with: previousEntries,
-            when: When(specification, standardHanlder)
-        )
-    }
-    
-    //===
-    
-    func when(
-        _ specification: String,
-        _ specialHanlder: @escaping (GlobalMutation) -> GlobalMutation?
-        ) -> When.Connector<Result>
-    {
-        return When.Connector(
-            with: previousEntries,
-            when: When(specification, specialHanlder)
+            when: When(specification, specializedHandler)
         )
     }
 }
