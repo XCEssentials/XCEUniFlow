@@ -46,6 +46,7 @@
 		94F1574C1F6D9D9C007A1F5E /* Given.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574B1F6D9D9C007A1F5E /* Given.swift */; };
 		94F157501F6DA062007A1F5E /* Given_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574F1F6DA062007A1F5E /* Given_toThen.swift */; };
 		94FCBC021F6DDA1700749904 /* Scenario_toMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC011F6DDA1700749904 /* Scenario_toMiddleware.swift */; };
+		94FCBC041F6DE16600749904 /* When_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC031F6DE16600749904 /* When_toThen.swift */; };
 		B685E60037F407D3CE0E2C3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 		C3D9ABD77F5AFD6A8F67A861 /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B963C5720D1093F4F08FB3F /* Arithmetics.swift */; };
 		D74EF5AAF28A897E24ACAF13 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03186E114271BE51700CA6F9 /* Search.swift */; };
@@ -130,6 +131,7 @@
 		94F1574B1F6D9D9C007A1F5E /* Given.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given.swift; sourceTree = "<group>"; };
 		94F1574F1F6DA062007A1F5E /* Given_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given_toThen.swift; sourceTree = "<group>"; };
 		94FCBC011F6DDA1700749904 /* Scenario_toMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario_toMiddleware.swift; sourceTree = "<group>"; };
+		94FCBC031F6DE16600749904 /* When_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = When_toThen.swift; sourceTree = "<group>"; };
 		9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				9483BF931F6DB0F300718F61 /* Story_toWhen.swift */,
 				9483BF8B1F6DA1A500718F61 /* When.swift */,
 				9483BF951F6DB4C400718F61 /* When_toGiven.swift */,
+				94FCBC031F6DE16600749904 /* When_toThen.swift */,
 				94F1574B1F6D9D9C007A1F5E /* Given.swift */,
 				94F1574F1F6DA062007A1F5E /* Given_toThen.swift */,
 				9483BF8F1F6DA23300718F61 /* Then.swift */,
@@ -534,6 +537,7 @@
 				9412C7FF1F68272E00015C9B /* TriggerGlobal.swift in Sources */,
 				9483BF8C1F6DA1A500718F61 /* When.swift in Sources */,
 				9483BF961F6DB4C400718F61 /* When_toGiven.swift in Sources */,
+				94FCBC041F6DE16600749904 /* When_toThen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,8 +29,11 @@ import XCERequirement
 //===
 
 public
-extension Given.Connector where GivenOutput == Void
+extension When.Connector
 {
+    /**
+     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+     */
     func then(
         _ specification: String,
         _ handler: @escaping (@escaping SubmitAction) -> Void
@@ -38,36 +41,35 @@ extension Given.Connector where GivenOutput == Void
     {
         return Scenario(
             when: when,
-            given: previousClauses,
+            given: [],
             then: Then(specification) { submit, _ in
                 
                 handler(submit)
             }
         )
     }
-}
-
-//===
-
-public
-extension Given.Connector
-{
+    
+    //===
+    
+    /**
+     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+     */
     func then(
         _ specification: String,
-        _ handler: @escaping (@escaping SubmitAction, GivenOutput) -> Void
+        _ handler: @escaping (@escaping SubmitAction, WhenOutput) -> Void
         ) -> Scenario
     {
-        typealias Input = GivenOutput
+        typealias Input = WhenOutput
         
         //---
         
         return Scenario(
             when: when,
-            given: previousClauses,
+            given: [],
             then: Then(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
-                
+                    
                 try Require("Previous result is of type \(Input.self)").isNotNil(
                     
                     previousResult as? Input
@@ -82,27 +84,33 @@ extension Given.Connector
     
     //===
     
+    /**
+     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+     */
     func then(_ specification: String, submit action: Action) -> Scenario
     {
         return Scenario(
             when: when,
-            given: previousClauses,
+            given: [],
             then: Then(specification) { submit, _ in
-
+                
                 submit << action
             }
         )
     }
-
+    
     //===
-
+    
+    /**
+     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+     */
     func then(_ specification: String, submit actions: [Action]) -> Scenario
     {
         return Scenario(
             when: when,
-            given: previousClauses,
+            given: [],
             then: Then(specification) { submit, _ in
-
+                
                 submit << actions
             }
         )
