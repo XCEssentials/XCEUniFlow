@@ -34,6 +34,7 @@ extension Story
     /**
      Defines 'WHEN' clause that starts definition of a given Scenario.
      */
+    static
     func when<T: MutationConvertible>(
         _ specification: String,
         _: T.Type
