@@ -51,12 +51,3 @@ extension Scenario
         let name: String
     }
 }
-
-// MARK: - Scenario error protocol
-
-public
-protocol ScenarioClauseFailure: Error
-{
-    var specification: String { get }
-    var reason: Error { get }
-}

@@ -24,37 +24,35 @@
  
  */
 
-import XCERequirement
+public
+protocol BDDFailure: Error { }
 
 //===
 
-extension Scenario
+public
+struct ScenarioFailure: BDDFailure
 {
-    var asMiddleware: Dispatcher.Middleware
-    {
-        return { globalModel, mutation, submit in
-            
-            do
-            {
-                var input: Any = try self.when.implementation(mutation)
-                
-                //---
-                
-                for item in self.given
-                {
-                    input = try item.implementation(globalModel, input)
-                }
-                
-                //--
-                
-                try self.then.implementation(submit, input)
-            }
-            catch
-            {
-                throw ScenarioFailure(story: self.story,
-                                      name: self.name,
-                                      reason: error)
-            }
-        }
-    }
+    /**
+     Type that represents the story to which the failed scenario is related.
+     */
+    let story: Story.Type
+    
+    /**
+     Name of the failed scenario.
+     */
+    let name: String
+    
+    /**
+     Error that casued this failure.
+     */
+    let reason: Error // supposed to be ScenarioClauseFailure
+}
+
+// MARK: - Scenario error protocol
+
+public
+protocol ScenarioClauseFailure: BDDFailure
+{
+    var specification: String { get }
+    var reason: Error { get }
 }
