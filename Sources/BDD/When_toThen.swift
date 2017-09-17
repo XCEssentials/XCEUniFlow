@@ -36,7 +36,7 @@ extension When.Connector
      */
     func then(
         _ specification: String,
-        _ handler: @escaping (@escaping SubmitAction) -> Void
+        do handler: @escaping (@escaping SubmitAction) -> Void
         ) -> Scenario
     {
         return Scenario(
@@ -58,7 +58,7 @@ extension When.Connector
      */
     func then(
         _ specification: String,
-        _ handler: @escaping (@escaping SubmitAction, WhenOutput) -> Void
+        do handler: @escaping (@escaping SubmitAction, WhenOutput) -> Void
         ) -> Scenario
     {
         typealias Input = WhenOutput
@@ -82,6 +82,63 @@ extension When.Connector
                 //===
                 
                 handler(submit, typedPreviousResult)
+            }
+        )
+    }
+    
+    //===
+    
+    /**
+     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+     */
+    func then(
+        _ specification: String,
+        submit actionGetter: @escaping (WhenOutput) -> Action
+        ) -> Scenario
+    {
+        typealias Input = WhenOutput
+        
+        //---
+        
+        return Scenario(
+            story: scenario.story,
+            name: scenario.name,
+            when: when,
+            given: [],
+            then: Then(specification) { submit, previousResult in
+                
+                let typedPreviousResult =
+                    
+                try Require("Previous result is of type \(Input.self)").isNotNil(
+                    
+                    previousResult as? Input
+                )
+                
+                //===
+                
+                submit << actionGetter(typedPreviousResult)
+            }
+        )
+    }
+    
+    //===
+    
+    /**
+     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+     */
+    func then(
+        _ specification: String,
+        submit actionGetter: @escaping () -> Action
+        ) -> Scenario
+    {
+        return Scenario(
+            story: scenario.story,
+            name: scenario.name,
+            when: when,
+            given: [],
+            then: Then(specification) { submit, _ in
+                
+                submit << actionGetter
             }
         )
     }

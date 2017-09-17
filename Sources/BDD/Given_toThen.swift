@@ -33,7 +33,7 @@ extension Given.Connector where GivenOutput == Void
 {
     func then(
         _ specification: String,
-        _ handler: @escaping (@escaping SubmitAction) -> Void
+        do handler: @escaping (@escaping SubmitAction) -> Void
         ) -> Scenario
     {
         return Scenario(
@@ -56,7 +56,7 @@ extension Given.Connector
 {
     func then(
         _ specification: String,
-        _ handler: @escaping (@escaping SubmitAction, GivenOutput) -> Void
+        do handler: @escaping (@escaping SubmitAction, GivenOutput) -> Void
         ) -> Scenario
     {
         typealias Input = GivenOutput
@@ -84,6 +84,57 @@ extension Given.Connector
         )
     }
     
+    //===
+    
+    func then(
+        _ specification: String,
+        submit actionGetter: @escaping (GivenOutput) -> Action
+        ) -> Scenario
+    {
+        typealias Input = GivenOutput
+        
+        //---
+        
+        return Scenario(
+            story: scenario.story,
+            name: scenario.name,
+            when: when,
+            given: previousClauses,
+            then: Then(specification) { submit, previousResult in
+                
+                let typedPreviousResult =
+                    
+                try Require("Previous result is of type \(Input.self)").isNotNil(
+                    
+                    previousResult as? Input
+                )
+                
+                //===
+                
+                submit << actionGetter(typedPreviousResult)
+            }
+        )
+    }
+
+    //===
+    
+    func then(
+        _ specification: String,
+        submit actionGetter: @escaping () -> Action
+        ) -> Scenario
+    {
+        return Scenario(
+            story: scenario.story,
+            name: scenario.name,
+            when: when,
+            given: previousClauses,
+            then: Then(specification) { submit, _ in
+                
+                submit << actionGetter
+            }
+        )
+    }
+
     //===
     
     func then(_ specification: String, submit action: Action) -> Scenario
