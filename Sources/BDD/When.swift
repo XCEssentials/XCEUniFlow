@@ -84,3 +84,49 @@ extension When
         let when: When
     }
 }
+
+// MARK: - Syntax sugar
+
+public
+extension MutationConvertible
+{
+    /*
+     This small helper enables expression like this:
+     
+     ```swift
+     .when("...", TransitionInto<M.App.Running>.processed)
+     ```
+     
+     instead of
+     
+     ```swift
+     .when("...", TransitionInto<M.App.Running>.self)
+     ```
+     */
+    static
+    var processed: Self.Type
+    {
+        return self
+    }
+    
+    //===
+    
+    /*
+     This small helper enables expression like this:
+     
+     ```swift
+     .when("...", TransitionInto<M.App.Running>.done)
+     ```
+     
+     instead of
+     
+     ```swift
+     .when("...", TransitionInto<M.App.Running>.self)
+     ```
+     */
+    static
+    var done: Self.Type
+    {
+        return self
+    }
+}
