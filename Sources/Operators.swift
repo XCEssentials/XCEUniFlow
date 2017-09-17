@@ -29,7 +29,7 @@
 public
 func << <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 {
-    return global.state(ofType: S.self)
+    return try? global.state(ofType: S.self)
 }
 
 //===
@@ -37,7 +37,7 @@ func << <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
 public
 func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
 {
-    return global.state(for: F.self)
+    return try? global.state(for: F.self)
 }
 
 //===
@@ -45,17 +45,18 @@ func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
 public
 func >> <F: Feature>(global: GlobalModel, _: F.Type) -> FeatureRepresentation?
 {
-    return global.state(for: F.self)
+    return try? global.state(for: F.self)
 }
 
 //===
 
 public
-func >> <F, S>(global: GlobalModel, _: F.Type) -> S? where
+func >> <F, S>(global: GlobalModel, _: F.Type) -> S?
+    where
     S: FeatureState,
     S.ParentFeature == F
 {
-    return global.state(for: F.self)
+    return try? global.state(for: F.self)
 }
 
 //===
@@ -63,7 +64,7 @@ func >> <F, S>(global: GlobalModel, _: F.Type) -> S? where
 public
 func >> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
 {
-    return global.state(ofType: S.self)
+    return try? global.state(ofType: S.self)
 }
 
 // MARK: - Submit action to proxy

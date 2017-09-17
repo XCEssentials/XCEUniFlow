@@ -36,44 +36,96 @@ struct GlobalModel
     var data = [Key: FeatureRepresentation]()
 }
 
+// MARK: - Errors
+
+public
+protocol GlobalModelError: Error { }
+
+public
+extension GlobalModel
+{
+    struct NoSuchFeature: GlobalModelError
+    {
+        let feature: Feature.Type
+    }
+    
+    struct NoSuchFeatureState: GlobalModelError
+    {
+        let state: FeatureRepresentation.Type
+        
+        var feature: Feature.Type
+        {
+            return state.feature
+        }
+    }
+}
+
 // MARK: - GET data
 
 public
 extension GlobalModel
 {
-    func state<S: FeatureRepresentation>(ofType _: S.Type) -> S?
+    func state<S: FeatureRepresentation>(ofType _: S.Type) throws -> S
     {
-        return data[S.feature.name] as? S
+        guard
+            let result = data[S.feature.name] as? S
+        else
+        {
+            throw NoSuchFeatureState(state: S.self)
+        }
+        
+        //---
+        
+        return result
     }
 
     //===
 
-    func state(for feature: Feature.Type) -> FeatureRepresentation?
+    func state(for feature: Feature.Type) throws -> FeatureRepresentation
     {
-        return data[feature.name]
+        guard
+            let result = data[feature.name]
+        else
+        {
+            throw NoSuchFeature(feature: feature)
+        }
+        
+        //---
+        
+        return result
     }
 
     //===
 
-    func state<F, S>(for _: F.Type) -> S? where
+    func state<F, S>(for _: F.Type) throws -> S
+        where
         S: FeatureState,
         S.ParentFeature == F
     {
-        return data[F.name] as? S
+        guard
+            let result = data[F.name] as? S
+        else
+        {
+            throw NoSuchFeatureState(state: S.self)
+        }
+        
+        //---
+        
+        return result
     }
 
     //===
 
     func hasState<S: FeatureRepresentation>(ofType _: S.Type) -> Bool
     {
-        return state(ofType: S.self) != nil
+        return (try? state(ofType: S.self)) != nil
     }
 
     //===
 
     func hasState(for feature: Feature.Type) -> Bool
     {
-        return state(for: feature) != nil
+        return (try? state(for: feature)) != nil
     }
 }
 
@@ -83,19 +135,20 @@ public
 extension Feature
 {
     static
-    func state(from globalModel: GlobalModel) -> FeatureRepresentation?
+    func state(from globalModel: GlobalModel) throws -> FeatureRepresentation
     {
-        return globalModel.state(for: self)
+        return try globalModel.state(for: self)
     }
     
     //===
     
     static
-    func state<S>(from globalModel: GlobalModel) -> S? where
+    func state<S>(from globalModel: GlobalModel) throws -> S?
+        where
         S: FeatureState,
         S.ParentFeature == Self
     {
-        return globalModel.state(for: self)
+        return try globalModel.state(for: self)
     }
 
     //===
@@ -113,9 +166,9 @@ public
 extension FeatureState
 {
     static
-    func from(_ globalModel: GlobalModel) -> Self?
+    func from(_ globalModel: GlobalModel) throws -> Self
     {
-        return globalModel.state(ofType: self)
+        return try globalModel.state(ofType: self)
     }
     
     //===
