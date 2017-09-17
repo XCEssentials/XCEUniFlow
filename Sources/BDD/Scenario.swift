@@ -27,9 +27,28 @@
 public
 struct Scenario
 {
+    public
+    let name: String
+    
+    public
     let when: When
+    
+    public
     let given: [Given]
+    
+    public
     let then: Then
+}
+
+// MARK: - Connector
+
+public
+extension Scenario
+{
+    struct Connector
+    {
+        let name: String
+    }
 }
 
 // MARK: - Scenario error protocol

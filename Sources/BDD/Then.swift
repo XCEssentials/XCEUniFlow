@@ -44,9 +44,11 @@ struct Then
         let reason: Error
     }
     
-    // MARK: - Internal members
+    //===
     
+    public
     let specification: String
+    
     let implementation: Handler
     
     // MARK: - Initializers

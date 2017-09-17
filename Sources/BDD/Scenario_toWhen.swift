@@ -29,18 +29,18 @@ import XCERequirement
 //===
 
 public
-extension Story
+extension Scenario.Connector
 {
     /**
      Defines 'WHEN' clause that starts definition of a given Scenario.
      */
-    static
     func when<T: MutationConvertible>(
         _ specification: String,
         _: T.Type
         ) -> When.Connector<T>
     {
         return When.Connector<T>(
+            scenario: name,
             when: When(specification) {
                 
                 return try Require("Mutation is of type \(T.self)").isNotNil(

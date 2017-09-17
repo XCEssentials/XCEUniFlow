@@ -49,9 +49,11 @@ struct Given
         let reason: Error
     }
     
-    // MARK: - Internal members
+    //===
     
+    public
     let specification: String
+    
     let implementation: Handler
     
     // MARK: - Initializers
@@ -83,6 +85,7 @@ extension Given
 {
     struct Connector<GivenOutput>
     {
+        let scenario: String
         let when: When
         let previousClauses: [Given]
     }
@@ -126,7 +129,11 @@ extension Given.Connector
 
         //---
 
-        return Given.Connector<Output>(when: when, previousClauses: items)
+        return Given.Connector<Output>(
+            scenario: scenario,
+            when: when,
+            previousClauses: items
+        )
     }
     
     //===
@@ -168,7 +175,11 @@ extension Given.Connector
         
         //---
         
-        return Given.Connector<Void>(when: when, previousClauses: items)
+        return Given.Connector<Void>(
+            scenario: scenario,
+            when: when,
+            previousClauses: items
+        )
     }
 }
 
@@ -197,7 +208,11 @@ extension Given.Connector where GivenOutput == Void
         
         //---
         
-        return Given.Connector<Output>(when: when, previousClauses: items)
+        return Given.Connector<Output>(
+            scenario: scenario,
+            when: when,
+            previousClauses: items
+        )
     }
     
     //===
@@ -226,6 +241,10 @@ extension Given.Connector where GivenOutput == Void
         
         //---
         
-        return Given.Connector<Void>(when: when, previousClauses: items)
+        return Given.Connector<Void>(
+            scenario: scenario,
+            when: when,
+            previousClauses: items
+        )
     }
 }

@@ -25,62 +25,11 @@
  */
 
 public
-struct When
+extension Story
 {
-    // MARK: - Intenral types
-    
-    typealias Handler = (GlobalMutation) throws -> MutationConvertible
-    
-    // MARK: - Public types
-    
-    public
-    struct Failed: ScenarioClauseFailure
+    static
+    func scenario(_ name: String) -> Scenario.Connector
     {
-        public
-        let specification: String
-        
-        public
-        let reason: Error
-    }
-    
-    //===
-    
-    public
-    let specification: String
-    
-    let implementation: Handler
-    
-    // MARK: - Initializers
-    
-    init(
-        _ specification: String,
-        _ implementation: @escaping Handler
-        )
-    {
-        self.specification = specification
-        self.implementation = {
-            
-            do
-            {
-                return try implementation($0)
-            }
-            catch
-            {
-                throw Failed(specification: specification, reason: error)
-            }
-        }
-    }
-}
-
-// MARK: - Connector
-
-public
-extension When
-{
-    public
-    struct Connector<WhenOutput: MutationConvertible>
-    {
-        let scenario: String
-        let when: When
+        return Scenario.Connector(name: name)
     }
 }

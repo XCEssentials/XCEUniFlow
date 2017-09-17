@@ -60,6 +60,7 @@ extension When.Connector
         //---
         
         return Given.Connector<Output>(
+            scenario: scenario,
             when: when,
             previousClauses: [firstGiven]
         )
@@ -100,6 +101,7 @@ extension When.Connector
         //---
         
         return Given.Connector<Void>(
+            scenario: scenario,
             when: when,
             previousClauses: [firstGiven]
         )
