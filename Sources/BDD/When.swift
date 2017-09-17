@@ -80,7 +80,7 @@ extension When
     public
     struct Connector<WhenOutput: MutationConvertible>
     {
-        let scenario: String
+        let scenario: Scenario.Connector
         let when: When
     }
 }

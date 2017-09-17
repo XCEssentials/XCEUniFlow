@@ -40,7 +40,8 @@ extension When.Connector
         ) -> Scenario
     {
         return Scenario(
-            name: scenario,
+            story: scenario.story,
+            name: scenario.name,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in
@@ -65,7 +66,8 @@ extension When.Connector
         //---
         
         return Scenario(
-            name: scenario,
+            story: scenario.story,
+            name: scenario.name,
             when: when,
             given: [],
             then: Then(specification) { submit, previousResult in
@@ -92,7 +94,8 @@ extension When.Connector
     func then(_ specification: String, submit action: Action) -> Scenario
     {
         return Scenario(
-            name: scenario,
+            story: scenario.story,
+            name: scenario.name,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in
@@ -110,7 +113,8 @@ extension When.Connector
     func then(_ specification: String, submit actions: [Action]) -> Scenario
     {
         return Scenario(
-            name: scenario,
+            story: scenario.story,
+            name: scenario.name,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in

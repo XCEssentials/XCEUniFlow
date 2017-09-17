@@ -30,6 +30,6 @@ extension Story
     static
     func scenario(_ name: String) -> Scenario.Connector
     {
-        return Scenario.Connector(name: name)
+        return Scenario.Connector(story: self, name: name)
     }
 }

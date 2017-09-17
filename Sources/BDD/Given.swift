@@ -85,7 +85,7 @@ extension Given
 {
     struct Connector<GivenOutput>
     {
-        let scenario: String
+        let scenario: Scenario.Connector
         let when: When
         let previousClauses: [Given]
     }

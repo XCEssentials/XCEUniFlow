@@ -28,15 +28,15 @@ public
 struct Scenario
 {
     public
+    let story: Story.Type
+    
+    public
     let name: String
     
-    public
+    //===
+    
     let when: When
-    
-    public
     let given: [Given]
-    
-    public
     let then: Then
 }
 
@@ -47,6 +47,7 @@ extension Scenario
 {
     struct Connector
     {
+        let story: Story.Type
         let name: String
     }
 }

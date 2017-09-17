@@ -40,7 +40,7 @@ extension Scenario.Connector
         ) -> When.Connector<T>
     {
         return When.Connector<T>(
-            scenario: name,
+            scenario: self,
             when: When(specification) {
                 
                 return try Require("Mutation is of type \(T.self)").isNotNil(
