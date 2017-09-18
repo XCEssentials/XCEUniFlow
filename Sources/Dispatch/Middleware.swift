@@ -25,51 +25,59 @@
  */
 
 public
-extension Feature
+extension Dispatcher
 {
-    static
-    var initialize: Initialization<Self>.Type
+    typealias Middleware =
+        (GlobalModel, GlobalMutation, @escaping SubmitAction) throws -> Void
+}
+
+// MARK: - Register global middleware
+
+public
+extension Dispatcher
+{
+    private
+    enum GlobalMiddleware
     {
-        return Initialization<Self>.self
+        static
+        var key: GlobalModel.Key
+        {
+            return GlobalModel.Key(reflecting: self)
+        }
+    }
+    
+    //===
+    
+    func registerGlobalMiddleware(_ handler: @escaping Middleware)
+    {
+        var globals = middleware[GlobalMiddleware.key] ?? []
+        globals.append(handler)
+        middleware[GlobalMiddleware.key] = globals
+    }
+    
+    //===
+    
+    func registerGlobalMiddleware(_ handlers: [Middleware])
+    {
+        var globals = middleware[GlobalMiddleware.key] ?? []
+        globals.append(contentsOf: handlers)
+        middleware[GlobalMiddleware.key] = globals
     }
 }
 
-//===
+// MARK: - Helper middleware builder
 
 public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+extension ActionKind
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    static
+    func bind(
+        _ handler: @escaping (GlobalModel, Self, @escaping SubmitAction) -> Void
+        ) -> Dispatcher.Middleware
     {
-        self.newState = newState
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
+        return { globalModel, mutation, submit in
+
+            self.init(mutation).map { handler(globalModel, $0, submit) }
         }
-        
-        //---
-        
-        self = mutation
     }
 }

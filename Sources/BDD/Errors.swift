@@ -25,51 +25,34 @@
  */
 
 public
-extension Feature
-{
-    static
-    var initialize: Initialization<Self>.Type
-    {
-        return Initialization<Self>.self
-    }
-}
+protocol BDDFailure: Error { }
 
 //===
 
 public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+struct ScenarioFailure: BDDFailure
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
-    {
-        self.newState = newState
-    }
-    
-    //===
+    /**
+     Type that represents the story to which the failed scenario is related.
+     */
+    let story: Story.Type
     
     /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
+     Name of the failed scenario.
      */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
-    }
+    let name: String
+    
+    /**
+     Error that casued this failure.
+     */
+    let reason: Error // supposed to be ScenarioClauseFailure
+}
+
+// MARK: - Scenario error protocol
+
+public
+protocol ScenarioClauseFailure: BDDFailure
+{
+    var specification: String { get }
+    var reason: Error { get }
 }

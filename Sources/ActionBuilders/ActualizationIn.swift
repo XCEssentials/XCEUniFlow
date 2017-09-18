@@ -54,11 +54,11 @@ extension Actualization
          ```
          */
         public
-        init?(_ diff: GlobalMutation)
+        init?(_ mutation: GlobalMutation)
         {
             guard
-                let mutation = diff as? Actualization<F>,
-                let state = mutation.state as? S
+                let mutation = mutation as? Actualization<F>,
+                let state = mutation.newState as? S
             else
             {
                 return nil
@@ -103,7 +103,7 @@ extension Actualization.In
             
             //---
             
-            return Actualization(in: state)
+            return Actualization(with: state)
         }
     }
 }

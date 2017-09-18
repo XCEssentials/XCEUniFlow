@@ -53,10 +53,10 @@ extension Deinitialization
          ```
          */
         public
-        init?(_ diff: GlobalMutation)
+        init?(_ mutation: GlobalMutation)
         {
             guard
-                let mutation = diff as? Deinitialization<S.ParentFeature>,
+                let mutation = mutation as? Deinitialization<S.ParentFeature>,
                 let oldState = mutation.oldState as? S
             else
             {

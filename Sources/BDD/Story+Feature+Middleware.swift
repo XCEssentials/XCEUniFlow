@@ -25,51 +25,11 @@
  */
 
 public
-extension Feature
+extension Story where Self: Feature
 {
     static
-    var initialize: Initialization<Self>.Type
+    var middleware: [Dispatcher.Middleware]
     {
-        return Initialization<Self>.self
-    }
-}
-
-//===
-
-public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
-{
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
-    {
-        self.newState = newState
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
+        return scenarios.map { $0.asMiddleware }
     }
 }

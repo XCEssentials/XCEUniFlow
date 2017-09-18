@@ -24,52 +24,37 @@
  
  */
 
-public
-extension Feature
-{
-    static
-    var initialize: Initialization<Self>.Type
-    {
-        return Initialization<Self>.self
-    }
-}
+import XCERequirement
 
 //===
 
-public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+extension Scenario
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    var asMiddleware: Dispatcher.Middleware
     {
-        self.newState = newState
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
+        return { globalModel, mutation, submit in
+            
+            do
+            {
+                var input: Any = try self.when.implementation(mutation)
+                
+                //---
+                
+                for item in self.given
+                {
+                    input = try item.implementation(globalModel, input)
+                }
+                
+                //--
+                
+                try self.then.implementation(submit, input)
+            }
+            catch
+            {
+                throw ScenarioFailure(story: self.story,
+                                      name: self.name,
+                                      reason: error)
+            }
         }
-        
-        //---
-        
-        self = mutation
     }
 }
