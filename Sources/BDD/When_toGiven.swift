@@ -39,7 +39,7 @@ extension When.Connector
         mapState handler: @escaping (GlobalModel) throws -> Output
         ) -> Given.Connector<Output>
     {
-        let firstGiven = Given(specification) { globalModel, _ in
+        let firstGiven = Given(first: true, specification) { globalModel, _ in
             
             return try handler(globalModel)
         }
@@ -67,7 +67,7 @@ extension When.Connector
         
         //---
         
-        let firstGiven = Given(specification) { _, previousResult in
+        let firstGiven = Given(first: true, specification) { _, previousResult in
             
             let typedPreviousResult =
                 
@@ -104,7 +104,7 @@ extension When.Connector
         
         //---
         
-        let firstGiven = Given(specification) { globalModel, previousResult in
+        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
             
             let typedPreviousResult =
                 
@@ -141,7 +141,7 @@ extension When.Connector
         withState handler: @escaping (GlobalModel) throws -> Void
         ) -> Given.Connector<Void>
     {
-        let firstGiven = Given(specification) { globalModel, _ in
+        let firstGiven = Given(first: true, specification) { globalModel, _ in
             
             try handler(globalModel)
             
@@ -173,7 +173,7 @@ extension When.Connector
         
         //---
         
-        let firstGiven = Given(specification) { _, previousResult in
+        let firstGiven = Given(first: true, specification) { _, previousResult in
             
             let typedPreviousResult =
                 
@@ -214,7 +214,7 @@ extension When.Connector
         
         //---
         
-        let firstGiven = Given(specification) { globalModel, previousResult in
+        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
             
             let typedPreviousResult =
                 

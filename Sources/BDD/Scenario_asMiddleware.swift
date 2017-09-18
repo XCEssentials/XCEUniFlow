@@ -40,10 +40,18 @@ extension Scenario
                 
                 //---
                 
+                self.onDidSatisfyWhenHandler?(self)
+                
+                //---
+                
                 for item in self.given
                 {
                     input = try item.implementation(globalModel, input)
                 }
+                
+                //---
+                
+                self.onWillPerformThenHandler?(self)
                 
                 //--
                 
@@ -52,7 +60,7 @@ extension Scenario
             catch
             {
                 throw ScenarioFailure(story: self.story,
-                                      name: self.name,
+                                      summary: self.summary,
                                       reason: error)
             }
         }

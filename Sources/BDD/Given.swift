@@ -25,7 +25,7 @@
  */
 
 public
-struct Given
+struct Given: ScenarioClause
 {
     // MARK: - Intenral types
     
@@ -48,6 +48,9 @@ struct Given
     //===
     
     public
+    let prefix: String
+    
+    public
     let specification: String
     
     let implementation: Handler
@@ -55,10 +58,12 @@ struct Given
     // MARK: - Initializers
     
     init(
+        first: Bool = false,
         _ specification: String,
         _ implementation: @escaping Handler
         )
     {
+        self.prefix = first ? "Given" : "And"
         self.specification = specification
         self.implementation = {
             

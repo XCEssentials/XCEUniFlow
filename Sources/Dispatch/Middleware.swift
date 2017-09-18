@@ -68,7 +68,7 @@ extension Dispatcher
 // MARK: - Helper middleware builder
 
 public
-extension ActionKind
+extension MutationConvertible
 {
     static
     func bind(

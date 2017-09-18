@@ -25,19 +25,141 @@
  */
 
 public
-struct Scenario
+protocol ScenarioClause: CustomStringConvertible
 {
+    var prefix: String { get }
+    var specification: String { get }
+}
+
+public
+extension ScenarioClause
+{
+    var prefix: String
+    {
+        return "\(type(of: self))"
+    }
+    
+    var description: String
+    {
+        return "\(prefix.uppercased()) \(specification)"
+    }
+}
+
+// MARK: - Scenario
+
+public
+struct Scenario: CustomStringConvertible
+{
+    // MARK: - Public members
+    
     public
     let story: Story.Type
     
     public
-    let name: String
+    let summary: String
     
-    //===
+    public
+    var description: String
+    {
+        return "[\(story.name)] \(summary)"
+    }
+    
+    public
+    func onDidSatisfyWhen(_ handler: @escaping (Scenario) -> Void) -> Scenario
+    {
+        var result = self
+        result.onDidSatisfyWhenHandler = handler
+        
+        //---
+        
+        return result
+    }
+    
+    public
+    func onDidSatisfyWhenDefault() -> Scenario
+    {
+        var result = self
+        result.onDidSatisfyWhenHandler = { print($0.description) }
+        
+        //---
+        
+        return result
+    }
+    
+    public
+    func onWillPerformThen(_ handler: @escaping (Scenario) -> Void) -> Scenario
+    {
+        var result = self
+        result.onWillPerformThenHandler = handler
+        
+        //---
+        
+        return result
+    }
+    
+    public
+    func onWillPerformThenDefault() -> Scenario
+    {
+        var result = self
+        result.onWillPerformThenHandler = { print($0.description) }
+        
+        //---
+        
+        return result
+    }
+    
+    // MARK: - Internal members
+    
+    var onDidSatisfyWhenHandler: ((Scenario) -> Void)?
+    var onWillPerformThenHandler: ((Scenario) -> Void)?
     
     let when: When
     let given: [Given]
     let then: Then
+    
+    // MARK: - Initializers
+    
+    init(
+        story: Story.Type,
+        summary: String?,
+        when: When,
+        given: [Given],
+        then: Then
+        )
+    {
+        self.story = story
+        
+        self.when = when
+        self.given = given
+        self.then = then
+        
+        //===
+        
+        if
+            let summary = summary
+        {
+            self.summary = summary
+        }
+        else
+        {
+            self.summary = type(of: self).constructSummary(when, given, then)
+        }
+    }
+    
+    // MARK: - Summary auto-constructor
+    
+    private
+    static
+    func constructSummary(
+        _ when: ScenarioClause,
+        _ given: [ScenarioClause],
+        _ then: ScenarioClause
+        ) -> String
+    {
+        return ([when] + given + [then])
+            .map{ $0.description }
+            .joined(separator: ", ") + "."
+    }
 }
 
 // MARK: - Connector
@@ -48,6 +170,6 @@ extension Scenario
     struct Connector
     {
         let story: Story.Type
-        let name: String
+        let summary: String?
     }
 }
