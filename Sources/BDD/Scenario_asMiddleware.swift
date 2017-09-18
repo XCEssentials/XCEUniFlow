@@ -52,7 +52,7 @@ extension Scenario
             catch
             {
                 throw ScenarioFailure(story: self.story,
-                                      name: self.name,
+                                      summary: self.summary,
                                       reason: error)
             }
         }

@@ -38,7 +38,7 @@ extension Given.Connector where GivenOutput == Void
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: previousClauses,
             then: Then(specification) { submit, _ in
@@ -65,7 +65,7 @@ extension Given.Connector
         
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: previousClauses,
             then: Then(specification) { submit, previousResult in
@@ -97,7 +97,7 @@ extension Given.Connector
         
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: previousClauses,
             then: Then(specification) { submit, previousResult in
@@ -125,7 +125,7 @@ extension Given.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: previousClauses,
             then: Then(specification) { submit, _ in
@@ -141,7 +141,7 @@ extension Given.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: previousClauses,
             then: Then(specification) { submit, _ in
@@ -157,7 +157,7 @@ extension Given.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: previousClauses,
             then: Then(specification) { submit, _ in

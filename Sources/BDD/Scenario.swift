@@ -31,7 +31,7 @@ struct Scenario
     let story: Story.Type
     
     public
-    let name: String
+    let summary: String
     
     //===
     
@@ -48,6 +48,6 @@ extension Scenario
     struct Connector
     {
         let story: Story.Type
-        let name: String
+        let summary: String
     }
 }
