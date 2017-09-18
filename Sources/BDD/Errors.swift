@@ -38,9 +38,9 @@ struct ScenarioFailure: BDDFailure
     let story: Story.Type
     
     /**
-     Name of the failed scenario.
+     Summary of the failed scenario.
      */
-    let name: String
+    let summary: String
     
     /**
      Error that casued this failure.

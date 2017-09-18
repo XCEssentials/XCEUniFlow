@@ -25,7 +25,7 @@
  */
 
 public
-struct Then
+struct Then: ScenarioClause
 {
     // MARK: - Intenral types
     

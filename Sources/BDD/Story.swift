@@ -25,13 +25,12 @@
  */
 
 /**
- 
+
  Example:
  
  AS the app owner
  IN ORDER TO retain users
  I WANT TO provide smooth and pleasant FTUE.
- 
  */
 public
 typealias StorySummary = (as: String, inOrderTo: String, wantTo: String)
@@ -41,6 +40,9 @@ typealias StorySummary = (as: String, inOrderTo: String, wantTo: String)
 public
 protocol Story
 {
+    static
+    var name: String { get }
+    
     static
     var summary: StorySummary { get }
     

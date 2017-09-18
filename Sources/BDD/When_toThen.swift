@@ -41,7 +41,7 @@ extension When.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in
@@ -67,7 +67,7 @@ extension When.Connector
         
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: [],
             then: Then(specification) { submit, previousResult in
@@ -102,7 +102,7 @@ extension When.Connector
         
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: [],
             then: Then(specification) { submit, previousResult in
@@ -133,7 +133,7 @@ extension When.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in
@@ -152,7 +152,7 @@ extension When.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in
@@ -171,7 +171,7 @@ extension When.Connector
     {
         return Scenario(
             story: scenario.story,
-            name: scenario.name,
+            summary: scenario.summary,
             when: when,
             given: [],
             then: Then(specification) { submit, _ in
