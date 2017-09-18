@@ -53,10 +53,10 @@ extension Initialization
          ```
          */
         public
-        init?(_ diff: GlobalMutation)
+        init?(_ mutation: GlobalMutation)
         {
             guard
-                let mutation = diff as? Initialization<F>,
+                let mutation = mutation as? Initialization<F>,
                 let newState = mutation.newState as? S
             else
             {

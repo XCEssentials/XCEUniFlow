@@ -24,8 +24,18 @@
  
  */
 
+/**
+ Not related to any feature.
+ */
 public
-enum TriggerGlobal: ActionKind { } // Not attached to any feature
+struct TriggerGlobal: ActionKind
+{
+    /**
+     This type is not supposed to be instantiated at all.
+     */
+    private
+    init() { }
+}
 
 //===
 

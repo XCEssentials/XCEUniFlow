@@ -24,52 +24,44 @@
  
  */
 
+/**
+ 
+ Example:
+ 
+ AS the app owner
+ IN ORDER TO retain users
+ I WANT TO provide smooth and pleasant FTUE.
+ 
+ */
 public
-extension Feature
+typealias StorySummary = (as: String, inOrderTo: String, wantTo: String)
+
+//===
+
+public
+protocol Story
 {
     static
-    var initialize: Initialization<Self>.Type
-    {
-        return Initialization<Self>.self
-    }
+    var summary: StorySummary { get }
+    
+    static
+    var scenarios: [Scenario] { get }
 }
 
 //===
 
 public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+extension Story
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    static
+    var summary: StorySummary
     {
-        self.newState = newState
+        return ("", "", "")
     }
     
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
+    static
+    var scenarios: [Scenario]
     {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
+        return []
     }
 }

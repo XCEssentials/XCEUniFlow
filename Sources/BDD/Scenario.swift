@@ -25,51 +25,29 @@
  */
 
 public
-extension Feature
+struct Scenario
 {
-    static
-    var initialize: Initialization<Self>.Type
-    {
-        return Initialization<Self>.self
-    }
+    public
+    let story: Story.Type
+    
+    public
+    let name: String
+    
+    //===
+    
+    let when: When
+    let given: [Given]
+    let then: Then
 }
 
-//===
+// MARK: - Connector
 
 public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+extension Scenario
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    struct Connector
     {
-        self.newState = newState
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
+        let story: Story.Type
+        let name: String
     }
 }

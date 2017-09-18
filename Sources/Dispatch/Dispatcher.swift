@@ -36,9 +36,6 @@ class Dispatcher
     
     var state = GlobalModel()
     
-    public
-    typealias Middleware = (GlobalModel, GlobalMutation, SubmitAction) -> Void
-    
     var middleware: [GlobalModel.Key: [Middleware]] = [:]
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]

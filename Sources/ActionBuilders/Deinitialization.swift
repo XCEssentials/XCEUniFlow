@@ -41,17 +41,12 @@ extension Feature
 //===
 
 public
-struct Deinitialization<F: Feature>: GlobalMutationExt, ActionKind
+struct Deinitialization<F: Feature>: ActionKind, FeatureRemoval
 {
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .removal }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
+    var relatedToFeature: Feature.Type
+    {
+        return F.self
+    }
     
     public
     let oldState: FeatureRepresentation
@@ -61,7 +56,6 @@ struct Deinitialization<F: Feature>: GlobalMutationExt, ActionKind
     init(from oldState: FeatureRepresentation)
     {
         self.oldState = oldState
-        self.apply = { $0.removeRepresentation(ofFeature: F.self) }
     }
     
     //===
@@ -74,10 +68,10 @@ struct Deinitialization<F: Feature>: GlobalMutationExt, ActionKind
      ```
      */
     public
-    init?(_ diff: GlobalMutation)
+    init?(_ mutation: GlobalMutation)
     {
         guard
-            let mutation = diff as? Deinitialization<F>
+            let mutation = mutation as? Deinitialization<F>
         else
         {
             return nil
@@ -116,7 +110,7 @@ extension Deinitialization
             
             //---
             
-            return Deinitialization<F>(from: oldState)
+            return self.init(from: oldState)
         }
     }
     
@@ -144,7 +138,7 @@ extension Deinitialization
             
             //---
             
-            return Deinitialization<F>(from: oldState)
+            return self.init(from: oldState)
         }
     }
 }

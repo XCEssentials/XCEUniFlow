@@ -24,52 +24,30 @@
  
  */
 
-public
-extension Feature
-{
-    static
-    var initialize: Initialization<Self>.Type
-    {
-        return Initialization<Self>.self
-    }
-}
+import XCERequirement
 
 //===
 
 public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+extension Scenario.Connector
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
-    {
-        self.newState = newState
-    }
-    
-    //===
-    
     /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
+     Defines 'WHEN' clause that starts definition of a given Scenario.
      */
-    public
-    init?(_ mutation: GlobalMutation)
+    func when<T: MutationConvertible>(
+        _ specification: String,
+        _: T.Type
+        ) -> When.Connector<T>
     {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
+        return When.Connector<T>(
+            scenario: self,
+            when: When(specification) {
+                
+                return try Require("Mutation is of type \(T.self)").isNotNil(
+                    
+                    T($0)
+                )
+            }
+        )
     }
 }

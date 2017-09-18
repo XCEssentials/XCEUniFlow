@@ -45,7 +45,7 @@ typealias ActionBody =
  A type that conforms to this protocol has a semantic value and represents a distinctive set of actions.
  */
 public
-protocol ActionKind { }
+protocol ActionKind: MutationConvertible { }
 
 //===
 
@@ -96,7 +96,6 @@ extension Action
 
 // MARK: - Direct execution helper (mostly unit tests helper)
 
-public
 extension Action
 {
     func perform(

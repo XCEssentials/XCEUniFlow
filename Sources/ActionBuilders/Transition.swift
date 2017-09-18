@@ -37,18 +37,8 @@ extension Feature
 //===
 
 public
-struct Transition<F: Feature>: GlobalMutationExt
+struct Transition<F: Feature>: ActionKind, FeatureUpdate
 {
-    static
-    var feature: Feature.Type { return F.self }
-    
-    static
-    var kind: FeatureMutationKind { return .update }
-    
-    let apply: (GlobalModel) -> GlobalModel
-    
-    //===
-    
     public
     let oldState: FeatureRepresentation
     
@@ -63,7 +53,6 @@ struct Transition<F: Feature>: GlobalMutationExt
     {
         self.oldState = oldState
         self.newState = newState
-        self.apply = { $0.store(newState) }
     }
     
     //===
@@ -77,10 +66,10 @@ struct Transition<F: Feature>: GlobalMutationExt
      ```
      */
     public
-    init?(_ diff: GlobalMutation)
+    init?(_ mutation: GlobalMutation)
     {
         guard
-            let mutation = diff as? Transition<F>
+            let mutation = mutation as? Transition<F>
         else
         {
             return nil

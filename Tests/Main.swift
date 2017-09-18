@@ -122,7 +122,7 @@ class Main: XCTestCase
             //===
             
             if
-                let p = Search.InProgress.from(globalModel),
+                let p = try? Search.InProgress.from(globalModel),
                 p.progress == 70
             {
                 progressEx.fulfill()

@@ -25,51 +25,64 @@
  */
 
 public
-extension Feature
+struct Given
 {
-    static
-    var initialize: Initialization<Self>.Type
+    // MARK: - Intenral types
+    
+    typealias PreviousResult = Any
+    typealias Result = Any
+    typealias Handler = (GlobalModel, PreviousResult) throws -> Result
+    
+    // MARK: - Public types
+    
+    public
+    struct Failed: ScenarioClauseFailure
     {
-        return Initialization<Self>.self
+        public
+        let specification: String
+        
+        public
+        let reason: Error
+    }
+    
+    //===
+    
+    public
+    let specification: String
+    
+    let implementation: Handler
+    
+    // MARK: - Initializers
+    
+    init(
+        _ specification: String,
+        _ implementation: @escaping Handler
+        )
+    {
+        self.specification = specification
+        self.implementation = {
+            
+            do
+            {
+                return try implementation($0, $1)
+            }
+            catch
+            {
+                throw Failed(specification: specification, reason: error)
+            }
+        }
     }
 }
 
-//===
+// MARK: - Connector
 
 public
-struct Initialization<F: Feature>: ActionKind, FeatureAddition
+extension Given
 {
-    public
-    let newState: FeatureRepresentation
-    
-    //===
-    
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    struct Connector<GivenOutput>
     {
-        self.newState = newState
-    }
-    
-    //===
-    
-    /**
-     Usage:
-     
-     ```swift
-     let someAppState = Initialization<M.App>(diff)?.newState
-     ```
-     */
-    public
-    init?(_ mutation: GlobalMutation)
-    {
-        guard
-            let mutation = mutation as? Initialization<F>
-        else
-        {
-            return nil
-        }
-        
-        //---
-        
-        self = mutation
+        let scenario: Scenario.Connector
+        let when: When
+        let previousClauses: [Given]
     }
 }

@@ -92,7 +92,7 @@ extension Dispatcher
         
         middleware.values.joined().forEach{
             
-            $0(state, mutation, proxy.submit)
+            try? $0(state, mutation, proxy.submit)
         }
         
         //---
@@ -112,24 +112,22 @@ extension Dispatcher
     
     func addMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
     {
-        let mutationType = type(of: mutation)
-        let key = mutationType.feature.name
-        
         if
-            mutationType.kind == .addition
+            mutation is FeatureAddition
         {
-            middleware[key] = mutationType.feature.middleware
+            let key = mutation.relatedToFeature.name
+            
+            middleware[key] = mutation.relatedToFeature.middleware
         }
     }
     
     func removeMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
     {
-        let mutationType = type(of: mutation)
-        let key = mutationType.feature.name
-        
         if
-            mutationType.kind == .removal
+            mutation is FeatureRemoval
         {
+            let key = mutation.relatedToFeature.name
+            
             middleware[key] = nil
         }
     }
