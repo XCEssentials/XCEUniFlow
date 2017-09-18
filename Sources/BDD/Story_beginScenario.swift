@@ -28,7 +28,7 @@ public
 extension Story
 {
     static
-    func scenario(_ summary: String) -> Scenario.Connector
+    func scenario(_ summary: String? = nil) -> Scenario.Connector
     {
         return Scenario.Connector(story: self, summary: summary)
     }

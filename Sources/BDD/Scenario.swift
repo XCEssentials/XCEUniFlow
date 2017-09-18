@@ -25,6 +25,29 @@
  */
 
 public
+protocol ScenarioClause: CustomStringConvertible
+{
+    var prefix: String { get }
+    var specification: String { get }
+}
+
+public
+extension ScenarioClause
+{
+    var prefix: String
+    {
+        return "\(type(of: self).self)"
+    }
+    
+    var description: String
+    {
+        return "\(prefix.uppercased()) \(specification)"
+    }
+}
+
+//===
+
+public
 struct Scenario
 {
     public
@@ -38,6 +61,61 @@ struct Scenario
     let when: When
     let given: [Given]
     let then: Then
+    
+    //===
+    
+    init(
+        story: Story.Type,
+        summary: String?,
+        when: When,
+        given: [Given],
+        then: Then
+        )
+    {
+        self.story = story
+        
+        self.when = when
+        self.given = given
+        self.then = then
+        
+        //===
+        
+        if
+            let summary = summary
+        {
+            self.summary = summary
+        }
+        else
+        {
+            self.summary = type(of: self).constructSummary(when, given, then)
+        }
+    }
+    
+    //===
+    
+    private
+    static
+    func constructSummary(
+        _ when: ScenarioClause,
+        _ given: [ScenarioClause],
+        _ then: ScenarioClause
+        ) -> String
+    {
+        return ([when] + given + [then])
+            .map{ $0.description }
+            .joined(separator: ", ") + "."
+    }
+}
+
+//===
+
+extension Scenario: CustomStringConvertible
+{
+    public
+    var description: String
+    {
+        return "[\(story.name)] \(summary)"
+    }
 }
 
 // MARK: - Connector
@@ -48,6 +126,6 @@ extension Scenario
     struct Connector
     {
         let story: Story.Type
-        let summary: String
+        let summary: String?
     }
 }

@@ -42,6 +42,9 @@ public
 protocol Story
 {
     static
+    var name: String { get }
+    
+    static
     var summary: StorySummary { get }
     
     static
