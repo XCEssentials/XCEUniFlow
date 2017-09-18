@@ -36,7 +36,7 @@ extension ScenarioClause
 {
     var prefix: String
     {
-        return "\(type(of: self).self)"
+        return "\(type(of: self))"
     }
     
     var description: String
@@ -45,24 +45,57 @@ extension ScenarioClause
     }
 }
 
-//===
+// MARK: - Scenario
 
 public
-struct Scenario
+struct Scenario: CustomStringConvertible
 {
+    // MARK: - Public members
+    
     public
     let story: Story.Type
     
     public
     let summary: String
     
-    //===
+    public
+    var description: String
+    {
+        return "[\(story.name)] \(summary)"
+    }
+    
+    public
+    func onDidSatisfyWhen(_ handler: @escaping (Scenario) -> Void) -> Scenario
+    {
+        var result = self
+        result.onDidSatisfyWhenHandler = handler
+        
+        //---
+        
+        return result
+    }
+    
+    public
+    func onWillPerformThen(_ handler: @escaping (Scenario) -> Void) -> Scenario
+    {
+        var result = self
+        result.onWillPerformThenHandler = handler
+        
+        //---
+        
+        return result
+    }
+    
+    // MARK: - Internal members
+    
+    var onDidSatisfyWhenHandler: ((Scenario) -> Void)?
+    var onWillPerformThenHandler: ((Scenario) -> Void)?
     
     let when: When
     let given: [Given]
     let then: Then
     
-    //===
+    // MARK: - Initializers
     
     init(
         story: Story.Type,
@@ -91,7 +124,7 @@ struct Scenario
         }
     }
     
-    //===
+    // MARK: - Summary auto-constructor
     
     private
     static
@@ -104,17 +137,6 @@ struct Scenario
         return ([when] + given + [then])
             .map{ $0.description }
             .joined(separator: ", ") + "."
-    }
-}
-
-//===
-
-extension Scenario: CustomStringConvertible
-{
-    public
-    var description: String
-    {
-        return "[\(story.name)] \(summary)"
     }
 }
 
