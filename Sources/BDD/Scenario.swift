@@ -76,10 +76,32 @@ struct Scenario: CustomStringConvertible
     }
     
     public
+    func onDidSatisfyWhenDefault() -> Scenario
+    {
+        var result = self
+        result.onDidSatisfyWhenHandler = { print($0.description) }
+        
+        //---
+        
+        return result
+    }
+    
+    public
     func onWillPerformThen(_ handler: @escaping (Scenario) -> Void) -> Scenario
     {
         var result = self
         result.onWillPerformThenHandler = handler
+        
+        //---
+        
+        return result
+    }
+    
+    public
+    func onWillPerformThenDefault() -> Scenario
+    {
+        var result = self
+        result.onWillPerformThenHandler = { print($0.description) }
         
         //---
         
