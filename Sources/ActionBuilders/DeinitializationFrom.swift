@@ -53,7 +53,7 @@ extension Deinitialization
          ```
          */
         public
-        init?(_ mutation: GlobalMutation)
+        init?(_ mutation: GlobalMutation?)
         {
             guard
                 let mutation = mutation as? Deinitialization<S.ParentFeature>,
