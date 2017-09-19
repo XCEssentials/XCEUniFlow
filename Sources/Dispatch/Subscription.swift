@@ -26,14 +26,6 @@
 
 import Foundation
 
-// MARK: - Observer
-
-public
-protocol StateObserver: class
-{
-    func update(with globalModel: GlobalModel, mutation: GlobalMutation?)
-}
-
 //===
 
 public

@@ -81,7 +81,7 @@ extension FeatureRemoval
 public
 protocol MutationConvertible
 {
-    init?(_ mutation: GlobalMutation)
+    init?(_ mutation: GlobalMutation?)
 }
 
 //===
@@ -89,7 +89,7 @@ protocol MutationConvertible
 public
 extension MutationConvertible
 {
-    init?(_ mutation: GlobalMutation)
+    init?(_ mutation: GlobalMutation?)
     {
         return nil
     }
