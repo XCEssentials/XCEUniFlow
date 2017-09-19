@@ -32,7 +32,8 @@
 		9421DCA01F5F9BDC00C838BB /* HelperProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC841F5F915C00C838BB /* HelperProtocols.swift */; };
 		9421DCA21F5F9BDC00C838BB /* GlobalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC861F5F915C00C838BB /* GlobalModel.swift */; };
 		9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC871F5F915C00C838BB /* ReportingHelpers.swift */; };
-		9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC881F5F915C00C838BB /* Subscriptions.swift */; };
+		9421DCA41F5F9BDC00C838BB /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC881F5F915C00C838BB /* Subscription.swift */; };
+		945914391F70841B00B29003 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945914381F70841B00B29003 /* Observer.swift */; };
 		945F6A691F6F1BCF0064121D /* When_toGiven_shrt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F6A681F6F1BCF0064121D /* When_toGiven_shrt.swift */; };
 		945F6A6B1F6F1CE90064121D /* Given_toGiven_shrt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F6A6A1F6F1CE90064121D /* Given_toGiven_shrt.swift */; };
 		9466768C1F62A698002FC086 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9466768B1F62A698002FC086 /* Aliases.swift */; };
@@ -126,7 +127,8 @@
 		9421DC841F5F915C00C838BB /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
 		9421DC861F5F915C00C838BB /* GlobalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalModel.swift; sourceTree = "<group>"; };
 		9421DC871F5F915C00C838BB /* ReportingHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportingHelpers.swift; sourceTree = "<group>"; };
-		9421DC881F5F915C00C838BB /* Subscriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
+		9421DC881F5F915C00C838BB /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
+		945914381F70841B00B29003 /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		945F6A681F6F1BCF0064121D /* When_toGiven_shrt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = When_toGiven_shrt.swift; sourceTree = "<group>"; };
 		945F6A6A1F6F1CE90064121D /* Given_toGiven_shrt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given_toGiven_shrt.swift; sourceTree = "<group>"; };
 		9466768B1F62A698002FC086 /* Aliases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
@@ -273,7 +275,8 @@
 				9421DC841F5F915C00C838BB /* HelperProtocols.swift */,
 				949B57CC1F69D9DD00EABFD4 /* Middleware.swift */,
 				9421DC871F5F915C00C838BB /* ReportingHelpers.swift */,
-				9421DC881F5F915C00C838BB /* Subscriptions.swift */,
+				9421DC881F5F915C00C838BB /* Subscription.swift */,
+				945914381F70841B00B29003 /* Observer.swift */,
 			);
 			path = Dispatch;
 			sourceTree = "<group>";
@@ -545,6 +548,7 @@
 				9412C7F61F68272E00015C9B /* Deinitialization.swift in Sources */,
 				9412C7F71F68272E00015C9B /* DeinitializationFrom.swift in Sources */,
 				9421DC9C1F5F9BDC00C838BB /* Dispatcher.swift in Sources */,
+				945914391F70841B00B29003 /* Observer.swift in Sources */,
 				94D97DBD1F6EF5AD0061079E /* Errors.swift in Sources */,
 				9421DC931F5F9BD600C838BB /* Feature.swift in Sources */,
 				9421DC941F5F9BD600C838BB /* FeatureState.swift in Sources */,
@@ -570,7 +574,7 @@
 				94F1574A1F6D9D49007A1F5E /* Story+Feature+Middleware.swift in Sources */,
 				94F157481F6D9C69007A1F5E /* Story.swift in Sources */,
 				94FCBC061F6E049900749904 /* Story_beginScenario.swift in Sources */,
-				9421DCA41F5F9BDC00C838BB /* Subscriptions.swift in Sources */,
+				9421DCA41F5F9BDC00C838BB /* Subscription.swift in Sources */,
 				9483BF901F6DA23300718F61 /* Then.swift in Sources */,
 				9412C7FA1F68272E00015C9B /* Transition.swift in Sources */,
 				9412C7FB1F68272E00015C9B /* TransitionBetween.swift in Sources */,
@@ -602,7 +606,7 @@
 			baseConfigurationReference = E4C8AB0E44A6025C58245723 /* Pods-Fwk.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEFINES_MODULE = NO;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Info/Fwk.plist;
@@ -646,7 +650,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -699,7 +703,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -766,7 +770,7 @@
 			baseConfigurationReference = DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEFINES_MODULE = NO;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Info/Fwk.plist;

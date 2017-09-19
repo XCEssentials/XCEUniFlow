@@ -66,7 +66,7 @@ struct Transition<F: Feature>: ActionKind, FeatureUpdate
      ```
      */
     public
-    init?(_ mutation: GlobalMutation)
+    init?(_ mutation: GlobalMutation?)
     {
         guard
             let mutation = mutation as? Transition<F>

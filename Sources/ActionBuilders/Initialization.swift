@@ -59,7 +59,7 @@ struct Initialization<F: Feature>: ActionKind, FeatureAddition
      ```
      */
     public
-    init?(_ mutation: GlobalMutation)
+    init?(_ mutation: GlobalMutation?)
     {
         guard
             let mutation = mutation as? Initialization<F>
