@@ -29,7 +29,7 @@ struct When: ScenarioClause
 {
     // MARK: - Intenral types
     
-    typealias Handler = (GlobalMutation) throws -> MutationConvertible
+    typealias Handler = (GlobalMutation?) throws -> MutationConvertible
     
     // MARK: - Public types
     
