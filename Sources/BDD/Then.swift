@@ -29,8 +29,8 @@ struct Then: ScenarioClause
 {
     // MARK: - Intenral types
     
-    typealias GivenResult = Any
-    typealias Handler = (@escaping SubmitAction, GivenResult) throws -> Void
+    typealias Input = Any
+    typealias Handler = (@escaping SubmitAction, Input) throws -> Void
     
     // MARK: - Public types
     
