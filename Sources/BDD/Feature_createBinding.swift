@@ -25,11 +25,11 @@
  */
 
 public
-extension Story
+extension Feature
 {
     static
     func scenario(_ summary: String? = nil) -> Scenario.Connector
     {
-        return Scenario.Connector(story: self, summary: summary)
+        return Scenario.Connector(context: self, summary: summary)
     }
 }

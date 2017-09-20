@@ -37,10 +37,10 @@ extension When.Connector
     func then(
         _ specification: String,
         do handler: @escaping (@escaping SubmitAction) -> Void
-        ) -> Scenario
+        ) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
@@ -49,6 +49,7 @@ extension When.Connector
                 handler(submit)
             }
         )
+        .asModelBinding
     }
     
     //===
@@ -59,14 +60,14 @@ extension When.Connector
     func then(
         _ specification: String,
         do handler: @escaping (@escaping SubmitAction, WhenOutput) -> Void
-        ) -> Scenario
+        ) -> ModelBinding
     {
         typealias Input = WhenOutput
         
         //---
         
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
@@ -84,6 +85,7 @@ extension When.Connector
                 handler(submit, typedPreviousResult)
             }
         )
+        .asModelBinding
     }
     
     //===
@@ -94,14 +96,14 @@ extension When.Connector
     func then(
         _ specification: String,
         submit actionGetter: @escaping (WhenOutput) -> Action
-        ) -> Scenario
+        ) -> ModelBinding
     {
         typealias Input = WhenOutput
         
         //---
         
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
@@ -119,6 +121,7 @@ extension When.Connector
                 submit << actionGetter(typedPreviousResult)
             }
         )
+        .asModelBinding
     }
     
     //===
@@ -129,10 +132,10 @@ extension When.Connector
     func then(
         _ specification: String,
         submit actionGetter: @escaping () -> Action
-        ) -> Scenario
+        ) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
@@ -141,6 +144,7 @@ extension When.Connector
                 submit << actionGetter
             }
         )
+        .asModelBinding
     }
     
     //===
@@ -148,10 +152,10 @@ extension When.Connector
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
      */
-    func then(_ specification: String, submit action: Action) -> Scenario
+    func then(_ specification: String, submit action: Action) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
@@ -160,6 +164,7 @@ extension When.Connector
                 submit << action
             }
         )
+        .asModelBinding
     }
     
     //===
@@ -167,10 +172,10 @@ extension When.Connector
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
      */
-    func then(_ specification: String, submit actions: [Action]) -> Scenario
+    func then(_ specification: String, submit actions: [Action]) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
@@ -179,5 +184,6 @@ extension When.Connector
                 submit << actions
             }
         )
+        .asModelBinding
     }
 }

@@ -30,7 +30,7 @@ import XCERequirement
 
 extension Scenario
 {
-    var asMiddleware: Dispatcher.Middleware
+    var asModelBinding: ModelBinding
     {
         return { globalModel, mutation, submit in
             
@@ -59,7 +59,7 @@ extension Scenario
             }
             catch
             {
-                throw ScenarioFailure(story: self.story,
+                throw ScenarioFailure(context: self.context,
                                       summary: self.summary,
                                       reason: error)
             }

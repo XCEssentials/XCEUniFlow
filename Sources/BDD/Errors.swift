@@ -35,7 +35,7 @@ struct ScenarioFailure: BDDFailure
     /**
      Type that represents the story to which the failed scenario is related.
      */
-    let story: Story.Type
+    let context: Feature.Type
     
     /**
      Summary of the failed scenario.

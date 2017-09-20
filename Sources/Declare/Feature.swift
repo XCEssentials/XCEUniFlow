@@ -28,7 +28,7 @@ public
 protocol Feature
 {
     static
-    var middleware: [Dispatcher.Middleware] { get }
+    var bindings: [ModelBinding] { get }
 }
 
 //===
@@ -37,7 +37,7 @@ public
 extension Feature
 {
     static
-    var middleware: [Dispatcher.Middleware]
+    var bindings: [ModelBinding]
     {
         return []
     }

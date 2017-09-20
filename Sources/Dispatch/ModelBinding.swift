@@ -25,47 +25,44 @@
  */
 
 public
-extension Dispatcher
-{
-    typealias Middleware =
-        (GlobalModel, GlobalMutation, @escaping SubmitAction) throws -> Void
-}
+typealias ModelBinding =
+    (GlobalModel, GlobalMutation, @escaping SubmitAction) throws -> Void
 
-// MARK: - Register global middleware
+// MARK: - Register global model bindings
 
 public
 extension Dispatcher
 {
     private
-    enum GlobalMiddleware
+    enum GlobalModelBinding
     {
         static
-        var key: GlobalModel.Key
+        var groupId: ModelBindingGroupId
         {
-            return GlobalModel.Key(reflecting: self)
+            return ModelBindingGroupId(reflecting: self)
         }
     }
     
     //===
     
-    func registerGlobalMiddleware(_ handler: @escaping Middleware)
+    func registerGlobalBinding(_ handler: @escaping ModelBinding)
     {
-        var globals = middleware[GlobalMiddleware.key] ?? []
+        var globals = bindings[GlobalModelBinding.groupId] ?? []
         globals.append(handler)
-        middleware[GlobalMiddleware.key] = globals
+        bindings[GlobalModelBinding.groupId] = globals
     }
     
     //===
     
-    func registerGlobalMiddleware(_ handlers: [Middleware])
+    func registerGlobalBindings(_ handlers: [ModelBinding])
     {
-        var globals = middleware[GlobalMiddleware.key] ?? []
+        var globals = bindings[GlobalModelBinding.groupId] ?? []
         globals.append(contentsOf: handlers)
-        middleware[GlobalMiddleware.key] = globals
+        bindings[GlobalModelBinding.groupId] = globals
     }
 }
 
-// MARK: - Helper middleware builder
+// MARK: - Helper ModelBinding builder
 
 public
 extension MutationConvertible
@@ -73,7 +70,7 @@ extension MutationConvertible
     static
     func bind(
         _ handler: @escaping (GlobalModel, Self, @escaping SubmitAction) -> Void
-        ) -> Dispatcher.Middleware
+        ) -> ModelBinding
     {
         return { globalModel, mutation, submit in
 

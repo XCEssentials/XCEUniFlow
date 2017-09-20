@@ -34,10 +34,10 @@ extension Given.Connector where GivenOutput == Void
     func then(
         _ specification: String,
         do handler: @escaping (@escaping SubmitAction) -> Void
-        ) -> Scenario
+        ) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
@@ -46,6 +46,7 @@ extension Given.Connector where GivenOutput == Void
                 handler(submit)
             }
         )
+        .asModelBinding
     }
 }
 
@@ -57,14 +58,14 @@ extension Given.Connector
     func then(
         _ specification: String,
         do handler: @escaping (@escaping SubmitAction, GivenOutput) -> Void
-        ) -> Scenario
+        ) -> ModelBinding
     {
         typealias Input = GivenOutput
         
         //---
         
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
@@ -82,6 +83,7 @@ extension Given.Connector
                 handler(submit, typedPreviousResult)
             }
         )
+        .asModelBinding
     }
     
     //===
@@ -89,14 +91,14 @@ extension Given.Connector
     func then(
         _ specification: String,
         submit actionGetter: @escaping (GivenOutput) -> Action
-        ) -> Scenario
+        ) -> ModelBinding
     {
         typealias Input = GivenOutput
         
         //---
         
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
@@ -114,6 +116,7 @@ extension Given.Connector
                 submit << actionGetter(typedPreviousResult)
             }
         )
+        .asModelBinding
     }
 
     //===
@@ -121,10 +124,10 @@ extension Given.Connector
     func then(
         _ specification: String,
         submit actionGetter: @escaping () -> Action
-        ) -> Scenario
+        ) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
@@ -133,14 +136,15 @@ extension Given.Connector
                 submit << actionGetter
             }
         )
+        .asModelBinding
     }
 
     //===
     
-    func then(_ specification: String, submit action: Action) -> Scenario
+    func then(_ specification: String, submit action: Action) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
@@ -149,14 +153,15 @@ extension Given.Connector
                 submit << action
             }
         )
+        .asModelBinding
     }
 
     //===
 
-    func then(_ specification: String, submit actions: [Action]) -> Scenario
+    func then(_ specification: String, submit actions: [Action]) -> ModelBinding
     {
         return Scenario(
-            story: scenario.story,
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
@@ -165,5 +170,6 @@ extension Given.Connector
                 submit << actions
             }
         )
+        .asModelBinding
     }
 }

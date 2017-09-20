@@ -53,7 +53,7 @@ struct Scenario: CustomStringConvertible
     // MARK: - Public members
     
     public
-    let story: Story.Type
+    let context: Feature.Type
     
     public
     let summary: String
@@ -61,7 +61,7 @@ struct Scenario: CustomStringConvertible
     public
     var description: String
     {
-        return "[\(story.name)] \(summary)"
+        return "[\(context.name)] \(summary)"
     }
     
     public
@@ -120,14 +120,14 @@ struct Scenario: CustomStringConvertible
     // MARK: - Initializers
     
     init(
-        story: Story.Type,
+        context: Feature.Type,
         summary: String?,
         when: When,
         given: [Given],
         then: Then
         )
     {
-        self.story = story
+        self.context = context
         
         self.when = when
         self.given = given
@@ -169,7 +169,7 @@ extension Scenario
 {
     struct Connector
     {
-        let story: Story.Type
+        let context: Feature.Type
         let summary: String?
     }
 }

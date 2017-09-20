@@ -35,8 +35,10 @@ class Dispatcher
     // MARK: - Private members
     
     var state = GlobalModel()
-    
-    var middleware: [GlobalModel.Key: [Middleware]] = [:]
+
+    typealias ModelBindingGroupId = String
+
+    var bindings: [ModelBindingGroupId: [ModelBinding]] = [:]
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
