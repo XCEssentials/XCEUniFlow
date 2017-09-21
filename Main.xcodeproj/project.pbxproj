@@ -51,7 +51,7 @@
 		94DF30EA1F703CA100BF1FC0 /* PagePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DF30E91F703CA100BF1FC0 /* PagePresentation.swift */; };
 		94F1574C1F6D9D9C007A1F5E /* Given.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574B1F6D9D9C007A1F5E /* Given.swift */; };
 		94F157501F6DA062007A1F5E /* Given_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F1574F1F6DA062007A1F5E /* Given_toThen.swift */; };
-		94FCBC021F6DDA1700749904 /* Scenario_asMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC011F6DDA1700749904 /* Scenario_asMiddleware.swift */; };
+		94FCBC021F6DDA1700749904 /* Scenario_asModelBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC011F6DDA1700749904 /* Scenario_asModelBinding.swift */; };
 		94FCBC041F6DE16600749904 /* When_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC031F6DE16600749904 /* When_toThen.swift */; };
 		94FCBC061F6E049900749904 /* Feature_createBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC051F6E049900749904 /* Feature_createBinding.swift */; };
 		94FCBC081F6E064000749904 /* Scenario_toWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FCBC071F6E064000749904 /* Scenario_toWhen.swift */; };
@@ -144,7 +144,7 @@
 		94DF30E91F703CA100BF1FC0 /* PagePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagePresentation.swift; sourceTree = "<group>"; };
 		94F1574B1F6D9D9C007A1F5E /* Given.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given.swift; sourceTree = "<group>"; };
 		94F1574F1F6DA062007A1F5E /* Given_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Given_toThen.swift; sourceTree = "<group>"; };
-		94FCBC011F6DDA1700749904 /* Scenario_asMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario_asMiddleware.swift; sourceTree = "<group>"; };
+		94FCBC011F6DDA1700749904 /* Scenario_asModelBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario_asModelBinding.swift; sourceTree = "<group>"; };
 		94FCBC031F6DE16600749904 /* When_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = When_toThen.swift; sourceTree = "<group>"; };
 		94FCBC051F6E049900749904 /* Feature_createBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature_createBinding.swift; sourceTree = "<group>"; };
 		94FCBC071F6E064000749904 /* Scenario_toWhen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario_toWhen.swift; sourceTree = "<group>"; };
@@ -297,7 +297,7 @@
 				945F6A6A1F6F1CE90064121D /* Given_toGiven_shrt.swift */,
 				94F1574F1F6DA062007A1F5E /* Given_toThen.swift */,
 				9483BF911F6DA77200718F61 /* Scenario.swift */,
-				94FCBC011F6DDA1700749904 /* Scenario_asMiddleware.swift */,
+				94FCBC011F6DDA1700749904 /* Scenario_asModelBinding.swift */,
 				94FCBC071F6E064000749904 /* Scenario_toWhen.swift */,
 				94FCBC051F6E049900749904 /* Feature_createBinding.swift */,
 				9483BF8F1F6DA23300718F61 /* Then.swift */,
@@ -563,7 +563,7 @@
 				9412C7E21F6812EC00015C9B /* Operators.swift in Sources */,
 				9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */,
 				9483BF921F6DA77200718F61 /* Scenario.swift in Sources */,
-				94FCBC021F6DDA1700749904 /* Scenario_asMiddleware.swift in Sources */,
+				94FCBC021F6DDA1700749904 /* Scenario_asModelBinding.swift in Sources */,
 				94FCBC081F6E064000749904 /* Scenario_toWhen.swift in Sources */,
 				94FCBC061F6E049900749904 /* Feature_createBinding.swift in Sources */,
 				9421DCA41F5F9BDC00C838BB /* Subscription.swift in Sources */,
