@@ -44,7 +44,7 @@ extension When.ModelConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
                 
                 handler(submit)
             }
@@ -70,7 +70,7 @@ extension When.ModelConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ThenModel(specification) { submit, previousResult in
+            then: ModelBinding.Then(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                     
@@ -105,7 +105,7 @@ extension When.ModelConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ThenModel(specification) { submit, previousResult in
+            then: ModelBinding.Then(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                     
@@ -136,7 +136,7 @@ extension When.ModelConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
                 
                 submit << actionGetter
             }
@@ -155,7 +155,7 @@ extension When.ModelConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
                 
                 submit << action
             }
@@ -174,7 +174,7 @@ extension When.ModelConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
                 
                 submit << actions
             }

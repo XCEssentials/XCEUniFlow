@@ -25,10 +25,8 @@
  */
 
 public
-struct ModelBinding: BDDScenario
+struct ObserverBinding: BDDScenario
 {
-    typealias GroupId = String
-
     // MARK: - Public members
 
     public
@@ -40,10 +38,10 @@ struct ModelBinding: BDDScenario
     // MARK: - Internal members
 
     public
-    var onDidSatisfyWhenHandler: ((ModelBinding) -> Void)?
+    var onDidSatisfyWhenHandler: ((ObserverBinding) -> Void)?
 
     public
-    var onWillPerformThenHandler: ((ModelBinding) -> Void)?
+    var onWillPerformThenHandler: ((ObserverBinding) -> Void)?
 
     public
     let when: When
@@ -56,7 +54,7 @@ struct ModelBinding: BDDScenario
 
     // MARK: - Initializers
 
-    init(context: Feature.Type,
+    init(context: StateObserver.Type,
          summary: String?,
          when: When,
          given: [Given],
@@ -73,11 +71,13 @@ struct ModelBinding: BDDScenario
 //===
 
 public
-extension ModelBinding
+extension ObserverBinding
 {
-    func execute(with globalModel: GlobalModel,
-                 mutation: GlobalMutation,
-                 submit: @escaping SubmitAction) throws
+    func execute(
+        with globalModel: GlobalModel,
+        mutation: GlobalMutation?,
+        observer: StateObserver
+        ) throws
     {
         do
         {
@@ -100,7 +100,7 @@ extension ModelBinding
 
             //--
 
-            try self.then.implementation(submit, input)
+            try self.then.implementation(observer, input)
         }
         catch
         {

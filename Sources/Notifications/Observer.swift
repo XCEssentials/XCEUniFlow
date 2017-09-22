@@ -25,50 +25,7 @@
  */
 
 public
-struct ThenModel: BDDScenarioClause
+protocol StateObserver: class
 {
-    // MARK: - Intenral types
-    
-    typealias Input = Any
-    typealias Handler = (@escaping SubmitAction, Input) throws -> Void
-    
-    // MARK: - Public types
-    
-    public
-    struct Failed: BDDScenarioClauseFailure
-    {
-        public
-        let specification: String
-        
-        public
-        let reason: Error
-    }
-    
-    //===
-    
-    public
-    let specification: String
-    
-    let implementation: Handler
-    
-    // MARK: - Initializers
-    
-    init(
-        _ specification: String,
-        _ implementation: @escaping Handler
-        )
-    {
-        self.specification = specification
-        self.implementation = {
-            
-            do
-            {
-                return try implementation($0, $1)
-            }
-            catch
-            {
-                throw Failed(specification: specification, reason: error)
-            }
-        }
-    }
+    var bindings: [ObserverBinding] { get }
 }

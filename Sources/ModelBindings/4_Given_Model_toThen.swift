@@ -41,7 +41,7 @@ extension Given.ModelConnector where GivenOutput == Void
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
                 
                 handler(submit)
             }
@@ -68,7 +68,7 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ThenModel(specification) { submit, previousResult in
+            then: ModelBinding.Then(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                 
@@ -100,7 +100,7 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ThenModel(specification) { submit, previousResult in
+            then: ModelBinding.Then(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                     
@@ -128,7 +128,7 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
                 
                 submit << actionGetter
             }
@@ -144,7 +144,7 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
 
                 submit << action
             }
@@ -160,7 +160,7 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ThenModel(specification) { submit, _ in
+            then: ModelBinding.Then(specification) { submit, _ in
 
                 submit << actions
             }

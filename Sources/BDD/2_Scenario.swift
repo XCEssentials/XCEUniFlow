@@ -52,7 +52,7 @@ extension BDDScenarioClause
 public
 protocol BDDScenario: CustomStringConvertible
 {
-    associatedtype Then: BDDScenarioClause
+    associatedtype ThenClause: BDDScenarioClause
 
     // MARK: - Public members
 
@@ -66,7 +66,7 @@ protocol BDDScenario: CustomStringConvertible
 
     var when: When { get }
     var given: [Given] { get }
-    var then: Then { get }
+    var then: ThenClause { get }
 }
 
 //===
