@@ -25,7 +25,7 @@
  */
 
 public
-struct Given: ScenarioClause
+struct Given: BDDScenarioClause
 {
     // MARK: - Intenral types
     
@@ -36,7 +36,7 @@ struct Given: ScenarioClause
     // MARK: - Public types
     
     public
-    struct Failed: ScenarioClauseFailure
+    struct Failed: BDDScenarioClauseFailure
     {
         public
         let specification: String
@@ -76,18 +76,5 @@ struct Given: ScenarioClause
                 throw Failed(specification: specification, reason: error)
             }
         }
-    }
-}
-
-// MARK: - Connector
-
-public
-extension Given
-{
-    struct Connector<GivenOutput>
-    {
-        let scenario: Scenario.Connector
-        let when: When
-        let previousClauses: [Given]
     }
 }

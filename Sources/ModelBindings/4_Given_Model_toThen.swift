@@ -29,31 +29,30 @@ import XCERequirement
 //===
 
 public
-extension Given.Connector where GivenOutput == Void
+extension Given.ModelConnector where GivenOutput == Void
 {
     func then(
         _ specification: String,
         do handler: @escaping (@escaping SubmitAction) -> Void
         ) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
                 
                 handler(submit)
             }
         )
-        .asModelBinding
     }
 }
 
 //===
 
 public
-extension Given.Connector
+extension Given.ModelConnector
 {
     func then(
         _ specification: String,
@@ -64,12 +63,12 @@ extension Given.Connector
         
         //---
         
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: Then(specification) { submit, previousResult in
+            then: ThenModel(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                 
@@ -83,7 +82,6 @@ extension Given.Connector
                 handler(submit, typedPreviousResult)
             }
         )
-        .asModelBinding
     }
     
     //===
@@ -97,12 +95,12 @@ extension Given.Connector
         
         //---
         
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: Then(specification) { submit, previousResult in
+            then: ThenModel(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                     
@@ -116,7 +114,6 @@ extension Given.Connector
                 submit << actionGetter(typedPreviousResult)
             }
         )
-        .asModelBinding
     }
 
     //===
@@ -126,50 +123,47 @@ extension Given.Connector
         submit actionGetter: @escaping () -> Action
         ) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
                 
                 submit << actionGetter
             }
         )
-        .asModelBinding
     }
 
     //===
     
     func then(_ specification: String, submit action: Action) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
 
                 submit << action
             }
         )
-        .asModelBinding
     }
 
     //===
 
     func then(_ specification: String, submit actions: [Action]) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
 
                 submit << actions
             }
         )
-        .asModelBinding
     }
 }

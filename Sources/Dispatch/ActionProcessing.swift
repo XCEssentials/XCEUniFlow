@@ -91,8 +91,21 @@ extension Dispatcher
         //---
         
         bindings.values.joined().forEach{
-            
-            try? $0(state, mutation, proxy.submit)
+
+            do
+            {
+                try $0.execute(with: state,
+                               mutation: mutation,
+                               submit: proxy.submit)
+
+                //---
+
+                onDidProcessBinding?($0.description)
+            }
+            catch
+            {
+                onDidRejectBinding?($0.description, error)
+            }
         }
         
         //---

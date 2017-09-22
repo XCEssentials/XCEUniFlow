@@ -25,11 +25,34 @@
  */
 
 public
-extension Feature
+protocol BDDFailure: Error { }
+
+//===
+
+public
+struct BDDScenarioFailure: BDDFailure
 {
-    static
-    func scenario(_ summary: String? = nil) -> Scenario.Connector
-    {
-        return Scenario.Connector(context: self, summary: summary)
-    }
+    /**
+     Type that represents the story to which the failed scenario is related.
+     */
+    let context: Any.Type
+    
+    /**
+     Summary of the failed scenario.
+     */
+    let summary: String
+    
+    /**
+     Error that casued this failure.
+     */
+    let reason: Error // supposed to be ScenarioClauseFailure
+}
+
+// MARK: - Scenario error protocol
+
+public
+protocol BDDScenarioClauseFailure: BDDFailure
+{
+    var specification: String { get }
+    var reason: Error { get }
 }

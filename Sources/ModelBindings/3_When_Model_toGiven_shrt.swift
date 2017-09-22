@@ -24,96 +24,86 @@
  
  */
 
-// MARK: - After VOID, WITH output
-
 public
-extension Given.Connector where GivenOutput == Void
+extension When.ModelConnector
 {
     /**
-     Adds subsequent 'GIVEN' clause in Scenario.
+     Defines first 'GIVEN' clause in a Scenario.
      */
     func givn<Output>(
         _ specification: String,
         mapState handler: @escaping (GlobalModel) throws -> Output
-        ) -> Given.Connector<Output>
+        ) -> Given.ModelConnector<Output>
     {
-        return and(specification, mapState: handler)
-    }
-}
-
-// MARK: - After VOID, NO output
-
-public
-extension Given.Connector where GivenOutput == Void
-{
-    /**
-     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
-     */
-    func givn(
-        _ specification: String,
-        withState handler: @escaping (GlobalModel) throws -> Void
-        ) -> Given.Connector<Void>
-    {
-        return and(specification, withState: handler)
-    }
-}
-
-// MARK: - WITH output
-
-public
-extension Given.Connector
-{
-    /**
-     Adds subsequent 'GIVEN' clause in Scenario.
-     */
-    func givn<Output>(
-        _ specification: String,
-        mapInput handler: @escaping (GivenOutput) throws -> Output
-        ) -> Given.Connector<Output>
-    {
-        return and(specification, mapInput: handler)
+        return self.given(specification, mapState: handler)
     }
     
     //===
     
     /**
-     Adds subsequent 'GIVEN' clause in Scenario.
+     Defines first 'GIVEN' clause in a Scenario.
      */
     func givn<Output>(
         _ specification: String,
-        map handler: @escaping (GlobalModel, GivenOutput) throws -> Output
-        ) -> Given.Connector<Output>
+        mapMutation handler: @escaping (WhenOutput) throws -> Output
+        ) -> Given.ModelConnector<Output>
     {
-        return and(specification, map: handler)
+        return given(specification, mapMutation: handler)
+    }
+    
+    //===
+    
+    /**
+     Defines first 'GIVEN' clause in a Scenario.
+     */
+    func givn<Output>(
+        _ specification: String,
+        map handler: @escaping (GlobalModel, WhenOutput) throws -> Output
+        ) -> Given.ModelConnector<Output>
+    {
+        return given(specification, map: handler)
     }
 }
 
 // MARK: - NO output
 
 public
-extension Given.Connector
+extension When.ModelConnector
 {
     /**
-     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
      */
     func givn(
         _ specification: String,
-        withInput handler: @escaping (GivenOutput) throws -> Void
-        ) -> Given.Connector<Void>
+        withState handler: @escaping (GlobalModel) throws -> Void
+        ) -> Given.ModelConnector<Void>
     {
-        return and(specification, withInput: handler)
+        return given(specification, withState: handler)
     }
     
     //===
     
     /**
-     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
      */
     func givn(
         _ specification: String,
-        with handler: @escaping (GlobalModel, GivenOutput) throws -> Void
-        ) -> Given.Connector<Void>
+        withMutation handler: @escaping (WhenOutput) throws -> Void
+        ) -> Given.ModelConnector<Void>
     {
-        return and(specification, with: handler)
+        return given(specification, withMutation: handler)
+    }
+    
+    //===
+    
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        with handler: @escaping (GlobalModel, WhenOutput) throws -> Void
+        ) -> Given.ModelConnector<Void>
+    {
+        return given(specification, with: handler)
     }
 }

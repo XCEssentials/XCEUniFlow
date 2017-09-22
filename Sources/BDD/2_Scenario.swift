@@ -25,14 +25,16 @@
  */
 
 public
-protocol ScenarioClause: CustomStringConvertible
+protocol BDDScenarioClause: CustomStringConvertible
 {
     var prefix: String { get }
     var specification: String { get }
 }
 
+//===
+
 public
-extension ScenarioClause
+extension BDDScenarioClause
 {
     var prefix: String
     {
@@ -48,128 +50,99 @@ extension ScenarioClause
 // MARK: - Scenario
 
 public
-struct Scenario: CustomStringConvertible
+protocol BDDScenario: CustomStringConvertible
 {
+    associatedtype Then: BDDScenarioClause
+
     // MARK: - Public members
-    
-    public
-    let context: Feature.Type
-    
-    public
-    let summary: String
-    
-    public
+
+    var context: Any.Type { get }
+    var explicitSummary: String? { get }
+
+    // MARK: - Internal members
+
+    var onDidSatisfyWhenHandler: ((Self) -> Void)? { get set }
+    var onWillPerformThenHandler: ((Self) -> Void)? { get set }
+
+    var when: When { get }
+    var given: [Given] { get }
+    var then: Then { get }
+}
+
+//===
+
+public
+extension BDDScenario
+{
+    var implicitSummary: String
+    {
+        return type(of: self).constructSummary(when, given, then)
+    }
+
+    var summary: String
+    {
+        return explicitSummary ?? implicitSummary
+    }
+
     var description: String
     {
-        return "[\(context.name)] \(summary)"
+        return "[\(String(reflecting: context))] \(summary)"
     }
-    
-    public
-    func onDidSatisfyWhen(_ handler: @escaping (Scenario) -> Void) -> Scenario
+
+    //===
+
+    func onDidSatisfyWhen(_ handler: @escaping (Self) -> Void) -> Self
     {
         var result = self
         result.onDidSatisfyWhenHandler = handler
-        
+
         //---
-        
+
         return result
     }
-    
-    public
-    func onDidSatisfyWhenDefault() -> Scenario
+
+    func onDidSatisfyWhenDefault() -> Self
     {
         var result = self
         result.onDidSatisfyWhenHandler = { print($0.description) }
-        
+
         //---
-        
+
         return result
     }
-    
-    public
-    func onWillPerformThen(_ handler: @escaping (Scenario) -> Void) -> Scenario
+
+    func onWillPerformThen(_ handler: @escaping (Self) -> Void) -> Self
     {
         var result = self
         result.onWillPerformThenHandler = handler
-        
+
         //---
-        
+
         return result
     }
-    
-    public
-    func onWillPerformThenDefault() -> Scenario
+
+    func onWillPerformThenDefault() -> Self
     {
         var result = self
         result.onWillPerformThenHandler = { print($0.description) }
-        
+
         //---
-        
+
         return result
     }
-    
-    // MARK: - Internal members
-    
-    var onDidSatisfyWhenHandler: ((Scenario) -> Void)?
-    var onWillPerformThenHandler: ((Scenario) -> Void)?
-    
-    let when: When
-    let given: [Given]
-    let then: Then
-    
-    // MARK: - Initializers
-    
-    init(
-        context: Feature.Type,
-        summary: String?,
-        when: When,
-        given: [Given],
-        then: Then
-        )
-    {
-        self.context = context
-        
-        self.when = when
-        self.given = given
-        self.then = then
-        
-        //===
-        
-        if
-            let summary = summary
-        {
-            self.summary = summary
-        }
-        else
-        {
-            self.summary = type(of: self).constructSummary(when, given, then)
-        }
-    }
-    
+
     // MARK: - Summary auto-constructor
-    
+
     private
     static
     func constructSummary(
-        _ when: ScenarioClause,
-        _ given: [ScenarioClause],
-        _ then: ScenarioClause
+        _ when: BDDScenarioClause,
+        _ given: [BDDScenarioClause],
+        _ then: BDDScenarioClause
         ) -> String
     {
         return ([when] + given + [then])
             .map{ $0.description }
             .joined(separator: ", ") + "."
-    }
-}
-
-// MARK: - Connector
-
-public
-extension Scenario
-{
-    struct Connector
-    {
-        let context: Feature.Type
-        let summary: String?
     }
 }

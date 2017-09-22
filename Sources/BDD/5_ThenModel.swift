@@ -25,16 +25,17 @@
  */
 
 public
-struct When: ScenarioClause
+struct ThenModel: BDDScenarioClause
 {
     // MARK: - Intenral types
     
-    typealias Handler = (GlobalMutation?) throws -> MutationConvertible
+    typealias Input = Any
+    typealias Handler = (@escaping SubmitAction, Input) throws -> Void
     
     // MARK: - Public types
     
     public
-    struct Failed: ScenarioClauseFailure
+    struct Failed: BDDScenarioClauseFailure
     {
         public
         let specification: String
@@ -62,71 +63,12 @@ struct When: ScenarioClause
             
             do
             {
-                return try implementation($0)
+                return try implementation($0, $1)
             }
             catch
             {
                 throw Failed(specification: specification, reason: error)
             }
         }
-    }
-}
-
-// MARK: - Connector
-
-public
-extension When
-{
-    public
-    struct Connector<WhenOutput: MutationConvertible>
-    {
-        let scenario: Scenario.Connector
-        let when: When
-    }
-}
-
-// MARK: - Syntax sugar
-
-public
-extension MutationConvertible
-{
-    /*
-     This small helper enables expression like this:
-     
-     ```swift
-     .when("...", TransitionInto<M.App.Running>.processed)
-     ```
-     
-     instead of
-     
-     ```swift
-     .when("...", TransitionInto<M.App.Running>.self)
-     ```
-     */
-    static
-    var processed: Self.Type
-    {
-        return self
-    }
-    
-    //===
-    
-    /*
-     This small helper enables expression like this:
-     
-     ```swift
-     .when("...", TransitionInto<M.App.Running>.done)
-     ```
-     
-     instead of
-     
-     ```swift
-     .when("...", TransitionInto<M.App.Running>.self)
-     ```
-     */
-    static
-    var done: Self.Type
-    {
-        return self
     }
 }

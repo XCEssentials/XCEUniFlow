@@ -26,48 +26,94 @@
 
 import XCERequirement
 
-// MARK: - With output
+// MARK: - After VOID, WITH output
 
 public
-extension When.Connector
+extension Given.ModelConnector where GivenOutput == Void
 {
     /**
-     Defines first 'GIVEN' clause in a Scenario.
+     Adds subsequent 'GIVEN' clause in Scenario.
      */
-    func given<Output>(
+    func and<Output>(
         _ specification: String,
         mapState handler: @escaping (GlobalModel) throws -> Output
-        ) -> Given.Connector<Output>
+        ) -> Given.ModelConnector<Output>
     {
-        let firstGiven = Given(first: true, specification) { globalModel, _ in
+        let nextGiven = Given(specification) { globalModel, _ in
             
             return try handler(globalModel)
         }
         
         //---
         
-        return Given.Connector<Output>(
-            scenario: scenario,
-            when: when,
-            previousClauses: [firstGiven]
-        )
-    }
-    
-    //===
-    
-    /**
-     Defines first 'GIVEN' clause in a Scenario.
-     */
-    func given<Output>(
-        _ specification: String,
-        mapMutation handler: @escaping (WhenOutput) throws -> Output
-        ) -> Given.Connector<Output>
-    {
-        typealias Input = WhenOutput
+        var items = self.previousClauses
+        items.append(nextGiven)
         
         //---
         
-        let firstGiven = Given(first: true, specification) { _, previousResult in
+        return Given.ModelConnector<Output>(
+            scenario: scenario,
+            when: when,
+            previousClauses: items
+        )
+    }
+}
+
+// MARK: - After VOID, NO output
+
+public
+extension Given.ModelConnector where GivenOutput == Void
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func and(
+        _ specification: String,
+        withState handler: @escaping (GlobalModel) throws -> Void
+        ) -> Given.ModelConnector<Void>
+    {
+        let nextGiven = Given(specification) { globalModel, _ in
+            
+            try handler(globalModel)
+            
+            //===
+            
+            return ()
+        }
+        
+        //---
+        
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.ModelConnector<Void>(
+            scenario: scenario,
+            when: when,
+            previousClauses: items
+        )
+    }
+}
+
+// MARK: - WITH output
+
+public
+extension Given.ModelConnector
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario.
+     */
+    func and<Output>(
+        _ specification: String,
+        mapInput handler: @escaping (GivenOutput) throws -> Output
+        ) -> Given.ModelConnector<Output>
+    {
+        typealias Input = GivenOutput
+        
+        //---
+        
+        let nextGiven = Given(specification) { _, previousResult in
             
             let typedPreviousResult =
                 
@@ -76,35 +122,40 @@ extension When.Connector
                 previousResult as? Input
             )
             
-            //---
+            //===
             
             return try handler(typedPreviousResult)
         }
         
         //---
         
-        return Given.Connector<Output>(
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.ModelConnector<Output>(
             scenario: scenario,
             when: when,
-            previousClauses: [firstGiven]
+            previousClauses: items
         )
     }
     
     //===
     
     /**
-     Defines first 'GIVEN' clause in a Scenario.
+     Adds subsequent 'GIVEN' clause in Scenario.
      */
-    func given<Output>(
+    func and<Output>(
         _ specification: String,
-        map handler: @escaping (GlobalModel, WhenOutput) throws -> Output
-        ) -> Given.Connector<Output>
+        map handler: @escaping (GlobalModel, GivenOutput) throws -> Output
+        ) -> Given.ModelConnector<Output>
     {
-        typealias Input = WhenOutput
+        typealias Input = GivenOutput
         
         //---
         
-        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
+        let nextGiven = Given(specification) { globalModel, previousResult in
             
             let typedPreviousResult =
                 
@@ -113,17 +164,22 @@ extension When.Connector
                 previousResult as? Input
             )
             
-            //---
+            //===
             
             return try handler(globalModel, typedPreviousResult)
         }
         
         //---
         
-        return Given.Connector<Output>(
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.ModelConnector<Output>(
             scenario: scenario,
             when: when,
-            previousClauses: [firstGiven]
+            previousClauses: items
         )
     }
 }
@@ -131,49 +187,21 @@ extension When.Connector
 // MARK: - NO output
 
 public
-extension When.Connector
+extension Given.ModelConnector
 {
     /**
-     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
      */
-    func given(
+    func and(
         _ specification: String,
-        withState handler: @escaping (GlobalModel) throws -> Void
-        ) -> Given.Connector<Void>
+        withInput handler: @escaping (GivenOutput) throws -> Void
+        ) -> Given.ModelConnector<Void>
     {
-        let firstGiven = Given(first: true, specification) { globalModel, _ in
-            
-            try handler(globalModel)
-            
-            //---
-            
-            return ()
-        }
+        typealias Input = GivenOutput
         
         //---
         
-        return Given.Connector<Void>(
-            scenario: scenario,
-            when: when,
-            previousClauses: [firstGiven]
-        )
-    }
-    
-    //===
-    
-    /**
-     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
-     */
-    func given(
-        _ specification: String,
-        withMutation handler: @escaping (WhenOutput) throws -> Void
-        ) -> Given.Connector<Void>
-    {
-        typealias Input = WhenOutput
-        
-        //---
-        
-        let firstGiven = Given(first: true, specification) { _, previousResult in
+        let nextGiven = Given(specification) { _, previousResult in
             
             let typedPreviousResult =
                 
@@ -182,39 +210,44 @@ extension When.Connector
                 previousResult as? Input
             )
             
-            //---
+            //===
             
             try handler(typedPreviousResult)
             
-            //---
+            //===
             
             return ()
         }
         
         //---
         
-        return Given.Connector<Void>(
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.ModelConnector<Void>(
             scenario: scenario,
             when: when,
-            previousClauses: [firstGiven]
+            previousClauses: items
         )
     }
     
     //===
     
     /**
-     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
      */
-    func given(
+    func and(
         _ specification: String,
-        with handler: @escaping (GlobalModel, WhenOutput) throws -> Void
-        ) -> Given.Connector<Void>
+        with handler: @escaping (GlobalModel, GivenOutput) throws -> Void
+        ) -> Given.ModelConnector<Void>
     {
-        typealias Input = WhenOutput
+        typealias Input = GivenOutput
         
         //---
         
-        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
+        let nextGiven = Given(specification) { globalModel, previousResult in
             
             let typedPreviousResult =
                 
@@ -223,21 +256,26 @@ extension When.Connector
                 previousResult as? Input
             )
             
-            //---
+            //===
             
             try handler(globalModel, typedPreviousResult)
             
-            //---
+            //===
             
             return ()
         }
         
         //---
         
-        return Given.Connector<Void>(
+        var items = self.previousClauses
+        items.append(nextGiven)
+        
+        //---
+        
+        return Given.ModelConnector<Void>(
             scenario: scenario,
             when: when,
-            previousClauses: [firstGiven]
+            previousClauses: items
         )
     }
 }

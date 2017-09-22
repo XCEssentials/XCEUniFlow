@@ -36,9 +36,7 @@ class Dispatcher
     
     var state = GlobalModel()
 
-    typealias ModelBindingGroupId = String
-
-    var bindings: [ModelBindingGroupId: [ModelBinding]] = [:]
+    var bindings: [ModelBinding.GroupId: [ModelBinding]] = [:]
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
@@ -53,7 +51,13 @@ class Dispatcher
     
     public
     var onDidRejectAction: ((_ action: Action, _: Error) -> Void)?
-    
+
+    public
+    var onDidProcessBinding: ((_ binding: String) -> Void)?
+
+    public
+    var onDidRejectBinding: ((_ binding: String, _: Error) -> Void)?
+
     // MARK: - Public initializers
     
     public

@@ -24,45 +24,12 @@
  
  */
 
-import XCERequirement
-
-//===
-
-extension Scenario
+public
+extension Feature
 {
-    var asModelBinding: ModelBinding
+    static
+    func scenario(_ summary: String? = nil) -> ModelBinding.Pending
     {
-        return { globalModel, mutation, submit in
-            
-            do
-            {
-                var input: Any = try self.when.implementation(mutation)
-                
-                //---
-                
-                self.onDidSatisfyWhenHandler?(self)
-                
-                //---
-                
-                for item in self.given
-                {
-                    input = try item.implementation(globalModel, input)
-                }
-                
-                //---
-                
-                self.onWillPerformThenHandler?(self)
-                
-                //--
-                
-                try self.then.implementation(submit, input)
-            }
-            catch
-            {
-                throw ScenarioFailure(context: self.context,
-                                      summary: self.summary,
-                                      reason: error)
-            }
-        }
+        return ModelBinding.Pending(context: self, summary: summary)
     }
 }

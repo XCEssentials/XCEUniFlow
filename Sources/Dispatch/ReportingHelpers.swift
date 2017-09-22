@@ -46,6 +46,16 @@ extension Dispatcher
             
             print("XCEUniFlow: [-] REJECTED '\($0.name)' >> '\($0.kindDescription)', reason: \($1)")
         }
+
+        onDidProcessBinding = {
+
+            print("XCEUniFlow: [+] processed BINDING: '\($0)'")
+        }
+
+        onDidRejectBinding = {
+
+            print("XCEUniFlow: [-] rejected BINDING: '\($0)', reason: \($1)")
+        }
     }
     
     //===
@@ -60,6 +70,11 @@ extension Dispatcher
         onDidRejectAction = {
             
             print("XCEUniFlow: [-] REJECTED '\($0.context)' >>  '\($0.kindDescription)', reason: \($1)")
+        }
+
+        onDidProcessBinding = {
+
+            print("XCEUniFlow: [+] processed BINDING: '\($0)'")
         }
     }
     

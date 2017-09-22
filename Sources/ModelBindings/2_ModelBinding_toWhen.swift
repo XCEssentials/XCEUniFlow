@@ -24,51 +24,30 @@
  
  */
 
+import XCERequirement
+
+//===
+
 public
-struct Then: ScenarioClause
+extension ModelBinding.Pending
 {
-    // MARK: - Intenral types
-    
-    typealias Input = Any
-    typealias Handler = (@escaping SubmitAction, Input) throws -> Void
-    
-    // MARK: - Public types
-    
-    public
-    struct Failed: ScenarioClauseFailure
-    {
-        public
-        let specification: String
-        
-        public
-        let reason: Error
-    }
-    
-    //===
-    
-    public
-    let specification: String
-    
-    let implementation: Handler
-    
-    // MARK: - Initializers
-    
-    init(
+    /**
+     Defines 'WHEN' clause that starts definition of a given Scenario.
+     */
+    func when<T: MutationConvertible>(
         _ specification: String,
-        _ implementation: @escaping Handler
-        )
+        _: T.Type
+        ) -> When.ModelConnector<T>
     {
-        self.specification = specification
-        self.implementation = {
-            
-            do
-            {
-                return try implementation($0, $1)
+        return When.ModelConnector<T>(
+            scenario: self,
+            when: When(specification) {
+                
+                return try Require("Mutation is of type \(T.self)").isNotNil(
+                    
+                    T($0)
+                )
             }
-            catch
-            {
-                throw Failed(specification: specification, reason: error)
-            }
-        }
+        )
     }
 }

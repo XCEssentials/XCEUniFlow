@@ -29,7 +29,7 @@ import XCERequirement
 //===
 
 public
-extension When.Connector
+extension When.ModelConnector
 {
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
@@ -39,17 +39,16 @@ extension When.Connector
         do handler: @escaping (@escaping SubmitAction) -> Void
         ) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
                 
                 handler(submit)
             }
         )
-        .asModelBinding
     }
     
     //===
@@ -66,12 +65,12 @@ extension When.Connector
         
         //---
         
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
-            then: Then(specification) { submit, previousResult in
+            then: ThenModel(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                     
@@ -85,7 +84,6 @@ extension When.Connector
                 handler(submit, typedPreviousResult)
             }
         )
-        .asModelBinding
     }
     
     //===
@@ -102,12 +100,12 @@ extension When.Connector
         
         //---
         
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
-            then: Then(specification) { submit, previousResult in
+            then: ThenModel(specification) { submit, previousResult in
                 
                 let typedPreviousResult =
                     
@@ -121,7 +119,6 @@ extension When.Connector
                 submit << actionGetter(typedPreviousResult)
             }
         )
-        .asModelBinding
     }
     
     //===
@@ -134,17 +131,16 @@ extension When.Connector
         submit actionGetter: @escaping () -> Action
         ) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
                 
                 submit << actionGetter
             }
         )
-        .asModelBinding
     }
     
     //===
@@ -154,17 +150,16 @@ extension When.Connector
      */
     func then(_ specification: String, submit action: Action) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
                 
                 submit << action
             }
         )
-        .asModelBinding
     }
     
     //===
@@ -174,16 +169,15 @@ extension When.Connector
      */
     func then(_ specification: String, submit actions: [Action]) -> ModelBinding
     {
-        return Scenario(
+        return ModelBinding(
             context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],
-            then: Then(specification) { submit, _ in
+            then: ThenModel(specification) { submit, _ in
                 
                 submit << actions
             }
         )
-        .asModelBinding
     }
 }
