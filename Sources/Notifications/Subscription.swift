@@ -66,7 +66,7 @@ extension Dispatcher.Subscription
         
         //---
         
-        observer.bindings.forEach {
+        type(of: observer).bindings.forEach {
 
             try? $0.execute(with: state,
                             mutation: mutation,
@@ -123,7 +123,7 @@ extension Dispatcher.Proxy
     public
     func updateNow(_ observer: StateObserver)
     {
-        observer.bindings.forEach {
+        type(of: observer).bindings.forEach {
 
             try? $0.execute(with: self.dispatcher.state,
                             mutation: nil,

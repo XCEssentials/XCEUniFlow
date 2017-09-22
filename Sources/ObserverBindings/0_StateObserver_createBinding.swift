@@ -27,6 +27,7 @@
 public
 extension StateObserver
 {
+    static
     func scenario(_ summary: String? = nil) -> ObserverBinding.Pending<Self>
     {
         return ObserverBinding.Pending(context: self, summary: summary)

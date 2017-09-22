@@ -31,35 +31,35 @@ import XCERequirement
 public
 extension When.ObserverConnector
 {
-    /**
-     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
-     */
-    func then(
-        _ specification: String,
-        do handler: @escaping (Observer) -> Void
-        ) -> ObserverBinding
-    {
-        return ObserverBinding(
-            context: type(of: scenario.context),
-            summary: scenario.summary,
-            when: when,
-            given: [],
-            then: ObserverBinding.Then(specification) { observer, _ in
-                
-                let typedObserver =
+//    /**
+//     Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
+//     */
+//    func then(
+//        _ specification: String,
+//        do handler: @escaping (Observer) -> Void
+//        ) -> ObserverBinding
+//    {
+//        return ObserverBinding(
+//            context: scenario.context,
+//            summary: scenario.summary,
+//            when: when,
+//            given: [],
+//            then: ObserverBinding.Then(specification) { observer, _ in
+//
+//                let typedObserver =
+//
+//                try Require("Provided observer is of type \(Observer.self)").isNotNil(
+//
+//                    observer as? Observer
+//                )
+//
+//                //===
+//
+//                handler(typedObserver)
+//            }
+//        )
+//    }
 
-                try Require("Provided observer is of type \(Observer.self)").isNotNil(
-
-                    observer as? Observer
-                )
-
-                //===
-
-                handler(typedObserver)
-            }
-        )
-    }
-    
     //===
     
     /**
@@ -75,7 +75,7 @@ extension When.ObserverConnector
         //---
         
         return ObserverBinding(
-            context: type(of: scenario.context),
+            context: scenario.context,
             summary: scenario.summary,
             when: when,
             given: [],

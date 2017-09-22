@@ -29,7 +29,7 @@ extension ObserverBinding
 {
     struct Pending<Observer: StateObserver>
     {
-        let context: Observer
+        let context: Observer.Type
         let summary: String?
     }
 }

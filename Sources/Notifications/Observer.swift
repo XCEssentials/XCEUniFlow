@@ -27,5 +27,6 @@
 public
 protocol StateObserver: class
 {
+    static
     var bindings: [ObserverBinding] { get }
 }
