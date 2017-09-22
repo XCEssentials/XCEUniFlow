@@ -100,9 +100,9 @@ extension Action
 {
     func perform(
         with currentState: GlobalModel,
-        submitHandler: @escaping SubmitAction
+        submitHandler: SubmitAction? = nil
         ) throws -> GlobalMutation?
     {
-        return try body(currentState, submitHandler)
+        return try body(currentState, submitHandler ?? { _ in })
     }
 }
