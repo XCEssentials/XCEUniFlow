@@ -86,18 +86,31 @@ extension Dispatcher
         
         //---
         
-        addMiddlewareIfNeeded(mutation)
+        addBindingsIfNeeded(mutation)
         
         //---
         
-        middleware.values.joined().forEach{
-            
-            try? $0(state, mutation, proxy.submit)
+        bindings.values.joined().forEach{
+
+            do
+            {
+                try $0.execute(with: state,
+                               mutation: mutation,
+                               submit: proxy.submit)
+
+                //---
+
+                onDidProcessBinding?($0.description)
+            }
+            catch
+            {
+                onDidRejectBinding?($0.description, error)
+            }
         }
         
         //---
         
-        removeMiddlewareIfNeeded(mutation)
+        removeBindingsIfNeeded(mutation)
         
         //---
         
@@ -110,25 +123,25 @@ extension Dispatcher
     
     //===
     
-    func addMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
+    func addBindingsIfNeeded(_ mutation: GlobalMutationExt)
     {
         if
             mutation is FeatureAddition
         {
             let key = mutation.relatedToFeature.name
             
-            middleware[key] = mutation.relatedToFeature.middleware
+            bindings[key] = mutation.relatedToFeature.bindings
         }
     }
     
-    func removeMiddlewareIfNeeded(_ mutation: GlobalMutationExt)
+    func removeBindingsIfNeeded(_ mutation: GlobalMutationExt)
     {
         if
             mutation is FeatureRemoval
         {
             let key = mutation.relatedToFeature.name
             
-            middleware[key] = nil
+            bindings[key] = nil
         }
     }
 }
