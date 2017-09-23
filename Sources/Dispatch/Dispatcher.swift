@@ -35,8 +35,8 @@ class Dispatcher
     // MARK: - Private members
     
     var state = GlobalModel()
-    
-    var middleware: [GlobalModel.Key: [Middleware]] = [:]
+
+    var bindings: [ModelBinding.GroupId: [ModelBinding]] = [:]
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
@@ -51,7 +51,13 @@ class Dispatcher
     
     public
     var onDidRejectAction: ((_ action: Action, _: Error) -> Void)?
-    
+
+    public
+    var onDidProcessBinding: ((_ binding: String) -> Void)?
+
+    public
+    var onDidRejectBinding: ((_ binding: String, _: Error) -> Void)?
+
     // MARK: - Public initializers
     
     public

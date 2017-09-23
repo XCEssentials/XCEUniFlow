@@ -25,64 +25,67 @@
  */
 
 public
-enum DefaultReporting
-{
-    case none, short, verbose
-}
+protocol PresentationState: FeatureStateAuto { }
 
 //===
 
+/**
+ Special pre-defined ViewModel type for tracking page presentation status on screen.
+ */
 public
-extension Dispatcher
+struct PagePresentation<P: Page>: ViewModel, NoBindings
 {
-    func enableVerboseDefaultReporting()
+    // uninitialized...
+    
+    public
+    struct ShouldAppear: PresentationState
     {
-        onDidProcessAction = {
-            
-            print("XCEUniFlow: [+] PROCESSED '\($0.name)' >> '\($0.kindDescription)'")
-        }
+        public
+        typealias ParentFeature = PagePresentation
         
-        onDidRejectAction = {
-            
-            print("XCEUniFlow: [-] REJECTED '\($0.name)' >> '\($0.kindDescription)', reason: \($1)")
-        }
-
-        onDidProcessBinding = {
-
-            print("XCEUniFlow: [+] processed BINDING: '\($0)'")
-        }
-
-        onDidRejectBinding = {
-
-            print("XCEUniFlow: [-] rejected BINDING: '\($0)', reason: \($1)")
-        }
+        public
+        init() { }
     }
     
-    //===
-
-    func enableShortDefaultReporting()
+    public
+    struct Appearing: PresentationState
     {
-        onDidProcessAction = {
-            
-            print("XCEUniFlow: [+] PROCESSED '\($0.context)' >> '\($0.kindDescription)'")
-        }
+        public
+        typealias ParentFeature = PagePresentation
         
-        onDidRejectAction = {
-            
-            print("XCEUniFlow: [-] REJECTED '\($0.context)' >>  '\($0.kindDescription)', reason: \($1)")
-        }
-
-        onDidProcessBinding = {
-
-            print("XCEUniFlow: [+] processed BINDING: '\($0)'")
-        }
+        public
+        init() { }
     }
     
-    //===
-
-    func resetReporting()
+    public
+    struct Ready: PresentationState
     {
-        onDidProcessAction = nil
-        onDidRejectAction = nil
+        public
+        typealias ParentFeature = PagePresentation
+        
+        public
+        init() { }
     }
+    
+    public
+    struct ShouldDisappear: PresentationState
+    {
+        public
+        typealias ParentFeature = PagePresentation
+        
+        public
+        init() { }
+    }
+    
+    public
+    struct Disappearing: PresentationState
+    {
+        public
+        typealias ParentFeature = PagePresentation
+        
+        public
+        init() { }
+    }
+    
+    // deinitialized...
 }
