@@ -44,10 +44,4 @@ extension Feature
     {
         return String(reflecting: self)
     }
-
-    static
-    var bindings: [ModelBinding]
-    {
-        return []
-    }
 }

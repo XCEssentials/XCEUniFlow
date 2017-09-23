@@ -33,7 +33,7 @@ protocol PresentationState: FeatureStateAuto { }
  Special pre-defined ViewModel type for tracking page presentation status on screen.
  */
 public
-struct PagePresentation<P: Page>: ViewModel
+struct PagePresentation<P: Page>: ViewModel, NoBindings
 {
     // uninitialized...
     

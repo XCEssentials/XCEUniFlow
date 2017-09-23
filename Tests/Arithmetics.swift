@@ -13,7 +13,7 @@ import XCERequirement
 
 //===
 
-enum Arithmetics: Feature
+enum Arithmetics: Feature, NoBindings
 {
     struct Main: FeatureState { typealias ParentFeature = Arithmetics
         
