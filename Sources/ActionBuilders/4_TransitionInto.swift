@@ -34,6 +34,14 @@ extension Transition
     struct Into<S: FeatureState>: ActionKind where S.ParentFeature == F
     {
         public
+        enum SameStateStrategy
+        {
+            case ok, no //swiftlint:disable:this identifier_name
+        }
+
+        //===
+
+        public
         let newState: S
         
         //===
@@ -84,6 +92,7 @@ extension Transition.Into where S: AutoInitializable
     func automatically(
         scope: String = #file,
         context: String = #function,
+        same: SameStateStrategy,
         completion: ((@escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
@@ -95,7 +104,14 @@ extension Transition.Into where S: AutoInitializable
                 
                 model >> F.self
             )
-            
+
+            //---
+
+            try Require("Reset strategy satisfied").isFalse(
+
+                (same == .no) && (oldState is S)
+            )
+
             //---
             
             let newState = S.init()
@@ -120,6 +136,7 @@ extension Transition.Into
     func via(
         scope: String = #file,
         context: String = #function,
+        same: SameStateStrategy,
         body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
@@ -131,7 +148,14 @@ extension Transition.Into
                 
                 model >> F.self
             )
-            
+
+            //---
+
+            try Require("Reset strategy satisfied").isFalse(
+
+                (same == .no) && (oldState is S)
+            )
+
             //---
             
             var newState: S!
