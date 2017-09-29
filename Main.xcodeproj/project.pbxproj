@@ -17,8 +17,8 @@
 		9421DCA31F5F9BDC00C838BB /* ReportingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC871F5F915C00C838BB /* ReportingHelpers.swift */; };
 		9421DCA41F5F9BDC00C838BB /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421DC881F5F915C00C838BB /* Subscription.swift */; };
 		9453E26C1F7583C5009352B5 /* 1_ObserverBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E26B1F7583C5009352B5 /* 1_ObserverBinding.swift */; };
-		9453E26E1F7589EE009352B5 /* 5_ModelBinding_Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E26D1F7589EE009352B5 /* 5_ModelBinding_Then.swift */; };
-		9453E2701F758B16009352B5 /* 5_ObserverBinding_Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E26F1F758B16009352B5 /* 5_ObserverBinding_Then.swift */; };
+		9453E26E1F7589EE009352B5 /* 5_Then_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E26D1F7589EE009352B5 /* 5_Then_Model.swift */; };
+		9453E2701F758B16009352B5 /* 5_Then_Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E26F1F758B16009352B5 /* 5_Then_Observer.swift */; };
 		9453E2721F758B7B009352B5 /* 0_StateObserver_createBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E2711F758B7B009352B5 /* 0_StateObserver_createBinding.swift */; };
 		9453E2741F758BAF009352B5 /* 1_ObserverBinding_Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E2731F758BAF009352B5 /* 1_ObserverBinding_Pending.swift */; };
 		9453E2761F758C71009352B5 /* 2_ObserverBinding_toWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9453E2751F758C71009352B5 /* 2_ObserverBinding_toWhen.swift */; };
@@ -118,8 +118,8 @@
 		9421DC871F5F915C00C838BB /* ReportingHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportingHelpers.swift; sourceTree = "<group>"; };
 		9421DC881F5F915C00C838BB /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		9453E26B1F7583C5009352B5 /* 1_ObserverBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 1_ObserverBinding.swift; sourceTree = "<group>"; };
-		9453E26D1F7589EE009352B5 /* 5_ModelBinding_Then.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_ModelBinding_Then.swift; sourceTree = "<group>"; };
-		9453E26F1F758B16009352B5 /* 5_ObserverBinding_Then.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_ObserverBinding_Then.swift; sourceTree = "<group>"; };
+		9453E26D1F7589EE009352B5 /* 5_Then_Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_Then_Model.swift; sourceTree = "<group>"; };
+		9453E26F1F758B16009352B5 /* 5_Then_Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_Then_Observer.swift; sourceTree = "<group>"; };
 		9453E2711F758B7B009352B5 /* 0_StateObserver_createBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 0_StateObserver_createBinding.swift; sourceTree = "<group>"; };
 		9453E2731F758BAF009352B5 /* 1_ObserverBinding_Pending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 1_ObserverBinding_Pending.swift; sourceTree = "<group>"; };
 		9453E2751F758C71009352B5 /* 2_ObserverBinding_toWhen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2_ObserverBinding_toWhen.swift; sourceTree = "<group>"; };
@@ -278,7 +278,7 @@
 				9483929D1F75906700581413 /* 4_Given_Observer_toGiven.swift */,
 				9483929E1F75906700581413 /* 4_Given_Observer_toGiven_shrt.swift */,
 				9483929F1F75906700581413 /* 4_Given_Observer_toThen.swift */,
-				9453E26F1F758B16009352B5 /* 5_ObserverBinding_Then.swift */,
+				9453E26F1F758B16009352B5 /* 5_Then_Observer.swift */,
 			);
 			path = ObserverBindings;
 			sourceTree = "<group>";
@@ -349,7 +349,7 @@
 				94F9227A1F757D030072CA4A /* 4_Given_Model_toGiven.swift */,
 				94F922791F757D030072CA4A /* 4_Given_Model_toGiven_shrt.swift */,
 				94F9227B1F757D030072CA4A /* 4_Given_Model_toThen.swift */,
-				9453E26D1F7589EE009352B5 /* 5_ModelBinding_Then.swift */,
+				9453E26D1F7589EE009352B5 /* 5_Then_Model.swift */,
 			);
 			path = ModelBindings;
 			sourceTree = "<group>";
@@ -612,8 +612,8 @@
 				94F922581F747C660072CA4A /* 4_TransitionInto.swift in Sources */,
 				94F922591F747C660072CA4A /* 5_Deinitialization.swift in Sources */,
 				94F9225A1F747C660072CA4A /* 5_DeinitializationFrom.swift in Sources */,
-				9453E26E1F7589EE009352B5 /* 5_ModelBinding_Then.swift in Sources */,
-				9453E2701F758B16009352B5 /* 5_ObserverBinding_Then.swift in Sources */,
+				9453E26E1F7589EE009352B5 /* 5_Then_Model.swift in Sources */,
+				9453E2701F758B16009352B5 /* 5_Then_Observer.swift in Sources */,
 				94F9223C1F747C5A0072CA4A /* Action.swift in Sources */,
 				94F9223D1F747C5A0072CA4A /* ActionContext.swift in Sources */,
 				9421DC9B1F5F9BDC00C838BB /* ActionProcessing.swift in Sources */,
