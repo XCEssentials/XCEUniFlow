@@ -11,6 +11,68 @@
 		82C2FFF2DDAD1BC7D438567A /* Pods_Fwk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71D399AC9179409F657A9CD8 /* Pods_Fwk.framework */; };
 		9479B7501F75CE2B00C5BDAF /* ArithmeticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9479B74F1F75CE2B00C5BDAF /* ArithmeticsTests.swift */; };
 		9479B7531F75CE9700C5BDAF /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9479B7511F75CE9600C5BDAF /* Arithmetics.swift */; };
+		94F4B25D1F7EEC2200058BD3 /* 0_Prefixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2581F7EDEDD00058BD3 /* 0_Prefixes.swift */; };
+		94F4B25E1F7EEC2200058BD3 /* 1_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */; };
+		94F4B25F1F7EEC2200058BD3 /* 2_ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */; };
+		94F4B2601F7EEC2200058BD3 /* 3_Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */; };
+		94F4B2611F7EEC2200058BD3 /* 4_PagePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25C1F7EDEDD00058BD3 /* 4_PagePresentation.swift */; };
+		94F4B2621F7EEC2900058BD3 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2551F7EDE9200058BD3 /* Operators.swift */; };
+		94F4B2631F7EEC2E00058BD3 /* 0_StateObserver_createBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2481F7EDE9200058BD3 /* 0_StateObserver_createBinding.swift */; };
+		94F4B2641F7EEC2E00058BD3 /* 1_ObserverBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2491F7EDE9200058BD3 /* 1_ObserverBinding.swift */; };
+		94F4B2651F7EEC2E00058BD3 /* 1_ObserverBinding_Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B24A1F7EDE9200058BD3 /* 1_ObserverBinding_Pending.swift */; };
+		94F4B2661F7EEC2E00058BD3 /* 2_ObserverBinding_toWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B24B1F7EDE9200058BD3 /* 2_ObserverBinding_toWhen.swift */; };
+		94F4B2671F7EEC2E00058BD3 /* 3_When_Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B24C1F7EDE9200058BD3 /* 3_When_Observer.swift */; };
+		94F4B2681F7EEC2E00058BD3 /* 3_When_Observer_toGiven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B24D1F7EDE9200058BD3 /* 3_When_Observer_toGiven.swift */; };
+		94F4B2691F7EEC2E00058BD3 /* 3_When_Observer_toGiven_shrt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B24E1F7EDE9200058BD3 /* 3_When_Observer_toGiven_shrt.swift */; };
+		94F4B26A1F7EEC2E00058BD3 /* 3_When_Observer_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B24F1F7EDE9200058BD3 /* 3_When_Observer_toThen.swift */; };
+		94F4B26B1F7EEC2E00058BD3 /* 4_Given_Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2501F7EDE9200058BD3 /* 4_Given_Observer.swift */; };
+		94F4B26C1F7EEC2E00058BD3 /* 4_Given_Observer_toGiven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2511F7EDE9200058BD3 /* 4_Given_Observer_toGiven.swift */; };
+		94F4B26D1F7EEC2E00058BD3 /* 4_Given_Observer_toGiven_shrt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2521F7EDE9200058BD3 /* 4_Given_Observer_toGiven_shrt.swift */; };
+		94F4B26E1F7EEC2E00058BD3 /* 4_Given_Observer_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2531F7EDE9200058BD3 /* 4_Given_Observer_toThen.swift */; };
+		94F4B26F1F7EEC2E00058BD3 /* 5_Then_Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2541F7EDE9200058BD3 /* 5_Then_Observer.swift */; };
+		94F4B2701F7EEC3100058BD3 /* MutationDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2441F7EDE9200058BD3 /* MutationDescriptors.swift */; };
+		94F4B2711F7EEC3100058BD3 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2451F7EDE9200058BD3 /* Observer.swift */; };
+		94F4B2721F7EEC3100058BD3 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2461F7EDE9200058BD3 /* Subscription.swift */; };
+		94F4B2731F7EEC3600058BD3 /* 0_Feature_createBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2361F7EDE9200058BD3 /* 0_Feature_createBinding.swift */; };
+		94F4B2741F7EEC3600058BD3 /* 1_ModelBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2371F7EDE9200058BD3 /* 1_ModelBinding.swift */; };
+		94F4B2751F7EEC3600058BD3 /* 1_ModelBinding_Pending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2381F7EDE9200058BD3 /* 1_ModelBinding_Pending.swift */; };
+		94F4B2761F7EEC3600058BD3 /* 2_ModelBinding_toWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2391F7EDE9200058BD3 /* 2_ModelBinding_toWhen.swift */; };
+		94F4B2771F7EEC3600058BD3 /* 3_When_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B23A1F7EDE9200058BD3 /* 3_When_Model.swift */; };
+		94F4B2781F7EEC3600058BD3 /* 3_When_Model_toGiven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B23B1F7EDE9200058BD3 /* 3_When_Model_toGiven.swift */; };
+		94F4B2791F7EEC3600058BD3 /* 3_When_Model_toGiven_shrt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B23C1F7EDE9200058BD3 /* 3_When_Model_toGiven_shrt.swift */; };
+		94F4B27A1F7EEC3600058BD3 /* 3_When_Model_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B23D1F7EDE9200058BD3 /* 3_When_Model_toThen.swift */; };
+		94F4B27B1F7EEC3600058BD3 /* 4_Given_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B23E1F7EDE9200058BD3 /* 4_Given_Model.swift */; };
+		94F4B27C1F7EEC3600058BD3 /* 4_Given_Model_toGiven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B23F1F7EDE9200058BD3 /* 4_Given_Model_toGiven.swift */; };
+		94F4B27D1F7EEC3600058BD3 /* 4_Given_Model_toGiven_shrt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2401F7EDE9200058BD3 /* 4_Given_Model_toGiven_shrt.swift */; };
+		94F4B27E1F7EEC3600058BD3 /* 4_Given_Model_toThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2411F7EDE9200058BD3 /* 4_Given_Model_toThen.swift */; };
+		94F4B27F1F7EEC3600058BD3 /* 5_Then_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2421F7EDE9200058BD3 /* 5_Then_Model.swift */; };
+		94F4B2801F7EEC3900058BD3 /* HelperProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */; };
+		94F4B2811F7EEC3E00058BD3 /* ActionProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2301F7EDE9200058BD3 /* ActionProcessing.swift */; };
+		94F4B2821F7EEC3E00058BD3 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2311F7EDE9200058BD3 /* Dispatcher.swift */; };
+		94F4B2831F7EEC3E00058BD3 /* GlobalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2321F7EDE9200058BD3 /* GlobalModel.swift */; };
+		94F4B2841F7EEC3E00058BD3 /* GlobalMutation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2331F7EDE9200058BD3 /* GlobalMutation.swift */; };
+		94F4B2851F7EEC3E00058BD3 /* ReportingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2341F7EDE9200058BD3 /* ReportingHelpers.swift */; };
+		94F4B2861F7EEC4200058BD3 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B22B1F7EDE9200058BD3 /* Action.swift */; };
+		94F4B2871F7EEC4200058BD3 /* ActionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B22C1F7EDE9200058BD3 /* ActionContext.swift */; };
+		94F4B2881F7EEC4200058BD3 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B22D1F7EDE9200058BD3 /* Feature.swift */; };
+		94F4B2891F7EEC4200058BD3 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B22E1F7EDE9200058BD3 /* State.swift */; };
+		94F4B28A1F7EEC4E00058BD3 /* 0_Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2261F7EDE9200058BD3 /* 0_Errors.swift */; };
+		94F4B28B1F7EEC4E00058BD3 /* 2_Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2271F7EDE9200058BD3 /* 2_Scenario.swift */; };
+		94F4B28C1F7EEC4E00058BD3 /* 3_When.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2281F7EDE9200058BD3 /* 3_When.swift */; };
+		94F4B28D1F7EEC4E00058BD3 /* 4_Given.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2291F7EDE9200058BD3 /* 4_Given.swift */; };
+		94F4B28E1F7EEC5000058BD3 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2241F7EDE9200058BD3 /* Aliases.swift */; };
+		94F4B28F1F7EEC5400058BD3 /* 0_TriggerGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2181F7EDE9200058BD3 /* 0_TriggerGlobal.swift */; };
+		94F4B2901F7EEC5400058BD3 /* 1_Trigger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2191F7EDE9200058BD3 /* 1_Trigger.swift */; };
+		94F4B2911F7EEC5400058BD3 /* 2_Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B21A1F7EDE9200058BD3 /* 2_Initialization.swift */; };
+		94F4B2921F7EEC5400058BD3 /* 2_InitializationInto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B21B1F7EDE9200058BD3 /* 2_InitializationInto.swift */; };
+		94F4B2931F7EEC5400058BD3 /* 3_Actualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B21C1F7EDE9200058BD3 /* 3_Actualization.swift */; };
+		94F4B2941F7EEC5400058BD3 /* 3_ActualizationIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B21D1F7EDE9200058BD3 /* 3_ActualizationIn.swift */; };
+		94F4B2951F7EEC5400058BD3 /* 4_Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B21E1F7EDE9200058BD3 /* 4_Transition.swift */; };
+		94F4B2961F7EEC5400058BD3 /* 4_TransitionBetween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B21F1F7EDE9200058BD3 /* 4_TransitionBetween.swift */; };
+		94F4B2971F7EEC5400058BD3 /* 4_TransitionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2201F7EDE9200058BD3 /* 4_TransitionFrom.swift */; };
+		94F4B2981F7EEC5400058BD3 /* 4_TransitionInto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2211F7EDE9200058BD3 /* 4_TransitionInto.swift */; };
+		94F4B2991F7EEC5400058BD3 /* 5_Deinitialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2221F7EDE9200058BD3 /* 5_Deinitialization.swift */; };
+		94F4B29A1F7EEC5400058BD3 /* 5_DeinitializationFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2231F7EDE9200058BD3 /* 5_DeinitializationFrom.swift */; };
 		B685E60037F407D3CE0E2C3E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 		FDA7C253BAB8420D6C290EA8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 170D95578C5313F01B6F8B37 /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -157,8 +219,8 @@
 		605B6CCF42A3F71B16DA5DAB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				509F6DDCB0B1A14921DEB015 /* XCEUniFlow.framework */,
 				541FA9F6EB0DE5C17CF1FC7D /* Tests.xctest */,
+				509F6DDCB0B1A14921DEB015 /* XCEUniFlow.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -189,7 +251,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = $local;
+			name = "$local";
 			sourceTree = "<group>";
 		};
 		91C96DEB87338EEDC8EDD43A /* Tests */ = {
@@ -538,8 +600,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9479B7501F75CE2B00C5BDAF /* ArithmeticsTests.swift in Sources */,
 				9479B7531F75CE9700C5BDAF /* Arithmetics.swift in Sources */,
+				9479B7501F75CE2B00C5BDAF /* ArithmeticsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,6 +609,68 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94F4B28A1F7EEC4E00058BD3 /* 0_Errors.swift in Sources */,
+				94F4B2731F7EEC3600058BD3 /* 0_Feature_createBinding.swift in Sources */,
+				94F4B25D1F7EEC2200058BD3 /* 0_Prefixes.swift in Sources */,
+				94F4B2631F7EEC2E00058BD3 /* 0_StateObserver_createBinding.swift in Sources */,
+				94F4B28F1F7EEC5400058BD3 /* 0_TriggerGlobal.swift in Sources */,
+				94F4B25E1F7EEC2200058BD3 /* 1_Model.swift in Sources */,
+				94F4B2741F7EEC3600058BD3 /* 1_ModelBinding.swift in Sources */,
+				94F4B2751F7EEC3600058BD3 /* 1_ModelBinding_Pending.swift in Sources */,
+				94F4B2641F7EEC2E00058BD3 /* 1_ObserverBinding.swift in Sources */,
+				94F4B2651F7EEC2E00058BD3 /* 1_ObserverBinding_Pending.swift in Sources */,
+				94F4B2901F7EEC5400058BD3 /* 1_Trigger.swift in Sources */,
+				94F4B2911F7EEC5400058BD3 /* 2_Initialization.swift in Sources */,
+				94F4B2921F7EEC5400058BD3 /* 2_InitializationInto.swift in Sources */,
+				94F4B2761F7EEC3600058BD3 /* 2_ModelBinding_toWhen.swift in Sources */,
+				94F4B2661F7EEC2E00058BD3 /* 2_ObserverBinding_toWhen.swift in Sources */,
+				94F4B28B1F7EEC4E00058BD3 /* 2_Scenario.swift in Sources */,
+				94F4B25F1F7EEC2200058BD3 /* 2_ViewModel.swift in Sources */,
+				94F4B2931F7EEC5400058BD3 /* 3_Actualization.swift in Sources */,
+				94F4B2941F7EEC5400058BD3 /* 3_ActualizationIn.swift in Sources */,
+				94F4B2601F7EEC2200058BD3 /* 3_Page.swift in Sources */,
+				94F4B28C1F7EEC4E00058BD3 /* 3_When.swift in Sources */,
+				94F4B2771F7EEC3600058BD3 /* 3_When_Model.swift in Sources */,
+				94F4B2781F7EEC3600058BD3 /* 3_When_Model_toGiven.swift in Sources */,
+				94F4B2791F7EEC3600058BD3 /* 3_When_Model_toGiven_shrt.swift in Sources */,
+				94F4B27A1F7EEC3600058BD3 /* 3_When_Model_toThen.swift in Sources */,
+				94F4B2671F7EEC2E00058BD3 /* 3_When_Observer.swift in Sources */,
+				94F4B2681F7EEC2E00058BD3 /* 3_When_Observer_toGiven.swift in Sources */,
+				94F4B2691F7EEC2E00058BD3 /* 3_When_Observer_toGiven_shrt.swift in Sources */,
+				94F4B26A1F7EEC2E00058BD3 /* 3_When_Observer_toThen.swift in Sources */,
+				94F4B28D1F7EEC4E00058BD3 /* 4_Given.swift in Sources */,
+				94F4B27B1F7EEC3600058BD3 /* 4_Given_Model.swift in Sources */,
+				94F4B27C1F7EEC3600058BD3 /* 4_Given_Model_toGiven.swift in Sources */,
+				94F4B27D1F7EEC3600058BD3 /* 4_Given_Model_toGiven_shrt.swift in Sources */,
+				94F4B27E1F7EEC3600058BD3 /* 4_Given_Model_toThen.swift in Sources */,
+				94F4B26B1F7EEC2E00058BD3 /* 4_Given_Observer.swift in Sources */,
+				94F4B26C1F7EEC2E00058BD3 /* 4_Given_Observer_toGiven.swift in Sources */,
+				94F4B26D1F7EEC2E00058BD3 /* 4_Given_Observer_toGiven_shrt.swift in Sources */,
+				94F4B26E1F7EEC2E00058BD3 /* 4_Given_Observer_toThen.swift in Sources */,
+				94F4B2611F7EEC2200058BD3 /* 4_PagePresentation.swift in Sources */,
+				94F4B2951F7EEC5400058BD3 /* 4_Transition.swift in Sources */,
+				94F4B2961F7EEC5400058BD3 /* 4_TransitionBetween.swift in Sources */,
+				94F4B2971F7EEC5400058BD3 /* 4_TransitionFrom.swift in Sources */,
+				94F4B2981F7EEC5400058BD3 /* 4_TransitionInto.swift in Sources */,
+				94F4B2991F7EEC5400058BD3 /* 5_Deinitialization.swift in Sources */,
+				94F4B29A1F7EEC5400058BD3 /* 5_DeinitializationFrom.swift in Sources */,
+				94F4B27F1F7EEC3600058BD3 /* 5_Then_Model.swift in Sources */,
+				94F4B26F1F7EEC2E00058BD3 /* 5_Then_Observer.swift in Sources */,
+				94F4B2861F7EEC4200058BD3 /* Action.swift in Sources */,
+				94F4B2871F7EEC4200058BD3 /* ActionContext.swift in Sources */,
+				94F4B2811F7EEC3E00058BD3 /* ActionProcessing.swift in Sources */,
+				94F4B28E1F7EEC5000058BD3 /* Aliases.swift in Sources */,
+				94F4B2821F7EEC3E00058BD3 /* Dispatcher.swift in Sources */,
+				94F4B2881F7EEC4200058BD3 /* Feature.swift in Sources */,
+				94F4B2831F7EEC3E00058BD3 /* GlobalModel.swift in Sources */,
+				94F4B2841F7EEC3E00058BD3 /* GlobalMutation.swift in Sources */,
+				94F4B2801F7EEC3900058BD3 /* HelperProtocols.swift in Sources */,
+				94F4B2701F7EEC3100058BD3 /* MutationDescriptors.swift in Sources */,
+				94F4B2711F7EEC3100058BD3 /* Observer.swift in Sources */,
+				94F4B2621F7EEC2900058BD3 /* Operators.swift in Sources */,
+				94F4B2851F7EEC3E00058BD3 /* ReportingHelpers.swift in Sources */,
+				94F4B2891F7EEC4200058BD3 /* State.swift in Sources */,
+				94F4B2721F7EEC3100058BD3 /* Subscription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,6 +814,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -709,6 +834,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
