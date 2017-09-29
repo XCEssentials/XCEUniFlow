@@ -40,7 +40,7 @@ public
 struct Actualization<F: Feature>: ActionKind, FeatureUpdate
 {
     public
-    let newState: FeatureRepresentation
+    let newState: SomeState
     
     //===
     

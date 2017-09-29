@@ -35,7 +35,7 @@ func << <S: State>(_: S.Type, global: GlobalModel) -> S?
 //===
 
 public
-func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
+func << <F: Feature>(_: F.Type, global: GlobalModel) -> SomeState?
 {
     return try? global.state(for: F.self)
 }
@@ -43,7 +43,7 @@ func << <F: Feature>(_: F.Type, global: GlobalModel) -> FeatureRepresentation?
 //===
 
 public
-func >> <F: Feature>(global: GlobalModel, _: F.Type) -> FeatureRepresentation?
+func >> <F: Feature>(global: GlobalModel, _: F.Type) -> SomeState?
 {
     return try? global.state(for: F.self)
 }

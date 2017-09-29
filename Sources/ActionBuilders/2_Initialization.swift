@@ -40,7 +40,7 @@ public
 struct Initialization<F: Feature>: ActionKind, FeatureAddition
 {
     public
-    let newState: FeatureRepresentation
+    let newState: SomeState
     
     //===
     

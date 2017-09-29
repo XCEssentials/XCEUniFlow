@@ -25,7 +25,7 @@
  */
 
 public
-protocol FeatureRepresentation
+protocol SomeState
 {
     /**
      Feature to which this mutation is related.
@@ -37,7 +37,7 @@ protocol FeatureRepresentation
 //===
 
 public
-protocol State: FeatureRepresentation
+protocol State: SomeState
 {
     associatedtype ParentFeature: Feature
 }

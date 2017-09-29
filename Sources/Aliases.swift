@@ -40,7 +40,7 @@ public
 typealias UFLFeature = Feature
 
 public
-typealias UFLFeatureRepresentation = FeatureRepresentation
+typealias UFLSomeState = SomeState
 
 public
 typealias UFLState = State

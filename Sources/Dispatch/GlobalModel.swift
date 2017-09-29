@@ -33,7 +33,7 @@ struct GlobalModel
     
     typealias Key = String
     
-    var data = [Key: FeatureRepresentation]()
+    var data = [Key: SomeState]()
 }
 
 // MARK: - Errors
@@ -51,7 +51,7 @@ extension GlobalModel
     
     struct NoSuchState: GlobalModelError
     {
-        let state: FeatureRepresentation.Type
+        let state: SomeState.Type
         
         var feature: Feature.Type
         {
@@ -65,7 +65,7 @@ extension GlobalModel
 public
 extension GlobalModel
 {
-    func state<S: FeatureRepresentation>(ofType _: S.Type) throws -> S
+    func state<S: SomeState>(ofType _: S.Type) throws -> S
     {
         guard
             let result = data[S.feature.name] as? S
@@ -81,7 +81,7 @@ extension GlobalModel
 
     //===
 
-    func state(for feature: Feature.Type) throws -> FeatureRepresentation
+    func state(for feature: Feature.Type) throws -> SomeState
     {
         guard
             let result = data[feature.name]
@@ -116,7 +116,7 @@ extension GlobalModel
 
     //===
 
-    func hasState<S: FeatureRepresentation>(ofType _: S.Type) -> Bool
+    func hasState<S: SomeState>(ofType _: S.Type) -> Bool
     {
         return (try? state(ofType: S.self)) != nil
     }
@@ -135,7 +135,7 @@ public
 extension Feature
 {
     static
-    func state(from globalModel: GlobalModel) throws -> FeatureRepresentation
+    func state(from globalModel: GlobalModel) throws -> SomeState
     {
         return try globalModel.state(for: self)
     }
@@ -185,7 +185,7 @@ extension State
 extension GlobalModel
 {
     @discardableResult
-    func store(_ state: FeatureRepresentation) -> GlobalModel
+    func store(_ state: SomeState) -> GlobalModel
     {
         var result = self
         result.data[type(of: state).feature.name] = state
