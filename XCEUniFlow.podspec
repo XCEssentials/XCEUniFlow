@@ -17,11 +17,14 @@ Pod::Spec.new do |s|
   s.source                    = { :git => companyGitHubAccount + '/' + projName + '.git', :tag => s.version }
   s.source_files              = 'Sources/**/*.swift'
 
-  s.osx.deployment_target     = '10.11'
   s.ios.deployment_target     = '9.0'
+  s.osx.deployment_target     = '10.11'
+  s.tvos.deployment_target    = '11.0'
+  s.watchos.deployment_target = '4.0'
+  
   s.requires_arc              = true
   
-  s.dependency                  'XCERequirement', '~> 1.5'
+  s.dependency                  'XCERequirement', '~> 1.6'
 
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
   s.author                    = { 'Maxim Khatskevich' => 'maxim@khatskevi.ch' }
