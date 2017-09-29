@@ -40,16 +40,16 @@ public
 struct Transition<F: Feature>: ActionKind, FeatureUpdate
 {
     public
-    let oldState: FeatureRepresentation
+    let oldState: SomeState
     
     public
-    let newState: FeatureRepresentation
+    let newState: SomeState
     
     //===
     
-    init<Into>(from oldState: FeatureRepresentation, into newState: Into) where
-        Into: FeatureState,
-        Into.ParentFeature == F
+    init<Into>(from oldState: SomeState, into newState: Into) where
+        Into: State,
+        Into.Parent == F
     {
         self.oldState = oldState
         self.newState = newState

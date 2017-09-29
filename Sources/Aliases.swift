@@ -31,7 +31,7 @@ public
 typealias UFLSubmitAction = SubmitAction
 
 public
-typealias UFLBecome<S: UFLFeatureState> = Become<S>
+typealias UFLBecome<S: UFLState> = Become<S>
 
 public
 typealias UFLActionContext = ActionContext
@@ -40,16 +40,16 @@ public
 typealias UFLFeature = Feature
 
 public
-typealias UFLFeatureRepresentation = FeatureRepresentation
+typealias UFLSomeState = SomeState
 
 public
-typealias UFLFeatureState = FeatureState
+typealias UFLState = State
 
 public
 typealias UFLAutoInitializable = AutoInitializable
 
 public
-typealias UFLFeatureStateAuto = FeatureStateAuto
+typealias UFLStateAuto = StateAuto
 
 public
 typealias UFLDispatcher = Dispatcher
@@ -61,12 +61,6 @@ public
 typealias UFLGlobalMutation = GlobalMutation
 
 public
-typealias UFLDispatcherInitializable = DispatcherInitializable
-
-public
-typealias UFLDispatcherBindable = DispatcherBindable
-
-public
 typealias UFLDefaultReporting = DefaultReporting
 
 public
@@ -76,13 +70,13 @@ public
 typealias UFLInitialization<F: UFLFeature> = Initialization<F>
 
 public
-typealias UFLInitializationInto<S: UFLFeatureState> = InitializationInto<S>
+typealias UFLInitializationInto<S: UFLState> = InitializationInto<S>
 
 public
 typealias UFLActualization<F: UFLFeature> = Actualization<F>
 
 public
-typealias UFLActualizationIn<S: UFLFeatureState> = ActualizationIn<S>
+typealias UFLActualizationIn<S: UFLState> = ActualizationIn<S>
 
 public
 typealias UFLTransition<F: UFLFeature> = Transition<F>
@@ -90,18 +84,18 @@ typealias UFLTransition<F: UFLFeature> = Transition<F>
 #if swift(>=3.2)
     
 public
-typealias UFLTransitionBetween<From: UFLFeatureState, Into: UFLFeatureState> =
+typealias UFLTransitionBetween<From: UFLState, Into: UFLState> =
     TransitionBetween<From, Into>
     where
-    From.ParentFeature == Into.ParentFeature
+    From.Parent == Into.Parent
     
 #endif
 
 public
-typealias UFLTransitionFrom<S: UFLFeatureState> = TransitionFrom<S>
+typealias UFLTransitionFrom<S: UFLState> = TransitionFrom<S>
 
 public
-typealias UFLTransitionInto<S: UFLFeatureState> = TransitionInto<S>
+typealias UFLTransitionInto<S: UFLState> = TransitionInto<S>
 
 public
 typealias UFLTrigger<F: UFLFeature> = Trigger<F>
@@ -110,4 +104,4 @@ public
 typealias UFLDeinitialization<F: UFLFeature> = Deinitialization<F>
 
 public
-typealias UFLDeinitializationFrom<S: UFLFeatureState> = DeinitializationFrom<S>
+typealias UFLDeinitializationFrom<S: UFLState> = DeinitializationFrom<S>

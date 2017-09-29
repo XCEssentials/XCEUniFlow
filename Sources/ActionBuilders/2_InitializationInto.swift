@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Initialization
 {
-    struct Into<S: FeatureState>: ActionKind where S.ParentFeature == F
+    struct Into<S: State>: ActionKind where S.Parent == F
     {
         public
         let newState: S
@@ -73,7 +73,7 @@ extension Initialization
 //===
 
 public
-typealias InitializationInto<S: FeatureState> = Initialization<S.ParentFeature>.Into<S>
+typealias InitializationInto<S: State> = Initialization<S.Parent>.Into<S>
 
 // MARK: - Action builders
 

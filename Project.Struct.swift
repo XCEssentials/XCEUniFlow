@@ -53,6 +53,8 @@ let project = Project("Main") { project in
         
             "PRODUCT_BUNDLE_IDENTIFIER" <<< bundleId.fwk,
             "INFOPLIST_FILE" <<< "Info/Fwk.plist",
+
+            "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES" <<< "$(inherited)",
             
             //--- iOS related:
             
@@ -79,6 +81,8 @@ let project = Project("Main") { project in
             //---
             
             unitTests.configurations.all.override(
+
+                "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES" <<< "$(inherited)",
                 
                 // very important for unit tests,
                 // prevents the error when unit test do not start at all

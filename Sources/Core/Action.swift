@@ -32,7 +32,7 @@ typealias SubmitAction = (Action) -> Void
 //===
 
 public
-typealias Become<S: FeatureState> = (S) -> Void
+typealias Become<S: State> = (S) -> Void
 
 //===
 

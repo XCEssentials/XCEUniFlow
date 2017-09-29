@@ -25,4 +25,41 @@
  */
 
 public
-protocol Model: Feature { }
+protocol SomeState
+{
+    /**
+     Feature to which this mutation is related.
+     */
+    static
+    var feature: Feature.Type { get }
+}
+
+//===
+
+public
+protocol State: SomeState
+{
+    associatedtype Parent: Feature
+}
+
+//===
+
+public
+extension State
+{
+    static
+    var feature: Feature.Type { return Parent.self }
+}
+
+//===
+
+public
+protocol AutoInitializable
+{
+    init()
+}
+
+//===
+
+public
+protocol StateAuto: State, AutoInitializable { }

@@ -100,7 +100,7 @@ public
 struct AnySettingOf<F: Feature>: MutationConvertible
 {
     public
-    let featureState: FeatureRepresentation
+    let featureState: SomeState
 
     //===
 
@@ -129,7 +129,7 @@ public
 struct AnyUpdateOf<F: Feature>: MutationConvertible
 {
     public
-    let featureState: FeatureRepresentation
+    let featureState: SomeState
 
     //===
 

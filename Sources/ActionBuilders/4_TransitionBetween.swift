@@ -31,9 +31,9 @@ import XCERequirement
 public
 extension Transition
 {
-    struct Between<From: FeatureState, Into: FeatureState>: ActionKind where
-        From.ParentFeature == F,
-        Into.ParentFeature == F
+    struct Between<From: State, Into: State>: ActionKind where
+        From.Parent == F,
+        Into.Parent == F
     {
         public
         let oldState: From
@@ -63,7 +63,7 @@ extension Transition
         init?(_ mutation: GlobalMutation?)
         {
             guard
-                let mutation = mutation as? Transition<From.ParentFeature>,
+                let mutation = mutation as? Transition<From.Parent>,
                 let oldState = mutation.oldState as? From,
                 let newState = mutation.newState as? Into
             else
@@ -83,10 +83,10 @@ extension Transition
 #if swift(>=3.2)
     
 public
-typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
-    Transition<From.ParentFeature>.Between<From, Into>
+typealias TransitionBetween<From: State, Into: State> =
+    Transition<From.Parent>.Between<From, Into>
     where
-    From.ParentFeature == Into.ParentFeature
+    From.Parent == Into.Parent
     
 #endif
 
