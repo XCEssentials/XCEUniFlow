@@ -54,7 +54,7 @@ public
 func >> <F, S>(global: GlobalModel, _: F.Type) -> S?
     where
     S: State,
-    S.ParentFeature == F
+    S.Parent == F
 {
     return try? global.state(for: F.self)
 }

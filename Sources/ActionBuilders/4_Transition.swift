@@ -49,7 +49,7 @@ struct Transition<F: Feature>: ActionKind, FeatureUpdate
     
     init<Into>(from oldState: SomeState, into newState: Into) where
         Into: State,
-        Into.ParentFeature == F
+        Into.Parent == F
     {
         self.oldState = oldState
         self.newState = newState

@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Transition
 {
-    struct From<S: State>: ActionKind where S.ParentFeature == F
+    struct From<S: State>: ActionKind where S.Parent == F
     {
         public
         let oldState: S
@@ -56,7 +56,7 @@ extension Transition
         init?(_ mutation: GlobalMutation?)
         {
             guard
-                let mutation = mutation as? Transition<S.ParentFeature>,
+                let mutation = mutation as? Transition<S.Parent>,
                 let oldState = mutation.oldState as? S
             else
             {
@@ -73,7 +73,7 @@ extension Transition
 //===
 
 public
-typealias TransitionFrom<S: State> = Transition<S.ParentFeature>.From<S>
+typealias TransitionFrom<S: State> = Transition<S.Parent>.From<S>
 
 // MARK: - Action builders
 
@@ -86,7 +86,7 @@ extension Transition.From
         context: String = #function,
         _ newState: Into
         ) -> Action
-        where Into.ParentFeature == F
+        where Into.Parent == F
     {
         return Action(scope, context, self) { model, _ in
             

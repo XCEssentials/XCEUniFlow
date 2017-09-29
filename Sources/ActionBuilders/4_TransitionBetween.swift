@@ -32,8 +32,8 @@ public
 extension Transition
 {
     struct Between<From: State, Into: State>: ActionKind where
-        From.ParentFeature == F,
-        Into.ParentFeature == F
+        From.Parent == F,
+        Into.Parent == F
     {
         public
         let oldState: From
@@ -63,7 +63,7 @@ extension Transition
         init?(_ mutation: GlobalMutation?)
         {
             guard
-                let mutation = mutation as? Transition<From.ParentFeature>,
+                let mutation = mutation as? Transition<From.Parent>,
                 let oldState = mutation.oldState as? From,
                 let newState = mutation.newState as? Into
             else
@@ -84,9 +84,9 @@ extension Transition
     
 public
 typealias TransitionBetween<From: State, Into: State> =
-    Transition<From.ParentFeature>.Between<From, Into>
+    Transition<From.Parent>.Between<From, Into>
     where
-    From.ParentFeature == Into.ParentFeature
+    From.Parent == Into.Parent
     
 #endif
 

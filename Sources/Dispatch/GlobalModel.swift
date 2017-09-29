@@ -100,7 +100,7 @@ extension GlobalModel
     func state<F, S>(for _: F.Type) throws -> S
         where
         S: State,
-        S.ParentFeature == F
+        S.Parent == F
     {
         guard
             let result = data[F.name] as? S
@@ -146,7 +146,7 @@ extension Feature
     func state<S>(from globalModel: GlobalModel) throws -> S?
         where
         S: State,
-        S.ParentFeature == Self
+        S.Parent == Self
     {
         return try globalModel.state(for: self)
     }

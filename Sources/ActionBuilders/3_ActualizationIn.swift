@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Actualization
 {
-    struct In<S: State>: ActionKind where S.ParentFeature == F
+    struct In<S: State>: ActionKind where S.Parent == F
         // swiftlint:disable:previous type_name
     {
         public
@@ -74,7 +74,7 @@ extension Actualization
 //===
 
 public
-typealias ActualizationIn<S: State> = Actualization<S.ParentFeature>.In<S>
+typealias ActualizationIn<S: State> = Actualization<S.Parent>.In<S>
 
 // MARK: - Action builders
 
@@ -92,7 +92,7 @@ extension Actualization.In
             
             var state =
                 
-            try Require("\(S.ParentFeature.name) is in \(S.self) state").isNotNil(
+            try Require("\(S.Parent.name) is in \(S.self) state").isNotNil(
                 
                 model >> S.self
             )

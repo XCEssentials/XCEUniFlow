@@ -41,7 +41,7 @@ struct PagePresentation<P: Page>: ViewModel, NoBindings
     struct ShouldAppear: PresentationState
     {
         public
-        typealias ParentFeature = PagePresentation
+        typealias Parent = PagePresentation
         
         public
         init() { }
@@ -51,7 +51,7 @@ struct PagePresentation<P: Page>: ViewModel, NoBindings
     struct Appearing: PresentationState
     {
         public
-        typealias ParentFeature = PagePresentation
+        typealias Parent = PagePresentation
         
         public
         init() { }
@@ -61,7 +61,7 @@ struct PagePresentation<P: Page>: ViewModel, NoBindings
     struct Ready: PresentationState
     {
         public
-        typealias ParentFeature = PagePresentation
+        typealias Parent = PagePresentation
         
         public
         init() { }
@@ -71,7 +71,7 @@ struct PagePresentation<P: Page>: ViewModel, NoBindings
     struct ShouldDisappear: PresentationState
     {
         public
-        typealias ParentFeature = PagePresentation
+        typealias Parent = PagePresentation
         
         public
         init() { }
@@ -81,7 +81,7 @@ struct PagePresentation<P: Page>: ViewModel, NoBindings
     struct Disappearing: PresentationState
     {
         public
-        typealias ParentFeature = PagePresentation
+        typealias Parent = PagePresentation
         
         public
         init() { }

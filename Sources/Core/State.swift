@@ -39,7 +39,7 @@ protocol SomeState
 public
 protocol State: SomeState
 {
-    associatedtype ParentFeature: Feature
+    associatedtype Parent: Feature
 }
 
 //===
@@ -48,7 +48,7 @@ public
 extension State
 {
     static
-    var feature: Feature.Type { return ParentFeature.self }
+    var feature: Feature.Type { return Parent.self }
 }
 
 //===

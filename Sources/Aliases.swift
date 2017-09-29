@@ -93,7 +93,7 @@ public
 typealias UFLTransitionBetween<From: UFLState, Into: UFLState> =
     TransitionBetween<From, Into>
     where
-    From.ParentFeature == Into.ParentFeature
+    From.Parent == Into.Parent
     
 #endif
 

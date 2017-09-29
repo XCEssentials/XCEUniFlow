@@ -44,7 +44,7 @@ struct Initialization<F: Feature>: ActionKind, FeatureAddition
     
     //===
     
-    init<S: State>(into newState: S) where S.ParentFeature == F
+    init<S: State>(into newState: S) where S.Parent == F
     {
         self.newState = newState
     }
