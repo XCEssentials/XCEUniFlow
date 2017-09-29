@@ -24,26 +24,6 @@
  
  */
 
-/**
- Special protocol that explicitly indicates - "this feature has no bindings".
- */
-public
-protocol NoBindings { }
-
-//===
-
-public
-extension NoBindings where Self: Feature
-{
-    static
-    var bindings: [ModelBinding]
-    {
-        return []
-    }
-}
-
-//===
-
 public
 extension Feature
 {
