@@ -61,6 +61,12 @@ public
 typealias UFLGlobalMutation = GlobalMutation
 
 public
+typealias UFLDispatcherInitializable = DispatcherInitializable
+
+public
+typealias UFLDispatcherBindable = DispatcherBindable
+
+public
 typealias UFLDefaultReporting = DefaultReporting
 
 public
