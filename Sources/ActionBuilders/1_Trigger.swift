@@ -56,7 +56,7 @@ enum Trigger<F: Feature>
     typealias Initialized = AnyState
     
     public
-    enum In<S: FeatureState>: ActionKind where S.ParentFeature == F { }
+    enum In<S: State>: ActionKind where S.ParentFeature == F { }
     // swiftlint:disable:previous type_name
 }
 

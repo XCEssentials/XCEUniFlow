@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Transition
 {
-    struct Into<S: FeatureState>: ActionKind where S.ParentFeature == F
+    struct Into<S: State>: ActionKind where S.ParentFeature == F
     {
         public
         enum SameStateStrategy
@@ -81,7 +81,7 @@ extension Transition
 //===
 
 public
-typealias TransitionInto<S: FeatureState> = Transition<S.ParentFeature>.Into<S>
+typealias TransitionInto<S: State> = Transition<S.ParentFeature>.Into<S>
 
 // MARK: - Action builders
 

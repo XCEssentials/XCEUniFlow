@@ -44,7 +44,7 @@ struct Actualization<F: Feature>: ActionKind, FeatureUpdate
     
     //===
     
-    init<S: FeatureState>(with newState: S) where S.ParentFeature == F
+    init<S: State>(with newState: S) where S.ParentFeature == F
     {
         self.newState = newState
     }

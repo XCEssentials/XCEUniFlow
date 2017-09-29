@@ -27,7 +27,7 @@
 // MARK: - GET data from GlobalModel
 
 public
-func << <S: FeatureState>(_: S.Type, global: GlobalModel) -> S?
+func << <S: State>(_: S.Type, global: GlobalModel) -> S?
 {
     return try? global.state(ofType: S.self)
 }
@@ -53,7 +53,7 @@ func >> <F: Feature>(global: GlobalModel, _: F.Type) -> FeatureRepresentation?
 public
 func >> <F, S>(global: GlobalModel, _: F.Type) -> S?
     where
-    S: FeatureState,
+    S: State,
     S.ParentFeature == F
 {
     return try? global.state(for: F.self)
@@ -62,7 +62,7 @@ func >> <F, S>(global: GlobalModel, _: F.Type) -> S?
 //===
 
 public
-func >> <S: FeatureState>(global: GlobalModel, _: S.Type) -> S?
+func >> <S: State>(global: GlobalModel, _: S.Type) -> S?
 {
     return try? global.state(ofType: S.self)
 }
@@ -134,7 +134,7 @@ func << (submit: SubmitAction, actionGetter: () -> Action)
 // MARK: - Pass feature state to 'become' handler
 
 public
-func << <S: FeatureState>(become: Become<S>, state: S)
+func << <S: State>(become: Become<S>, state: S)
 {
     become(state)
 }

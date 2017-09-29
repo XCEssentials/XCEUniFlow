@@ -15,7 +15,7 @@ import XCERequirement
 
 enum Arithmetics: Feature, NoBindings
 {
-    struct Main: FeatureState { typealias ParentFeature = Arithmetics
+    struct Main: State { typealias ParentFeature = Arithmetics
         
         var val: Int
     }

@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Transition
 {
-    struct Between<From: FeatureState, Into: FeatureState>: ActionKind where
+    struct Between<From: State, Into: State>: ActionKind where
         From.ParentFeature == F,
         Into.ParentFeature == F
     {
@@ -83,7 +83,7 @@ extension Transition
 #if swift(>=3.2)
     
 public
-typealias TransitionBetween<From: FeatureState, Into: FeatureState> =
+typealias TransitionBetween<From: State, Into: State> =
     Transition<From.ParentFeature>.Between<From, Into>
     where
     From.ParentFeature == Into.ParentFeature

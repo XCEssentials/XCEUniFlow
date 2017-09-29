@@ -25,7 +25,7 @@
  */
 
 public
-protocol PresentationState: FeatureStateAuto { }
+protocol PresentationState: StateAuto { }
 
 //===
 

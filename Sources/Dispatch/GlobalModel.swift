@@ -49,7 +49,7 @@ extension GlobalModel
         let feature: Feature.Type
     }
     
-    struct NoSuchFeatureState: GlobalModelError
+    struct NoSuchState: GlobalModelError
     {
         let state: FeatureRepresentation.Type
         
@@ -71,7 +71,7 @@ extension GlobalModel
             let result = data[S.feature.name] as? S
         else
         {
-            throw NoSuchFeatureState(state: S.self)
+            throw NoSuchState(state: S.self)
         }
         
         //---
@@ -99,14 +99,14 @@ extension GlobalModel
 
     func state<F, S>(for _: F.Type) throws -> S
         where
-        S: FeatureState,
+        S: State,
         S.ParentFeature == F
     {
         guard
             let result = data[F.name] as? S
         else
         {
-            throw NoSuchFeatureState(state: S.self)
+            throw NoSuchState(state: S.self)
         }
         
         //---
@@ -145,7 +145,7 @@ extension Feature
     static
     func state<S>(from globalModel: GlobalModel) throws -> S?
         where
-        S: FeatureState,
+        S: State,
         S.ParentFeature == Self
     {
         return try globalModel.state(for: self)
@@ -160,10 +160,10 @@ extension Feature
     }
 }
 
-// MARK: - GET data - from FeatureState
+// MARK: - GET data - from State
 
 public
-extension FeatureState
+extension State
 {
     static
     func from(_ globalModel: GlobalModel) throws -> Self

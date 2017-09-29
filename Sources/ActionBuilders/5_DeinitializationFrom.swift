@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Deinitialization
 {
-    struct From<S: FeatureState>: ActionKind where S.ParentFeature == F
+    struct From<S: State>: ActionKind where S.ParentFeature == F
     {
         public
         let oldState: S
@@ -73,7 +73,7 @@ extension Deinitialization
 //===
 
 public
-typealias DeinitializationFrom<S: FeatureState> = Deinitialization<S.ParentFeature>.From<S>
+typealias DeinitializationFrom<S: State> = Deinitialization<S.ParentFeature>.From<S>
 
 // MARK: - Action builders
 

@@ -31,7 +31,7 @@ import XCERequirement
 public
 extension Transition
 {
-    struct From<S: FeatureState>: ActionKind where S.ParentFeature == F
+    struct From<S: State>: ActionKind where S.ParentFeature == F
     {
         public
         let oldState: S
@@ -73,7 +73,7 @@ extension Transition
 //===
 
 public
-typealias TransitionFrom<S: FeatureState> = Transition<S.ParentFeature>.From<S>
+typealias TransitionFrom<S: State> = Transition<S.ParentFeature>.From<S>
 
 // MARK: - Action builders
 
@@ -81,7 +81,7 @@ public
 extension Transition.From
 {
     static
-    func into<Into: FeatureState>(
+    func into<Into: State>(
         scope: String = #file,
         context: String = #function,
         _ newState: Into

@@ -37,7 +37,7 @@ protocol FeatureRepresentation
 //===
 
 public
-protocol FeatureState: FeatureRepresentation
+protocol State: FeatureRepresentation
 {
     associatedtype ParentFeature: Feature
 }
@@ -45,7 +45,7 @@ protocol FeatureState: FeatureRepresentation
 //===
 
 public
-extension FeatureState
+extension State
 {
     static
     var feature: Feature.Type { return ParentFeature.self }
@@ -62,4 +62,4 @@ protocol AutoInitializable
 //===
 
 public
-protocol FeatureStateAuto: FeatureState, AutoInitializable { }
+protocol StateAuto: State, AutoInitializable { }
