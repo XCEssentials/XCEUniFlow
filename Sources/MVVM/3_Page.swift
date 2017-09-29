@@ -24,10 +24,6 @@
  
  */
 
-import XCEUniFlow
-
-//===
-
 /**
  Special kind of ViewModel that represents a single page in a GUI application.
  
