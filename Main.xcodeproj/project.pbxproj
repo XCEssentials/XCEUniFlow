@@ -112,6 +112,12 @@
 		94F4B2531F7EDE9200058BD3 /* 4_Given_Observer_toThen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 4_Given_Observer_toThen.swift; sourceTree = "<group>"; };
 		94F4B2541F7EDE9200058BD3 /* 5_Then_Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_Then_Observer.swift; sourceTree = "<group>"; };
 		94F4B2551F7EDE9200058BD3 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
+		94F4B2581F7EDEDD00058BD3 /* 0_Prefixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 0_Prefixes.swift; sourceTree = "<group>"; };
+		94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 1_Model.swift; sourceTree = "<group>"; };
+		94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2_ViewModel.swift; sourceTree = "<group>"; };
+		94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3_Page.swift; sourceTree = "<group>"; };
+		94F4B25C1F7EDEDD00058BD3 /* 4_PagePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 4_PagePresentation.swift; sourceTree = "<group>"; };
 		9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
@@ -203,6 +209,7 @@
 				94F4B2251F7EDE9200058BD3 /* BDD */,
 				94F4B22A1F7EDE9200058BD3 /* Core */,
 				94F4B22F1F7EDE9200058BD3 /* Dispatch */,
+				94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */,
 				94F4B2351F7EDE9200058BD3 /* ModelBindings */,
 				94F4B2431F7EDE9200058BD3 /* Notifications */,
 				94F4B2471F7EDE9200058BD3 /* ObserverBindings */,
@@ -314,6 +321,18 @@
 			path = ObserverBindings;
 			sourceTree = "<group>";
 		};
+		94F4B2571F7EDEDD00058BD3 /* MVVM */ = {
+			isa = PBXGroup;
+			children = (
+				94F4B2581F7EDEDD00058BD3 /* 0_Prefixes.swift */,
+				94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */,
+				94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */,
+				94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */,
+				94F4B25C1F7EDEDD00058BD3 /* 4_PagePresentation.swift */,
+			);
+			path = MVVM;
+			sourceTree = "<group>";
+		};
 		CCB12E04C4B5615526102E10 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +348,7 @@
 			isa = PBXGroup;
 			children = (
 				94F4B2161F7EDE9200058BD3 /* Core */,
+				94F4B2571F7EDEDD00058BD3 /* MVVM */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -386,6 +406,11 @@
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0700;
 				Struct.Version = 2.1.0;
+				TargetAttributes = {
+					F3CC3BEBC58E798E5E6678CD = {
+						LastSwiftMigration = 0900;
+					};
+				};
 			};
 			buildConfigurationList = 9B4F0B7E8300BFE925E00702 /* Build configuration list for PBXProject "Main" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -541,8 +566,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4C8AB0E44A6025C58245723 /* Pods-Fwk.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 13;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Info/Fwk.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -553,6 +579,7 @@
 				PRODUCT_NAME = XCEUniFlow;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -702,8 +729,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 13;
-				DEFINES_MODULE = NO;
+				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Info/Fwk.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
