@@ -23,14 +23,14 @@ Pod::Spec.new do |s|
   
   s.requires_arc              = true
   
-  s.dependency                  'XCERequirement', '~> 1.6'
-
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
   s.author                    = { 'Maxim Khatskevich' => 'maxim@khatskevi.ch' }
 
   s.default_subspec = 'Core'
 
   s.subspec 'Core' do |ss|
+
+    ss.dependency               'XCERequirement', '~> 1.6'
 
     ss.source_files           = 'Sources/Core/**/*.swift'
 
