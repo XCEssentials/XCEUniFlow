@@ -40,11 +40,11 @@ public
 struct Initialization<F: Feature>: ActionKind, FeatureAddition
 {
     public
-    let newState: FeatureRepresentation
+    let newState: SomeState
     
     //===
     
-    init<S: FeatureState>(into newState: S) where S.ParentFeature == F
+    init<S: State>(into newState: S) where S.Parent == F
     {
         self.newState = newState
     }

@@ -40,7 +40,7 @@ protocol GlobalMutationExt: GlobalMutation
 
 protocol FeatureSetting: GlobalMutationExt
 {
-    var newState: FeatureRepresentation { get }
+    var newState: SomeState { get }
 }
 
 extension FeatureSetting

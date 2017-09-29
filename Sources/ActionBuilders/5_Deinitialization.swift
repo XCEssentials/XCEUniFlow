@@ -49,11 +49,11 @@ struct Deinitialization<F: Feature>: ActionKind, FeatureRemoval
     }
     
     public
-    let oldState: FeatureRepresentation
+    let oldState: SomeState
     
     //===
     
-    init(from oldState: FeatureRepresentation)
+    init(from oldState: SomeState)
     {
         self.oldState = oldState
     }

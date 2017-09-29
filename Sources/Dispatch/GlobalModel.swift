@@ -33,7 +33,7 @@ struct GlobalModel
     
     typealias Key = String
     
-    var data = [Key: FeatureRepresentation]()
+    var data = [Key: SomeState]()
 }
 
 // MARK: - Errors
@@ -49,9 +49,9 @@ extension GlobalModel
         let feature: Feature.Type
     }
     
-    struct NoSuchFeatureState: GlobalModelError
+    struct NoSuchState: GlobalModelError
     {
-        let state: FeatureRepresentation.Type
+        let state: SomeState.Type
         
         var feature: Feature.Type
         {
@@ -65,13 +65,13 @@ extension GlobalModel
 public
 extension GlobalModel
 {
-    func state<S: FeatureRepresentation>(ofType _: S.Type) throws -> S
+    func state<S: SomeState>(ofType _: S.Type) throws -> S
     {
         guard
             let result = data[S.feature.name] as? S
         else
         {
-            throw NoSuchFeatureState(state: S.self)
+            throw NoSuchState(state: S.self)
         }
         
         //---
@@ -81,7 +81,7 @@ extension GlobalModel
 
     //===
 
-    func state(for feature: Feature.Type) throws -> FeatureRepresentation
+    func state(for feature: Feature.Type) throws -> SomeState
     {
         guard
             let result = data[feature.name]
@@ -99,14 +99,14 @@ extension GlobalModel
 
     func state<F, S>(for _: F.Type) throws -> S
         where
-        S: FeatureState,
-        S.ParentFeature == F
+        S: State,
+        S.Parent == F
     {
         guard
             let result = data[F.name] as? S
         else
         {
-            throw NoSuchFeatureState(state: S.self)
+            throw NoSuchState(state: S.self)
         }
         
         //---
@@ -116,7 +116,7 @@ extension GlobalModel
 
     //===
 
-    func hasState<S: FeatureRepresentation>(ofType _: S.Type) -> Bool
+    func hasState<S: SomeState>(ofType _: S.Type) -> Bool
     {
         return (try? state(ofType: S.self)) != nil
     }
@@ -135,7 +135,7 @@ public
 extension Feature
 {
     static
-    func state(from globalModel: GlobalModel) throws -> FeatureRepresentation
+    func state(from globalModel: GlobalModel) throws -> SomeState
     {
         return try globalModel.state(for: self)
     }
@@ -145,8 +145,8 @@ extension Feature
     static
     func state<S>(from globalModel: GlobalModel) throws -> S?
         where
-        S: FeatureState,
-        S.ParentFeature == Self
+        S: State,
+        S.Parent == Self
     {
         return try globalModel.state(for: self)
     }
@@ -160,10 +160,10 @@ extension Feature
     }
 }
 
-// MARK: - GET data - from FeatureState
+// MARK: - GET data - from State
 
 public
-extension FeatureState
+extension State
 {
     static
     func from(_ globalModel: GlobalModel) throws -> Self
@@ -185,7 +185,7 @@ extension FeatureState
 extension GlobalModel
 {
     @discardableResult
-    func store(_ state: FeatureRepresentation) -> GlobalModel
+    func store(_ state: SomeState) -> GlobalModel
     {
         var result = self
         result.data[type(of: state).feature.name] = state
