@@ -11,7 +11,6 @@
 		82C2FFF2DDAD1BC7D438567A /* Pods_Fwk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71D399AC9179409F657A9CD8 /* Pods_Fwk.framework */; };
 		9479B7501F75CE2B00C5BDAF /* ArithmeticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9479B74F1F75CE2B00C5BDAF /* ArithmeticsTests.swift */; };
 		9479B7531F75CE9700C5BDAF /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9479B7511F75CE9600C5BDAF /* Arithmetics.swift */; };
-		94F4B25D1F7EEC2200058BD3 /* 0_Prefixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2581F7EDEDD00058BD3 /* 0_Prefixes.swift */; };
 		94F4B25E1F7EEC2200058BD3 /* 1_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */; };
 		94F4B25F1F7EEC2200058BD3 /* 2_ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */; };
 		94F4B2601F7EEC2200058BD3 /* 3_Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */; };
@@ -175,7 +174,6 @@
 		94F4B2541F7EDE9200058BD3 /* 5_Then_Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_Then_Observer.swift; sourceTree = "<group>"; };
 		94F4B2551F7EDE9200058BD3 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
-		94F4B2581F7EDEDD00058BD3 /* 0_Prefixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 0_Prefixes.swift; sourceTree = "<group>"; };
 		94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 1_Model.swift; sourceTree = "<group>"; };
 		94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2_ViewModel.swift; sourceTree = "<group>"; };
 		94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3_Page.swift; sourceTree = "<group>"; };
@@ -251,7 +249,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = "$local";
+			name = $local;
 			sourceTree = "<group>";
 		};
 		91C96DEB87338EEDC8EDD43A /* Tests */ = {
@@ -386,7 +384,6 @@
 		94F4B2571F7EDEDD00058BD3 /* MVVM */ = {
 			isa = PBXGroup;
 			children = (
-				94F4B2581F7EDEDD00058BD3 /* 0_Prefixes.swift */,
 				94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */,
 				94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */,
 				94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */,
@@ -611,7 +608,6 @@
 			files = (
 				94F4B28A1F7EEC4E00058BD3 /* 0_Errors.swift in Sources */,
 				94F4B2731F7EEC3600058BD3 /* 0_Feature_createBinding.swift in Sources */,
-				94F4B25D1F7EEC2200058BD3 /* 0_Prefixes.swift in Sources */,
 				94F4B2631F7EEC2E00058BD3 /* 0_StateObserver_createBinding.swift in Sources */,
 				94F4B28F1F7EEC5400058BD3 /* 0_TriggerGlobal.swift in Sources */,
 				94F4B25E1F7EEC2200058BD3 /* 1_Model.swift in Sources */,
@@ -691,7 +687,7 @@
 			baseConfigurationReference = E4C8AB0E44A6025C58245723 /* Pods-Fwk.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Info/Fwk.plist;
@@ -736,7 +732,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -789,7 +785,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -856,7 +852,7 @@
 			baseConfigurationReference = DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Info/Fwk.plist;
