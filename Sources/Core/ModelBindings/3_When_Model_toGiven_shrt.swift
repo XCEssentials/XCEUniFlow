@@ -24,6 +24,8 @@
  
  */
 
+// MARK: - With output
+
 public
 extension When.ModelConnector
 {
@@ -105,5 +107,48 @@ extension When.ModelConnector
         ) -> Given.ModelConnector<Void>
     {
         return given(specification, with: handler)
+    }
+}
+
+// MARK: - Returns Bool
+
+public
+extension When.ModelConnector
+{
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMapState handler: @escaping (GlobalModel) throws -> Bool
+        ) -> Given.ModelConnector<Void>
+    {
+        return given(specification, ifMapState: handler)
+    }
+
+    //===
+
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMapMutation handler: @escaping (WhenOutput) throws -> Bool
+        ) -> Given.ModelConnector<Void>
+    {
+        return given(specification, ifMapMutation: handler)
+    }
+
+    //===
+
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMap handler: @escaping (GlobalModel, WhenOutput) throws -> Bool
+        ) -> Given.ModelConnector<Void>
+    {
+        return given(specification, ifMap: handler)
     }
 }

@@ -58,6 +58,23 @@ extension Given.ModelConnector where GivenOutput == Void
     }
 }
 
+// MARK: - After VOID, Returns Bool
+
+public
+extension Given.ModelConnector where GivenOutput == Void
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMapState handler: @escaping (GlobalModel) throws -> Bool
+        ) -> Given.ModelConnector<Void>
+    {
+        return and(specification, ifMapState: handler)
+    }
+}
+
 // MARK: - WITH output
 
 public
