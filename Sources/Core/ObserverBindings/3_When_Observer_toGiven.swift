@@ -241,3 +241,126 @@ extension When.ObserverConnector
         )
     }
 }
+
+// MARK: - Returns Bool
+
+public
+extension When.ObserverConnector
+{
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func given(
+        _ specification: String,
+        ifMapState handler: @escaping (GlobalModel) throws -> Bool
+        ) -> Given.ObserverConnector<Observer, Void>
+    {
+        let firstGiven = Given(first: true, specification) { globalModel, _ in
+
+            try Require("Handler returns 'true'").isTrue(
+
+                try handler(globalModel)
+            )
+
+            //---
+
+            return ()
+        }
+
+        //---
+
+        return Given.ObserverConnector(
+            scenario: scenario,
+            when: when,
+            previousClauses: [firstGiven]
+        )
+    }
+
+    //===
+
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func given(
+        _ specification: String,
+        ifMapMutation handler: @escaping (WhenOutput) throws -> Bool
+        ) -> Given.ObserverConnector<Observer, Void>
+    {
+        typealias Input = WhenOutput
+
+        //---
+
+        let firstGiven = Given(first: true, specification) { _, previousResult in
+
+            let typedPreviousResult =
+
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+
+                previousResult as? Input
+            )
+
+            //---
+
+            try Require("Handler returns 'true'").isTrue(
+
+                try handler(typedPreviousResult)
+            )
+
+            //---
+
+            return ()
+        }
+
+        //---
+
+        return Given.ObserverConnector(
+            scenario: scenario,
+            when: when,
+            previousClauses: [firstGiven]
+        )
+    }
+
+    //===
+
+    /**
+     Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
+     */
+    func given(
+        _ specification: String,
+        ifMap handler: @escaping (GlobalModel, WhenOutput) throws -> Bool
+        ) -> Given.ObserverConnector<Observer, Void>
+    {
+        typealias Input = WhenOutput
+
+        //---
+
+        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
+
+            let typedPreviousResult =
+
+            try Require("Previous result is of type \(Input.self)").isNotNil(
+
+                previousResult as? Input
+            )
+
+            //---
+
+            try Require("Handler returns 'true'").isTrue(
+
+                try handler(globalModel, typedPreviousResult)
+            )
+
+            //---
+
+            return ()
+        }
+
+        //---
+
+        return Given.ObserverConnector(
+            scenario: scenario,
+            when: when,
+            previousClauses: [firstGiven]
+        )
+    }
+}

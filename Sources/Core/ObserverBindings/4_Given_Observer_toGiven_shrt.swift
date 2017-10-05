@@ -58,6 +58,23 @@ extension Given.ObserverConnector where GivenOutput == Void
     }
 }
 
+// MARK: - After VOID, Returns Bool
+
+public
+extension Given.ObserverConnector where GivenOutput == Void
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMapState handler: @escaping (GlobalModel) throws -> Bool
+        ) -> Given.ObserverConnector<Observer, Void>
+    {
+        return and(specification, ifMapState: handler)
+    }
+}
+
 // MARK: - WITH output
 
 public
@@ -115,5 +132,35 @@ extension Given.ObserverConnector
         ) -> Given.ObserverConnector<Observer, Void>
     {
         return and(specification, with: handler)
+    }
+}
+
+// MARK: - Returns Bool
+
+public
+extension Given.ObserverConnector
+{
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMapInput handler: @escaping (GivenOutput) throws -> Bool
+        ) -> Given.ObserverConnector<Observer, Void>
+    {
+        return and(specification, ifMapInput: handler)
+    }
+
+    //===
+
+    /**
+     Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
+     */
+    func givn(
+        _ specification: String,
+        ifMap handler: @escaping (GlobalModel, GivenOutput) throws -> Bool
+        ) -> Given.ObserverConnector<Observer, Void>
+    {
+        return and(specification, ifMap: handler)
     }
 }
