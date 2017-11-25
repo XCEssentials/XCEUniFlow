@@ -26,22 +26,8 @@ Pod::Spec.new do |s|
   s.license                   = { :type => 'MIT', :file => 'LICENSE' }
   s.author                    = { 'Maxim Khatskevich' => 'maxim@khatskevi.ch' }
 
-  s.default_subspec = 'Core'
+  s.dependency                  'XCERequirement', '~> 1.6'
 
-  s.subspec 'Core' do |ss|
-
-    ss.dependency               'XCERequirement', '~> 1.6'
-
-    ss.source_files           = 'Sources/Core/**/*.swift'
-
-  end
-
-  s.subspec 'MVVM' do |ss|
-
-    ss.dependency               s.name + '/Core'
-  
-    ss.source_files           = 'Sources/MVVM/**/*.swift'
-
-  end
+  s.source_files              = 'Sources/**/*.swift'
 
 end
