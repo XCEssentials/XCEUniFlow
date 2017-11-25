@@ -25,4 +25,16 @@
  */
 
 public
-protocol Model: Feature { }
+protocol DispatcherInitializable: class
+{
+    init(with proxy: Dispatcher.Proxy)
+}
+
+//===
+
+public
+protocol DispatcherBindable: class
+{
+    @discardableResult
+    func bind(with proxy: Dispatcher.Proxy) -> Self
+}
