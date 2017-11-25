@@ -11,10 +11,6 @@
 		82C2FFF2DDAD1BC7D438567A /* Pods_Fwk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71D399AC9179409F657A9CD8 /* Pods_Fwk.framework */; };
 		9479B7501F75CE2B00C5BDAF /* ArithmeticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9479B74F1F75CE2B00C5BDAF /* ArithmeticsTests.swift */; };
 		9479B7531F75CE9700C5BDAF /* Arithmetics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9479B7511F75CE9600C5BDAF /* Arithmetics.swift */; };
-		94F4B25E1F7EEC2200058BD3 /* 1_Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */; };
-		94F4B25F1F7EEC2200058BD3 /* 2_ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */; };
-		94F4B2601F7EEC2200058BD3 /* 3_Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */; };
-		94F4B2611F7EEC2200058BD3 /* 4_PagePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B25C1F7EDEDD00058BD3 /* 4_PagePresentation.swift */; };
 		94F4B2621F7EEC2900058BD3 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2551F7EDE9200058BD3 /* Operators.swift */; };
 		94F4B2631F7EEC2E00058BD3 /* 0_StateObserver_createBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2481F7EDE9200058BD3 /* 0_StateObserver_createBinding.swift */; };
 		94F4B2641F7EEC2E00058BD3 /* 1_ObserverBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F4B2491F7EDE9200058BD3 /* 1_ObserverBinding.swift */; };
@@ -174,10 +170,6 @@
 		94F4B2541F7EDE9200058BD3 /* 5_Then_Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5_Then_Observer.swift; sourceTree = "<group>"; };
 		94F4B2551F7EDE9200058BD3 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperProtocols.swift; sourceTree = "<group>"; };
-		94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 1_Model.swift; sourceTree = "<group>"; };
-		94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2_ViewModel.swift; sourceTree = "<group>"; };
-		94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3_Page.swift; sourceTree = "<group>"; };
-		94F4B25C1F7EDEDD00058BD3 /* 4_PagePresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 4_PagePresentation.swift; sourceTree = "<group>"; };
 		9BCE00641CF74ADCDEC3901A /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		AC41B4B449341FB98B13A24D /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DA624B5EAF5E7E92162F08B2 /* Pods-Fwk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fwk.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fwk/Pods-Fwk.release.xcconfig"; sourceTree = "<group>"; };
@@ -261,23 +253,6 @@
 			path = Tests;
 			sourceTree = SOURCE_ROOT;
 		};
-		94F4B2161F7EDE9200058BD3 /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				94F4B2171F7EDE9200058BD3 /* ActionBuilders */,
-				94F4B2241F7EDE9200058BD3 /* Aliases.swift */,
-				94F4B2251F7EDE9200058BD3 /* BDD */,
-				94F4B22A1F7EDE9200058BD3 /* Core */,
-				94F4B22F1F7EDE9200058BD3 /* Dispatch */,
-				94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */,
-				94F4B2351F7EDE9200058BD3 /* ModelBindings */,
-				94F4B2431F7EDE9200058BD3 /* Notifications */,
-				94F4B2471F7EDE9200058BD3 /* ObserverBindings */,
-				94F4B2551F7EDE9200058BD3 /* Operators.swift */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
 		94F4B2171F7EDE9200058BD3 /* ActionBuilders */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,7 +291,8 @@
 				94F4B22D1F7EDE9200058BD3 /* Feature.swift */,
 				94F4B22E1F7EDE9200058BD3 /* State.swift */,
 			);
-			path = Core;
+			name = Core;
+			path = Core/Core;
 			sourceTree = "<group>";
 		};
 		94F4B22F1F7EDE9200058BD3 /* Dispatch */ = {
@@ -381,17 +357,6 @@
 			path = ObserverBindings;
 			sourceTree = "<group>";
 		};
-		94F4B2571F7EDEDD00058BD3 /* MVVM */ = {
-			isa = PBXGroup;
-			children = (
-				94F4B2591F7EDEDD00058BD3 /* 1_Model.swift */,
-				94F4B25A1F7EDEDD00058BD3 /* 2_ViewModel.swift */,
-				94F4B25B1F7EDEDD00058BD3 /* 3_Page.swift */,
-				94F4B25C1F7EDEDD00058BD3 /* 4_PagePresentation.swift */,
-			);
-			path = MVVM;
-			sourceTree = "<group>";
-		};
 		CCB12E04C4B5615526102E10 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -406,8 +371,16 @@
 		F93CCBA4EE1207F54A25CEAF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				94F4B2161F7EDE9200058BD3 /* Core */,
-				94F4B2571F7EDEDD00058BD3 /* MVVM */,
+				94F4B2171F7EDE9200058BD3 /* ActionBuilders */,
+				94F4B2241F7EDE9200058BD3 /* Aliases.swift */,
+				94F4B2251F7EDE9200058BD3 /* BDD */,
+				94F4B22A1F7EDE9200058BD3 /* Core */,
+				94F4B22F1F7EDE9200058BD3 /* Dispatch */,
+				94F4B2561F7EDED000058BD3 /* HelperProtocols.swift */,
+				94F4B2351F7EDE9200058BD3 /* ModelBindings */,
+				94F4B2431F7EDE9200058BD3 /* Notifications */,
+				94F4B2471F7EDE9200058BD3 /* ObserverBindings */,
+				94F4B2551F7EDE9200058BD3 /* Operators.swift */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -610,7 +583,6 @@
 				94F4B2731F7EEC3600058BD3 /* 0_Feature_createBinding.swift in Sources */,
 				94F4B2631F7EEC2E00058BD3 /* 0_StateObserver_createBinding.swift in Sources */,
 				94F4B28F1F7EEC5400058BD3 /* 0_TriggerGlobal.swift in Sources */,
-				94F4B25E1F7EEC2200058BD3 /* 1_Model.swift in Sources */,
 				94F4B2741F7EEC3600058BD3 /* 1_ModelBinding.swift in Sources */,
 				94F4B2751F7EEC3600058BD3 /* 1_ModelBinding_Pending.swift in Sources */,
 				94F4B2641F7EEC2E00058BD3 /* 1_ObserverBinding.swift in Sources */,
@@ -621,10 +593,8 @@
 				94F4B2761F7EEC3600058BD3 /* 2_ModelBinding_toWhen.swift in Sources */,
 				94F4B2661F7EEC2E00058BD3 /* 2_ObserverBinding_toWhen.swift in Sources */,
 				94F4B28B1F7EEC4E00058BD3 /* 2_Scenario.swift in Sources */,
-				94F4B25F1F7EEC2200058BD3 /* 2_ViewModel.swift in Sources */,
 				94F4B2931F7EEC5400058BD3 /* 3_Actualization.swift in Sources */,
 				94F4B2941F7EEC5400058BD3 /* 3_ActualizationIn.swift in Sources */,
-				94F4B2601F7EEC2200058BD3 /* 3_Page.swift in Sources */,
 				94F4B28C1F7EEC4E00058BD3 /* 3_When.swift in Sources */,
 				94F4B2771F7EEC3600058BD3 /* 3_When_Model.swift in Sources */,
 				94F4B2781F7EEC3600058BD3 /* 3_When_Model_toGiven.swift in Sources */,
@@ -643,7 +613,6 @@
 				94F4B26C1F7EEC2E00058BD3 /* 4_Given_Observer_toGiven.swift in Sources */,
 				94F4B26D1F7EEC2E00058BD3 /* 4_Given_Observer_toGiven_shrt.swift in Sources */,
 				94F4B26E1F7EEC2E00058BD3 /* 4_Given_Observer_toThen.swift in Sources */,
-				94F4B2611F7EEC2200058BD3 /* 4_PagePresentation.swift in Sources */,
 				94F4B2951F7EEC5400058BD3 /* 4_Transition.swift in Sources */,
 				94F4B2961F7EEC5400058BD3 /* 4_TransitionBetween.swift in Sources */,
 				94F4B2971F7EEC5400058BD3 /* 4_TransitionFrom.swift in Sources */,
