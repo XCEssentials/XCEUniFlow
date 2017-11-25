@@ -35,5 +35,6 @@ protocol DispatcherInitializable: class
 public
 protocol DispatcherBindable: class
 {
+    @discardableResult
     func bind(with proxy: Dispatcher.Proxy) -> Self
 }
