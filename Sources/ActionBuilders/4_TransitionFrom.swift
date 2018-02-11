@@ -85,7 +85,7 @@ extension Transition.From
         scope: String = #file,
         context: String = #function,
         _ newState: Into,
-        body: ((GlobalModel, S, @escaping SubmitAction) -> Void)? = nil
+        body: ((GlobalModel, S, @escaping SubmitAction) throws -> Void)? = nil
         ) -> Action
         where Into.Parent == F
     {
@@ -104,7 +104,7 @@ extension Transition.From
 
             //---
 
-            body?(globalModel, oldState, submit)
+            try body?(globalModel, oldState, submit)
 
             //---
             

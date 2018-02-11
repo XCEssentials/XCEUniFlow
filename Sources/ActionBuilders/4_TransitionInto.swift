@@ -105,7 +105,7 @@ extension Transition.Into where S: AutoInitializable
         scope: String = #file,
         context: String = #function,
         same: SameStateStrategy,
-        body: ((GlobalModel, SomeState, S, @escaping SubmitAction) -> Void)? = nil
+        body: ((GlobalModel, SomeState, S, @escaping SubmitAction) throws -> Void)? = nil
         ) -> Action
     {
         return Action(scope, context, self)
@@ -134,7 +134,7 @@ extension Transition.Into where S: AutoInitializable
             
             //---
             
-            body?(globalModel, oldState, newState, submit)
+            try body?(globalModel, oldState, newState, submit)
             
             //---
             
@@ -147,7 +147,7 @@ extension Transition.Into where S: AutoInitializable
         scope: String = #file,
         context: String = #function,
         same: SameStateStrategy,
-        body: ((@escaping SubmitAction) -> Void)? = nil
+        body: ((@escaping SubmitAction) throws -> Void)? = nil
         ) -> Action
     {
         return automatically(scope: scope, context: context, same: same)
@@ -156,7 +156,7 @@ extension Transition.Into where S: AutoInitializable
 
             //---
 
-            body?(submit)
+            try body?(submit)
         }
     }
 }
