@@ -36,7 +36,19 @@ extension Transition
         public
         enum SameStateStrategy
         {
-            case ok, no //swiftlint:disable:this identifier_name
+            /**
+             'ok' means "it's okay to override in case old/current state
+             is the same as the new/target one". NOTE, that old/new states are
+             compared by state type/name, not via 'Equatable' protocol.
+             */
+            case ok //swiftlint:disable:this identifier_name
+
+            /**
+             'no' means "do NOT override in case old/current state
+             is the same as the new/target one". NOTE, that old/new states are
+             compared by state type/name, not via 'Equatable' protocol.
+             */
+            case no //swiftlint:disable:this identifier_name
         }
 
         //===
@@ -93,16 +105,20 @@ extension Transition.Into where S: AutoInitializable
         scope: String = #file,
         context: String = #function,
         same: SameStateStrategy,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
+        body: ((GlobalModel, SomeState, S, @escaping SubmitAction) -> Void)? = nil
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
-            
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
+
             let oldState =
                 
             try Require("\(F.name) is presented").isNotNil(
                 
-                model >> F.self
+                globalModel >> F.self
             )
 
             //---
@@ -114,15 +130,33 @@ extension Transition.Into where S: AutoInitializable
 
             //---
             
-            let newState = S.init()
+            let newState = S()
             
             //---
             
-            completion?(submit)
+            body?(globalModel, oldState, newState, submit)
             
             //---
             
             return Transition(from: oldState, into: newState)
+        }
+    }
+
+    static
+    func automatically(
+        scope: String = #file,
+        context: String = #function,
+        same: SameStateStrategy,
+        body: ((@escaping SubmitAction) -> Void)? = nil
+        ) -> Action
+    {
+        return automatically(scope: scope, context: context, same: same)
+        {
+            _, _, _, submit in
+
+            //---
+
+            body?(submit)
         }
     }
 }
@@ -140,13 +174,17 @@ extension Transition.Into
         body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
             let oldState =
                 
             try Require("\(F.name) is presented").isNotNil(
                 
-                model >> F.self
+                globalModel >> F.self
             )
 
             //---
@@ -162,7 +200,7 @@ extension Transition.Into
             
             //---
             
-            try body(model, { newState = $0 }, submit)
+            try body(globalModel, { newState = $0 }, submit)
             
             //---
             

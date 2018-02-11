@@ -84,19 +84,28 @@ extension Transition.From
     func into<Into: State>(
         scope: String = #file,
         context: String = #function,
-        _ newState: Into
+        _ newState: Into,
+        body: ((GlobalModel, S, @escaping SubmitAction) -> Void)? = nil
         ) -> Action
         where Into.Parent == F
     {
-        return Action(scope, context, self) { model, _ in
-            
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
+
             let oldState =
                 
             try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
-                model >> S.self
+                globalModel >> S.self
             )
-            
+
+            //---
+
+            body?(globalModel, oldState, submit)
+
             //---
             
             return Transition(from: oldState, into: newState)
