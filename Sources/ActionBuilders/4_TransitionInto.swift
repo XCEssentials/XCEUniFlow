@@ -171,7 +171,7 @@ extension Transition.Into
         scope: String = #file,
         context: String = #function,
         same: SameStateStrategy,
-        body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, SomeState, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self)
@@ -200,7 +200,7 @@ extension Transition.Into
             
             //---
             
-            try body(globalModel, { newState = $0 }, submit)
+            try body(globalModel, oldState, { newState = $0 }, submit)
             
             //---
             
@@ -212,6 +212,24 @@ extension Transition.Into
             //---
             
             return Transition(from: oldState, into: newState)
+        }
+    }
+
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        same: SameStateStrategy,
+        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return via(scope: scope, context: context, same: same)
+        {
+            _, _, become, submit in
+
+            //---
+
+            try body(become, submit)
         }
     }
 }
