@@ -85,25 +85,29 @@ extension Actualization.In
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (inout S, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, inout S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
-            var state =
+            var currentState =
                 
             try Require("\(S.Parent.name) is in \(S.self) state").isNotNil(
                 
-                model >> S.self
+                globalModel >> S.self
             )
             
             //---
             
-            try body(&state, submit)
+            try body(globalModel, &currentState, submit)
             
             //---
             
-            return Actualization(with: state)
+            return Actualization(with: currentState)
         }
     }
 }

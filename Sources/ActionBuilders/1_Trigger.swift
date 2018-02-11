@@ -99,23 +99,46 @@ extension Trigger.AnyState
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, SomeState, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
-            
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
+
+            let currentState =
+
             try Require("\(F.name) is presented").isNotNil(
                 
-                model >> F.self
+                globalModel >> F.self
             )
-            
+
             //---
             
-            try body(model, submit)
+            try body(globalModel, currentState, submit)
             
             //---
             
             return nil
+        }
+    }
+
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return via(scope: scope, context: context)
+        {
+            globalModel, _, submit in
+
+            //---
+
+            try body(globalModel, submit)
         }
     }
 }
@@ -129,25 +152,46 @@ extension Trigger.In
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (S, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
             let currentState =
                 
             try Require("\(F.name) is in \(S.self) state").isNotNil(
                 
-                model >> S.self
+                globalModel >> S.self
             )
             
             //---
             
-            try body(currentState, submit)
+            try body(globalModel, currentState, submit)
             
             //---
             
             return nil
+        }
+    }
+
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (S, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return via(scope: scope, context: context)
+        {
+            _, currentState, submit in
+
+            //---
+
+            try body(currentState, submit)
         }
     }
 }

@@ -92,53 +92,46 @@ extension Deinitialization
     func automatically(
         scope: String = #file,
         context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
+        body: @escaping (GlobalModel, SomeState, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
-            
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
+
             let oldState =
-            
+                
             try Require("\(F.name) is presented").isNotNil(
                 
-                model >> F.self
+                globalModel >> F.self
             )
             
             //---
             
-            completion?(submit)
+            try body(globalModel, oldState, submit)
             
             //---
             
             return self.init(from: oldState)
         }
     }
-    
-    //===
-    
+
     static
-    func prepare(
+    func automatically(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
+        body: ((@escaping SubmitAction) throws -> Void)? = nil
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
-            
-            let oldState =
-                
-            try Require("\(F.name) is presented").isNotNil(
-                
-                model >> F.self
-            )
-            
+        return automatically(scope: scope, context: context)
+        {
+            _, _, submit in
+
             //---
-            
-            try body(model, submit)
-            
-            //---
-            
-            return self.init(from: oldState)
+
+            try body?(submit)
         }
     }
 }

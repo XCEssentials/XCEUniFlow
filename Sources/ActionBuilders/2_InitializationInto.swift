@@ -84,27 +84,48 @@ extension Initialization.Into where S: AutoInitializable
     func automatically(
         scope: String = #file,
         context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
+        body: @escaping (GlobalModel, S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
             try Require("\(F.name) is NOT initialized yet").isNil(
                 
-                model >> F.self
+                globalModel >> F.self
             )
             
             //---
             
-            let newState = S.init()
+            let newState = S()
             
             //---
             
-            completion?(submit)
+            try body(globalModel, newState, submit)
             
             //---
             
             return Initialization(into: newState)
+        }
+    }
+
+    static
+    func automatically(
+        scope: String = #file,
+        context: String = #function,
+        body: ((@escaping SubmitAction) throws -> Void)? = nil
+        ) -> Action
+    {
+        return automatically(scope: scope, context: context)
+        {
+            _, _, submit in
+
+            //---
+
+            try body?(submit)
         }
     }
 }
@@ -118,14 +139,18 @@ extension Initialization.Into
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, Become<S>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
             try Require("\(F.name) is NOT initialized yet").isNil(
                 
-                model >> F.self
+                globalModel >> F.self
             )
             
             //---
@@ -134,7 +159,7 @@ extension Initialization.Into
             
             //---
             
-            try body({ newState = $0 }, submit)
+            try body(globalModel, { newState = $0 }, submit)
             
             //---
             
@@ -146,6 +171,23 @@ extension Initialization.Into
             //---
             
             return Initialization(into: newState)
+        }
+    }
+
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (Become<S>, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return via(scope: scope, context: context)
+        {
+            _, become, submit in
+
+            //---
+
+            try body(become, submit)
         }
     }
 }

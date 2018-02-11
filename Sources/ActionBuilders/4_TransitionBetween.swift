@@ -99,29 +99,50 @@ extension Transition.Between where Into: AutoInitializable
     func automatically(
         scope: String = #file,
         context: String = #function,
-        completion: ((@escaping SubmitAction) -> Void)? = nil
+        body: @escaping (GlobalModel, From, Into, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
             let oldState =
                 
             try Require("\(F.name) is in \(From.self) state").isNotNil(
                 
-                model >> From.self
+                globalModel >> From.self
             )
             
             //---
             
-            let newState = Into.init()
+            let newState = Into()
             
             //---
             
-            completion?(submit)
+            try body(globalModel, oldState, newState, submit)
             
             //---
             
             return Transition(from: oldState, into: newState)
+        }
+    }
+
+    static
+    func automatically(
+        scope: String = #file,
+        context: String = #function,
+        body: ((@escaping SubmitAction) throws -> Void)? = nil
+        ) -> Action
+    {
+        return automatically(scope: scope, context: context)
+        {
+            _, _, _, submit in
+
+            //---
+
+            try body?(submit)
         }
     }
 }
@@ -135,16 +156,20 @@ extension Transition.Between
     func via(
         scope: String = #file,
         context: String = #function,
-        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
+        body: @escaping (GlobalModel, From, Become<Into>, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self)
+        {
+            globalModel, submit in
+
+            //---
             
             let oldState =
                 
             try Require("\(F.name) is in \(From.self) state").isNotNil(
                 
-                model >> From.self
+                globalModel >> From.self
             )
             
             //---
@@ -153,7 +178,7 @@ extension Transition.Between
             
             //---
             
-            try body(oldState, { newState = $0 }, submit)
+            try body(globalModel, oldState, { newState = $0 }, submit)
             
             //---
             
@@ -165,6 +190,23 @@ extension Transition.Between
             //---
             
             return Transition(from: oldState, into: newState)
+        }
+    }
+
+    static
+    func via(
+        scope: String = #file,
+        context: String = #function,
+        body: @escaping (From, Become<Into>, @escaping SubmitAction) throws -> Void
+        ) -> Action
+    {
+        return via(scope: scope, context: context)
+        {
+            _, oldState, become, submit in
+
+            //---
+
+            try body(oldState, become, submit)
         }
     }
 }
