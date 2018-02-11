@@ -28,14 +28,7 @@
  Not related to any feature.
  */
 public
-struct TriggerGlobal: ActionKind
-{
-    /**
-     This type is not supposed to be instantiated at all.
-     */
-    private
-    init() { }
-}
+enum TriggerGlobal: ActionKind { }
 
 //===
 
