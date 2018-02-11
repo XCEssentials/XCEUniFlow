@@ -99,7 +99,7 @@ extension Transition.Between where Into: AutoInitializable
     func automatically(
         scope: String = #file,
         context: String = #function,
-        body: ((GlobalModel, From, Into, @escaping SubmitAction) throws -> Void)? = nil
+        body: @escaping (GlobalModel, From, Into, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self)
@@ -121,7 +121,7 @@ extension Transition.Between where Into: AutoInitializable
             
             //---
             
-            try body?(globalModel, oldState, newState, submit)
+            try body(globalModel, oldState, newState, submit)
             
             //---
             

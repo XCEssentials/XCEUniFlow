@@ -84,7 +84,7 @@ extension Initialization.Into where S: AutoInitializable
     func automatically(
         scope: String = #file,
         context: String = #function,
-        body: ((GlobalModel, S, @escaping SubmitAction) throws -> Void)? = nil
+        body: @escaping (GlobalModel, S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
         return Action(scope, context, self)
@@ -104,7 +104,7 @@ extension Initialization.Into where S: AutoInitializable
             
             //---
             
-            try body?(globalModel, newState, submit)
+            try body(globalModel, newState, submit)
             
             //---
             
