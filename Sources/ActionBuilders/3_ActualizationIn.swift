@@ -110,21 +110,4 @@ extension Actualization.In
             return Actualization(with: currentState)
         }
     }
-
-    static
-    func via(
-        scope: String = #file,
-        context: String = #function,
-        body: @escaping (inout S, @escaping SubmitAction) throws -> Void
-        ) -> Action
-    {
-        return via(scope: scope, context: context)
-        {
-            (_, currentState: inout S, submit) in
-
-            //---
-
-            try body(&currentState, submit)
-        }
-    }
 }
