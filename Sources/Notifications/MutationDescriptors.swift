@@ -123,6 +123,36 @@ struct AnySettingOf<F: Feature>: MutationConvertible
 //===
 
 /**
+ Special kind of mutation descriptor that will be resolved in a non-nil value from any mutation except deinitialization, i.e. any mutation that adds or updates the feature in global model.
+ */
+public
+struct SettingInto<S: State>: MutationConvertible
+{
+    public
+    let newState: S
+
+    //===
+
+    public
+    init?(_ mutation: GlobalMutation?)
+    {
+        if
+            let setting = mutation as? FeatureSetting,
+            setting.relatedToFeature == S.Parent.self,
+            let newState = setting.newState as? S
+        {
+            self.newState = newState
+        }
+        else
+        {
+            return nil
+        }
+    }
+}
+
+//===
+
+/**
  Special kind of mutation descriptor that will be resolved in a non-nil value from any mutation except initialization or deinitialization, i.e. any mutation that updates the feature in global model.
  */
 public
