@@ -45,9 +45,9 @@ class ArithmeticsTests: XCTestCase
         {
             let mutation =
 
-                try Arithmetics
-                    .begin()
-                    .perform(with: state)
+            try Arithmetics
+                .begin()
+                .perform(with: state)
 
             //---
 
@@ -75,9 +75,9 @@ class ArithmeticsTests: XCTestCase
         {
             _ =
 
-                try Arithmetics
-                    .begin()
-                    .perform(with: state)
+            try Arithmetics
+                .begin()
+                .perform(with: state)
 
             //---
 
@@ -105,9 +105,9 @@ class ArithmeticsTests: XCTestCase
         {
             let mutation =
 
-                try Arithmetics
-                    .setExplicit(value: targetValue)
-                    .perform(with: state)
+            try Arithmetics
+                .setExplicit(value: targetValue)
+                .perform(with: state)
 
             //---
 
@@ -134,9 +134,9 @@ class ArithmeticsTests: XCTestCase
         {
             _ =
 
-                try Arithmetics
-                    .setExplicit(value: Int(arc4random_uniform(10000)))
-                    .perform(with: state)
+            try Arithmetics
+                .setExplicit(value: Int(arc4random_uniform(10000)))
+                .perform(with: state)
 
             //---
 
@@ -163,9 +163,9 @@ class ArithmeticsTests: XCTestCase
         {
             _ =
 
-                try Arithmetics
-                    .setExplicit(value: theValue)
-                    .perform(with: state)
+            try Arithmetics
+                .setExplicit(value: theValue)
+                .perform(with: state)
 
             //---
 
