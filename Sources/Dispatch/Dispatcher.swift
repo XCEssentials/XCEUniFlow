@@ -34,14 +34,15 @@ class Dispatcher
 {
     // MARK: - Private members
     
-    var state = GlobalModel()
-
     var bindings: [ModelBinding.GroupId: [ModelBinding]] = [:]
     
     var subscriptions: [Subscription.Identifier: Subscription] = [:]
     
     // MARK: - Public members
     
+    public internal(set)
+    var state = GlobalModel()
+
     public
     lazy
     var proxy: Proxy = Proxy(for: self)
@@ -89,6 +90,12 @@ class Dispatcher
         init(for dispatcher: Dispatcher)
         {
             self.dispatcher = dispatcher
+        }
+        
+        public
+        var state: GlobalModel
+        {
+            return dispatcher.state
         }
     }
 }
