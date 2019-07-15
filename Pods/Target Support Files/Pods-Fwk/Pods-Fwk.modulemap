@@ -1,6 +1,0 @@
-framework module Pods_Fwk {
-  umbrella header "Pods-Fwk-umbrella.h"
-
-  export *
-  module * { export * }
-}
