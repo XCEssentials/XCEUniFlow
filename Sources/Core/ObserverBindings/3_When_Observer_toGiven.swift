@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 // MARK: - With output
 
@@ -67,11 +67,15 @@ extension When.ObserverConnector
         
         //---
         
-        let firstGiven = Given(first: true, specification) { _, previousResult in
+        let firstGiven = Given(first: true, specification) {
+            
+            _, previousResult in
+            
+            //---
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -108,7 +112,7 @@ extension When.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -177,7 +181,7 @@ extension When.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -218,7 +222,7 @@ extension When.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -294,7 +298,7 @@ extension When.ObserverConnector
 
             let typedPreviousResult =
 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
 
                 previousResult as? Input
             )
@@ -338,7 +342,7 @@ extension When.ObserverConnector
 
             let typedPreviousResult =
 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
 
                 previousResult as? Input
             )

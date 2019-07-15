@@ -48,7 +48,7 @@ extension When.ObserverConnector
 
                 let typedObserver =
 
-                try Require("Provided observer is of type \(Observer.self)").isNotNil(
+                try Pipeline.ensure("Provided observer is of type \(Observer.self)"){ $0 != nil }
 
                     observer as? Observer
                 )
@@ -83,7 +83,7 @@ extension When.ObserverConnector
                 
                 let typedObserver =
 
-                try Require("Provided observer is of type \(Observer.self)").isNotNil(
+                try Pipeline.ensure("Provided observer is of type \(Observer.self)"){ $0 != nil }
 
                     observer as? Observer
                 )
@@ -92,7 +92,7 @@ extension When.ObserverConnector
 
                 let typedPreviousResult =
                     
-                try Require("Previous result is of type \(Input.self)").isNotNil(
+                try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                     
                     previousResult as? Input
                 )

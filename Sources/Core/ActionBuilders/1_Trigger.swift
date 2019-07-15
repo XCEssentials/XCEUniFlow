@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -72,16 +72,18 @@ extension Trigger.NoState
         body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self) { model, submit in
+        return Action(scope, context, self){
             
-            try Require("\(F.name) is NOT presented yet").isNil(
-                
-                model >> F.self
-            )
+            globalModel, submit in
             
             //---
             
-            try body(model, submit)
+            try globalModel
+                ./ Pipe.ensure(
+                    "\(F.name) is NOT presented yet",
+                    { !$0.hasState(for: F.self) }
+                )
+                ./ { _ in try body(globalModel, submit) }
             
             //---
             
@@ -102,22 +104,17 @@ extension Trigger.AnyState
         body: @escaping (GlobalModel, SomeState, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self)
-        {
+        return Action(scope, context, self){
+            
             globalModel, submit in
 
             //---
-
-            let currentState =
-
-            try Require("\(F.name) is presented").isNotNil(
-                
-                globalModel >> F.self
-            )
-
-            //---
             
-            try body(globalModel, currentState, submit)
+            try globalModel
+                >> F.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInitialized(F.self) }
+                ./ { (globalModel, $0, submit) }
+                ./ body
             
             //---
             
@@ -132,8 +129,8 @@ extension Trigger.AnyState
         body: @escaping (GlobalModel, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return via(scope: scope, context: context)
-        {
+        return via(scope: scope, context: context){
+            
             globalModel, _, submit in
 
             //---
@@ -155,22 +152,17 @@ extension Trigger.In
         body: @escaping (GlobalModel, S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return Action(scope, context, self)
-        {
+        return Action(scope, context, self){
+            
             globalModel, submit in
 
             //---
             
-            let currentState =
-                
-            try Require("\(F.name) is in \(S.self) state").isNotNil(
-                
-                globalModel >> S.self
-            )
-            
-            //---
-            
-            try body(globalModel, currentState, submit)
+            try globalModel
+                >> S.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, S.self) }
+                ./ { (globalModel, $0, submit) }
+                ./ body
             
             //---
             
@@ -185,8 +177,8 @@ extension Trigger.In
         body: @escaping (S, @escaping SubmitAction) throws -> Void
         ) -> Action
     {
-        return via(scope: scope, context: context)
-        {
+        return via(scope: scope, context: context){
+            
             _, currentState, submit in
 
             //---

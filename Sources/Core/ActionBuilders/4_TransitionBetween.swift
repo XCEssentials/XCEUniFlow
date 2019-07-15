@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -108,12 +108,9 @@ extension Transition.Between where Into: AutoInitializable
 
             //---
             
-            let oldState =
-                
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
-                
-                globalModel >> From.self
-            )
+            let oldState = try globalModel
+                >> From.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, From.self) }
             
             //---
             
@@ -165,16 +162,13 @@ extension Transition.Between
 
             //---
             
-            let oldState =
-                
-            try Require("\(F.name) is in \(From.self) state").isNotNil(
-                
-                globalModel >> From.self
-            )
-            
+            let oldState = try globalModel
+                >> From.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, From.self) }
+               
             //---
             
-            var newState: Into!
+            var newState: Into?
             
             //---
             
@@ -182,14 +176,9 @@ extension Transition.Between
             
             //---
             
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
+            return try newState
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, Into.self) }
+                ./ { Transition(from: oldState, into: $0) }
         }
     }
 

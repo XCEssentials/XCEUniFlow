@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -93,13 +93,10 @@ extension Deinitialization.From
 
             //---
 
-            let oldState =
+            let oldState = try globalModel
+                >> S.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, S.self) }
                 
-            try Require("\(F.name) is in \(S.self) state").isNotNil(
-                
-                globalModel >> S.self
-            )
-            
             //---
             
             try body(globalModel, oldState, submit)

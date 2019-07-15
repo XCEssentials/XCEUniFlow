@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "XCEPipeline",
+        "repositoryURL": "https://github.com/XCEssentials/Pipeline",
+        "state": {
+          "branch": null,
+          "revision": "06b54601b2b7360c65923fb378ca19cc7eab4094",
+          "version": "3.0.1"
+        }
+      },
+      {
+        "package": "XCERequirement",
+        "repositoryURL": "https://github.com/XCEssentials/Requirement",
+        "state": {
+          "branch": null,
+          "revision": "9561ac453c90a000a1c434d835230c253171c32e",
+          "version": "2.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

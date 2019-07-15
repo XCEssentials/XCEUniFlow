@@ -24,34 +24,24 @@
  
  */
 
-import XCEPipeline
-
-//===
-
 public
-extension ObserverBinding.Pending
+enum UniFlowError: Error
 {
-    /**
-     Defines 'WHEN' clause that starts definition of a given Scenario.
-     */
-    func when<T: MutationConvertible>(
-        _ specification: String,
-        _: T.Type
-        ) -> When.ObserverConnector<Observer, T>
-    {
-        return When.ObserverConnector<Observer, T>(
-            scenario: self,
-            when: When(specification) {
-
-                return try $0
-                    ./ T.init
-                    ./ Pipe.unwrapOrThrow(
-                        UniFlowError.incompatibleMutation(
-                            expected: T.self,
-                            actual: $0
-                        )
-                    )
-            }
-        )
-    }
+    case featureIsInitialized(
+        Feature.Type
+    )
+    
+    case featureIsNotInitialized(
+        Feature.Type
+    )
+    
+    case featureIsNotInState(
+        Feature.Type,
+        SomeState.Type
+    )
+    
+    case incompatibleMutation(
+        expected: MutationConvertible.Type,
+        actual: GlobalMutation?
+    )
 }

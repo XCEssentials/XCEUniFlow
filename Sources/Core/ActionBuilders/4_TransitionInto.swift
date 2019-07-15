@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -114,20 +114,11 @@ extension Transition.Into where S: AutoInitializable
 
             //---
 
-            let oldState =
-                
-            try Require("\(F.name) is presented").isNotNil(
-                
-                globalModel >> F.self
-            )
-
-            //---
-
-            try Require("Reset strategy satisfied").isFalse(
-
-                (same == .no) && (oldState is S)
-            )
-
+            let oldState = try globalModel
+                >> F.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInitialized(F.self) }
+                ./ Pipeline.ensure("Reset strategy satisfied"){ (same != .no) || !($0 is S) }
+            
             //---
             
             let newState = S()
@@ -180,23 +171,14 @@ extension Transition.Into
 
             //---
             
-            let oldState =
-                
-            try Require("\(F.name) is presented").isNotNil(
-                
-                globalModel >> F.self
-            )
-
-            //---
-
-            try Require("Reset strategy satisfied").isFalse(
-
-                (same == .no) && (oldState is S)
-            )
-
+            let oldState = try globalModel
+                >> F.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInitialized(F.self) }
+                ./ Pipeline.ensure("Reset strategy satisfied"){ (same != .no) || !($0 is S) }
+            
             //---
             
-            var newState: S!
+            var newState: S?
             
             //---
             
@@ -204,14 +186,9 @@ extension Transition.Into
             
             //---
             
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
-            
-            //---
-            
-            return Transition(from: oldState, into: newState)
+            return try newState
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, S.self) }
+                ./ { Transition(from: oldState, into: $0) }
         }
     }
 

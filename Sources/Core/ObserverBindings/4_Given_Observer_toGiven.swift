@@ -157,7 +157,7 @@ extension Given.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -199,7 +199,7 @@ extension Given.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -245,7 +245,7 @@ extension Given.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -291,7 +291,7 @@ extension Given.ObserverConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -341,7 +341,7 @@ extension Given.ObserverConnector
 
             let typedPreviousResult =
 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
 
                 previousResult as? Input
             )
@@ -390,7 +390,7 @@ extension Given.ObserverConnector
 
             let typedPreviousResult =
 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
 
                 previousResult as? Input
             )

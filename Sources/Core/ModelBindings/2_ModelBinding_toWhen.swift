@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -43,10 +43,14 @@ extension ModelBinding.Pending
             scenario: self,
             when: When(specification) {
                 
-                return try Require("Mutation is of type \(T.self)").isNotNil(
-                    
-                    T($0)
-                )
+                return try $0
+                    ./ T.init
+                    ./ Pipe.unwrapOrThrow(
+                        UniFlowError.incompatibleMutation(
+                            expected: T.self,
+                            actual: $0
+                        )
+                    )
             }
         )
     }

@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -163,10 +163,8 @@ extension Initialization.Into
             
             //---
             
-            try Require("New state for \(F.name) is set").isNotNil(
-                
-                newState
-            )
+            _ = try newState
+                ./ Pipeline.ensure("New state for \(F.name) is set"){ $0 != nil }
             
             //---
             

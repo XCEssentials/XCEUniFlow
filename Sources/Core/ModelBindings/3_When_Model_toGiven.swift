@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 // MARK: - With output
 
@@ -71,7 +71,7 @@ extension When.ModelConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -108,7 +108,7 @@ extension When.ModelConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -177,7 +177,7 @@ extension When.ModelConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -218,7 +218,7 @@ extension When.ModelConnector
             
             let typedPreviousResult =
                 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
                 
                 previousResult as? Input
             )
@@ -294,7 +294,7 @@ extension When.ModelConnector
 
             let typedPreviousResult =
 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
 
                 previousResult as? Input
             )
@@ -338,7 +338,7 @@ extension When.ModelConnector
 
             let typedPreviousResult =
 
-            try Require("Previous result is of type \(Input.self)").isNotNil(
+            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
 
                 previousResult as? Input
             )

@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -96,10 +96,9 @@ extension Actualization.In
             
             var currentState =
                 
-            try Require("\(S.Parent.name) is in \(S.self) state").isNotNil(
-                
-                globalModel >> S.self
-            )
+            try globalModel
+                >> S.self
+                ./ { try $0 ?! UniFlowError.featureIsNotInState(S.Parent.self, S.self) }
             
             //---
             
