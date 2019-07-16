@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "XCEPipeline",
+        "repositoryURL": "https://github.com/XCEssentials/Pipeline",
+        "state": {
+          "branch": null,
+          "revision": "3aedc9fadad3b1988d02d13be99c474fb66cd0c3",
+          "version": "3.1.1"
+        }
+      },
+      {
+        "package": "XCERequirement",
+        "repositoryURL": "https://github.com/XCEssentials/Requirement",
+        "state": {
+          "branch": null,
+          "revision": "9561ac453c90a000a1c434d835230c253171c32e",
+          "version": "2.0.1"
+        }
+      },
+      {
+        "package": "SwiftHamcrest",
+        "repositoryURL": "https://github.com/nschum/SwiftHamcrest",
+        "state": {
+          "branch": null,
+          "revision": "53e322984e000deefd3a5efaa777a7365c51aac9",
+          "version": "2.2.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
