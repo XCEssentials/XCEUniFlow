@@ -27,7 +27,6 @@
 public
 extension When
 {
-    public
     struct ObserverConnector<
         Observer: StateObserver,
         WhenOutput: MutationConvertible>

@@ -27,7 +27,6 @@
 public
 extension When
 {
-    public
     struct ModelConnector<WhenOutput: MutationConvertible>
     {
         let scenario: ModelBinding.Pending

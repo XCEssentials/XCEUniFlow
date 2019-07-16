@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 // MARK: - After VOID, WITH output
 
@@ -109,16 +109,15 @@ extension Given.ObserverConnector where GivenOutput == Void
         ifMapState handler: @escaping (GlobalModel) throws -> Bool
         ) -> Given.ObserverConnector<Observer, Void>
     {
-        let nextGiven = Given(specification) { globalModel, _ in
-
-            try Require("Handler returns 'true'").isTrue(
-
-                try handler(globalModel)
-            )
-
-            //===
-
-            return ()
+        let nextGiven = Given(specification) {
+            
+            globalModel, _ in
+            
+            //---
+            
+            return try globalModel
+                ./ handler
+                ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
         }
 
         //---
@@ -153,31 +152,24 @@ extension Given.ObserverConnector
         
         //---
         
-        let nextGiven = Given(specification) { _, previousResult in
+        let nextGiven = Given(specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            _, previousResult in
             
-            //===
+            //---
             
-            return try handler(typedPreviousResult)
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ handler
         }
-        
-        //---
-        
-        var items = self.previousClauses
-        items.append(nextGiven)
         
         //---
         
         return Given.ObserverConnector(
             scenario: scenario,
             when: when,
-            previousClauses: items
+            previousClauses: self.previousClauses + [nextGiven]
         )
     }
     
@@ -195,31 +187,25 @@ extension Given.ObserverConnector
         
         //---
         
-        let nextGiven = Given(specification) { globalModel, previousResult in
+        let nextGiven = Given(specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            globalModel, previousResult in
             
-            //===
+            //---
             
-            return try handler(globalModel, typedPreviousResult)
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (globalModel, $0) }
+                ./ handler
         }
-        
-        //---
-        
-        var items = self.previousClauses
-        items.append(nextGiven)
         
         //---
         
         return Given.ObserverConnector(
             scenario: scenario,
             when: when,
-            previousClauses: items
+            previousClauses: self.previousClauses + [nextGiven]
         )
     }
 }
@@ -241,35 +227,24 @@ extension Given.ObserverConnector
         
         //---
         
-        let nextGiven = Given(specification) { _, previousResult in
+        let nextGiven = Given(specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            _, previousResult in
             
-            //===
+            //---
             
-            try handler(typedPreviousResult)
-            
-            //===
-            
-            return ()
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ handler
         }
-        
-        //---
-        
-        var items = self.previousClauses
-        items.append(nextGiven)
         
         //---
         
         return Given.ObserverConnector(
             scenario: scenario,
             when: when,
-            previousClauses: items
+            previousClauses: self.previousClauses + [nextGiven]
         )
     }
     
@@ -287,35 +262,25 @@ extension Given.ObserverConnector
         
         //---
         
-        let nextGiven = Given(specification) { globalModel, previousResult in
+        let nextGiven = Given(specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            globalModel, previousResult in
             
-            //===
+            //---
             
-            try handler(globalModel, typedPreviousResult)
-            
-            //===
-            
-            return ()
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (globalModel, $0) }
+                ./ handler
         }
-        
-        //---
-        
-        var items = self.previousClauses
-        items.append(nextGiven)
         
         //---
         
         return Given.ObserverConnector(
             scenario: scenario,
             when: when,
-            previousClauses: items
+            previousClauses: self.previousClauses + [nextGiven]
         )
     }
 }
@@ -337,38 +302,25 @@ extension Given.ObserverConnector
 
         //---
 
-        let nextGiven = Given(specification) { _, previousResult in
-
-            let typedPreviousResult =
-
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-
-                previousResult as? Input
-            )
-
-            //===
-
-            try Require("Handler returns 'true'").isTrue(
-
-                try handler(typedPreviousResult)
-            )
-
-            //===
-
-            return ()
+        let nextGiven = Given(specification) {
+            
+            _, previousResult in
+            
+            //---
+            
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ handler
+                ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
         }
-
-        //---
-
-        var items = self.previousClauses
-        items.append(nextGiven)
 
         //---
 
         return Given.ObserverConnector(
             scenario: scenario,
             when: when,
-            previousClauses: items
+            previousClauses: self.previousClauses + [nextGiven]
         )
     }
 
@@ -386,38 +338,26 @@ extension Given.ObserverConnector
 
         //---
 
-        let nextGiven = Given(specification) { globalModel, previousResult in
-
-            let typedPreviousResult =
-
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-
-                previousResult as? Input
-            )
-
-            //===
-
-            try Require("Handler returns 'true'").isTrue(
-
-                try handler(globalModel, typedPreviousResult)
-            )
-
-            //===
-
-            return ()
+        let nextGiven = Given(specification) {
+            
+            globalModel, previousResult in
+            
+            //---
+            
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (globalModel, $0) }
+                ./ handler
+                ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
         }
-
-        //---
-
-        var items = self.previousClauses
-        items.append(nextGiven)
 
         //---
 
         return Given.ObserverConnector(
             scenario: scenario,
             when: when,
-            previousClauses: items
+            previousClauses: self.previousClauses + [nextGiven]
         )
     }
 }

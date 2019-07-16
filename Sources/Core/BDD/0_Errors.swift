@@ -56,3 +56,21 @@ protocol BDDScenarioClauseFailure: BDDFailure
     var specification: String { get }
     var reason: Error { get }
 }
+
+// MARK: - Execution Errors
+
+public
+enum BDDExecutionError: Error
+{
+    case wrongInputType(
+        Any.Type,
+        expected: Any.Type
+    )
+    
+    case handlerIndicatedFailure
+    
+    case wrongObserverType(
+        Any.Type,
+        expected: Any.Type
+    )
+}

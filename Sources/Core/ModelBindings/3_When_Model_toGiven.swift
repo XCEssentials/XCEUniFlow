@@ -67,18 +67,16 @@ extension When.ModelConnector
         
         //---
         
-        let firstGiven = Given(first: true, specification) { _, previousResult in
+        let firstGiven = Given(first: true, specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            _, previousResult in
             
             //---
             
-            return try handler(typedPreviousResult)
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ handler
         }
         
         //---
@@ -104,18 +102,17 @@ extension When.ModelConnector
         
         //---
         
-        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
+        let firstGiven = Given(first: true, specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            globalModel, previousResult in
             
             //---
             
-            return try handler(globalModel, typedPreviousResult)
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (globalModel, $0) }
+                ./ handler
         }
         
         //---
@@ -173,18 +170,16 @@ extension When.ModelConnector
         
         //---
         
-        let firstGiven = Given(first: true, specification) { _, previousResult in
+        let firstGiven = Given(first: true, specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            _, previousResult in
             
             //---
             
-            try handler(typedPreviousResult)
+            try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ handler
             
             //---
             
@@ -214,18 +209,17 @@ extension When.ModelConnector
         
         //---
         
-        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
+        let firstGiven = Given(first: true, specification) {
             
-            let typedPreviousResult =
-                
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                
-                previousResult as? Input
-            )
+            globalModel, previousResult in
             
             //---
             
-            try handler(globalModel, typedPreviousResult)
+            try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (globalModel, $0) }
+                ./ handler
             
             //---
             
@@ -255,16 +249,15 @@ extension When.ModelConnector
         ifMapState handler: @escaping (GlobalModel) throws -> Bool
         ) -> Given.ModelConnector<Void>
     {
-        let firstGiven = Given(first: true, specification) { globalModel, _ in
-
-            try Require("Handler returns 'true'").isTrue(
-
-                try handler(globalModel)
-            )
-
+        let firstGiven = Given(first: true, specification) {
+            
+            globalModel, _ in
+            
             //---
-
-            return ()
+            
+            return try globalModel
+                ./ handler
+                ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
         }
 
         //---
@@ -290,25 +283,17 @@ extension When.ModelConnector
 
         //---
 
-        let firstGiven = Given(first: true, specification) { _, previousResult in
-
-            let typedPreviousResult =
-
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-
-                previousResult as? Input
-            )
-
+        let firstGiven = Given(first: true, specification) {
+            
+            _, previousResult in
+            
             //---
-
-            try Require("Handler returns 'true'").isTrue(
-
-                try handler(typedPreviousResult)
-            )
-
-            //---
-
-            return ()
+            
+            return try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ handler
+                ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
         }
 
         //---
@@ -334,21 +319,18 @@ extension When.ModelConnector
 
         //---
 
-        let firstGiven = Given(first: true, specification) { globalModel, previousResult in
-
-            let typedPreviousResult =
-
-            try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-
-                previousResult as? Input
-            )
-
+        let firstGiven = Given(first: true, specification) {
+            
+            globalModel, previousResult in
+            
             //---
 
-            try Require("Handler returns 'true'").isTrue(
-
-                try handler(globalModel, typedPreviousResult)
-            )
+            try previousResult
+                ./ { $0 as? Input }
+                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (globalModel, $0) }
+                ./ handler
+                ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
 
             //---
 

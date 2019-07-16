@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -68,18 +68,17 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ModelBinding.Then(specification) { submit, previousResult in
+            then: ModelBinding.Then(specification) {
                 
-                let typedPreviousResult =
+                submit, previousResult in
                 
-                try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                    
-                    previousResult as? Input
-                )
+                //---
                 
-                //===
-                
-                handler(submit, typedPreviousResult)
+                try previousResult
+                    ./ { $0 as? Input }
+                    ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                    ./ { (submit, $0) }
+                    ./ handler
             }
         )
     }
@@ -100,18 +99,17 @@ extension Given.ModelConnector
             summary: scenario.summary,
             when: when,
             given: previousClauses,
-            then: ModelBinding.Then(specification) { submit, previousResult in
+            then: ModelBinding.Then(specification) {
                 
-                let typedPreviousResult =
-                    
-                try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                    
-                    previousResult as? Input
-                )
+                submit, previousResult in
                 
-                //===
+                //---
                 
-                submit << actionGetter(typedPreviousResult)
+                try previousResult
+                    ./ { $0 as? Input }
+                    ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                    ./ actionGetter
+                    ./ submit
             }
         )
     }

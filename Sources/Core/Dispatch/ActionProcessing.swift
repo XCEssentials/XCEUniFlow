@@ -31,7 +31,6 @@ import Foundation
 public
 extension Dispatcher.Proxy
 {
-    public
     func submit(_ action: Action)
     {
         DispatchQueue.main.async {

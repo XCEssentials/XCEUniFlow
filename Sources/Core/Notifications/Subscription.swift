@@ -96,7 +96,6 @@ public
 extension Dispatcher.Proxy
 {
     @discardableResult
-    public
     func subscribe(
         _ observer: StateObserver,
         forceUpdateNow: Bool = false
@@ -120,7 +119,6 @@ extension Dispatcher.Proxy
     
     //===
 
-    public
     func updateNow(_ observer: StateObserver)
     {
         type(of: observer).bindings.forEach {

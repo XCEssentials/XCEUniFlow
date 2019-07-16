@@ -24,7 +24,7 @@
  
  */
 
-import XCERequirement
+import XCEPipeline
 
 //===
 
@@ -44,18 +44,16 @@ extension When.ObserverConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ObserverBinding.Then(specification) { observer, _ in
-
-                let typedObserver =
-
-                try Pipeline.ensure("Provided observer is of type \(Observer.self)"){ $0 != nil }
-
-                    observer as? Observer
-                )
-
-                //===
-
-                handler(typedObserver)
+            then: ObserverBinding.Then(specification) {
+                
+                observer, _ in
+                
+                //---
+                
+                try observer
+                    ./ { $0 as? Observer }
+                    ./ { try $0 ?! BDDExecutionError.wrongObserverType(type(of: $0), expected: Observer.self) }
+                    ./ handler
             }
         )
     }
@@ -79,27 +77,21 @@ extension When.ObserverConnector
             summary: scenario.summary,
             when: when,
             given: [],
-            then: ObserverBinding.Then(specification) { observer, previousResult in
+            then: ObserverBinding.Then(specification) {
                 
-                let typedObserver =
-
-                try Pipeline.ensure("Provided observer is of type \(Observer.self)"){ $0 != nil }
-
-                    observer as? Observer
-                )
-
-                //===
-
-                let typedPreviousResult =
-                    
-                try Pipeline.ensure("Previous result is of type \(Input.self)"){ $0 != nil }
-                    
-                    previousResult as? Input
-                )
+                observer, previousResult in
                 
-                //===
+                //---
                 
-                handler(typedObserver, typedPreviousResult)
+                try (
+                    observer
+                        ./ { $0 as? Observer }
+                        ./ { try $0 ?! BDDExecutionError.wrongObserverType(type(of: $0), expected: Observer.self) },
+                    previousResult
+                        ./ { $0 as? Input }
+                        ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                    )
+                    ./ handler
             }
         )
     }

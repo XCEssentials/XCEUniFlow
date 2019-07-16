@@ -93,10 +93,9 @@ extension Initialization.Into where S: AutoInitializable
 
             //---
             
-            try Require("\(F.name) is NOT initialized yet").isNil(
-                
-                globalModel >> F.self
-            )
+            try globalModel
+                ./ { !$0.hasState(for: F.self) }
+                ./ { try $0 ?! UniFlowError.featureIsInitialized(F.self) }
             
             //---
             
@@ -148,10 +147,9 @@ extension Initialization.Into
 
             //---
             
-            try Require("\(F.name) is NOT initialized yet").isNil(
-                
-                globalModel >> F.self
-            )
+            try globalModel
+                ./ { !$0.hasState(for: F.self) }
+                ./ { try $0 ?! UniFlowError.featureIsInitialized(F.self) }
             
             //---
             
