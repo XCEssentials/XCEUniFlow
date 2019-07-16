@@ -1,0 +1,27 @@
+# https://docs.travis-ci.com/user/customizing-the-build/
+# https://docs.travis-ci.com/user/job-lifecycle/#the-job-lifecycle
+# https://docs.travis-ci.com/user/languages/objective-c/
+
+branches:
+  only:
+  - master
+  - /^hotfix.*$/
+  - /^release.*$/
+  - /^feature.*$/
+
+git:
+  depth: 3
+  submodules: false
+
+language: objective-c # fine for Swift as well
+
+osx_image:
+  - xcode10.2
+  - xcode11
+
+before_script:
+  # cd ./.setup && swift run && cd ./.. # RUN this manually!
+  - swift --version
+
+script:
+  - swift test
