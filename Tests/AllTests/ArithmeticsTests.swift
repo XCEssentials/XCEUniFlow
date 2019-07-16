@@ -26,10 +26,12 @@
 
 import XCTest
 
+import XCEPipeline
+import XCERequirement
+import SwiftHamcrest
+
 @testable
 import XCEUniFlow
-
-import XCETesting
 
 //===
 
@@ -43,26 +45,17 @@ class ArithmeticsTests: XCTestCase
 
         do
         {
-            let mutation =
-
             try Arithmetics
                 .begin()
                 .perform(with: state)
-
-            //---
-
-            Assert("Initialized").isNotNil(
-
-                InitializationInto<Arithmetics.Main>(mutation)
-            )
+                ./ InitializationInto<Arithmetics.Main>.init
+                .* { assertThat($0, not(nilValue()))  }
         }
         catch
         {
             XCTFail("\(error)")
         }
     }
-
-    //===
 
     func testBeginNegative()
     {
@@ -73,9 +66,7 @@ class ArithmeticsTests: XCTestCase
 
         do
         {
-            _ =
-
-            try Arithmetics
+            _ = try Arithmetics
                 .begin()
                 .perform(with: state)
 
@@ -88,8 +79,6 @@ class ArithmeticsTests: XCTestCase
             // failed as expected
         }
     }
-
-    //===
 
     func testSetExplicitPositive()
     {
@@ -103,26 +92,18 @@ class ArithmeticsTests: XCTestCase
 
         do
         {
-            let mutation =
-
             try Arithmetics
                 .setExplicit(value: targetValue)
                 .perform(with: state)
-
-            //---
-
-            Assert("Set to target value as expected").isTrue(
-
-                ActualizationIn<Arithmetics.Main>(mutation)?.state.val == targetValue
-            )
+                ./ ActualizationIn<Arithmetics.Main>.init
+                ./ { $0!.state.val }
+                .* { assertThat($0, equalTo(targetValue)) }
         }
         catch
         {
             XCTFail("\(error)")
         }
     }
-
-    //===
 
     func testSetExplicitNegativeUninitialized()
     {
@@ -132,9 +113,7 @@ class ArithmeticsTests: XCTestCase
 
         do
         {
-            _ =
-
-            try Arithmetics
+            _ = try Arithmetics
                 .setExplicit(value: Int(arc4random_uniform(10000)))
                 .perform(with: state)
 
@@ -142,13 +121,15 @@ class ArithmeticsTests: XCTestCase
 
             XCTFail("Should never come to this point")
         }
+        catch UniFlowError.featureIsNotInState(let feature, _)
+        {
+            assertThat(feature.name, equalTo(XCEUniFlowAllTests.Arithmetics.name))
+        }
         catch
         {
-            // failed as expected
+            XCTFail("Should never come to this point")
         }
     }
-
-    //===
 
     func testSetExplicitNegativeSameValue()
     {
@@ -161,9 +142,7 @@ class ArithmeticsTests: XCTestCase
 
         do
         {
-            _ =
-
-            try Arithmetics
+            _ = try Arithmetics
                 .setExplicit(value: theValue)
                 .perform(with: state)
 
@@ -171,9 +150,13 @@ class ArithmeticsTests: XCTestCase
 
             XCTFail("Should never come to this point")
         }
+        catch _ as UnsatisfiedRequirement
+        {
+            // okay
+        }
         catch
         {
-            // failed as expected
+            XCTFail("Should never come to this point")
         }
     }
 }

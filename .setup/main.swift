@@ -171,6 +171,10 @@ try CustomTextFile("""
             .package(
                 url: "https://github.com/XCEssentials/Pipeline",
                 from: "3.0.0"
+            ),
+            .package(
+                url: "https://github.com/nschum/SwiftHamcrest",
+                from: "2.1.1"
             )
         ],
         targets: [
@@ -185,7 +189,10 @@ try CustomTextFile("""
             .testTarget(
                 name: "\(targetNames.tests)",
                 dependencies: [
-                    "\(targetNames.core)"
+                    "\(targetNames.core)",
+                    "XCEPipeline",
+                    "XCERequirement",
+                    "SwiftHamcrest"
                 ],
                 path: "\(sourcesLocations.tests)"
             ),
