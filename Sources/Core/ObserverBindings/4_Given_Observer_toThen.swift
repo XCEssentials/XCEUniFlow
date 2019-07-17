@@ -49,7 +49,7 @@ extension Given.ObserverConnector where GivenOutput == Void
                 
                 try observer
                     ./ { $0 as? Observer }
-                    ./ { try $0 ?! BDDExecutionError.wrongObserverType(type(of: $0), expected: Observer.self) }
+                    ./ { (try $0 ?! BDDExecutionError.wrongObserverType(type(of: $0), expected: Observer.self)) as Observer }
                     ./ handler
             }
         )
