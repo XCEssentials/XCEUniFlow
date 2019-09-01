@@ -10,7 +10,7 @@
 
 Uni-directional data flow & finite state machine merged together.
 
-# Problem
+## Problem
 
 Every app has an architecture, good or bad. Since there is no universal methodology about how to build an app, every developer/team has to come up with their own solution every time an app is being built.
 
@@ -31,7 +31,7 @@ Optionally, there are few more fundamental challenges that every app faces soone
 
 So let's define **app architecture** as a set of rules that define how listed above challenges are being solved in particular app.
 
-# Pre-existing solutions
+## Pre-existing solutions
 
 There are quite few design patterns that are trying to describe how to organize overall application structure on a high level ([MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller), [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), etc.). They are not very specific and different developers interpret and implement these patterns in a slightly different way.
 
@@ -39,44 +39,44 @@ One of the most promising (and relatively new on iOS) is so-called **"unidirecti
 
 It's a very powerful framework that seems to cover all the fundamental needs. However, there are several things that are not so great and might be improved.
 
-## Overhead with Reducer implementation
+### Overhead with Reducer implementation
 
 1. **Reducer** is not supposed to have any internal state/data ever, so the only value of **reducer** is the logic that can be easily represented as a pure function (with input parameters), so it doesn't make sense to have **reducer** as an object/instance and implement it's functionality as instance member/function.
-2. The way **reducers** are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every **reducer** as an object/struct and then always remember (during application and **store** initialization) to create exactly one instance of each **reducer** and explicitly register it in the **store**. Otherwise, **reducer** will not be included in the **actions** processing chain and silently will not work.
-3. Entire library architecture promotes very strange and inconvenient way of organizing app logic/code. Each **action** supposed to represent only data model needed for the logic related to this **action**, while logic itself is spread across one or multiple **reducers**. The only way to recall/understand what a particular **action** does, without having detailed up-to-date documentation, is to search across whole app for **reducers** which react to that specific **action**. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app and pure overall app UX.
+2. The way **reducers** are supposed to be implemented adds unnecessary "manual" work to developer and very likely will lead to errors/mistakes as the codebase grows. In particular, developer has to implement every **reducer** as a function somewhere and then always remember (during application and **store** initialization) to explicitly register it in the **store** (pass as input parameter amongs all other reducers). Otherwise, **reducer** will not be included in the **actions** processing chain and silently will not work.
+3. Entire library architecture promotes very strange and inconvenient way of organizing app logic/code. Each **action** supposed to represent only data model needed for the logic related to this **action**, while logic itself is spread across one or multiple **reducers**. The only way to recall/understand what a particular **action** does, without having detailed up-to-date documentation, is to search across whole app for **reducers** which react to that specific **action**. That's a nightmare for developer, leads to lack of understanding of big picture by developer and, as result - to errors/bugs/crashes in the app. Also it's counter-intuitive that, in fact, **action** is just a *data cotnainer*, not an actual state mutation as the name suggests and as an external reader might assume.
 4. The way **reducer** main function expected to be written is far from perfect. While it may look cool because it's pure "functional" approach, it's lot of manual work for developer that implements app functionality. We have to do check/unwrap optional **state** in every single reducer, before we even start to write any app-specific code, which is just ridiculous - why wouldn't we have the 'state' set at any moment of application life time? Plus, it comes as read-only input parameter and you HAVE to return a state value, even if this action made no mutations on state at all - that all makes developer (in most cases) to explicitly unwrap optional input state into a variable ("var"). We also do not know what the **action** is and have to always optionally typecast it or at least check its type. That's lot of unnecessary complications that make the logic behind the source code hard to read and understand, so, again, it's very error-prone.
 
-## Subscription mechanism limitations
+### Subscription mechanism limitations
 
 The subscription mechanism requires:
 
 1. **observer** to have a specific method implemented (conform to protocol) that limits developer with naming;
 2. this specific method (**newState**) receives optional value, that require the code to always have unwrapping code before any app-specific code comes, which is on a big scale a big unnecessary manual work to be done by developer.
 
-## Middleware
+### Middleware
 
 **Middleware** seems to be absolutely overkill/unnecessary complication, even a simple example looks super complicated.
 
-# Wishlist
+## Wishlist
 
 A framework like this should be a tool that helps and inspires to:
 
-1. make the app completely predictable at any moment of time (so that eliminates crashes);
-2. effectively exchange/share data between different scopes (without having to store and maintain direct cross-references in many-to-many style) so all parts of the app (including all UIs) stay consistent all the time;
+1. make the app completely predictable at any moment of time (to eliminate crashes as much as possible);
+2. effectively exchange/share data between different scopes (without having to store and maintain direct cross-references in many-to-many style) so all parts of the app (including all UIs) stay always consistent;
 3. eliminate implicit [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)) in application source code;
 4. make the app source code well structured - easy to read, understand and reason about;
 5. make the app source code compatible with key software design principle (like [Separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns), [Encapsulation](https://en.wikipedia.org/wiki/Information_hiding#Encapsulation), [Black box](https://en.wikipedia.org/wiki/Black_box), [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection));
 6. make the app source code compatible with key architectural patterns (like [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel), [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)).
 7. make the app source code easily translatable to/from [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) specifications;
-8. make application source code ready for unit tests (including independent module testing and integration testing);
+8. make application source code completely ready for unit tests, as well as integration tests;
 9. keep developer written source code minimal and compact (make it look like specifications);
 10. keep library overhead as low as possible (no run-time "magic" should be involved, as less "manual" operations as possible).
 
-# Scope
+## Scope
 
-This library provides the highest level of abstraction in application development process, so any kind of specific tasks (like networking, data encoding/decoding, any kind of computations, GUI configuration, etc.) are out of scope.
+The goal of this framework is to provide a tool for defining and managing application state and delivering notifications about such state mutations to subscribed observers. This library provides the highest level of abstraction in application development process, so any kind of specific tasks (like networking, data encoding/decoding, any kind of computations, GUI configuration, etc.) are out of scope.
 
-# Theoretical fundamentals
+## Theoretical fundamentals
 
 Any **app consists of** two main components: **[model](https://en.wikipedia.org/wiki/Data_model)** (static component, which provides storage for all possible kinds of [data](https://en.wikipedia.org/wiki/Data) that the app can operate with) and **[business logic](https://en.wikipedia.org/wiki/Business_logic)** (dynamic component, which represents all possible mutations that might happen with that data model).
 
@@ -86,21 +86,19 @@ Moreover, each app consists of features, which may or may not depend one on anot
 
 To sum it up, every app should be represented as a set of features. Every feature can be defined by one or several *alternative* states (every feature state corresponds to its own model), plus transitions between these states. 
 
-# Methodology overview
+## Methodology overview
 
-App model - **global model** - is a composite object that consists of feature models. To be completely precise, every feature (when presented in global model at all) at any given moment of time is represented by exactly one of its state models. Obviously, each feature state model that is currently presented in global model defines what's current state of corresponding feature; if no single state model of a given feature is presented in global model, then current state of that particular feature is undefined (the feature is not being used currently).
+App model - **global model** - is a special container object that at any moment of time contains all currently initialized **features**. In turn, every initialized feature at any given moment of time is represented by exactly one of its **states**. Obviously, each feature state that is currently presented in global model defines the current state of corresponding feature; if no single state of a given feature is currently presented in the global model, then current state of that particular feature is undefined (the feature is not being used currently).
 
-By app **global state** at any given moment of time lets agree to understand a combination of all feature state models currently presented in app global model.
+This concludes data model of an app.
 
-This concludes static/data model of an app.
+App business logic can be represented by transitions between different feature states. That means each transition should change current state of one or several features. In general case, each transition consists of pre-conditions which must be fulfilled before this transition can be performed, as well as transition body that defines how exactly this transition is going to be made. Transitions are also used to bring any kind of input from outer world into the app (for example, user input, system notifications, etc.)
 
-App business logic can be represented by transitions between different app global states. That means each transition should change current state of one or several features. In general case, each transition consists of pre-conditions which must be fulfilled before this transition can be performed, as well as transition body that defines how exactly this transition is going to be made. Transitions are also used to bring any kind of input from outer world into the app (for example, user input, system notifications, etc.)
+## How to install
 
-# How to install
+The recommended way is to install using [SwiftPM](https://swift.org/package-manager/), but [Carthage](https://github.com/Carthage/Carthage) is also supported out of the box..
 
-The recommended way is to install using [CocoaPods](https://cocoapods.org/?q=XCEUniFlow).
-
-# How it works
+## How it works
 
 Each app [feature](https://en.wikipedia.org/wiki/Software_feature) should be represented by a data type that conforms to **`Feature`** protocol. Its name corresponds to the feature name. This data type is never supposed to be instantiated and will be needed as meta data for corresponding feature states only.
 
@@ -122,7 +120,7 @@ Dispatcher has several responsibilities:
 - process state transitions (instances of `Action` data type that mutate the `GlobalModel` instance stored inside dispatcher);
 - deliver notifications about global state mutations to subscribed observers (this is how we can interconnect different parts/scopes of the app, including delivering updates to GUI in "reactive" style).
 
-# How to use
+## How to use
 
 Import framework like this:
 
@@ -130,7 +128,7 @@ Import framework like this:
 import XCEUniFlow
 ```
 
-## Dispatcher
+### Dispatcher
 
 First of all, you need to create a dispatcher. The recommended way is just to decalre an internal instance level constant in your `AppDelegate` class. This guarantees that dispatcher has the same life cycle as the app itself.
 
@@ -146,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 }
 ```
 
-## DispatcherProxy
+### DispatcherProxy
 
 For safety reasons, it is not recommended to pass reference to dispatcher across the app. Instead, there is a special lightweight data structure called `DispatcherProxy` that provides access to essential functionality of a given dispatcher and supposed to be freely passed/copied/stored as many times as it is needed.
 
@@ -244,7 +242,7 @@ class Ctrl: UIViewController, DispatcherInitializable
 }
 ```
 
-## Subscription
+### Subscription
 
 To subscribe for notifications from dispatcher, all you need to do is, basically, register an object as observer and provide corresponding `update handler`. Optionally you may also provide `convert handler` which is responsible for converting global app state into more specific model (this helps make the code even more declarative).
 
@@ -331,7 +329,7 @@ class View: UIView, DispatcherInitializable
 
 Note, that observer object works like a key in a dictionary to identify subscription among all other subscriptions. Only one subscription is possible per observer. Every submit attempt to setup a subscription for an observer will override previous subscription for this observer.
 
-## Feature modeling
+### Feature modeling
 
 One of the most important techniques in this methodology is how to define features, feature states and state transitions.
 
@@ -478,23 +476,23 @@ proxy.submit { Search.begin(with: word) } // actually start search process
 
 Remember, all actions are being processed serially on the main thread, one-by-one, in the same order as they have been submitted (FIFO).
 
-## Final notes
+### Final notes
 
 Above is an example of bare minimum that might be needed to solve a task like this. The example might be extended with a dedicated state for failure (that also may store the error occurred) on some other states, depending on specifics of particular search. Also there should be a transition that discards search results and prepares for a new search, deinitialization transition (in case the search view is closed completely and we do not need to keep in memory anything related to `Search` feature at all). And so on.
 
-# Positive outcomes
+## Why UniFlow?
 
 There are quite a few positive outcomes from using this framework as a foundation for your app:
 
 - the methodology encourages to write app source code in functional manner, that eliminates side effects, makes it better organized, easier to read and understand;
 - it provides very clear strategy for scaling app from very few features to dozens and hundreds of them;
-- it eliminates unexpected behavior, because if you write state transitions properly - check all necessary preconditions and secure all necessary data into temporary variables before proceed with actually making the transition - there is no chance to get an unexpected behavior or run time exception;
+- it eliminates unexpected behaviors, because if you write state transitions properly - check all necessary preconditions, etc. - there is no chance to get an unexpected behavior or run time exception;
 - it dramatically increases codebase modularity and testability (in comparison with "traditional" **imperative** programming or any other popular architecture patterns), making both module and integration testing a breeze;
 - each transition (with its trigger points) is easily translatable into [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) scenario and vice versa;
-- easy to deliver any data to any scope of the app, just subscribe for updates from dispatcher and read/put access desired data from/into global app state;
-- the app still easily compatible with existing architecture patterns like MVC, MVVM and others, because this library only organizes Model layer.
-- no need to sacrifice with performance, because this library brings no overhead at all, no run time magic, everything written in pure Swift.
+- easy to deliver any data to any scope of the app, just subscribe for updates from dispatcher and access desired data from global app state;
+- this approach still easily compatible with existing architecture patterns like MVC, MVVM and others, because this library only covers Model layer and does not limit you on how/where it will be used;
+- no need to sacrifice with performance, because this library brings almost no overhead at all, no run time magic, everything written in pure Swift.
 
-# Future plans
+## Future plans
 
 The project has evolved through several minor and 5 major updates. Current notation considered to be stable and pretty well balanced in terms of ease of use, concise and self-expressive API and functionality. Pretty much any kind of functionality can be implemented using proposed methodology.
