@@ -8,7 +8,7 @@
 
 # UniFlow
 
-Uni-directional data flow & finite state machine merged together
+Uni-directional data flow & finite state machine merged together.
 
 # Problem
 
@@ -495,16 +495,6 @@ There are quite a few positive outcomes from using this framework as a foundatio
 - the app still easily compatible with existing architecture patterns like MVC, MVVM and others, because this library only organizes Model layer.
 - no need to sacrifice with performance, because this library brings no overhead at all, no run time magic, everything written in pure Swift.
 
-# Compatibility with Objective-C
-
-For mixed environment Swift 3 + Objective-C use [version 1.1.1](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.1.1). For compatibility with Swift 2.2 and Swift 2.3 (as well as Objective-C) use [older version](https://github.com/maximkhatskevich/MKHUniFlow/releases/tag/1.0).
-
-Starting from [version 2.0.0](https://github.com/XCEssentials/UniFlow/releases/tag/2.0.0) interoperability with Objective-C is no longer supported.
-
 # Future plans
 
-The project has evolved through several minor and 3 major updates. Current notation considered to be stable and pretty well balanced in terms of ease of use, concise and self-expressive API and functionality. Pretty much any kind of functionality can be implemented using proposed methodology.
-
-# Contribution, feedback, questions...
-
-I you have any kind of feedback or questions - feel free to open an issue. If you'd like to propose an improvement or found a bug - start na issue as well, or feel free to fork and submit a pull request. Any kind of contributions would be much appreciated!
+The project has evolved through several minor and 5 major updates. Current notation considered to be stable and pretty well balanced in terms of ease of use, concise and self-expressive API and functionality. Pretty much any kind of functionality can be implemented using proposed methodology.

@@ -75,7 +75,7 @@ extension When.ModelConnector
             
             return try previousResult
                 ./ { $0 as? Input }
-                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                 ./ handler
         }
         
@@ -110,7 +110,7 @@ extension When.ModelConnector
             
             return try previousResult
                 ./ { $0 as? Input }
-                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                 ./ { (globalModel, $0) }
                 ./ handler
         }
@@ -178,7 +178,7 @@ extension When.ModelConnector
             
             try previousResult
                 ./ { $0 as? Input }
-                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                 ./ handler
             
             //---
@@ -217,7 +217,7 @@ extension When.ModelConnector
             
             try previousResult
                 ./ { $0 as? Input }
-                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                 ./ { (globalModel, $0) }
                 ./ handler
             
@@ -291,7 +291,7 @@ extension When.ModelConnector
             
             return try previousResult
                 ./ { $0 as? Input }
-                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                 ./ handler
                 ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)
         }
@@ -327,7 +327,7 @@ extension When.ModelConnector
 
             try previousResult
                 ./ { $0 as? Input }
-                ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                 ./ { (globalModel, $0) }
                 ./ handler
                 ./ Pipeline.throwIfFalse(BDDExecutionError.handlerIndicatedFailure)

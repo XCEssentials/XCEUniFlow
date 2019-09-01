@@ -76,7 +76,7 @@ extension Given.ModelConnector
                 
                 try previousResult
                     ./ { $0 as? Input }
-                    ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                    ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                     ./ { (submit, $0) }
                     ./ handler
             }
@@ -107,7 +107,7 @@ extension Given.ModelConnector
                 
                 try previousResult
                     ./ { $0 as? Input }
-                    ./ { try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self) }
+                    ./ { (try $0 ?! BDDExecutionError.wrongInputType(type(of: $0), expected: Input.self)) as Input }
                     ./ actionGetter
                     ./ submit
             }
