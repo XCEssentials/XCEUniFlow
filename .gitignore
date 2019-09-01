@@ -94,6 +94,7 @@ Package.pins
 # we don't need to store project file,
 # as we generate it on-demand
 *.xcodeproj
+!XCEUniFlow.xcodeproj
 
 ### Custom repo-specific ###
 # ==========
