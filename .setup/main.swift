@@ -207,6 +207,18 @@ try CustomTextFile("""
     )
     .writeToFileSystem()
 
+// MARK: Write - Cartfile
+
+try CustomTextFile("""
+    github "XCEssentials/Requirement"
+    github "XCEssentials/Pipeline"
+    """
+    )
+    .prepare(
+        at: ["Cartfile"]
+    )
+    .writeToFileSystem()
+
 // MARK: - POST-script invocation output
 
 print("--- END of '\(Executable.name)' script ---")
