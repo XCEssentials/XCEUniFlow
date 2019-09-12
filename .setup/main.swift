@@ -11,6 +11,39 @@ print("--- BEGIN of '\(Executable.name)' script ---")
 
 // MARK: Parameters
 
+let dependencies = (
+    requirement: (
+        name: """
+            XCERequirement
+            """,
+        carthage: """
+            github "XCEssentials/Requirement"
+            """,
+        swiftPM: """
+            .package(url: "https://github.com/XCEssentials/Requirement", from: "2.0.0")
+            """
+    ),
+    pipeline: (
+        name: """
+            XCEPipeline
+            """,
+        carthage: """
+            github "XCEssentials/Pipeline"
+            """,
+        swiftPM: """
+            .package(url: "https://github.com/XCEssentials/Pipeline", from: "3.0.0")
+            """
+    ),
+    swiftHamcrest: (
+        name: """
+            SwiftHamcrest
+            """,
+        swiftPM: """
+            .package(url: "https://github.com/nschum/SwiftHamcrest", from: "2.1.1")
+            """
+    )
+)
+
 Spec.BuildSettings.swiftVersion.value = "5.0"
 let swiftLangVersions = "[.v5]"
 
@@ -166,25 +199,16 @@ try CustomTextFile("""
             )
         ],
         dependencies: [
-            .package(
-                url: "https://github.com/XCEssentials/Requirement",
-                from: "2.0.0"
-            ),
-            .package(
-                url: "https://github.com/XCEssentials/Pipeline",
-                from: "3.0.0"
-            ),
-            .package(
-                url: "https://github.com/nschum/SwiftHamcrest",
-                from: "2.1.1"
-            )
+            \(dependencies.requirement.swiftPM),
+            \(dependencies.pipeline.swiftPM),
+            \(dependencies.swiftHamcrest.swiftPM)
         ],
         targets: [
             .target(
                 name: "\(targetNames.core)",
                 dependencies: [
-                    "XCERequirement",
-                    "XCEPipeline"
+                    "\(dependencies.requirement.name)",
+                    "\(dependencies.pipeline.name)"
                 ],
                 path: "\(sourcesLocations.core)"
             ),
@@ -192,9 +216,9 @@ try CustomTextFile("""
                 name: "\(targetNames.tests)",
                 dependencies: [
                     "\(targetNames.core)",
-                    "XCEPipeline",
-                    "XCERequirement",
-                    "SwiftHamcrest"
+                    "\(dependencies.requirement.name)",
+                    "\(dependencies.pipeline.name)",
+                    "\(dependencies.swiftHamcrest.name)"
                 ],
                 path: "\(sourcesLocations.tests)"
             ),
@@ -207,6 +231,19 @@ try CustomTextFile("""
         at: ["Package.swift"]
     )
     .writeToFileSystem()
+
+// MARK: Write - Cartfile
+
+try CustomTextFile("""
+    \(dependencies.requirement.carthage)
+    \(dependencies.pipeline.carthage)
+    """
+    )
+    .prepare(
+        at: ["Cartfile"]
+    )
+    .writeToFileSystem()
+
 
 // MARK: Write - set_bundle_id.sh
 

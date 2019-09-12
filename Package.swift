@@ -13,18 +13,9 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/XCEssentials/Requirement",
-            from: "2.0.0"
-        ),
-        .package(
-            url: "https://github.com/XCEssentials/Pipeline",
-            from: "3.0.0"
-        ),
-        .package(
-            url: "https://github.com/nschum/SwiftHamcrest",
-            from: "2.1.1"
-        )
+        .package(url: "https://github.com/XCEssentials/Requirement", from: "2.0.0"),
+        .package(url: "https://github.com/XCEssentials/Pipeline", from: "3.0.0"),
+        .package(url: "https://github.com/nschum/SwiftHamcrest", from: "2.1.1")
     ],
     targets: [
         .target(
@@ -39,8 +30,8 @@ let package = Package(
             name: "XCEUniFlowAllTests",
             dependencies: [
                 "XCEUniFlow",
-                "XCEPipeline",
                 "XCERequirement",
+                "XCEPipeline",
                 "SwiftHamcrest"
             ],
             path: "Tests/AllTests"
