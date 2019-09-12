@@ -37,7 +37,10 @@ let project = (
     copyrightYear: 2016
 )
 
-let productName = company.prefix + project.name
+let product = (
+    name: company.prefix + project.name,
+    bundleId: "com.\(remoteRepo.accountName).\(remoteRepo.name)"
+)
 
 let authors = [
     ("Maxim Khatskevich", "maxim@khatskevi.ch")
@@ -54,8 +57,8 @@ let subSpecs: PerSubSpec = (
 )
 
 let targetNames: PerSubSpec = (
-    productName,
-    productName + subSpecs.tests
+    product.name,
+    product.name + subSpecs.tests
 )
 
 let sourcesLocations: PerSubSpec = (
@@ -153,10 +156,10 @@ try CustomTextFile("""
     import PackageDescription
 
     let package = Package(
-        name: "\(productName)",
+        name: "\(product.name)",
         products: [
             .library(
-                name: "\(productName)",
+                name: "\(product.name)",
                 targets: [
                     "\(targetNames.core)"
                 ]
@@ -204,6 +207,22 @@ try CustomTextFile("""
         at: ["Package.swift"]
     )
     .writeToFileSystem()
+
+// MARK: Write - set_bundle_id.sh
+
+try CustomTextFile("""
+    #!/bin/bash
+
+    # http://www.grymoire.com/Unix/Sed.html#TOC
+    sed -i '' -e "s|PRODUCT_BUNDLE_IDENTIFIER = \\"\(product.name)\\"|PRODUCT_BUNDLE_IDENTIFIER = \(product.bundleId)|g" \(product.name).xcodeproj/project.pbxproj
+
+    """
+    )
+    .prepare(
+        at: ["set_bundle_id.sh"]
+    )
+    .writeToFileSystem()
+
 
 // MARK: - POST-script invocation output
 
