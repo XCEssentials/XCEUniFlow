@@ -99,6 +99,11 @@ let sourcesLocations: PerSubSpec = (
     Spec.Locations.tests + subSpecs.tests
 )
 
+let swiftPMPackageManifestFileName = "Package.swift"
+let cartfileFileName = "Cartfile"
+let prepareForCarthageXcconfigFileName = "PrepareForCarthage.xcconfig"
+let prepareForCarthageShFileName = "PrepareForCarthage.sh"
+
 // MARK: Parameters - Summary
 
 localRepo.report()
@@ -228,7 +233,7 @@ try CustomTextFile("""
     """
     )
     .prepare(
-        at: ["Package.swift"]
+        at: [swiftPMPackageManifestFileName]
     )
     .writeToFileSystem()
 
@@ -240,26 +245,63 @@ try CustomTextFile("""
     """
     )
     .prepare(
-        at: ["Cartfile"]
+        at: [cartfileFileName]
     )
     .writeToFileSystem()
 
-
-// MARK: Write - set_bundle_id.sh
+// MARK: Write - PrepareForCarthage.xcconfig
 
 try CustomTextFile("""
-    #!/bin/bash
-
-    # http://www.grymoire.com/Unix/Sed.html#TOC
-    sed -i '' -e "s|PRODUCT_BUNDLE_IDENTIFIER = \\"\(product.name)\\"|PRODUCT_BUNDLE_IDENTIFIER = \(product.bundleId)|g" \(product.name).xcodeproj/project.pbxproj
-
+    PRODUCT_BUNDLE_IDENTIFIER = "\(product.bundleId)"
+    CURRENT_PROJECT_VERSION = 1
+    VERSIONING_SYSTEM = "apple-generic"
     """
     )
     .prepare(
-        at: ["set_bundle_id.sh"]
+        at: [prepareForCarthageXcconfigFileName]
     )
     .writeToFileSystem()
 
+// MARK: Write - PrepareForCarthage.sh
+
+try CustomTextFile("""
+    #!/bin/bash
+    # http://www.grymoire.com/Unix/Sed.html#TOC
+
+    currentVersion=$1
+
+    #---
+
+    productName="\(product.name)"
+    bundleId="\(product.bundleId)"
+
+    xcconfigFile="\(prepareForCarthageXcconfigFileName)"
+
+    #---
+
+    echo "ℹ️ Preparing $productName for Carthage."
+
+    echo "Updating xcconfig file with version $currentVersion..."
+    sed -i '' -e "s|^CURRENT_PROJECT_VERSION = .*$|CURRENT_PROJECT_VERSION = $currentVersion|g" $xcconfigFile
+
+    echo "Generating project file using SwiftPM and config file $xcconfigFile"
+    swift package generate-xcodeproj --xcconfig-overrides $xcconfigFile
+
+    # NOTE: the xcconfig file will be applied to all dependency targets as well,
+    # but it's not an issue for in this case.
+
+    echo "Overriding PRODUCT_BUNDLE_IDENTIFIER with <$bundleId> in project file due to bug in SwiftPM."
+    # SwiftPM overrides this value even after applying custom xcconfig file.
+    sed -i '' -e "s|PRODUCT_BUNDLE_IDENTIFIER = \\"$productName\\"|PRODUCT_BUNDLE_IDENTIFIER = $bundleId|g" $productName.xcodeproj/project.pbxproj
+
+    echo "ℹ️ Done"
+    
+    """
+    )
+    .prepare(
+        at: [prepareForCarthageShFileName]
+    )
+    .writeToFileSystem()
 
 // MARK: - POST-script invocation output
 
