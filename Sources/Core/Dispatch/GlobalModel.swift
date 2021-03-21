@@ -29,7 +29,7 @@ struct GlobalModel
 {
     init() {}
     
-    //===
+    //---
     
     typealias Key = String
     
@@ -79,7 +79,7 @@ extension GlobalModel
         return result
     }
 
-    //===
+    //---
 
     func state(for feature: Feature.Type) throws -> SomeState
     {
@@ -95,7 +95,7 @@ extension GlobalModel
         return result
     }
 
-    //===
+    //---
 
     func state<F, S>(for _: F.Type) throws -> S
         where
@@ -114,14 +114,14 @@ extension GlobalModel
         return result
     }
 
-    //===
+    //---
 
     func hasState<S: SomeState>(ofType _: S.Type) -> Bool
     {
         return (try? state(ofType: S.self)) != nil
     }
 
-    //===
+    //---
 
     func hasState(for feature: Feature.Type) -> Bool
     {
@@ -140,7 +140,7 @@ extension Feature
         return try globalModel.state(for: self)
     }
     
-    //===
+    //---
     
     static
     func state<S>(from globalModel: GlobalModel) throws -> S?
@@ -151,7 +151,7 @@ extension Feature
         return try globalModel.state(for: self)
     }
 
-    //===
+    //---
 
     static
     func presented(in globalModel: GlobalModel) -> Bool
@@ -171,7 +171,7 @@ extension State
         return try globalModel.state(ofType: self)
     }
     
-    //===
+    //---
     
     static
     func presented(in globalModel: GlobalModel) -> Bool

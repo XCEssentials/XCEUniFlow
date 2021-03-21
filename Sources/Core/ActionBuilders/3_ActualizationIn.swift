@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Actualization
@@ -37,14 +37,14 @@ extension Actualization
         public
         let state: S
         
-        //===
+        //---
         
         init(_ state: S)
         {
             self.state = state
         }
         
-        //===
+        //---
         
         /**
          Usage:
@@ -71,7 +71,7 @@ extension Actualization
     }
 }
 
-//===
+//---
 
 public
 typealias ActualizationIn<S: State> = Actualization<S.Parent>.In<S>

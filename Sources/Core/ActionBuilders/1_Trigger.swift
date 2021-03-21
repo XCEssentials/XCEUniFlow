@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Feature
@@ -38,7 +38,7 @@ extension Feature
     }
 }
 
-//===
+//---
 
 public
 enum Trigger<F: Feature>
@@ -92,7 +92,7 @@ extension Trigger.NoState
     }
 }
 
-//===
+//---
 
 public
 extension Trigger.AnyState
@@ -140,7 +140,7 @@ extension Trigger.AnyState
     }
 }
 
-//===
+//---
 
 public
 extension Trigger.In

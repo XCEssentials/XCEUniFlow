@@ -167,7 +167,7 @@ class Window: UIWindow, DispatcherInitializable
     {
         self.init(frame: UIScreen.main.bounds)
         
-        //===
+        //---
         
         // here subscribe for updates from dispatcher via proxy, if needed
         // store proxy internally, if needed
@@ -213,7 +213,7 @@ class Ctrl: UIViewController, DispatcherInitializable
     private(set)
     var proxy: DispatcherProxy!
     
-    //===
+    //---
     
     required
     convenience
@@ -221,7 +221,7 @@ class Ctrl: UIViewController, DispatcherInitializable
     {
         self.init(nibName: nil, bundle: nil)
         
-        //===
+        //---
         
         //...
         
@@ -261,11 +261,11 @@ class View: UIView, DispatcherInitializable
     {
         self.init(frame: CGRect.zero)
         
-        //===
+        //---
         
         // ...
         
-        //===
+        //---
         
         proxy
             .subscribe(self)
@@ -295,11 +295,11 @@ class View: UIView, DispatcherInitializable
     {
         self.init(frame: CGRect.zero)
         
-        //===
+        //---
         
         // ...
         
-        //===
+        //---
         
         proxy
             .subscribe(self)
@@ -430,7 +430,7 @@ func begin(with word: String) -> Action
             
             become { InProgress(keyword: word) }
             
-            //===
+            //---
             
             var list: [Any] = []
             

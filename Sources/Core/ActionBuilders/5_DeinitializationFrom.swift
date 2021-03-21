@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Deinitialization
@@ -36,14 +36,14 @@ extension Deinitialization
         public
         let oldState: S
         
-        //===
+        //---
         
         init(_ oldState: S)
         {
             self.oldState = oldState
         }
         
-        //===
+        //---
         
         /**
          Usage:
@@ -70,7 +70,7 @@ extension Deinitialization
     }
 }
 
-//===
+//---
 
 public
 typealias DeinitializationFrom<S: State> = Deinitialization<S.Parent>.From<S>

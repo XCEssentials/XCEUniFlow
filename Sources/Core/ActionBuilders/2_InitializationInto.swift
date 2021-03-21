@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Initialization
@@ -36,14 +36,14 @@ extension Initialization
         public
         let newState: S
         
-        //===
+        //---
         
         init(_ newState: S)
         {
             self.newState = newState
         }
         
-        //===
+        //---
         
         /**
          Usage:
@@ -70,7 +70,7 @@ extension Initialization
     }
 }
 
-//===
+//---
 
 public
 typealias InitializationInto<S: State> = Initialization<S.Parent>.Into<S>
@@ -129,7 +129,7 @@ extension Initialization.Into where S: AutoInitializable
     }
 }
 
-//===
+//---
 
 public
 extension Initialization.Into

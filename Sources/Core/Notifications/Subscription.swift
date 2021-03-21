@@ -26,7 +26,7 @@
 
 import Foundation
 
-//===
+//---
 
 public
 extension Dispatcher
@@ -117,7 +117,7 @@ extension Dispatcher.Proxy
         return result
     }
     
-    //===
+    //---
 
     func updateNow(_ observer: StateObserver)
     {

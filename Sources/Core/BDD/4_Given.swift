@@ -45,7 +45,7 @@ struct Given: BDDScenarioClause
         let reason: Error
     }
     
-    //===
+    //---
     
     public
     let prefix: String

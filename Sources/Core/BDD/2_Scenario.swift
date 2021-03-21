@@ -31,7 +31,7 @@ protocol BDDScenarioClause: CustomStringConvertible
     var specification: String { get }
 }
 
-//===
+//---
 
 public
 extension BDDScenarioClause
@@ -69,7 +69,7 @@ protocol BDDScenario: CustomStringConvertible
     var then: ThenClause { get }
 }
 
-//===
+//---
 
 public
 extension BDDScenario
@@ -89,7 +89,7 @@ extension BDDScenario
         return "[\(String(reflecting: context))] \(summary)"
     }
 
-    //===
+    //---
 
     func onDidSatisfyWhen(_ handler: @escaping (Self) -> Void) -> Self
     {

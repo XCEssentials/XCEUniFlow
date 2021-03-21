@@ -30,7 +30,7 @@ enum DefaultReporting
     case none, short, verbose
 }
 
-//===
+//---
 
 public
 extension Dispatcher
@@ -58,7 +58,7 @@ extension Dispatcher
         }
     }
     
-    //===
+    //---
 
     func enableShortDefaultReporting()
     {
@@ -78,7 +78,7 @@ extension Dispatcher
         }
     }
     
-    //===
+    //---
 
     func resetReporting()
     {

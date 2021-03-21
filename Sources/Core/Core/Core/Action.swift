@@ -24,22 +24,22 @@
  
  */
 
-//===
+//---
 
 public
 typealias SubmitAction = (Action) -> Void
 
-//===
+//---
 
 public
 typealias Become<S: State> = (S) -> Void
 
-//===
+//---
 
 typealias ActionBody =
     (GlobalModel, @escaping SubmitAction) throws -> GlobalMutationExt?
 
-//===
+//---
 
 /**
  A type that conforms to this protocol has a semantic value and represents a distinctive set of actions.
@@ -47,7 +47,7 @@ typealias ActionBody =
 public
 protocol ActionKind: MutationConvertible { }
 
-//===
+//---
 
 public
 struct Action
@@ -61,11 +61,11 @@ struct Action
     public
     let kind: ActionKind.Type
     
-    //===
+    //---
     
     let body: ActionBody
     
-    //===
+    //---
     
     /**
      NOTE: constructor is unavailable directly from outside of the module!

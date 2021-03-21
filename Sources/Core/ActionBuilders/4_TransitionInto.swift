@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Transition
@@ -51,19 +51,19 @@ extension Transition
             case no //swiftlint:disable:this identifier_name
         }
 
-        //===
+        //---
 
         public
         let newState: S
         
-        //===
+        //---
         
         init(_ newState: S)
         {
             self.newState = newState
         }
         
-        //===
+        //---
         
         /**
          Usage:
@@ -90,7 +90,7 @@ extension Transition
     }
 }
 
-//===
+//---
 
 public
 typealias TransitionInto<S: State> = Transition<S.Parent>.Into<S>
@@ -152,7 +152,7 @@ extension Transition.Into where S: AutoInitializable
     }
 }
 
-//===
+//---
 
 public
 extension Transition.Into

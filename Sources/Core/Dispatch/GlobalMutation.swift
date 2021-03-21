@@ -36,7 +36,7 @@ protocol GlobalMutationExt: GlobalMutation
     var apply: (GlobalModel) -> GlobalModel { get }
 }
 
-//===
+//---
 
 protocol FeatureSetting: GlobalMutationExt
 {
@@ -56,15 +56,15 @@ extension FeatureSetting
     }
 }
 
-//===
+//---
 
 protocol FeatureAddition: FeatureSetting {}
 
-//===
+//---
 
 protocol FeatureUpdate: FeatureSetting {}
 
-//===
+//---
 
 protocol FeatureRemoval: GlobalMutationExt { }
 
@@ -84,7 +84,7 @@ protocol MutationConvertible
     init?(_ mutation: GlobalMutation?)
 }
 
-//===
+//---
 
 public
 extension MutationConvertible

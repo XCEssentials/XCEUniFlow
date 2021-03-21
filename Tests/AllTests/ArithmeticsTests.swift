@@ -33,7 +33,7 @@ import SwiftHamcrest
 @testable
 import XCEUniFlow
 
-//===
+//---
 
 class ArithmeticsTests: XCTestCase
 {

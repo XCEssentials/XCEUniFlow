@@ -40,7 +40,7 @@ extension When.ModelConnector
         return self.given(specification, mapState: handler)
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario.
@@ -53,7 +53,7 @@ extension When.ModelConnector
         return given(specification, mapMutation: handler)
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario.
@@ -83,7 +83,7 @@ extension When.ModelConnector
         return given(specification, withState: handler)
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
@@ -96,7 +96,7 @@ extension When.ModelConnector
         return given(specification, withMutation: handler)
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
@@ -126,7 +126,7 @@ extension When.ModelConnector
         return given(specification, ifMapState: handler)
     }
 
-    //===
+    //---
 
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
@@ -139,7 +139,7 @@ extension When.ModelConnector
         return given(specification, ifMapMutation: handler)
     }
 
-    //===
+    //---
 
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.

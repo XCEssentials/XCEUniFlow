@@ -34,7 +34,7 @@ extension Feature
     }
 }
 
-//===
+//---
 
 public
 struct Transition<F: Feature>: ActionKind, FeatureUpdate
@@ -45,7 +45,7 @@ struct Transition<F: Feature>: ActionKind, FeatureUpdate
     public
     let newState: SomeState
     
-    //===
+    //---
     
     init<Into>(from oldState: SomeState, into newState: Into) where
         Into: State,
@@ -55,7 +55,7 @@ struct Transition<F: Feature>: ActionKind, FeatureUpdate
         self.newState = newState
     }
     
-    //===
+    //---
     
     /**
      Usage:

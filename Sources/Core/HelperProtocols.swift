@@ -30,7 +30,7 @@ protocol DispatcherInitializable: class
     init(with proxy: Dispatcher.Proxy)
 }
 
-//===
+//---
 
 public
 protocol DispatcherBindable: class

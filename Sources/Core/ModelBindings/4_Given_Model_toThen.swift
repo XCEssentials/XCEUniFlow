@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Given.ModelConnector where GivenOutput == Void
@@ -49,7 +49,7 @@ extension Given.ModelConnector where GivenOutput == Void
     }
 }
 
-//===
+//---
 
 public
 extension Given.ModelConnector
@@ -83,7 +83,7 @@ extension Given.ModelConnector
         )
     }
     
-    //===
+    //---
     
     func then(
         _ specification: String,
@@ -114,7 +114,7 @@ extension Given.ModelConnector
         )
     }
 
-    //===
+    //---
     
     func then(
         _ specification: String,
@@ -133,7 +133,7 @@ extension Given.ModelConnector
         )
     }
 
-    //===
+    //---
     
     func then(_ specification: String, submit action: Action) -> ModelBinding
     {
@@ -149,7 +149,7 @@ extension Given.ModelConnector
         )
     }
 
-    //===
+    //---
 
     func then(_ specification: String, submit actions: [Action]) -> ModelBinding
     {

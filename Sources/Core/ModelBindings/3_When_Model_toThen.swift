@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension When.ModelConnector
@@ -51,7 +51,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
@@ -85,7 +85,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
@@ -119,7 +119,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
@@ -141,7 +141,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.
@@ -160,7 +160,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.

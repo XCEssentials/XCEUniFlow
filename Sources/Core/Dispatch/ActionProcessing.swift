@@ -26,7 +26,7 @@
 
 import Foundation
 
-//===
+//---
 
 public
 extension Dispatcher.Proxy
@@ -46,7 +46,7 @@ extension Dispatcher.Proxy
     }
 }
 
-//===
+//---
 
 extension Dispatcher
 {
@@ -77,7 +77,7 @@ extension Dispatcher
         }
     }
     
-    //===
+    //---
     
     func process(_ mutation: GlobalMutationExt)
     {
@@ -120,7 +120,7 @@ extension Dispatcher
             .forEach { subscriptions[$0] = nil }
     }
     
-    //===
+    //---
     
     func addBindingsIfNeeded(_ mutation: GlobalMutationExt)
     {

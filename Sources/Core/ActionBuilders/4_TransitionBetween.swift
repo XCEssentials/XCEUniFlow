@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Transition
@@ -41,7 +41,7 @@ extension Transition
         public
         let newState: Into
         
-        //===
+        //---
         
         init(_ oldState: From, _ newState: Into)
         {
@@ -49,7 +49,7 @@ extension Transition
             self.newState = newState
         }
         
-        //===
+        //---
         
         /**
          Usage:
@@ -78,7 +78,7 @@ extension Transition
     }
 }
 
-//===
+//---
 
 #if swift(>=3.2)
     
@@ -144,7 +144,7 @@ extension Transition.Between where Into: AutoInitializable
     }
 }
 
-//===
+//---
 
 public
 extension Transition.Between

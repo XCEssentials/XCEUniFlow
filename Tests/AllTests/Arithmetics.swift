@@ -29,7 +29,7 @@ import Foundation
 import XCEUniFlow
 import XCERequirement
 
-//===
+//---
 
 enum Arithmetics: Feature, NoBindings
 {
@@ -39,7 +39,7 @@ enum Arithmetics: Feature, NoBindings
     }
 }
 
-//===
+//---
 
 extension Arithmetics
 {
@@ -73,7 +73,7 @@ extension Arithmetics
             try Require("Current value is != to desired new value"){ value != $0 }
                 .validate(current.val)
             
-            //===
+            //---
             
             current.val = value
         }

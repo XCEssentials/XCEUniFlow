@@ -91,7 +91,7 @@ extension Given.ModelConnector
         return and(specification, mapInput: handler)
     }
     
-    //===
+    //---
     
     /**
      Adds subsequent 'GIVEN' clause in Scenario.
@@ -121,7 +121,7 @@ extension Given.ModelConnector
         return and(specification, withInput: handler)
     }
     
-    //===
+    //---
     
     /**
      Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.

@@ -34,7 +34,7 @@ protocol Feature
     var bindings: [ModelBinding] { get }
 }
 
-//===
+//---
 
 public
 extension Feature
@@ -46,7 +46,7 @@ extension Feature
     }
 }
 
-//===
+//---
 
 /**
  Special protocol that explicitly indicates - "this feature has no bindings".
@@ -54,7 +54,7 @@ extension Feature
 public
 protocol NoBindings { }
 
-//===
+//---
 
 public
 extension NoBindings where Self: Feature

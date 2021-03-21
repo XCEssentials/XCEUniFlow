@@ -32,7 +32,7 @@ func << <S: State>(_: S.Type, global: GlobalModel) -> S?
     return try? global.state(ofType: S.self)
 }
 
-//===
+//---
 
 public
 func << <F: Feature>(_: F.Type, global: GlobalModel) -> SomeState?
@@ -40,7 +40,7 @@ func << <F: Feature>(_: F.Type, global: GlobalModel) -> SomeState?
     return try? global.state(for: F.self)
 }
 
-//===
+//---
 
 public
 func >> <F: Feature>(global: GlobalModel, _: F.Type) -> SomeState?
@@ -48,7 +48,7 @@ func >> <F: Feature>(global: GlobalModel, _: F.Type) -> SomeState?
     return try? global.state(for: F.self)
 }
 
-//===
+//---
 
 public
 func >> <F, S>(global: GlobalModel, _: F.Type) -> S?
@@ -59,7 +59,7 @@ func >> <F, S>(global: GlobalModel, _: F.Type) -> S?
     return try? global.state(for: F.self)
 }
 
-//===
+//---
 
 public
 func >> <S: State>(global: GlobalModel, _: S.Type) -> S?
@@ -75,7 +75,7 @@ func << (proxy: Dispatcher.Proxy, action: Action)
     proxy.submit(action)
 }
 
-//===
+//---
 
 public
 func << (proxy: Dispatcher.Proxy, actions: [Action])
@@ -83,7 +83,7 @@ func << (proxy: Dispatcher.Proxy, actions: [Action])
     actions.forEach{ proxy.submit($0) }
 }
 
-//===
+//---
 
 public
 func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
@@ -91,7 +91,7 @@ func << (proxy: Dispatcher.Proxy, actionGetter: () -> Action)
     proxy.submit(actionGetter())
 }
 
-//===
+//---
 
 public
 func << (proxy: Dispatcher.Proxy, actionGetters: [() -> Action])
@@ -107,7 +107,7 @@ func << (submit: SubmitAction, action: Action)
     submit(action)
 }
 
-//===
+//---
 
 public
 func << (submit: SubmitAction, actions: [Action])
@@ -115,7 +115,7 @@ func << (submit: SubmitAction, actions: [Action])
     actions.forEach{ submit($0) }
 }
 
-//===
+//---
 
 public
 func << (submit: SubmitAction, actionGetters: [() -> Action])
@@ -123,7 +123,7 @@ func << (submit: SubmitAction, actionGetters: [() -> Action])
     actionGetters.forEach{ submit($0()) }
 }
 
-//===
+//---
 
 public
 func << (submit: SubmitAction, actionGetter: () -> Action)
