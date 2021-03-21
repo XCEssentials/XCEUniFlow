@@ -25,72 +25,23 @@
  */
 
 public
-protocol GlobalMutation { }
-
-// MARK: - GlobalMutationExt
-
-protocol GlobalMutationExt: GlobalMutation
+protocol Feature
 {
-    var relatedToFeature: Feature.Type { get }
-    
-    var apply: (GlobalModel) -> GlobalModel { get }
-}
+    static
+    var name: String { get }
 
-//---
-
-protocol FeatureSetting: GlobalMutationExt
-{
-    var newState: SomeState { get }
-}
-
-extension FeatureSetting
-{
-    var relatedToFeature: Feature.Type
-    {
-        return type(of: newState).feature
-    }
-    
-    var apply: (GlobalModel) -> GlobalModel
-    {
-        return { $0.store(self.newState) }
-    }
-}
-
-//---
-
-protocol FeatureAddition: FeatureSetting {}
-
-//---
-
-protocol FeatureUpdate: FeatureSetting {}
-
-//---
-
-protocol FeatureRemoval: GlobalMutationExt { }
-
-extension FeatureRemoval
-{
-    var apply: (GlobalModel) -> GlobalModel
-    {
-        return { $0.removeRepresentation(of: self.relatedToFeature) }
-    }
-}
-
-// MARK: - MutationConvertible
-
-public
-protocol MutationConvertible
-{
-    init?(_ mutation: GlobalMutation?)
+    static
+    var bindings: [ModelBinding] { get }
 }
 
 //---
 
 public
-extension MutationConvertible
+extension Feature
 {
-    init?(_ mutation: GlobalMutation?)
+    static
+    var name: String
     {
-        return nil
+        return String(reflecting: self)
     }
 }

@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension When.ObserverConnector
@@ -58,7 +58,7 @@ extension When.ObserverConnector
         )
     }
 
-    //===
+    //---
     
     /**
      Skips 'GIVEN' clause at all and goes straight to 'THEN' clause.

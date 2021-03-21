@@ -16,8 +16,7 @@ git:
 language: objective-c # fine for Swift as well
 
 osx_image:
-  - xcode10.2
-  - xcode11
+  - xcode12
 
 before_script:
   # cd ./.setup && swift run && cd ./.. # RUN this manually!

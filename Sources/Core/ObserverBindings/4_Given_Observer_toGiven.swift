@@ -76,7 +76,7 @@ extension Given.ObserverConnector where GivenOutput == Void
             
             try handler(globalModel)
             
-            //===
+            //---
             
             return ()
         }
@@ -173,7 +173,7 @@ extension Given.ObserverConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Adds subsequent 'GIVEN' clause in Scenario.
@@ -248,7 +248,7 @@ extension Given.ObserverConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
@@ -324,7 +324,7 @@ extension Given.ObserverConnector
         )
     }
 
-    //===
+    //---
 
     /**
      Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.

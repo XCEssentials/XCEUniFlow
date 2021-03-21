@@ -45,7 +45,7 @@ struct NoMutation: MutationConvertible
     }
 }
 
-//===
+//---
 
 public
 struct AnyMutation: MutationConvertible
@@ -53,7 +53,7 @@ struct AnyMutation: MutationConvertible
     public
     let relatedToFeature: Feature.Type
 
-    //===
+    //---
 
     public
     init?(_ mutation: GlobalMutation?)
@@ -70,7 +70,7 @@ struct AnyMutation: MutationConvertible
     }
 }
 
-//===
+//---
 
 public
 struct AnyMutationOf<F: Feature>: MutationConvertible
@@ -91,7 +91,7 @@ struct AnyMutationOf<F: Feature>: MutationConvertible
     }
 }
 
-//===
+//---
 
 /**
  Special kind of mutation descriptor that will be resolved in a non-nil value from any mutation except deinitialization, i.e. any mutation that adds or updates the feature in global model.
@@ -102,7 +102,7 @@ struct AnySettingOf<F: Feature>: MutationConvertible
     public
     let featureState: SomeState
 
-    //===
+    //---
 
     public
     init?(_ mutation: GlobalMutation?)
@@ -120,7 +120,7 @@ struct AnySettingOf<F: Feature>: MutationConvertible
     }
 }
 
-//===
+//---
 
 /**
  Special kind of mutation descriptor that will be resolved in a non-nil value from any mutation except deinitialization, i.e. any mutation that adds or updates the feature in global model.
@@ -131,7 +131,7 @@ struct SettingInto<S: State>: MutationConvertible
     public
     let newState: S
 
-    //===
+    //---
 
     public
     init?(_ mutation: GlobalMutation?)
@@ -150,7 +150,7 @@ struct SettingInto<S: State>: MutationConvertible
     }
 }
 
-//===
+//---
 
 /**
  Special kind of mutation descriptor that will be resolved in a non-nil value from any mutation except initialization or deinitialization, i.e. any mutation that updates the feature in global model.
@@ -161,7 +161,7 @@ struct AnyUpdateOf<F: Feature>: MutationConvertible
     public
     let featureState: SomeState
 
-    //===
+    //---
 
     public
     init?(_ mutation: GlobalMutation?)

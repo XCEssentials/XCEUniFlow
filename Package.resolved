@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/XCEssentials/Pipeline",
         "state": {
           "branch": null,
-          "revision": "4ef1944d923f1570c3808f95c6e2873f5eb62eb5",
-          "version": "3.1.4"
+          "revision": "92d50f2dc0eaf6ccebe6f88d0f4fe79ac7a48450",
+          "version": "3.3.0"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/XCEssentials/Requirement",
         "state": {
           "branch": null,
-          "revision": "aa880d74f5506442431eade7ec2ab5be3bd72b05",
-          "version": "2.0.4"
+          "revision": "6010ab5ab866eaa26e21a52ab0e142da9ab7b07b",
+          "version": "2.2.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/nschum/SwiftHamcrest",
         "state": {
           "branch": null,
-          "revision": "53e322984e000deefd3a5efaa777a7365c51aac9",
-          "version": "2.2.1"
+          "revision": "8293762e84a6d59f0742d6f9bc94132accfc31f9",
+          "version": "2.2.2"
         }
       }
     ]

@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Transition
@@ -36,14 +36,14 @@ extension Transition
         public
         let oldState: S
         
-        //===
+        //---
         
         init(_ oldState: S)
         {
             self.oldState = oldState
         }
         
-        //===
+        //---
         
         /**
          Usage:
@@ -70,7 +70,7 @@ extension Transition
     }
 }
 
-//===
+//---
 
 public
 typealias TransitionFrom<S: State> = Transition<S.Parent>.From<S>

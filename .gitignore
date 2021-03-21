@@ -80,6 +80,7 @@ playground.xcworkspace
 #
 Packages/
 Package.pins
+.swiftpm/
 .build/
 
 ### Swift Package Manager ###

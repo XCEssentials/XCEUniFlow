@@ -30,7 +30,7 @@
 public
 enum TriggerGlobal: ActionKind { }
 
-//===
+//---
 
 public
 extension ActionContext

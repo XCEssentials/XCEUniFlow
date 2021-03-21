@@ -164,7 +164,7 @@ extension Given.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Adds subsequent 'GIVEN' clause in Scenario.
@@ -239,7 +239,7 @@ extension Given.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.
@@ -315,7 +315,7 @@ extension Given.ModelConnector
         )
     }
 
-    //===
+    //---
 
     /**
      Adds subsequent 'GIVEN' clause in Scenario that does NOT return anything.

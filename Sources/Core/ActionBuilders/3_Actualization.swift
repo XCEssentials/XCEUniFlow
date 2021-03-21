@@ -34,7 +34,7 @@ extension Feature
     }
 }
 
-//===
+//---
 
 public
 struct Actualization<F: Feature>: ActionKind, FeatureUpdate
@@ -42,14 +42,14 @@ struct Actualization<F: Feature>: ActionKind, FeatureUpdate
     public
     let newState: SomeState
     
-    //===
+    //---
     
     init<S: State>(with newState: S) where S.Parent == F
     {
         self.newState = newState
     }
     
-    //===
+    //---
     
     /**
      Usage:

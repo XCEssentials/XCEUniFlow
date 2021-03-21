@@ -43,7 +43,7 @@ struct When: BDDScenarioClause
         let reason: Error
     }
     
-    //===
+    //---
     
     public
     let specification: String
@@ -96,7 +96,7 @@ extension MutationConvertible
         return self
     }
     
-    //===
+    //---
     
     /*
      This small helper enables expression like this:

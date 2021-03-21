@@ -53,7 +53,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario.
@@ -88,7 +88,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario.
@@ -156,7 +156,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
@@ -195,7 +195,7 @@ extension When.ModelConnector
         )
     }
     
-    //===
+    //---
     
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
@@ -269,7 +269,7 @@ extension When.ModelConnector
         )
     }
 
-    //===
+    //---
 
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.
@@ -305,7 +305,7 @@ extension When.ModelConnector
         )
     }
 
-    //===
+    //---
 
     /**
      Defines first 'GIVEN' clause in a Scenario that does NOT return anything.

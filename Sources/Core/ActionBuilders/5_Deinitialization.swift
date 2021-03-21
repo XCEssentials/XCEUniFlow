@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Feature
@@ -38,7 +38,7 @@ extension Feature
     }
 }
 
-//===
+//---
 
 public
 struct Deinitialization<F: Feature>: ActionKind, FeatureRemoval
@@ -51,14 +51,14 @@ struct Deinitialization<F: Feature>: ActionKind, FeatureRemoval
     public
     let oldState: SomeState
     
-    //===
+    //---
     
     init(from oldState: SomeState)
     {
         self.oldState = oldState
     }
     
-    //===
+    //---
     
     /**
      Usage:

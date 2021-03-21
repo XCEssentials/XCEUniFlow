@@ -68,7 +68,7 @@ struct ObserverBinding: BDDScenario
     }
 }
 
-//===
+//---
 
 public
 extension ObserverBinding

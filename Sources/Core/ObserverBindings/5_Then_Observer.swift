@@ -46,7 +46,7 @@ extension ObserverBinding
             let reason: Error
         }
 
-        //===
+        //---
 
         public
         let specification: String

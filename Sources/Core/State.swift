@@ -34,7 +34,7 @@ protocol SomeState
     var feature: Feature.Type { get }
 }
 
-//===
+//---
 
 public
 protocol State: SomeState
@@ -42,7 +42,7 @@ protocol State: SomeState
     associatedtype Parent: Feature
 }
 
-//===
+//---
 
 public
 extension State
@@ -51,7 +51,7 @@ extension State
     var feature: Feature.Type { return Parent.self }
 }
 
-//===
+//---
 
 public
 protocol AutoInitializable
@@ -59,7 +59,7 @@ protocol AutoInitializable
     init()
 }
 
-//===
+//---
 
 public
 protocol StateAuto: State, AutoInitializable { }

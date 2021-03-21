@@ -27,7 +27,7 @@
 public
 protocol BDDFailure: Error { }
 
-//===
+//---
 
 public
 struct BDDScenarioFailure: BDDFailure

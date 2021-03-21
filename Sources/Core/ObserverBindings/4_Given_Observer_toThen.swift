@@ -26,7 +26,7 @@
 
 import XCEPipeline
 
-//===
+//---
 
 public
 extension Given.ObserverConnector where GivenOutput == Void
@@ -56,7 +56,7 @@ extension Given.ObserverConnector where GivenOutput == Void
     }
 }
 
-//===
+//---
 
 public
 extension Given.ObserverConnector

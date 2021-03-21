@@ -24,37 +24,13 @@
  
  */
 
-public
-protocol Feature
-{
-    static
-    var name: String { get }
-
-    static
-    var bindings: [ModelBinding] { get }
-}
-
-//===
-
-public
-extension Feature
-{
-    static
-    var name: String
-    {
-        return String(reflecting: self)
-    }
-}
-
-//===
-
 /**
  Special protocol that explicitly indicates - "this feature has no bindings".
  */
 public
 protocol NoBindings { }
 
-//===
+//---
 
 public
 extension NoBindings where Self: Feature
