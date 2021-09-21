@@ -121,7 +121,7 @@ class ArithmeticsTests: XCTestCase
 
             XCTFail("Should never come to this point")
         }
-        catch UniFlowError.featureIsNotInState(let feature, _)
+        catch UniFlowError.featureIsNotInState(let feature, _, _)
         {
             assertThat(feature.name, equalTo(XCEUniFlowAllTests.Arithmetics.name))
         }

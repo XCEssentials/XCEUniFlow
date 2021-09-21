@@ -94,11 +94,15 @@ extension Actualization.In
 
             //---
             
-            var currentState =
-                
-            try globalModel
+            var currentState = try globalModel
                 >> S.self
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(S.Parent.self, S.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        S.Parent.self,
+                        expected: S.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
             
             //---
             
