@@ -187,7 +187,13 @@ extension Transition.Into
             //---
             
             return try newState
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, S.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        F.self,
+                        expected: S.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
                 ./ { Transition(from: oldState, into: $0) }
         }
     }

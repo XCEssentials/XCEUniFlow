@@ -110,7 +110,13 @@ extension Transition.Between where Into: AutoInitializable
             
             let oldState = try globalModel
                 >> From.self
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, From.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        F.self,
+                        expected: From.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
             
             //---
             
@@ -164,7 +170,13 @@ extension Transition.Between
             
             let oldState = try globalModel
                 >> From.self
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, From.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        F.self,
+                        expected: From.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
                
             //---
             
@@ -177,7 +189,13 @@ extension Transition.Between
             //---
             
             return try newState
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, Into.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        F.self,
+                        expected: Into.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
                 ./ { Transition(from: oldState, into: $0) }
         }
     }
