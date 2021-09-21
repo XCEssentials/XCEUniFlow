@@ -28,20 +28,21 @@ public
 enum UniFlowError: Error
 {
     case featureIsInitialized(
-        Feature.Type
-    )
+            Feature.Type
+         )
     
     case featureIsNotInitialized(
-        Feature.Type
-    )
+            Feature.Type
+         )
     
     case featureIsNotInState(
-        Feature.Type,
-        SomeState.Type
-    )
+            Feature.Type,
+            expected: SomeState.Type,
+            actual: SomeState?
+         )
     
     case incompatibleMutation(
-        expected: MutationConvertible.Type,
-        actual: GlobalMutation?
-    )
+            expected: MutationConvertible.Type,
+            actual: GlobalMutation?
+         )
 }

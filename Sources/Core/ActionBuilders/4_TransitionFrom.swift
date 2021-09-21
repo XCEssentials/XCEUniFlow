@@ -97,7 +97,13 @@ extension Transition.From
 
             let oldState = try globalModel
                 >> S.self
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, S.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        F.self,
+                        expected: S.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
                
             //---
 

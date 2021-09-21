@@ -160,7 +160,13 @@ extension Trigger.In
             
             try globalModel
                 >> S.self
-                ./ { try $0 ?! UniFlowError.featureIsNotInState(F.self, S.self) }
+                ./ {
+                    try $0 ?! UniFlowError.featureIsNotInState(
+                        F.self,
+                        expected: S.self,
+                        actual: try? globalModel.state(for: F.self)
+                    )
+                }
                 ./ { (globalModel, $0, submit) }
                 ./ body
             
