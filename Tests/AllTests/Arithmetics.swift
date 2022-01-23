@@ -31,64 +31,64 @@ import XCERequirement
 
 //---
 
-enum Arithmetics: Feature, NoBindings
-{
-    struct Main: State { typealias Parent = Arithmetics
-        
-        var val: Int
-    }
-}
-
-//---
-
-extension Arithmetics
-{
-    static
-    func begin() -> Action
-    {
-        return initialize.Into<Main>.via
-        {
-            become, submit in
-
-            //---
-            
-            become << Main(val: 0)
-            
-            //---
-            
-            submit << [ setExplicit(value: 10),
-                        incFive() ]
-        }
-    }
-    
-    static
-    func setExplicit(value: Int) -> Action
-    {
-        return actualize.In<Main>.via
-        {
-            _, current, _ in
-
-            //---
-
-            try Require("Current value is != to desired new value"){ value != $0 }
-                .validate(current.val)
-            
-            //---
-            
-            current.val = value
-        }
-    }
-    
-    static
-    func incFive() -> Action
-    {
-        return actualize.In<Main>.via
-        {
-            _, current, _ in
-
-            //---
-            
-            current.val += 5
-        }
-    }
-}
+//enum Arithmetics: Feature, NoBindings
+//{
+//    struct Main: State { typealias Parent = Arithmetics
+//
+//        var val: Int
+//    }
+//}
+//
+////---
+//
+//extension Arithmetics
+//{
+//    static
+//    func begin() -> Action
+//    {
+//        return initialize.Into<Main>.via
+//        {
+//            become, submit in
+//
+//            //---
+//
+//            become << Main(val: 0)
+//
+//            //---
+//
+//            submit << [ setExplicit(value: 10),
+//                        incFive() ]
+//        }
+//    }
+//
+//    static
+//    func setExplicit(value: Int) -> Action
+//    {
+//        return actualize.In<Main>.via
+//        {
+//            _, current, _ in
+//
+//            //---
+//
+//            try Require("Current value is != to desired new value"){ value != $0 }
+//                .validate(current.val)
+//
+//            //---
+//
+//            current.val = value
+//        }
+//    }
+//
+//    static
+//    func incFive() -> Action
+//    {
+//        return actualize.In<Main>.via
+//        {
+//            _, current, _ in
+//
+//            //---
+//
+//            current.val += 5
+//        }
+//    }
+//}

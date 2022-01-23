@@ -35,128 +35,128 @@ import XCEUniFlow
 
 //---
 
-class ArithmeticsTests: XCTestCase
-{
-    func testBeginPositive()
-    {
-        let state = GlobalModel()
-
-        //---
-
-        do
-        {
-            try Arithmetics
-                .begin()
-                .perform(with: state)
-                ./ InitializationInto<Arithmetics.Main>.init
-                .* { assertThat($0, not(nilValue()))  }
-        }
-        catch
-        {
-            XCTFail("\(error)")
-        }
-    }
-
-    func testBeginNegative()
-    {
-        let state = GlobalModel()
-            .store(Arithmetics.Main(val: 1))
-
-        //---
-
-        do
-        {
-            _ = try Arithmetics
-                .begin()
-                .perform(with: state)
-
-            //---
-
-            XCTFail("Should never come to this point")
-        }
-        catch
-        {
-            // failed as expected
-        }
-    }
-
-    func testSetExplicitPositive()
-    {
-        let sourceValue = Int(arc4random_uniform(10000))
-        let targetValue = sourceValue + 1 + Int(arc4random_uniform(100))
-
-        let state = GlobalModel()
-            .store(Arithmetics.Main(val: sourceValue))
-
-        //---
-
-        do
-        {
-            try Arithmetics
-                .setExplicit(value: targetValue)
-                .perform(with: state)
-                ./ ActualizationIn<Arithmetics.Main>.init
-                ./ { $0!.state.val }
-                .* { assertThat($0, equalTo(targetValue)) }
-        }
-        catch
-        {
-            XCTFail("\(error)")
-        }
-    }
-
-    func testSetExplicitNegativeUninitialized()
-    {
-        let state = GlobalModel()
-
-        //---
-
-        do
-        {
-            _ = try Arithmetics
-                .setExplicit(value: Int(arc4random_uniform(10000)))
-                .perform(with: state)
-
-            //---
-
-            XCTFail("Should never come to this point")
-        }
-        catch UniFlowError.featureIsNotInState(let feature, _, _)
-        {
-            assertThat(feature.name, equalTo(XCEUniFlowAllTests.Arithmetics.name))
-        }
-        catch
-        {
-            XCTFail("Should never come to this point")
-        }
-    }
-
-    func testSetExplicitNegativeSameValue()
-    {
-        let theValue = Int(arc4random_uniform(10000))
-
-        let state = GlobalModel()
-            .store(Arithmetics.Main(val: theValue))
-
-        //---
-
-        do
-        {
-            _ = try Arithmetics
-                .setExplicit(value: theValue)
-                .perform(with: state)
-
-            //---
-
-            XCTFail("Should never come to this point")
-        }
-        catch _ as UnsatisfiedRequirement
-        {
-            // okay
-        }
-        catch
-        {
-            XCTFail("Should never come to this point")
-        }
-    }
-}
+//class ArithmeticsTests: XCTestCase
+//{
+//    func testBeginPositive()
+//    {
+//        let state = GlobalModel()
+//
+//        //---
+//
+//        do
+//        {
+//            try Arithmetics
+//                .begin()
+//                .perform(with: state)
+//                ./ InitializationInto<Arithmetics.Main>.init
+//                .* { assertThat($0, not(nilValue()))  }
+//        }
+//        catch
+//        {
+//            XCTFail("\(error)")
+//        }
+//    }
+//
+//    func testBeginNegative()
+//    {
+//        let state = GlobalModel()
+//            .store(Arithmetics.Main(val: 1))
+//
+//        //---
+//
+//        do
+//        {
+//            _ = try Arithmetics
+//                .begin()
+//                .perform(with: state)
+//
+//            //---
+//
+//            XCTFail("Should never come to this point")
+//        }
+//        catch
+//        {
+//            // failed as expected
+//        }
+//    }
+//
+//    func testSetExplicitPositive()
+//    {
+//        let sourceValue = Int(arc4random_uniform(10000))
+//        let targetValue = sourceValue + 1 + Int(arc4random_uniform(100))
+//
+//        let state = GlobalModel()
+//            .store(Arithmetics.Main(val: sourceValue))
+//
+//        //---
+//
+//        do
+//        {
+//            try Arithmetics
+//                .setExplicit(value: targetValue)
+//                .perform(with: state)
+//                ./ ActualizationIn<Arithmetics.Main>.init
+//                ./ { $0!.state.val }
+//                .* { assertThat($0, equalTo(targetValue)) }
+//        }
+//        catch
+//        {
+//            XCTFail("\(error)")
+//        }
+//    }
+//
+//    func testSetExplicitNegativeUninitialized()
+//    {
+//        let state = GlobalModel()
+//
+//        //---
+//
+//        do
+//        {
+//            _ = try Arithmetics
+//                .setExplicit(value: Int(arc4random_uniform(10000)))
+//                .perform(with: state)
+//
+//            //---
+//
+//            XCTFail("Should never come to this point")
+//        }
+//        catch UniFlowError.featureIsNotInState(let feature, _, _)
+//        {
+//            assertThat(feature.name, equalTo(XCEUniFlowAllTests.Arithmetics.name))
+//        }
+//        catch
+//        {
+//            XCTFail("Should never come to this point")
+//        }
+//    }
+//
+//    func testSetExplicitNegativeSameValue()
+//    {
+//        let theValue = Int(arc4random_uniform(10000))
+//
+//        let state = GlobalModel()
+//            .store(Arithmetics.Main(val: theValue))
+//
+//        //---
+//
+//        do
+//        {
+//            _ = try Arithmetics
+//                .setExplicit(value: theValue)
+//                .perform(with: state)
+//
+//            //---
+//
+//            XCTFail("Should never come to this point")
+//        }
+//        catch _ as UnsatisfiedRequirement
+//        {
+//            // okay
+//        }
+//        catch
+//        {
+//            XCTFail("Should never come to this point")
+//        }
+//    }
+//}
