@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "XCEByTypeStorage",
+        "repositoryURL": "https://github.com/XCEssentials/ByTypeStorage",
+        "state": {
+          "branch": null,
+          "revision": "a05233c4a971701f19694c37d40d53eb7528dd54",
+          "version": "3.12.0"
+        }
+      },
+      {
         "package": "XCEPipeline",
         "repositoryURL": "https://github.com/XCEssentials/Pipeline",
         "state": {

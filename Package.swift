@@ -4,6 +4,10 @@ import PackageDescription
 
 let package = Package(
     name: "XCEUniFlow",
+    platforms: [
+        .macOS(.v10_15), // depends on Combine
+        .iOS(.v15)
+    ],
     products: [
         .library(
             name: "XCEUniFlow",
@@ -13,6 +17,10 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(
+            name: "XCEByTypeStorage",
+            url: "https://github.com/XCEssentials/ByTypeStorage",
+            .upToNextMinor(from: "3.12.0")),
         .package(
             name: "XCERequirement",
             url: "https://github.com/XCEssentials/Requirement",
@@ -30,6 +38,7 @@ let package = Package(
         .target(
             name: "XCEUniFlow",
             dependencies: [
+                "XCEByTypeStorage",
                 "XCERequirement",
                 "XCEPipeline"
             ],
