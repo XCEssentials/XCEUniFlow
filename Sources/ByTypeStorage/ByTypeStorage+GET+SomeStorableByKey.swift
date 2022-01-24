@@ -25,20 +25,35 @@
  */
 
 public
-protocol SomeStorable: SomeStorableBase
+extension ByTypeStorage
 {
-    associatedtype Key: SomeFeatureBase
+    subscript<V: SomeState>(_ valueType: V.Type = V.self) -> V?
+    {
+        try? fetch(valueOfType: V.self)
+    }
+    
+    func hasValue<V: SomeState>(ofType valueType: V.Type) -> Bool
+    {
+        self[V.self] != nil
+    }
 }
 
-// MARK: - Helpers
+//---
 
 public
-extension SomeStorable
+extension SomeState
 {
-    /// `ByTypeStorage` will use this as actual key.
     static
-    var key: SomeFeatureBase.Type
+    func fetch(from storage: ByTypeStorage) throws -> Self
     {
-        Key.self
+        try storage.fetch(valueOfType: self)
+    }
+
+    //---
+
+    static
+    func isPresent(in storage: ByTypeStorage) -> Bool
+    {
+        storage.hasValue(ofType: self)
     }
 }

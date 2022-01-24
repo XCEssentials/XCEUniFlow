@@ -29,13 +29,13 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct TransitionInto<New: SomeStorable>: SomeMutationDecriptor
+struct TransitionInto<New: SomeState>: SomeMutationDecriptor
 {
     public
     let timestamp: Date
 
     public
-    let oldValue: SomeStorableBase
+    let oldValue: SomeStateBase
     
     public
     let newValue: New

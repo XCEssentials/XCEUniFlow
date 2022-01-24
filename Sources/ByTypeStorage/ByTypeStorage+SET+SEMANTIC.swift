@@ -41,8 +41,8 @@ extension ByTypeStorage
         case auto
         case initialization
         case actualization
-        case transition(fromValueType: SomeStorableBase.Type?)
-        case deinitialization(fromValueType: SomeStorableBase.Type?, strict: Bool)
+        case transition(fromValueType: SomeStateBase.Type?)
+        case deinitialization(fromValueType: SomeStateBase.Type?, strict: Bool)
         
         func validateProposedOutcome(_ outcome: MutationAttemptOutcome) throws -> Void
         {
@@ -99,7 +99,7 @@ extension ByTypeStorage
 {
     @discardableResult
     mutating
-    func initialize<V: SomeStorable>(
+    func initialize<V: SomeState>(
         with newValue: V
     ) throws -> MutationAttemptOutcome {
         
@@ -117,7 +117,7 @@ extension ByTypeStorage
 {
     @discardableResult
     mutating
-    func actualize<V: SomeStorable>(
+    func actualize<V: SomeState>(
         _: V.Type = V.self,
         via mutationHandler: (inout V) throws -> Void
     ) throws -> MutationAttemptOutcome {
@@ -135,7 +135,7 @@ extension ByTypeStorage
     
     @discardableResult
     mutating
-    func actualize<V: SomeStorable>(
+    func actualize<V: SomeState>(
         with newValue: V
     ) throws -> MutationAttemptOutcome {
         
@@ -153,10 +153,10 @@ extension ByTypeStorage
 {
     @discardableResult
     mutating
-    func transition<O: SomeStorable, N: SomeStorable>(
+    func transition<O: SomeState, N: SomeState>(
         from _: O,
         into newValue: N
-    ) throws -> MutationAttemptOutcome where O.Key == N.Key /* NOTE: "O != N" is implied*/ {
+    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
         
         try transition(
             from: O.self,
@@ -166,10 +166,10 @@ extension ByTypeStorage
     
     @discardableResult
     mutating
-    func transition<O: SomeStorable, N: SomeStorable>(
+    func transition<O: SomeState, N: SomeState>(
         from _: O.Type,
         into newValue: N
-    ) throws -> MutationAttemptOutcome where O.Key == N.Key /* NOTE: "O != N" is implied*/ {
+    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
         
         try store(
             newValue,
@@ -181,7 +181,7 @@ extension ByTypeStorage
     /// so in best case scenario it is going to be actualization.
     @discardableResult
     mutating
-    func transition<V: SomeStorable>(
+    func transition<V: SomeState>(
         from _: V.Type,
         into newValue: V
     ) throws -> MutationAttemptOutcome {
@@ -194,7 +194,7 @@ extension ByTypeStorage
     
     @discardableResult
     mutating
-    func transition<V: SomeStorable>(
+    func transition<V: SomeState>(
         into newValue: V
     ) throws -> MutationAttemptOutcome {
         
@@ -214,7 +214,7 @@ extension ByTypeStorage
     mutating
     func deinitialize(
         _ keyType: SomeFeatureBase.Type,
-        fromValueType: SomeStorableBase.Type?, // = nil,
+        fromValueType: SomeStateBase.Type?, // = nil,
         strict: Bool // = true
     ) throws -> MutationAttemptOutcome {
         

@@ -41,12 +41,12 @@ public
 extension SomeFeature where Self: FeatureBase
 {
     @discardableResult
-    func ensureCurrentState<V: SomeStorable>(
+    func ensureCurrentState<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _ valueOfType: V.Type = V.self
-    ) throws -> V where V.Key == Self {
+    ) throws -> V where V.Feature == Self {
         
         try dispatcher.fetch(
             scope: scope,
@@ -57,12 +57,12 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func store<V: SomeStorable>(
+    func store<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _ value: V
-    ) throws -> ByTypeStorage.History where V.Key == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
@@ -71,12 +71,12 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func initialize<V: SomeStorable>(
+    func initialize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         with newValue: V
-    ) throws -> ByTypeStorage.History where V.Key == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
@@ -85,13 +85,13 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func actualize<V: SomeStorable>(
+    func actualize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _ valueOfType: V.Type = V.self,
         via mutationHandler: (inout V) throws -> Void
-    ) throws -> ByTypeStorage.History where V.Key == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -100,12 +100,12 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func actualize<V: SomeStorable>(
+    func actualize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         with newValue: V
-    ) throws -> ByTypeStorage.History where V.Key == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -114,13 +114,13 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func transition<O: SomeStorable, N: SomeStorable>(
+    func transition<O: SomeState, N: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from oldValueInstance: O,
         into newValue: N
-    ) throws -> ByTypeStorage.History where O.Key == Self, N.Key == Self {
+    ) throws -> ByTypeStorage.History where O.Feature == Self, N.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -129,13 +129,13 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func transition<O: SomeStorable, N: SomeStorable>(
+    func transition<O: SomeState, N: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from oldValueType: O.Type,
         into newValue: N
-    ) throws -> ByTypeStorage.History where O.Key == Self, N.Key == Self {
+    ) throws -> ByTypeStorage.History where O.Feature == Self, N.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -144,12 +144,12 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func transition<V: SomeStorable>(
+    func transition<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         into newValue: V
-    ) throws -> ByTypeStorage.History where V.Key == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -172,12 +172,12 @@ extension SomeFeature where Self: FeatureBase
     }
     
     @discardableResult
-    func deinitialize<V: SomeStorable>(
+    func deinitialize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from fromValueType: V.Type
-    ) throws -> ByTypeStorage.History where V.Key == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            

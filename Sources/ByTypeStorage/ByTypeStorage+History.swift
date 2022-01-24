@@ -44,10 +44,10 @@ extension ByTypeStorage
     
     enum MutationAttemptOutcome
     {
-        case initialization(key: SomeFeatureBase.Type, newValue: SomeStorableBase)
-        case actualization(key: SomeFeatureBase.Type, oldValue: SomeStorableBase, newValue: SomeStorableBase)
-        case transition(key: SomeFeatureBase.Type, oldValue: SomeStorableBase, newValue: SomeStorableBase)
-        case deinitialization(key: SomeFeatureBase.Type, oldValue: SomeStorableBase)
+        case initialization(key: SomeFeatureBase.Type, newValue: SomeStateBase)
+        case actualization(key: SomeFeatureBase.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
+        case transition(key: SomeFeatureBase.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
+        case deinitialization(key: SomeFeatureBase.Type, oldValue: SomeStateBase)
         
         /// No removal operation has been performed, because no such key has been found.
         case nothingToRemove(key: SomeFeatureBase.Type)
@@ -87,10 +87,10 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let oldValue: SomeStorableBase?
+        let oldValue: SomeStateBase?
         
         public
-        let newValue: SomeStorableBase?
+        let newValue: SomeStateBase?
     }
     
     var asAnyMutation: AnyMutationOutcome?
@@ -150,7 +150,7 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let newValue: SomeStorableBase
+        let newValue: SomeStateBase
     }
     
     var asInitialization: InitializationOutcome?
@@ -191,7 +191,7 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let newValue: SomeStorableBase
+        let newValue: SomeStateBase
     }
     
     /// Operation that results with given key being present in the storage.
@@ -236,10 +236,10 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let oldValue: SomeStorableBase
+        let oldValue: SomeStateBase
         
         public
-        let newValue: SomeStorableBase
+        let newValue: SomeStateBase
     }
     
     /// Operation that has both old and new values.
@@ -282,10 +282,10 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let oldValue: SomeStorableBase
+        let oldValue: SomeStateBase
         
         public
-        let newValue: SomeStorableBase
+        let newValue: SomeStateBase
     }
     
     var asActualization: ActualizationOutcome?
@@ -326,10 +326,10 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let oldValue: SomeStorableBase
+        let oldValue: SomeStateBase
         
         public
-        let newValue: SomeStorableBase
+        let newValue: SomeStateBase
     }
     
     var asTransition: TransitionOutcome?
@@ -370,7 +370,7 @@ extension ByTypeStorage.HistoryElement
         let key: SomeFeatureBase.Type
         
         public
-        let oldValue: SomeStorableBase
+        let oldValue: SomeStateBase
     }
     
     var asDeinitialization: DeinitializationOutcome?

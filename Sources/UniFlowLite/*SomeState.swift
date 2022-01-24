@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeState: SomeStateBase, SomeStorable where Key == Feature
+protocol SomeState: SomeStateBase
 {
     associatedtype Feature: SomeFeature
 }

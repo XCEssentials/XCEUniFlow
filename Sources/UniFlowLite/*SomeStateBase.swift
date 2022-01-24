@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeStateBase: SomeStorableBase
+protocol SomeStateBase
 {
     static
     var feature: SomeFeatureBase.Type { get }

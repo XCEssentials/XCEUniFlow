@@ -98,9 +98,6 @@ extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport
             .map {
                 $0.storage
                     .allValues
-                    .compactMap {
-                        $0 as? SomeStateBase
-                    }
                     .map(
                         FeatureStatus.init
                     )

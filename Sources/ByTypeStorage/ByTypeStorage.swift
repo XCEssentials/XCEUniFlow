@@ -32,7 +32,7 @@ public
 struct ByTypeStorage
 {
     private
-    var data: [String: SomeStorableBase] = [:]
+    var data: [String: SomeStateBase] = [:]
     
     public private(set)
     var history: History = []
@@ -59,8 +59,8 @@ extension ByTypeStorage
         
         case valueTypeMismatch(
             key: SomeFeatureBase.Type,
-            expected: SomeStorableBase.Type,
-            actual: SomeStorableBase
+            expected: SomeStateBase.Type,
+            actual: SomeStateBase
         )
     }
 }
@@ -70,7 +70,7 @@ extension ByTypeStorage
 public
 extension ByTypeStorage
 {
-    var allValues: [SomeStorableBase]
+    var allValues: [SomeStateBase]
     {
         .init(data.values)
     }
@@ -79,11 +79,11 @@ extension ByTypeStorage
     {
         allValues
             .map {
-                type(of: $0).key
+                type(of: $0).feature
             }
     }
     
-    func fetch(valueForKey keyType: SomeFeatureBase.Type) throws -> SomeStorableBase
+    func fetch(valueForKey keyType: SomeFeatureBase.Type) throws -> SomeStateBase
     {
         if
             let result = data[keyType.name]
@@ -96,9 +96,9 @@ extension ByTypeStorage
         }
     }
     
-    func fetch<V: SomeStorable>(valueOfType _: V.Type = V.self) throws -> V
+    func fetch<V: SomeState>(valueOfType _: V.Type = V.self) throws -> V
     {
-        let someResult = try fetch(valueForKey: V.Key.self)
+        let someResult = try fetch(valueForKey: V.Feature.self)
         
         //---
         
@@ -110,7 +110,7 @@ extension ByTypeStorage
         else
         {
             throw ReadDataError.valueTypeMismatch(
-                key: V.Key.self,
+                key: V.Feature.self,
                 expected: V.self,
                 actual: someResult
             )
@@ -125,7 +125,7 @@ extension ByTypeStorage
 {
     @discardableResult
     mutating
-    func store<V: SomeStorable>(
+    func store<V: SomeState>(
         _ value: V,
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
@@ -134,11 +134,11 @@ extension ByTypeStorage
         
         //---
         
-        switch (data[V.Key.name], value)
+        switch (data[V.Feature.name], value)
         {
             case (.none, let newValue):
                 
-                outcome = .initialization(key: V.Key.self, newValue: newValue)
+                outcome = .initialization(key: V.Feature.self, newValue: newValue)
                 
                 //---
                 
@@ -146,7 +146,7 @@ extension ByTypeStorage
                 
                 //---
                 
-                data[V.Key.name] = newValue
+                data[V.Feature.name] = newValue
                 
             //---
                 
@@ -155,11 +155,11 @@ extension ByTypeStorage
                 if
                     type(of: oldValue) == type(of: newValue)
                 {
-                    outcome = .actualization(key: V.Key.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .actualization(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
                 }
                 else
                 {
-                    outcome = .transition(key: V.Key.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .transition(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
                 }
                 
                 //---
@@ -168,7 +168,7 @@ extension ByTypeStorage
                 
                 //---
                 
-                data[V.Key.name] = newValue
+                data[V.Feature.name] = newValue
         }
         
         //---
@@ -192,7 +192,7 @@ extension ByTypeStorage
     mutating
     func removeValue(
         forKey keyType: SomeFeatureBase.Type,
-        fromValueType: SomeStorableBase.Type? = nil,
+        fromValueType: SomeStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {
         

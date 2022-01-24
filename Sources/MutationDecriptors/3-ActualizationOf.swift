@@ -30,7 +30,7 @@ import Foundation /// for access to `Date` type
 
 /// Operation that has both old and new values.
 public
-struct ActualizationOf<V: SomeStorable>: SomeMutationDecriptor
+struct ActualizationOf<V: SomeState>: SomeMutationDecriptor
 {
     public
     let timestamp: Date

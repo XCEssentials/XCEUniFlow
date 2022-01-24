@@ -32,9 +32,9 @@ extension StorageDispatcher
         context: String = #function,
         location: Int = #line,
         valueForKey keyType: SomeFeatureBase.Type
-    ) throws -> SomeStorableBase {
+    ) throws -> SomeStateBase {
         
-        var result: SomeStorableBase!
+        var result: SomeStateBase!
         
         //---
         
@@ -84,7 +84,7 @@ extension SomeFeatureBase
         context: String = #function,
         location: Int = #line,
         from storage: StorageDispatcher
-    ) throws -> SomeStorableBase {
+    ) throws -> SomeStateBase {
         
         try storage.fetch(
             scope: scope,

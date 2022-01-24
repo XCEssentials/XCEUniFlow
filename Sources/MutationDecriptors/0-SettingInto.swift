@@ -30,7 +30,7 @@ import Foundation /// for access to `Date` type
 
 /// Operation that results with given key being present in the storage.
 public
-struct SettingInto<New: SomeStorable>: SomeMutationDecriptor
+struct SettingInto<New: SomeState>: SomeMutationDecriptor
 {
     public
     let timestamp: Date
