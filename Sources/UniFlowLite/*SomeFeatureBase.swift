@@ -28,6 +28,9 @@ public
 protocol SomeFeatureBase: SomeKey
 {
     static
+    var bindings: [AccessReportBinding] { get }
+    
+    static
     var displayName: String { get }
 }
 

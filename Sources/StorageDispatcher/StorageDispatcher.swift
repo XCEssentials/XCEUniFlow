@@ -275,6 +275,9 @@ extension StorageDispatcher
                         return nil
                 }
             }
+            .compactMap {
+                $0 as? SomeFeatureBase.Type
+            }
             .map {(
                 key: $0,
                 bindings: $0

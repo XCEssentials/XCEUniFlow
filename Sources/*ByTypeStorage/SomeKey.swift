@@ -26,11 +26,7 @@
 
 /// Semantic marker for type that can be used as key in the storage.
 public
-protocol SomeKey
-{
-    static
-    var bindings: [AccessReportBinding] { get }
-}
+protocol SomeKey {}
 
 //---
 
