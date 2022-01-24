@@ -118,7 +118,7 @@ extension StorageDispatcher
         storage.allValues
     }
     
-    var allKeys: [SomeKey.Type]
+    var allKeys: [SomeFeatureBase.Type]
     {
         storage.allKeys
     }
@@ -264,7 +264,7 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeKey.Type? in
+            .compactMap { report -> SomeFeatureBase.Type? in
                 
                 switch report.outcome
                 {
@@ -274,9 +274,6 @@ extension StorageDispatcher
                     default:
                         return nil
                 }
-            }
-            .compactMap {
-                $0 as? SomeFeatureBase.Type
             }
             .map {(
                 key: $0,
@@ -304,7 +301,7 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeKey.Type? in
+            .compactMap { report -> SomeFeatureBase.Type? in
                 
                 switch report.outcome
                 {
@@ -353,7 +350,7 @@ struct AccessReportBinding: SomeAccessReportBinding
     }
     
     public
-    init<S: SomeKey, W: Publisher, G>(
+    init<S: SomeFeatureBase, W: Publisher, G>(
         source: S.Type,
         description: String,
         scope: String,

@@ -25,7 +25,7 @@
  */
 
 public
-extension NoBindings where Self: SomeKey
+extension NoBindings where Self: SomeFeatureBase
 {
     static
     var bindings: [AccessReportBinding] { [] }

@@ -31,5 +31,5 @@ public
 protocol SomeStorableBase
 {
     static
-    var key: SomeKey.Type { get }
+    var key: SomeFeatureBase.Type { get }
 }

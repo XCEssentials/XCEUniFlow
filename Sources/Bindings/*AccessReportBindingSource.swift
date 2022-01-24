@@ -27,6 +27,6 @@
 public
 enum AccessReportBindingSource
 {
-    case keyType(SomeKey.Type)
+    case keyType(SomeFeatureBase.Type)
     case observerType(SomeStorageObserver.Type)
 }

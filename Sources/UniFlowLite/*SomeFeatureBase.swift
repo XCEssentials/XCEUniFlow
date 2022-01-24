@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeFeatureBase: SomeKey
+protocol SomeFeatureBase
 {
     static
     var bindings: [AccessReportBinding] { get }
@@ -39,6 +39,13 @@ protocol SomeFeatureBase: SomeKey
 public
 extension SomeFeatureBase
 {
+    /// `ByTypeStorage` will use this as actual key.
+    static
+    var name: String
+    {
+        .init(reflecting: Self.self)
+    }
+
     static
     var displayName: String
     {

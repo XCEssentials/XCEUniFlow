@@ -27,7 +27,7 @@
 public
 protocol SomeStorable: SomeStorableBase
 {
-    associatedtype Key: SomeKey
+    associatedtype Key: SomeFeatureBase
 }
 
 // MARK: - Helpers
@@ -37,7 +37,7 @@ extension SomeStorable
 {
     /// `ByTypeStorage` will use this as actual key.
     static
-    var key: SomeKey.Type
+    var key: SomeFeatureBase.Type
     {
         Key.self
     }

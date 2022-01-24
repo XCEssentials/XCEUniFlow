@@ -25,7 +25,7 @@
  */
 
 public
-extension SomeKey
+extension SomeFeatureBase
 {
     static
     func scenario(

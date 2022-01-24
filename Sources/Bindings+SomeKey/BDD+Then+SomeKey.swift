@@ -25,7 +25,7 @@
  */
 
 public
-extension BDD.GivenOrThenContext where S: SomeKey
+extension BDD.GivenOrThenContext where S: SomeFeatureBase
 {
     func then(
         scope: String = #file,
@@ -72,7 +72,7 @@ extension BDD.GivenOrThenContext where S: SomeKey
 //---
 
 public
-extension BDD.ThenContext where S: SomeKey
+extension BDD.ThenContext where S: SomeFeatureBase
 {
     func then(
         scope: String = #file,

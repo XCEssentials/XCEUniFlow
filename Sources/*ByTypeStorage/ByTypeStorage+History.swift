@@ -44,13 +44,13 @@ extension ByTypeStorage
     
     enum MutationAttemptOutcome
     {
-        case initialization(key: SomeKey.Type, newValue: SomeStorableBase)
-        case actualization(key: SomeKey.Type, oldValue: SomeStorableBase, newValue: SomeStorableBase)
-        case transition(key: SomeKey.Type, oldValue: SomeStorableBase, newValue: SomeStorableBase)
-        case deinitialization(key: SomeKey.Type, oldValue: SomeStorableBase)
+        case initialization(key: SomeFeatureBase.Type, newValue: SomeStorableBase)
+        case actualization(key: SomeFeatureBase.Type, oldValue: SomeStorableBase, newValue: SomeStorableBase)
+        case transition(key: SomeFeatureBase.Type, oldValue: SomeStorableBase, newValue: SomeStorableBase)
+        case deinitialization(key: SomeFeatureBase.Type, oldValue: SomeStorableBase)
         
         /// No removal operation has been performed, because no such key has been found.
-        case nothingToRemove(key: SomeKey.Type)
+        case nothingToRemove(key: SomeFeatureBase.Type)
     }
 }
 
@@ -59,7 +59,7 @@ extension ByTypeStorage
 public
 extension ByTypeStorage.HistoryElement
 {
-    var key: SomeKey.Type
+    var key: SomeFeatureBase.Type
     {
         switch self.outcome
         {
@@ -84,7 +84,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let oldValue: SomeStorableBase?
@@ -147,7 +147,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let newValue: SomeStorableBase
@@ -188,7 +188,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let newValue: SomeStorableBase
@@ -233,7 +233,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let oldValue: SomeStorableBase
@@ -279,7 +279,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let oldValue: SomeStorableBase
@@ -323,7 +323,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let oldValue: SomeStorableBase
@@ -367,7 +367,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
         
         public
         let oldValue: SomeStorableBase
@@ -407,7 +407,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeKey.Type
+        let key: SomeFeatureBase.Type
     }
     
     var asBlankRemovalOutcome: BlankRemovalOutcome?
