@@ -319,10 +319,10 @@ extension StorageDispatcher
     }
 }
 
-// MARK: - Binding - Internal
+// MARK: - Binding
 
 public
-struct AccessReportBinding: SomeAccessReportBinding
+struct Binding: SomeAccessReportBinding
 {
     public
     let source: AccessReportBindingSource
@@ -343,13 +343,13 @@ struct AccessReportBinding: SomeAccessReportBinding
     
     //---
     
-    public
+    //internal
     func construct(with dispatcher: StorageDispatcher) -> AnyCancellable
     {
         body(dispatcher, self).sink(receiveCompletion: { _ in }, receiveValue: { })
     }
     
-    public
+    //internal
     init<S: SomeFeatureBase, W: Publisher, G>(
         source: S.Type,
         description: String,
@@ -446,39 +446,8 @@ struct AccessReportBinding: SomeAccessReportBinding
                 .eraseToAnyPublisher()
         }
     }
-}
-
-// MARK: - Binding - External
-
-public
-struct AccessReportBindingExt: SomeAccessReportBinding
-{
-    public
-    let source: AccessReportBindingSource
     
-    public
-    let description: String
-    
-    public
-    let scope: String
-    
-    public
-    let location: Int
-    
-    //---
-    
-    private
-    let body: (StorageDispatcher, Self) -> AnyPublisher<Void, Error>
-    
-    //---
-    
-    public
-    func construct(with dispatcher: StorageDispatcher) -> AnyCancellable
-    {
-        body(dispatcher, self).sink(receiveCompletion: { _ in }, receiveValue: { })
-    }
-    
-    public
+    //internal
     init<S: SomeStorageObserver, W: Publisher, G>(
         source: S,
         description: String,

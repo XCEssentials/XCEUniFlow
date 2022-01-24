@@ -28,7 +28,7 @@ public
 protocol SomeFeatureBase
 {
     static
-    var bindings: [AccessReportBinding] { get }
+    var bindings: [Binding] { get }
     
     static
     var displayName: String { get }

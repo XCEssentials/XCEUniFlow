@@ -32,7 +32,7 @@ extension BDD.GivenOrThenContext where S: SomeStorageObserver
         location: Int = #line,
         with source: S,
         _ then: @escaping (S, W.Output) -> Void
-    ) -> AccessReportBindingExt {
+    ) -> Binding {
         
         .init(
             source: source,
@@ -50,7 +50,7 @@ extension BDD.GivenOrThenContext where S: SomeStorageObserver
         location: Int = #line,
         with source: S,
         _ sourceOnlyHandler: @escaping (S) -> Void
-    ) -> AccessReportBindingExt {
+    ) -> Binding {
         
         then(scope: scope, location: location, with: source) { src, _ in
             
@@ -63,7 +63,7 @@ extension BDD.GivenOrThenContext where S: SomeStorageObserver
         location: Int = #line,
         with source: S,
         _ outputOnlyHandler: @escaping (W.Output) -> Void
-    ) -> AccessReportBindingExt {
+    ) -> Binding {
         
         then(scope: scope, location: location, with: source) { _, output in
             
@@ -82,7 +82,7 @@ extension BDD.ThenContext where S: SomeStorageObserver
         location: Int = #line,
         with source: S,
         _ then: @escaping (S, G) -> Void
-    ) -> AccessReportBindingExt {
+    ) -> Binding {
         
         .init(
             source: source,
@@ -100,7 +100,7 @@ extension BDD.ThenContext where S: SomeStorageObserver
         location: Int = #line,
         with source: S,
         _ sourceOnlyHandler: @escaping (S) -> Void
-    ) -> AccessReportBindingExt {
+    ) -> Binding {
         
         then(scope: scope, location: location, with: source) { src, _ in
             
@@ -113,7 +113,7 @@ extension BDD.ThenContext where S: SomeStorageObserver
         location: Int = #line,
         with source: S,
         _ outputOnlyHandler: @escaping (G) -> Void
-    ) -> AccessReportBindingExt {
+    ) -> Binding {
         
         then(scope: scope, location: location, with: source) { _, output in
             

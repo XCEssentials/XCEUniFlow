@@ -31,7 +31,7 @@ extension BDD.GivenOrThenContext where S: SomeFeatureBase
         scope: String = #file,
         location: Int = #line,
         _ then: @escaping (StorageDispatcher, W.Output) -> Void
-    ) -> AccessReportBinding {
+    ) -> Binding {
         
         .init(
             source: S.self,
@@ -48,7 +48,7 @@ extension BDD.GivenOrThenContext where S: SomeFeatureBase
         scope: String = #file,
         location: Int = #line,
         _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> Void
-    ) -> AccessReportBinding {
+    ) -> Binding {
         
         then(scope: scope, location: location) { dispatcher, _ in
             
@@ -60,7 +60,7 @@ extension BDD.GivenOrThenContext where S: SomeFeatureBase
         scope: String = #file,
         location: Int = #line,
         _ outputOnlyHandler: @escaping (W.Output) -> Void
-    ) -> AccessReportBinding {
+    ) -> Binding {
         
         then(scope: scope, location: location) { _, output in
             
@@ -78,7 +78,7 @@ extension BDD.ThenContext where S: SomeFeatureBase
         scope: String = #file,
         location: Int = #line,
         _ then: @escaping (StorageDispatcher, G) -> Void
-    ) -> AccessReportBinding {
+    ) -> Binding {
         
         .init(
             source: S.self,
@@ -95,7 +95,7 @@ extension BDD.ThenContext where S: SomeFeatureBase
         scope: String = #file,
         location: Int = #line,
         _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> Void
-    ) -> AccessReportBinding {
+    ) -> Binding {
         
         then(scope: scope, location: location) { dispatcher, _ in
             
@@ -107,7 +107,7 @@ extension BDD.ThenContext where S: SomeFeatureBase
         scope: String = #file,
         location: Int = #line,
         _ outputOnlyHandler: @escaping (G) -> Void
-    ) -> AccessReportBinding {
+    ) -> Binding {
         
         then(scope: scope, location: location) { _, output in
             

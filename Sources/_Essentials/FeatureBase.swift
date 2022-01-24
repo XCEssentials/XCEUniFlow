@@ -53,11 +53,8 @@ class FeatureBase
     var subscriptions: [AnyCancellable] = []
     
     public
-    init() {}
-    
-    public
     init(
-        with storageDispatcher: StorageDispatcher
+        with storageDispatcher: StorageDispatcher? = nil
     ) {
         self.dispatcher = storageDispatcher
     }

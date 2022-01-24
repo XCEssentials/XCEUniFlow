@@ -31,7 +31,7 @@ import Combine
 public
 protocol SomeStorageObserver: AnyObject
 {
-    var bindings: [AccessReportBindingExt] { get }
+    var bindings: [Binding] { get }
 }
 
 public
