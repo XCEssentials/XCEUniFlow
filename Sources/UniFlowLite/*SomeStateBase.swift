@@ -24,4 +24,9 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol SomeStateBase: SomeStorableBase
+{
+    static
+    var feature: SomeFeatureBase.Type { get }
+}

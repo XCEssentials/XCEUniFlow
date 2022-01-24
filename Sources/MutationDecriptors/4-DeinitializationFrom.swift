@@ -24,4 +24,34 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+public
+struct DeinitializationFrom<Old: SomeStorable>
+{
+    public
+    let timestamp: Date
+
+    public
+    let oldValue: Old
+    
+    public
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    ) {
+        
+        guard
+            let oldValue = mutationReport.asDeinitialization?.oldValue as? Old
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.timestamp = mutationReport.timestamp
+        self.oldValue = oldValue
+    }
+}

@@ -24,4 +24,9 @@
  
  */
 
-//import XCEByTypeStorage
+public
+enum AccessReportBindingSource
+{
+    case keyType(SomeKey.Type)
+    case observerType(SomeStorageObserver.Type)
+}

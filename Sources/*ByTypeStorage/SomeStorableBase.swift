@@ -24,4 +24,12 @@
  
  */
 
-//import XCEByTypeStorage
+/**
+ Conformance to this protocol allows an instance of 'Self' type to be stored in any 'ByTypeStorage' instance.
+ */
+public
+protocol SomeStorableBase
+{
+    static
+    var key: SomeKey.Type { get }
+}

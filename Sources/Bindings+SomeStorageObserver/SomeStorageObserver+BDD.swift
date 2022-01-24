@@ -24,4 +24,13 @@
  
  */
 
-//import XCEByTypeStorage
+public
+extension SomeStorageObserver
+{
+    func scenario(
+        _ description: String = ""
+    ) -> BDD.WhenContext<Self> {
+        
+        .init(description: description)
+    }
+}

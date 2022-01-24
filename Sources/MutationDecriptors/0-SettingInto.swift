@@ -24,4 +24,35 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+/// Operation that results with given key being present in the storage.
+public
+struct SettingInto<New: SomeStorable>: SomeMutationDecriptor
+{
+    public
+    let timestamp: Date
+
+    public
+    let newValue: New
+    
+    public
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    ) {
+        
+        guard
+            let newValue = mutationReport.asSetting?.newValue as? New
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.timestamp = mutationReport.timestamp
+        self.newValue = newValue
+    }
+}

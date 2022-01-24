@@ -24,4 +24,14 @@
  
  */
 
-//import XCEByTypeStorage
+public
+extension SomeKey
+{
+    static
+    func scenario(
+        _ description: String = ""
+    ) -> BDD.WhenContext<Self> {
+        
+        .init(description: description)
+    }
+}

@@ -24,4 +24,23 @@
  
  */
 
-//import XCEByTypeStorage
+import Combine
+
+//---
+
+public
+protocol SomeStorageObserver: AnyObject
+{
+    var bindings: [AccessReportBindingExt] { get }
+}
+
+public
+extension SomeStorageObserver
+{
+    typealias Itself = Self
+    
+    func observe(_ dispatcher: StorageDispatcher) -> [AnyCancellable]
+    {
+        bindings.map{ $0.construct(with: dispatcher) }
+    }
+}

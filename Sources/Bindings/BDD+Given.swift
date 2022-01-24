@@ -24,4 +24,41 @@
  
  */
 
-//import XCEByTypeStorage
+import Combine
+
+//---
+
+public
+extension BDD.GivenOrThenContext
+{
+    func given<G>(
+        _ given: @escaping (StorageDispatcher, W.Output) throws -> G?
+    ) -> BDD.ThenContext<S, W, G> {
+        
+        .init(
+            description: description,
+            when: when,
+            given: given
+        )
+    }
+    
+    func given<G>(
+        _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> G?
+    ) -> BDD.ThenContext<S, W, G> {
+        
+        given { dispatcher, _ in
+            
+            dispatcherOnlyHandler(dispatcher)
+        }
+    }
+    
+    func given<G>(
+        _ outputOnlyHandler: @escaping (W.Output) -> G?
+    ) -> BDD.ThenContext<S, W, G> {
+        
+        given { _, output in
+            
+            outputOnlyHandler(output)
+        }
+    }
+}

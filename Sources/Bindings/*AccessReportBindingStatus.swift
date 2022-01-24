@@ -24,4 +24,19 @@
  
  */
 
-//import XCEByTypeStorage
+public
+enum AccessReportBindingStatus
+{
+    case activated(SomeAccessReportBinding)
+    
+    /// After passing through `when` (and `given`,
+    /// if present) claus(es), right before `then`.
+    case triggered(SomeAccessReportBinding)
+    
+    /// After executing `then` clause.
+    case executed(SomeAccessReportBinding)
+    
+    case failed(SomeAccessReportBinding, Error)
+    
+    case cancelled(SomeAccessReportBinding)
+}

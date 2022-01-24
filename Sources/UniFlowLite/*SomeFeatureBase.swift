@@ -24,4 +24,21 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol SomeFeatureBase: SomeKey
+{
+    static
+    var displayName: String { get }
+}
+
+//---
+
+public
+extension SomeFeatureBase
+{
+    static
+    var displayName: String
+    {
+        name
+    }
+}

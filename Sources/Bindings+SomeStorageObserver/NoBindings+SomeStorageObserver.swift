@@ -24,4 +24,8 @@
  
  */
 
-//import XCEByTypeStorage
+public
+extension NoBindingsExt where Self: SomeStorageObserver
+{
+    var bindings: [AccessReportBindingExt] { [] }
+}

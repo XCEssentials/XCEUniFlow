@@ -24,4 +24,39 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+public
+struct AnyMutationOf<K: SomeKey>: SomeMutationDecriptor
+{
+    public
+    let timestamp: Date
+
+    public
+    let oldValue: SomeStorableBase?
+    
+    public
+    let newValue: SomeStorableBase?
+    
+    public
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    ) {
+        
+        guard
+            let anyMutation = mutationReport.asAnyMutation,
+            anyMutation.key.name == K.name
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.timestamp = mutationReport.timestamp
+        self.oldValue = anyMutation.oldValue
+        self.newValue = anyMutation.newValue
+    }
+}

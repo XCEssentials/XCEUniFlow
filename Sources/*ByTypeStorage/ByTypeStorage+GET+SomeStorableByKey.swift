@@ -24,4 +24,36 @@
  
  */
 
-//import XCEByTypeStorage
+public
+extension ByTypeStorage
+{
+    subscript<V: SomeStorable>(_ valueType: V.Type = V.self) -> V?
+    {
+        try? fetch(valueOfType: V.self)
+    }
+    
+    func hasValue<V: SomeStorable>(ofType valueType: V.Type) -> Bool
+    {
+        self[V.self] != nil
+    }
+}
+
+//---
+
+public
+extension SomeStorable
+{
+    static
+    func fetch(from storage: ByTypeStorage) throws -> Self
+    {
+        try storage.fetch(valueOfType: self)
+    }
+
+    //---
+
+    static
+    func isPresent(in storage: ByTypeStorage) -> Bool
+    {
+        storage.hasValue(ofType: self)
+    }
+}

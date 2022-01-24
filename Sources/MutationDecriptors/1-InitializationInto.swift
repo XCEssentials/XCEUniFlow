@@ -24,4 +24,34 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+public
+struct InitializationInto<New: SomeStorable>: SomeMutationDecriptor
+{
+    public
+    let timestamp: Date
+
+    public
+    let newValue: New
+    
+    public
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    ) {
+        
+        guard
+            let newValue = mutationReport.asInitialization?.newValue as? New
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.timestamp = mutationReport.timestamp
+        self.newValue = newValue
+    }
+}

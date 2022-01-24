@@ -24,4 +24,40 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+/// Operation that has both old and new values.
+public
+struct ActualizationOf<V: SomeStorable>: SomeMutationDecriptor
+{
+    public
+    let timestamp: Date
+
+    public
+    let oldValue: V
+    
+    public
+    let newValue: V
+    
+    public
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    ) {
+        
+        guard
+            let oldValue = mutationReport.asActualization?.oldValue as? V,
+            let newValue = mutationReport.asActualization?.newValue as? V
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.timestamp = mutationReport.timestamp
+        self.oldValue = oldValue
+        self.newValue = newValue
+    }
+}

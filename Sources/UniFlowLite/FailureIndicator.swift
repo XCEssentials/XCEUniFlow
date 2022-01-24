@@ -24,4 +24,5 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol FailureIndicator: SomeStateBase {}

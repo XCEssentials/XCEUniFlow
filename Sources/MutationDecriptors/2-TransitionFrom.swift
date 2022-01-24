@@ -24,4 +24,39 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+public
+struct TransitionFrom<Old: SomeStorable>: SomeMutationDecriptor
+{
+    public
+    let timestamp: Date
+
+    public
+    let oldValue: Old
+    
+    public
+    let newValue: SomeStorableBase
+    
+    public
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    ) {
+        
+        guard
+            let oldValue = mutationReport.asTransition?.oldValue as? Old,
+            let newValue = mutationReport.asTransition?.newValue
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.timestamp = mutationReport.timestamp
+        self.oldValue = oldValue
+        self.newValue = newValue
+    }
+}

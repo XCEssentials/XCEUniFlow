@@ -24,4 +24,41 @@
  
  */
 
-//import XCEByTypeStorage
+import Combine
+
+//---
+
+/// Scope for BDD style definitions that help to declare bindings.
+public
+enum BDD
+{
+    public
+    struct WhenContext<S> // S - Source
+    {
+        public
+        let description: String
+    }
+    
+    public
+    struct GivenOrThenContext<S, W: Publisher> // S - Source, W - When
+    {
+        public
+        let description: String
+        
+        //internal
+        let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
+    }
+    
+    public
+    struct ThenContext<S, W: Publisher, G> // S - Source, W - When, G - Given
+    {
+        public
+        let description: String
+        
+        //internal
+        let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
+        
+        //internal
+        let given: (StorageDispatcher, W.Output) throws -> G?
+    }
+}

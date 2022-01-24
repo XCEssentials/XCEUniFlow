@@ -24,4 +24,10 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol NoBindings {}
+
+//---
+
+public
+protocol NoBindingsExt {}

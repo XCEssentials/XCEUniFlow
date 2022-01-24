@@ -24,4 +24,21 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol SomeStorable: SomeStorableBase
+{
+    associatedtype Key: SomeKey
+}
+
+// MARK: - Helpers
+
+public
+extension SomeStorable
+{
+    /// `ByTypeStorage` will use this as actual key.
+    static
+    var key: SomeKey.Type
+    {
+        Key.self
+    }
+}

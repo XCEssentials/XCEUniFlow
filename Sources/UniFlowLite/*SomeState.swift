@@ -24,4 +24,20 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol SomeState: SomeStateBase, SomeStorable where Key == Feature
+{
+    associatedtype Feature: SomeFeature
+}
+
+// MARK: - Helpers
+
+public
+extension SomeState
+{
+    static
+    var feature: SomeFeatureBase.Type
+    {
+        Feature.self
+    }
+}

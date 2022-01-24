@@ -24,4 +24,16 @@
  
  */
 
-//import XCEByTypeStorage
+import Foundation /// for access to `Date` type
+
+//---
+
+public
+protocol SomeMutationDecriptor
+{
+    var timestamp: Date { get }
+    
+    init?(
+        from mutationReport: ByTypeStorage.HistoryElement
+    )
+}

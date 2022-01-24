@@ -24,4 +24,14 @@
  
  */
 
-//import XCEByTypeStorage
+public
+protocol SomeAccessReportBinding
+{
+    var source: AccessReportBindingSource { get }
+    
+    var description: String { get }
+    
+    var scope: String { get }
+    
+    var location: Int { get }
+}
