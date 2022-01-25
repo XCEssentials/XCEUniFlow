@@ -1,9 +1,13 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
 let package = Package(
     name: "XCEUniFlow",
+    platforms: [
+        .macOS(.v10_15), // depends on Combine
+        .iOS(.v15)
+    ],
     products: [
         .library(
             name: "XCEUniFlow",
@@ -13,9 +17,14 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "XCERequirement", url: "https://github.com/XCEssentials/Requirement", from: "2.0.0"),
-        .package(name: "XCEPipeline", url: "https://github.com/XCEssentials/Pipeline", from: "3.0.0"),
-        .package(name: "SwiftHamcrest", url: "https://github.com/nschum/SwiftHamcrest", from: "2.1.1")
+        .package(
+            name: "XCERequirement",
+            url: "https://github.com/XCEssentials/Requirement",
+            .upToNextMinor(from: "2.3.0")),
+        .package(
+            name: "XCEPipeline",
+            url: "https://github.com/XCEssentials/Pipeline",
+            .upToNextMinor(from: "3.7.0")),
     ],
     targets: [
         .target(
@@ -24,17 +33,16 @@ let package = Package(
                 "XCERequirement",
                 "XCEPipeline"
             ],
-            path: "Sources/Core"
+            path: "Sources"
         ),
         .testTarget(
-            name: "XCEUniFlowAllTests",
+            name: "XCEUniFlowTests",
             dependencies: [
                 "XCEUniFlow",
                 "XCERequirement",
-                "XCEPipeline",
-                "SwiftHamcrest"
+                "XCEPipeline"
             ],
-            path: "Tests/AllTests"
+            path: "Tests"
         ),
     ]
 )
