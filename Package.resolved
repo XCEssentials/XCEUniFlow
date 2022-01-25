@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "XCEByTypeStorage",
-        "repositoryURL": "https://github.com/XCEssentials/ByTypeStorage",
-        "state": {
-          "branch": null,
-          "revision": "a05233c4a971701f19694c37d40d53eb7528dd54",
-          "version": "3.12.0"
-        }
-      },
-      {
         "package": "XCEPipeline",
         "repositoryURL": "https://github.com/XCEssentials/Pipeline",
         "state": {
@@ -26,15 +17,6 @@
           "branch": null,
           "revision": "29217e77814a3d7ca76eaa46eeb2f9ba28206006",
           "version": "2.3.0"
-        }
-      },
-      {
-        "package": "SwiftHamcrest",
-        "repositoryURL": "https://github.com/nschum/SwiftHamcrest",
-        "state": {
-          "branch": null,
-          "revision": "8293762e84a6d59f0742d6f9bc94132accfc31f9",
-          "version": "2.2.2"
         }
       }
     ]

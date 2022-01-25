@@ -18,10 +18,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            name: "XCEByTypeStorage",
-            url: "https://github.com/XCEssentials/ByTypeStorage",
-            .upToNextMinor(from: "3.12.0")),
-        .package(
             name: "XCERequirement",
             url: "https://github.com/XCEssentials/Requirement",
             .upToNextMinor(from: "2.3.0")),
@@ -29,16 +25,11 @@ let package = Package(
             name: "XCEPipeline",
             url: "https://github.com/XCEssentials/Pipeline",
             .upToNextMinor(from: "3.7.0")),
-        .package(
-            name: "SwiftHamcrest",
-            url: "https://github.com/nschum/SwiftHamcrest",
-            .upToNextMinor(from: "2.2.0"))
     ],
     targets: [
         .target(
             name: "XCEUniFlow",
             dependencies: [
-                "XCEByTypeStorage",
                 "XCERequirement",
                 "XCEPipeline"
             ],
@@ -49,8 +40,7 @@ let package = Package(
             dependencies: [
                 "XCEUniFlow",
                 "XCERequirement",
-                "XCEPipeline",
-                "SwiftHamcrest"
+                "XCEPipeline"
             ],
             path: "Tests"
         ),

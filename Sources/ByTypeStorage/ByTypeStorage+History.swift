@@ -41,17 +41,6 @@ extension ByTypeStorage
         public
         let outcome: MutationAttemptOutcome
     }
-    
-    enum MutationAttemptOutcome
-    {
-        case initialization(key: SomeFeatureBase.Type, newValue: SomeStateBase)
-        case actualization(key: SomeFeatureBase.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
-        case transition(key: SomeFeatureBase.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
-        case deinitialization(key: SomeFeatureBase.Type, oldValue: SomeStateBase)
-        
-        /// No removal operation has been performed, because no such key has been found.
-        case nothingToRemove(key: SomeFeatureBase.Type)
-    }
 }
 
 //---
