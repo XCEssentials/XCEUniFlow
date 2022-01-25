@@ -25,7 +25,7 @@
  */
 
 public
-extension NoBindings where Self: SomeStorageObserver
+extension NoBindings where Self: SomeDispatcherObserver
 {
     var bindings: [Binding] { [] }
 }

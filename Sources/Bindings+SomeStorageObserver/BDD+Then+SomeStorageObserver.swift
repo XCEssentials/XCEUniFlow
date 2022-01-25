@@ -25,7 +25,7 @@
  */
 
 public
-extension BDD.GivenOrThenContext where S: SomeStorageObserver
+extension BDD.GivenOrThenContext where S: SomeDispatcherObserver
 {
     func then(
         scope: String = #file,
@@ -75,7 +75,7 @@ extension BDD.GivenOrThenContext where S: SomeStorageObserver
 //---
 
 public
-extension BDD.ThenContext where S: SomeStorageObserver
+extension BDD.ThenContext where S: SomeDispatcherObserver
 {
     func then(
         scope: String = #file,

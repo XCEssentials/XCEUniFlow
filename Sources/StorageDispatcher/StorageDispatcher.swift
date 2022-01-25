@@ -328,7 +328,7 @@ struct Binding
     enum Source
     {
         case inStoreBinding(SomeFeatureBase.Type)
-        case externalBinding(SomeStorageObserver.Type)
+        case externalBinding(SomeDispatcherObserver.Type)
     }
 
     public
@@ -455,7 +455,7 @@ struct Binding
     }
     
     //internal
-    init<S: SomeStorageObserver, W: Publisher, G>(
+    init<S: SomeDispatcherObserver, W: Publisher, G>(
         source: S,
         description: String,
         scope: String,
