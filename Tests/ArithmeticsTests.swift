@@ -35,128 +35,157 @@ import XCEUniFlow
 
 //---
 
-//class ArithmeticsTests: XCTestCase
-//{
-//    func testBeginPositive()
-//    {
-//        let state = GlobalModel()
-//
-//        //---
-//
-//        do
-//        {
-//            try Arithmetics
-//                .begin()
-//                .perform(with: state)
-//                ./ InitializationInto<Arithmetics.Main>.init
-//                .* { assertThat($0, not(nilValue()))  }
-//        }
-//        catch
-//        {
-//            XCTFail("\(error)")
-//        }
-//    }
-//
-//    func testBeginNegative()
-//    {
-//        let state = GlobalModel()
-//            .store(Arithmetics.Main(val: 1))
-//
-//        //---
-//
-//        do
-//        {
-//            _ = try Arithmetics
-//                .begin()
-//                .perform(with: state)
-//
-//            //---
-//
-//            XCTFail("Should never come to this point")
-//        }
-//        catch
-//        {
-//            // failed as expected
-//        }
-//    }
-//
-//    func testSetExplicitPositive()
-//    {
-//        let sourceValue = Int(arc4random_uniform(10000))
-//        let targetValue = sourceValue + 1 + Int(arc4random_uniform(100))
-//
-//        let state = GlobalModel()
-//            .store(Arithmetics.Main(val: sourceValue))
-//
-//        //---
-//
-//        do
-//        {
-//            try Arithmetics
-//                .setExplicit(value: targetValue)
-//                .perform(with: state)
-//                ./ ActualizationIn<Arithmetics.Main>.init
-//                ./ { $0!.state.val }
-//                .* { assertThat($0, equalTo(targetValue)) }
-//        }
-//        catch
-//        {
-//            XCTFail("\(error)")
-//        }
-//    }
-//
-//    func testSetExplicitNegativeUninitialized()
-//    {
-//        let state = GlobalModel()
-//
-//        //---
-//
-//        do
-//        {
-//            _ = try Arithmetics
-//                .setExplicit(value: Int(arc4random_uniform(10000)))
-//                .perform(with: state)
-//
-//            //---
-//
-//            XCTFail("Should never come to this point")
-//        }
-//        catch UniFlowError.featureIsNotInState(let feature, _, _)
-//        {
-//            assertThat(feature.name, equalTo(XCEUniFlowAllTests.Arithmetics.name))
-//        }
-//        catch
-//        {
-//            XCTFail("Should never come to this point")
-//        }
-//    }
-//
-//    func testSetExplicitNegativeSameValue()
-//    {
-//        let theValue = Int(arc4random_uniform(10000))
-//
-//        let state = GlobalModel()
-//            .store(Arithmetics.Main(val: theValue))
-//
-//        //---
-//
-//        do
-//        {
-//            _ = try Arithmetics
-//                .setExplicit(value: theValue)
-//                .perform(with: state)
-//
-//            //---
-//
-//            XCTFail("Should never come to this point")
-//        }
-//        catch _ as UnsatisfiedRequirement
-//        {
-//            // okay
-//        }
-//        catch
-//        {
-//            XCTFail("Should never come to this point")
-//        }
-//    }
-//}
+class ArithmeticsTests: XCTestCase
+{
+    typealias SUT = Arithmetics
+    
+    var sut: Arithmetics!
+    
+    override
+    func setUp()
+    {
+        sut = Arithmetics(with: .init())
+        
+        //---
+        
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 0)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 0)
+    }
+    
+    override
+    func tearDown()
+    {
+        sut = nil
+    }
+}
+
+// MARK: - Tests
+
+extension ArithmeticsTests
+{
+    func test_initialization_success() throws
+    {
+        let input = SUT.Main(val: 0)
+        let output = try sut.initialize(with: input)
+        
+        //---
+        
+        XCTAssertEqual(output.count, 1)
+        
+        guard
+            case let .initialization(key, newValue) = output[0].outcome
+        else
+        {
+            return XCTFail("Unexpected output: \(output)")
+        }
+        
+        XCTAssert(key is SUT.Type)
+        XCTAssertEqual((newValue as! SUT.Main).val, 0)
+    }
+    
+    func test_initialization_fails_ifAlreadyInitialized() throws
+    {
+        let input = SUT.Main(val: 0)
+        try sut.initialize(with: input)
+        
+        //---
+        
+        do
+        {
+            try sut.initialize(with: input)
+            XCTFail("Expected to fail double initialization")
+        }
+        catch
+        {
+            guard
+                let semanticError = error as? SemanticMutationError
+            else
+            {
+                return XCTFail("Unexpected failure type")
+            }
+            
+            guard
+                case .initialization = semanticError.expectedMutation
+            else
+            {
+                return XCTFail("Unexpected `expectedMutation`: \(semanticError.expectedMutation)")
+            }
+            
+            guard
+                case let .actualization(key, oldValue, newValue) = semanticError.proposedOutcome
+            else
+            {
+                return XCTFail("Unexpected `proposedOutcome`: \(semanticError.proposedOutcome)")
+            }
+            
+            XCTAssert(key is SUT.Type)
+            XCTAssertEqual((oldValue as! SUT.Main).val, 0)
+            XCTAssertEqual((newValue as! SUT.Main).val, 0)
+        }
+    }
+
+    func test_begin_success() throws
+    {
+        sut.begin()
+        
+        //---
+        
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 0)
+    }
+    
+    func test_begin_doubleCallHasNoEffect() throws
+    {
+        sut.begin()
+        sut.begin(with: 5) // repeating call causes no effect on the state
+        
+        //---
+        
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 0)
+    }
+    
+    func test_setExplicit_success() throws
+    {
+        sut.begin(with: 0)
+        sut.setExplicit(value: 5)
+
+        //---
+
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 5)
+    }
+    
+    func test_setExplicit_noEffectIfUninitialized() throws
+    {
+        sut.setExplicit(value: 5)
+
+        //---
+
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 0)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 0)
+    }
+    
+    func test_setExplicit_noEffectIfPreconditionFails() throws
+    {
+        sut.begin(with: 0)
+        sut.setExplicit(value: 0) // this will not cause any mutation
+
+        //---
+
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 0)
+    }
+}

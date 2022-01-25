@@ -31,64 +31,65 @@ import XCERequirement
 
 //---
 
-//enum Arithmetics: Feature, NoBindings
-//{
-//    struct Main: State { typealias Parent = Arithmetics
-//
-//        var val: Int
-//    }
-//}
-//
-////---
-//
-//extension Arithmetics
-//{
-//    static
-//    func begin() -> Action
-//    {
-//        return initialize.Into<Main>.via
-//        {
-//            become, submit in
-//
-//            //---
-//
-//            become << Main(val: 0)
-//
-//            //---
-//
-//            submit << [ setExplicit(value: 10),
-//                        incFive() ]
-//        }
-//    }
-//
-//    static
-//    func setExplicit(value: Int) -> Action
-//    {
-//        return actualize.In<Main>.via
-//        {
-//            _, current, _ in
-//
-//            //---
-//
-//            try Require("Current value is != to desired new value"){ value != $0 }
-//                .validate(current.val)
-//
-//            //---
-//
-//            current.val = value
-//        }
-//    }
-//
-//    static
-//    func incFive() -> Action
-//    {
-//        return actualize.In<Main>.via
-//        {
-//            _, current, _ in
-//
-//            //---
-//
-//            current.val += 5
-//        }
-//    }
-//}
+class Arithmetics: FeatureBase, SomeFeature, NoBindings
+{
+    struct Main: SomeState {
+        
+        typealias Feature = Arithmetics
+
+        var val: Int
+    }
+}
+
+//---
+
+extension Arithmetics
+{
+    func begin(with value: Int = 0)
+    {
+        should {
+            
+            let main = Main(val: value)
+            
+            //---
+            
+            try initialize(with: main)
+        }
+    }
+
+    func setExplicit(value: Int)
+    {
+        should {
+            
+            var main: Main = try ensureCurrentState()
+            
+            //---
+            
+            try Check.that("Current value is != to desired new value", main.val != value)
+            
+            //---
+            
+            main.val = value
+            
+            //---
+            
+            try actualize(with: main)
+        }
+    }
+
+    func incFive()
+    {
+        should {
+            
+            var main: Main = try ensureCurrentState()
+            
+            //---
+            
+            main.val += 5
+            
+            //---
+            
+            try actualize(with: main)
+        }
+    }
+}
