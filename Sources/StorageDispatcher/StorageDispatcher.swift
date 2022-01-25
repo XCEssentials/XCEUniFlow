@@ -40,7 +40,7 @@ class StorageDispatcher
     typealias Status = CurrentValueSubject<[FeatureStatus], Never>
     
     fileprivate
-    typealias BindingsStatusLog = PassthroughSubject<AccessReportBindingStatus, Never>
+    typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
     
     //---
     
@@ -79,7 +79,7 @@ class StorageDispatcher
     }
     
     public
-    var bindingsStatusLog: AnyPublisher<AccessReportBindingStatus, Never>
+    var bindingsStatusLog: AnyPublisher<BindingStatus, Never>
     {
         _bindingsStatusLog
             .eraseToAnyPublisher()
@@ -322,10 +322,17 @@ extension StorageDispatcher
 // MARK: - Binding
 
 public
-struct Binding: SomeAccessReportBinding
+struct Binding
 {
     public
-    let source: AccessReportBindingSource
+    enum Source
+    {
+        case inStoreBinding(SomeFeatureBase.Type)
+        case externalBinding(SomeStorageObserver.Type)
+    }
+
+    public
+    let source: Source
     
     public
     let description: String
@@ -363,7 +370,7 @@ struct Binding: SomeAccessReportBinding
         
         //---
         
-        self.source = .keyType(S.self)
+        self.source = .inStoreBinding(S.self)
         self.description = description
         self.scope = scope
         self.location = location
@@ -461,7 +468,7 @@ struct Binding: SomeAccessReportBinding
         
         //---
         
-        self.source = .observerType(S.self)
+        self.source = .externalBinding(S.self)
         self.description = description
         self.scope = scope
         self.location = location

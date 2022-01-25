@@ -25,18 +25,18 @@
  */
 
 public
-enum AccessReportBindingStatus
+enum BindingStatus
 {
-    case activated(SomeAccessReportBinding)
+    case activated(Binding)
     
     /// After passing through `when` (and `given`,
     /// if present) claus(es), right before `then`.
-    case triggered(SomeAccessReportBinding)
+    case triggered(Binding)
     
     /// After executing `then` clause.
-    case executed(SomeAccessReportBinding)
+    case executed(Binding)
     
-    case failed(SomeAccessReportBinding, Error)
+    case failed(Binding, Error)
     
-    case cancelled(SomeAccessReportBinding)
+    case cancelled(Binding)
 }
