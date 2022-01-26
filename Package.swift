@@ -20,11 +20,11 @@ let package = Package(
         .package(
             name: "XCERequirement",
             url: "https://github.com/XCEssentials/Requirement",
-            .upToNextMinor(from: "2.3.0")),
+            .upToNextMajor(from: "2.3.0")),
         .package(
             name: "XCEPipeline",
             url: "https://github.com/XCEssentials/Pipeline",
-            .upToNextMinor(from: "3.7.0")),
+            .upToNextMajor(from: "3.7.0")),
     ],
     targets: [
         .target(
