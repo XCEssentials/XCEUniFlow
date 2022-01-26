@@ -28,7 +28,7 @@ public
 protocol SomeFeatureBase
 {
     static
-    var bindings: [Binding] { get }
+    var bindings: [MutationBinding] { get }
     
     static
     var displayName: String { get }

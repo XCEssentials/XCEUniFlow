@@ -28,5 +28,5 @@ public
 extension NoBindings where Self: SomeFeatureBase
 {
     static
-    var bindings: [Binding] { [] }
+    var bindings: [MutationBinding] { [] }
 }
