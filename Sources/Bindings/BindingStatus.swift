@@ -27,16 +27,16 @@
 public
 enum BindingStatus
 {
-    case activated(Binding)
+    case activated(MutationBinding)
     
     /// After passing through `when` (and `given`,
     /// if present) claus(es), right before `then`.
-    case triggered(Binding)
+    case triggered(MutationBinding)
     
     /// After executing `then` clause.
-    case executed(Binding)
+    case executed(MutationBinding)
     
-    case failed(Binding, Error)
+    case failed(MutationBinding, Error)
     
-    case cancelled(Binding)
+    case cancelled(MutationBinding)
 }
