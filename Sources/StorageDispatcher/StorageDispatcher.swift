@@ -319,10 +319,10 @@ extension StorageDispatcher
     }
 }
 
-// MARK: - Binding
+// MARK: - MutationBinding
 
 public
-struct Binding
+struct MutationBinding
 {
     public
     enum Source

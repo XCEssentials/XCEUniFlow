@@ -27,5 +27,5 @@
 public
 extension NoBindings where Self: SomeDispatcherObserver
 {
-    var bindings: [Binding] { [] }
+    var bindings: [MutationBinding] { [] }
 }

@@ -31,7 +31,7 @@ import Combine
 public
 protocol SomeDispatcherObserver: AnyObject
 {
-    var bindings: [Binding] { get }
+    var bindings: [MutationBinding] { get }
 }
 
 public
