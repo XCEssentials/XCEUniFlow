@@ -66,6 +66,12 @@ class FeatureBase
         self.dispatcher = storageDispatcher
     }
     
+    public
+    func removeAllSubscriptions()
+    {
+        subscriptions = []
+    }
+    
     /// Group several read/write operations in one access report.
     public
     func access(
