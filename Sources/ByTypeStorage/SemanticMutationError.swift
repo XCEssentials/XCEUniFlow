@@ -25,8 +25,11 @@
  */
 
 public
-extension NoBindings where Self: SomeFeatureBase
+struct SemanticMutationError: Error
 {
-    static
-    var bindings: [MutationBinding] { [] }
+    public
+    let expectedMutation: ExpectedMutation
+    
+    public
+    let proposedOutcome: MutationAttemptOutcome
 }
