@@ -36,16 +36,7 @@ class FeatureBase
     {
         didSet
         {
-            if
-                let observer = self as? SomeDispatcherObserver,
-                let dispatcher = self.dispatcher
-            {
-                self.subscriptions = observer.observe(dispatcher)
-            }
-            else
-            {
-                self.subscriptions = []
-            }
+            activateSubscriptionsIfNeeded()
         }
     }
     
@@ -57,6 +48,10 @@ class FeatureBase
         with storageDispatcher: StorageDispatcher? = nil
     ) {
         self.dispatcher = storageDispatcher
+        
+        //---
+        
+        activateSubscriptionsIfNeeded()
     }
     
     public
@@ -64,6 +59,21 @@ class FeatureBase
         with storageDispatcher: StorageDispatcher
     ) {
         self.dispatcher = storageDispatcher
+    }
+    
+    private
+    func activateSubscriptionsIfNeeded()
+    {
+        if
+            let observer = self as? SomeDispatcherObserver,
+            let dispatcher = self.dispatcher
+        {
+            self.subscriptions = observer.observe(dispatcher)
+        }
+        else
+        {
+            self.subscriptions = []
+        }
     }
     
     public
