@@ -26,3 +26,40 @@
 
 public
 protocol NoBindings {}
+
+public
+extension NoBindings where Self: SomeFeatureBase
+{
+    static
+    var bindings: [MutationBinding] { [] }
+}
+
+public
+extension NoBindings where Self: SomeDispatcherObserver
+{
+    var bindings: [MutationBinding] { [] }
+}
+
+//---
+
+public
+protocol NoInStoreBindings {}
+
+public
+extension NoInStoreBindings where Self: SomeFeatureBase
+{
+    static
+    var bindings: [MutationBinding] { [] }
+}
+
+//---
+
+public
+protocol NoExternalBindings {}
+
+public
+extension NoExternalBindings where Self: SomeDispatcherObserver
+{
+    var bindings: [MutationBinding] { [] }
+}
+
