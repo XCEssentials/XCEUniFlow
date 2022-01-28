@@ -66,7 +66,7 @@ struct ModelStatus
     public
     init(with state: SomeStateBase)
     {
-        self.title = type(of: state).feature.displayName
+        self.title = type(of: state).model.displayName
         self.subtitle = .init(describing: type(of: state).self)
         self.state = state
         
@@ -125,7 +125,7 @@ extension Publisher where Output == [ModelStatus], Failure == Never
                                 if
                                     let state = $0.state
                                 {
-                                    return type(of: state).feature.name == feature.name
+                                    return type(of: state).model.name == feature.name
                                 }
                                 else
                                 {

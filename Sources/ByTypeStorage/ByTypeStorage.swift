@@ -79,7 +79,7 @@ extension ByTypeStorage
     {
         allValues
             .map {
-                type(of: $0).feature
+                type(of: $0).model
             }
     }
     
