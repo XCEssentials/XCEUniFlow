@@ -29,7 +29,7 @@ import Combine
 //---
 
 public
-struct FeatureStatus
+struct ModelStatus
 {
     public
     enum StatusIndicator: String, Equatable, Codable
@@ -55,9 +55,9 @@ struct FeatureStatus
     let indicator: StatusIndicator
     
     public
-    init(missing feature: SomeModelBase.Type)
+    init(missing model: SomeModelBase.Type)
     {
-        self.title = feature.displayName
+        self.title = model.displayName
         self.subtitle = "<missing>"
         self.state = nil
         self.indicator = .missing
@@ -84,12 +84,12 @@ struct FeatureStatus
     }
 }
 
-// MARK: - Access log - Processed - get features status (dashboard)
+// MARK: - Access log - Processed - get model status (dashboard)
 
 public
 extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport, Failure == Never
 {
-    var statusReport: AnyPublisher<[FeatureStatus], Failure>
+    var statusReport: AnyPublisher<[ModelStatus], Failure>
     {
         self
             .filter {
@@ -99,7 +99,7 @@ extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport
                 $0.storage
                     .allValues
                     .map(
-                        FeatureStatus.init
+                        ModelStatus.init
                     )
             }
             .eraseToAnyPublisher()
@@ -107,16 +107,16 @@ extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport
 }
 
 public
-extension Publisher where Output == [FeatureStatus], Failure == Never
+extension Publisher where Output == [ModelStatus], Failure == Never
 {
     func matched(
-        with features: [SomeModelBase.Type]
+        with models: [SomeModelBase.Type]
     ) -> AnyPublisher<Output, Failure> {
 
         self
             .map { existingStatuses in
                 
-                features
+                models
                     .map { feature in
                         
                         existingStatuses

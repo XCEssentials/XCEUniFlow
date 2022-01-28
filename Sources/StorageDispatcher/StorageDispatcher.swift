@@ -37,7 +37,7 @@ class StorageDispatcher
     typealias AccessLog = PassthroughSubject<AccessReport, Never>
  
     fileprivate
-    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
+    typealias Status = CurrentValueSubject<[ModelStatus], Never>
     
     fileprivate
     typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
@@ -72,7 +72,7 @@ class StorageDispatcher
     }
     
     public
-    var status: AnyPublisher<[FeatureStatus], Never>
+    var status: AnyPublisher<[ModelStatus], Never>
     {
         _status
             .eraseToAnyPublisher()
