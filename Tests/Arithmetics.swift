@@ -31,7 +31,7 @@ import XCERequirement
 
 //---
 
-class Arithmetics: FeatureBase, SomeFeature, NoBindings
+class Arithmetics: FeatureBase, SomeModel, NoBindings
 {
     struct Main: SomeState {
         
