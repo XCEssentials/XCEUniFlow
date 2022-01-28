@@ -28,7 +28,7 @@ public
 protocol NoBindings {}
 
 public
-extension NoBindings where Self: SomeFeatureBase
+extension NoBindings where Self: SomeModelBase
 {
     static
     var bindings: [MutationBinding] { [] }
@@ -46,7 +46,7 @@ public
 protocol NoInStoreBindings {}
 
 public
-extension NoInStoreBindings where Self: SomeFeatureBase
+extension NoInStoreBindings where Self: SomeModelBase
 {
     static
     var bindings: [MutationBinding] { [] }

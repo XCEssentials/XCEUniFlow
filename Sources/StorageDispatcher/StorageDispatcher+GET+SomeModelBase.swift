@@ -31,7 +31,7 @@ extension StorageDispatcher
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        valueForKey keyType: SomeFeatureBase.Type
+        valueForKey keyType: SomeModelBase.Type
     ) throws -> SomeStateBase {
         
         var result: SomeStateBase!
@@ -52,7 +52,7 @@ extension StorageDispatcher
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        withKey keyType: SomeFeatureBase.Type
+        withKey keyType: SomeModelBase.Type
     ) -> Bool {
         
         do
@@ -76,7 +76,7 @@ extension StorageDispatcher
 //---
 
 public
-extension SomeFeatureBase
+extension SomeModelBase
 {
     static
     func fetch(

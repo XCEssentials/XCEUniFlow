@@ -118,7 +118,7 @@ extension StorageDispatcher
         storage.allValues
     }
     
-    var allKeys: [SomeFeatureBase.Type]
+    var allKeys: [SomeModelBase.Type]
     {
         storage.allKeys
     }
@@ -264,7 +264,7 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeFeatureBase.Type? in
+            .compactMap { report -> SomeModelBase.Type? in
                 
                 switch report.outcome
                 {
@@ -301,7 +301,7 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeFeatureBase.Type? in
+            .compactMap { report -> SomeModelBase.Type? in
                 
                 switch report.outcome
                 {
@@ -327,7 +327,7 @@ struct MutationBinding
     public
     enum Source
     {
-        case inStoreBinding(SomeFeatureBase.Type)
+        case inStoreBinding(SomeModelBase.Type)
         case externalBinding(SomeDispatcherObserver.Type)
     }
 
@@ -357,7 +357,7 @@ struct MutationBinding
     }
     
     //internal
-    init<S: SomeFeatureBase, W: Publisher, G>(
+    init<S: SomeModelBase, W: Publisher, G>(
         source: S.Type,
         description: String,
         scope: String,

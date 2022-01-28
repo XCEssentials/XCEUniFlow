@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeModel: SomeFeatureBase {}
+protocol SomeModel: SomeModelBase {}
 
 //---
 

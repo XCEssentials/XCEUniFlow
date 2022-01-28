@@ -25,33 +25,30 @@
  */
 
 public
-extension ByTypeStorage
+protocol SomeModelBase
 {
-    subscript(_ keyType: SomeFeatureBase.Type) -> SomeStateBase?
-    {
-        try? fetch(valueForKey: keyType)
-    }
+    static
+    var bindings: [MutationBinding] { get }
     
-    func hasValue(withKey keyType: SomeFeatureBase.Type) -> Bool
-    {
-        self[keyType] != nil
-    }
+    static
+    var displayName: String { get }
 }
 
 //---
 
 public
-extension SomeFeatureBase
+extension SomeModelBase
 {
+    /// `ByTypeStorage` will use this as actual key.
     static
-    func fetch(from storage: ByTypeStorage) throws -> SomeStateBase
+    var name: String
     {
-        try storage.fetch(valueForKey: self)
+        .init(reflecting: Self.self)
     }
 
     static
-    func isPresent(in storage: ByTypeStorage) -> Bool
+    var displayName: String
     {
-        storage.hasValue(withKey: self)
+        name
     }
 }

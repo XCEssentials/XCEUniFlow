@@ -25,13 +25,33 @@
  */
 
 public
-extension SomeFeatureBase
+extension ByTypeStorage
+{
+    subscript(_ keyType: SomeModelBase.Type) -> SomeStateBase?
+    {
+        try? fetch(valueForKey: keyType)
+    }
+    
+    func hasValue(withKey keyType: SomeModelBase.Type) -> Bool
+    {
+        self[keyType] != nil
+    }
+}
+
+//---
+
+public
+extension SomeModelBase
 {
     static
-    func scenario(
-        _ description: String = ""
-    ) -> BDD.WhenContext<Self> {
-        
-        .init(description: description)
+    func fetch(from storage: ByTypeStorage) throws -> SomeStateBase
+    {
+        try storage.fetch(valueForKey: self)
+    }
+
+    static
+    func isPresent(in storage: ByTypeStorage) -> Bool
+    {
+        storage.hasValue(withKey: self)
     }
 }
