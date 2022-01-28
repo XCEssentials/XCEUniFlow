@@ -35,7 +35,7 @@ class Arithmetics: FeatureBase, SomeModel, NoBindings
 {
     struct Main: SomeState {
         
-        typealias Feature = Arithmetics
+        typealias Model = Arithmetics
 
         var val: Int
     }

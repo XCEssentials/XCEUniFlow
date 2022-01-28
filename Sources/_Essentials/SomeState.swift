@@ -27,7 +27,7 @@
 public
 protocol SomeState: SomeStateBase
 {
-    associatedtype Feature: SomeModel
+    associatedtype Model: SomeModel
 }
 
 // MARK: - Helpers
@@ -38,6 +38,6 @@ extension SomeState
     static
     var model: SomeModelBase.Type
     {
-        Feature.self
+        Model.self
     }
 }
