@@ -54,11 +54,11 @@ extension ByTypeStorage
     enum ReadDataError: Error
     {
         case keyNotFound(
-            SomeFeatureBase.Type
+            SomeModelBase.Type
         )
         
         case valueTypeMismatch(
-            key: SomeFeatureBase.Type,
+            key: SomeModelBase.Type,
             expected: SomeStateBase.Type,
             actual: SomeStateBase
         )
@@ -75,15 +75,15 @@ extension ByTypeStorage
         .init(data.values)
     }
     
-    var allKeys: [SomeFeatureBase.Type]
+    var allKeys: [SomeModelBase.Type]
     {
         allValues
             .map {
-                type(of: $0).feature
+                type(of: $0).model
             }
     }
     
-    func fetch(valueForKey keyType: SomeFeatureBase.Type) throws -> SomeStateBase
+    func fetch(valueForKey keyType: SomeModelBase.Type) throws -> SomeStateBase
     {
         if
             let result = data[keyType.name]
@@ -98,7 +98,7 @@ extension ByTypeStorage
     
     func fetch<V: SomeState>(valueOfType _: V.Type = V.self) throws -> V
     {
-        let someResult = try fetch(valueForKey: V.Feature.self)
+        let someResult = try fetch(valueForKey: V.Model.self)
         
         //---
         
@@ -110,7 +110,7 @@ extension ByTypeStorage
         else
         {
             throw ReadDataError.valueTypeMismatch(
-                key: V.Feature.self,
+                key: V.Model.self,
                 expected: V.self,
                 actual: someResult
             )
@@ -134,11 +134,11 @@ extension ByTypeStorage
         
         //---
         
-        switch (data[V.Feature.name], value)
+        switch (data[V.Model.name], value)
         {
             case (.none, let newValue):
                 
-                outcome = .initialization(key: V.Feature.self, newValue: newValue)
+                outcome = .initialization(key: V.Model.self, newValue: newValue)
                 
                 //---
                 
@@ -146,7 +146,7 @@ extension ByTypeStorage
                 
                 //---
                 
-                data[V.Feature.name] = newValue
+                data[V.Model.name] = newValue
                 
             //---
                 
@@ -155,11 +155,11 @@ extension ByTypeStorage
                 if
                     type(of: oldValue) == type(of: newValue)
                 {
-                    outcome = .actualization(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .actualization(key: V.Model.self, oldValue: oldValue, newValue: newValue)
                 }
                 else
                 {
-                    outcome = .transition(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .transition(key: V.Model.self, oldValue: oldValue, newValue: newValue)
                 }
                 
                 //---
@@ -168,7 +168,7 @@ extension ByTypeStorage
                 
                 //---
                 
-                data[V.Feature.name] = newValue
+                data[V.Model.name] = newValue
         }
         
         //---
@@ -191,7 +191,7 @@ extension ByTypeStorage
     @discardableResult
     mutating
     func removeValue(
-        forKey keyType: SomeFeatureBase.Type,
+        forKey keyType: SomeModelBase.Type,
         fromValueType: SomeStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {

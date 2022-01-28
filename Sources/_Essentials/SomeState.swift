@@ -25,41 +25,19 @@
  */
 
 public
-protocol NoBindings {}
+protocol SomeState: SomeStateBase
+{
+    associatedtype Model: SomeModel
+}
+
+// MARK: - Helpers
 
 public
-extension NoBindings where Self: SomeModelBase
+extension SomeState
 {
     static
-    var bindings: [MutationBinding] { [] }
+    var model: SomeModelBase.Type
+    {
+        Model.self
+    }
 }
-
-public
-extension NoBindings where Self: SomeDispatcherObserver
-{
-    var bindings: [MutationBinding] { [] }
-}
-
-//---
-
-public
-protocol NoInStoreBindings {}
-
-public
-extension NoInStoreBindings where Self: SomeModelBase
-{
-    static
-    var bindings: [MutationBinding] { [] }
-}
-
-//---
-
-public
-protocol NoExternalBindings {}
-
-public
-extension NoExternalBindings where Self: SomeDispatcherObserver
-{
-    var bindings: [MutationBinding] { [] }
-}
-

@@ -25,33 +25,8 @@
  */
 
 public
-extension ByTypeStorage
-{
-    subscript(_ keyType: SomeFeatureBase.Type) -> SomeStateBase?
-    {
-        try? fetch(valueForKey: keyType)
-    }
-    
-    func hasValue(withKey keyType: SomeFeatureBase.Type) -> Bool
-    {
-        self[keyType] != nil
-    }
-}
-
-//---
-
-public
-extension SomeFeatureBase
+protocol SomeStateBase
 {
     static
-    func fetch(from storage: ByTypeStorage) throws -> SomeStateBase
-    {
-        try storage.fetch(valueForKey: self)
-    }
-
-    static
-    func isPresent(in storage: ByTypeStorage) -> Bool
-    {
-        storage.hasValue(withKey: self)
-    }
+    var model: SomeModelBase.Type { get }
 }

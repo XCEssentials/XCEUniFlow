@@ -25,30 +25,13 @@
  */
 
 public
-protocol SomeFeatureBase
+extension SomeModelBase
 {
     static
-    var bindings: [MutationBinding] { get }
-    
-    static
-    var displayName: String { get }
-}
-
-//---
-
-public
-extension SomeFeatureBase
-{
-    /// `ByTypeStorage` will use this as actual key.
-    static
-    var name: String
-    {
-        .init(reflecting: Self.self)
-    }
-
-    static
-    var displayName: String
-    {
-        name
+    func scenario(
+        _ description: String = ""
+    ) -> BDD.WhenContext<Self> {
+        
+        .init(description: description)
     }
 }
