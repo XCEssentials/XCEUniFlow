@@ -61,7 +61,7 @@ extension Arithmetics
     {
         should {
             
-            var main: Main = try ensureCurrentState()
+            var main: Main = try fetch()
             
             //---
             
@@ -81,7 +81,7 @@ extension Arithmetics
     {
         should {
             
-            var main: Main = try ensureCurrentState()
+            var main: Main = try fetch()
             
             //---
             

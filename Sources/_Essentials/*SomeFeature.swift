@@ -41,12 +41,12 @@ public
 extension SomeFeature where Self: FeatureBase
 {
     @discardableResult
-    func ensureCurrentState<V: SomeState>(
+    func fetch<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _ valueOfType: V.Type = V.self
-    ) throws -> V where V.Feature == Self {
+    ) throws -> V {
         
         try dispatcher.fetch(
             scope: scope,
