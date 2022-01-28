@@ -31,11 +31,11 @@ import XCERequirement
 
 //---
 
-class Arithmetics: FeatureBase, SomeFeature, NoBindings
+class Arithmetics: FeatureBase, SomeModel, NoBindings
 {
     struct Main: SomeState {
         
-        typealias Feature = Arithmetics
+        typealias Model = Arithmetics
 
         var val: Int
     }
@@ -61,7 +61,7 @@ extension Arithmetics
     {
         should {
             
-            var main: Main = try ensureCurrentState()
+            var main: Main = try fetch()
             
             //---
             
@@ -81,7 +81,7 @@ extension Arithmetics
     {
         should {
             
-            var main: Main = try ensureCurrentState()
+            var main: Main = try fetch()
             
             //---
             

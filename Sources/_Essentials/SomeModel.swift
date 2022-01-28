@@ -25,12 +25,12 @@
  */
 
 public
-protocol SomeFeature: SomeFeatureBase {}
+protocol SomeModel: SomeModelBase {}
 
 //---
 
 public
-extension SomeFeature
+extension SomeModel
 {
     typealias Itself = Self
 }
@@ -38,17 +38,17 @@ extension SomeFeature
 //---
 
 public
-extension SomeFeature where Self: FeatureBase
+extension SomeModel where Self: FeatureBase
 {
     @discardableResult
-    func ensureCurrentState<V: SomeState>(
+    func fetch<V: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _ valueOfType: V.Type = V.self
-    ) throws -> V where V.Feature == Self {
+    ) throws -> V {
         
-        try dispatcher.fetch(
+        try _dispatcher.fetch(
             scope: scope,
             context: context,
             location: location,
@@ -62,9 +62,9 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         _ value: V
-    ) throws -> ByTypeStorage.History where V.Feature == Self {
+    ) throws -> ByTypeStorage.History where V.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
             
             try $0.store(value)
         }
@@ -76,9 +76,9 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         with newValue: V
-    ) throws -> ByTypeStorage.History where V.Feature == Self {
+    ) throws -> ByTypeStorage.History where V.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
             
             try $0.initialize(with: newValue)
         }
@@ -91,9 +91,9 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         _ valueOfType: V.Type = V.self,
         via mutationHandler: (inout V) throws -> Void
-    ) throws -> ByTypeStorage.History where V.Feature == Self {
+    ) throws -> ByTypeStorage.History where V.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.actualize(V.self, via: mutationHandler)
         }
@@ -105,9 +105,9 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         with newValue: V
-    ) throws -> ByTypeStorage.History where V.Feature == Self {
+    ) throws -> ByTypeStorage.History where V.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.actualize(with: newValue)
         }
@@ -120,9 +120,9 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         from oldValueInstance: O,
         into newValue: N
-    ) throws -> ByTypeStorage.History where O.Feature == Self, N.Feature == Self {
+    ) throws -> ByTypeStorage.History where O.Model == Self, N.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.transition(from: oldValueInstance, into: newValue)
         }
@@ -135,9 +135,9 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         from oldValueType: O.Type,
         into newValue: N
-    ) throws -> ByTypeStorage.History where O.Feature == Self, N.Feature == Self {
+    ) throws -> ByTypeStorage.History where O.Model == Self, N.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.transition(from: O.self, into: newValue)
         }
@@ -149,9 +149,9 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         into newValue: V
-    ) throws -> ByTypeStorage.History where V.Feature == Self {
+    ) throws -> ByTypeStorage.History where V.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.transition(into: newValue)
         }
@@ -165,7 +165,7 @@ extension SomeFeature where Self: FeatureBase
         strict: Bool = true
     ) throws -> ByTypeStorage.History {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.deinitialize(Self.self, fromValueType: nil, strict: strict)
         }
@@ -177,9 +177,9 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         from fromValueType: V.Type
-    ) throws -> ByTypeStorage.History where V.Feature == Self {
+    ) throws -> ByTypeStorage.History where V.Model == Self {
         
-        try dispatcher.access(scope: scope, context: context, location: location) {
+        try _dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.deinitialize(Self.self, fromValueType: fromValueType, strict: true)
         }

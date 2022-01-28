@@ -24,20 +24,12 @@
  
  */
 
-public
-protocol SomeState: SomeStateBase
+open
+class WorkflowBase: FeatureBase
 {
-    associatedtype Feature: SomeFeature
-}
-
-// MARK: - Helpers
-
-public
-extension SomeState
-{
-    static
-    var feature: SomeFeatureBase.Type
+    public
+    var dispatcher: StorageDispatcher!
     {
-        Feature.self
+        _dispatcher
     }
 }
