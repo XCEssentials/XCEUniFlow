@@ -37,7 +37,7 @@ class StorageDispatcher
     typealias AccessLog = PassthroughSubject<AccessReport, Never>
  
     fileprivate
-    typealias Status = CurrentValueSubject<[ModelStatus], Never>
+    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
     
     fileprivate
     typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
@@ -72,7 +72,7 @@ class StorageDispatcher
     }
     
     public
-    var status: AnyPublisher<[ModelStatus], Never>
+    var status: AnyPublisher<[FeatureStatus], Never>
     {
         _status
             .eraseToAnyPublisher()
@@ -118,7 +118,7 @@ extension StorageDispatcher
         storage.allValues
     }
     
-    var allKeys: [SomeModelBase.Type]
+    var allKeys: [SomeStateful.Type]
     {
         storage.allKeys
     }
@@ -264,7 +264,7 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeModelBase.Type? in
+            .compactMap { report -> SomeStateful.Type? in
                 
                 switch report.outcome
                 {
@@ -301,7 +301,7 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeModelBase.Type? in
+            .compactMap { report -> SomeStateful.Type? in
                 
                 switch report.outcome
                 {
@@ -327,7 +327,7 @@ struct MutationBinding
     public
     enum Source
     {
-        case inStoreBinding(SomeModelBase.Type)
+        case inStoreBinding(SomeStateful.Type)
         case externalBinding(SomeDispatcherObserver.Type)
     }
 
@@ -357,7 +357,7 @@ struct MutationBinding
     }
     
     //internal
-    init<S: SomeModelBase, W: Publisher, G>(
+    init<S: SomeStateful, W: Publisher, G>(
         source: S.Type,
         description: String,
         scope: String,

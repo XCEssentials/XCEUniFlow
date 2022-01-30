@@ -25,7 +25,7 @@
  */
 
 public
-extension BDD.GivenOrThenContext where S: SomeModelBase
+extension BDD.GivenOrThenContext where S: SomeWorkflow
 {
     func then(
         scope: String = #file,
@@ -55,24 +55,12 @@ extension BDD.GivenOrThenContext where S: SomeModelBase
             dispatcherOnlyHandler(dispatcher)
         }
     }
-    
-    func then(
-        scope: String = #file,
-        location: Int = #line,
-        _ outputOnlyHandler: @escaping (W.Output) -> Void
-    ) -> MutationBinding {
-        
-        then(scope: scope, location: location) { _, output in
-            
-            outputOnlyHandler(output)
-        }
-    }
 }
 
 //---
 
 public
-extension BDD.ThenContext where S: SomeModelBase
+extension BDD.ThenContext where S: SomeWorkflow
 {
     func then(
         scope: String = #file,
@@ -100,18 +88,6 @@ extension BDD.ThenContext where S: SomeModelBase
         then(scope: scope, location: location) { dispatcher, _ in
             
             dispatcherOnlyHandler(dispatcher)
-        }
-    }
-    
-    func then(
-        scope: String = #file,
-        location: Int = #line,
-        _ outputOnlyHandler: @escaping (G) -> Void
-    ) -> MutationBinding {
-        
-        then(scope: scope, location: location) { _, output in
-            
-            outputOnlyHandler(output)
         }
     }
 }

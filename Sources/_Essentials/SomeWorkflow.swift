@@ -24,12 +24,5 @@
  
  */
 
-open
-class WorkflowBase: FeatureBase
-{
-    public
-    var dispatcher: StorageDispatcher!
-    {
-        _dispatcher
-    }
-}
+public
+protocol SomeWorkflow: SomeFeature {}

@@ -37,3 +37,14 @@ protocol SomeMutationDecriptor
         from mutationReport: ByTypeStorage.HistoryElement
     )
 }
+
+public
+extension SomeMutationDecriptor
+{
+    /// Syntax sugar to look nicer in `when` statements.
+    static
+    var completed: Self.Type
+    {
+        self
+    }
+}

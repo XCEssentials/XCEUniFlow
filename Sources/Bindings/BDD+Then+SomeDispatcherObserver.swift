@@ -57,19 +57,6 @@ extension BDD.GivenOrThenContext where S: SomeDispatcherObserver
             sourceOnlyHandler(src)
         }
     }
-    
-    func then(
-        scope: String = #file,
-        location: Int = #line,
-        with source: S,
-        _ outputOnlyHandler: @escaping (W.Output) -> Void
-    ) -> MutationBinding {
-        
-        then(scope: scope, location: location, with: source) { _, output in
-            
-            outputOnlyHandler(output)
-        }
-    }
 }
 
 //---
@@ -105,19 +92,6 @@ extension BDD.ThenContext where S: SomeDispatcherObserver
         then(scope: scope, location: location, with: source) { src, _ in
             
             sourceOnlyHandler(src)
-        }
-    }
-    
-    func then(
-        scope: String = #file,
-        location: Int = #line,
-        with source: S,
-        _ outputOnlyHandler: @escaping (G) -> Void
-    ) -> MutationBinding {
-        
-        then(scope: scope, location: location, with: source) { _, output in
-            
-            outputOnlyHandler(output)
         }
     }
 }
