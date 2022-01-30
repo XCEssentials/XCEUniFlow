@@ -66,7 +66,7 @@ struct FeatureStatus
     public
     init(with state: SomeStateBase)
     {
-        self.title = type(of: state).model.displayName
+        self.title = type(of: state).feature.displayName
         self.subtitle = .init(describing: type(of: state).self)
         self.state = state
         
@@ -84,7 +84,7 @@ struct FeatureStatus
     }
 }
 
-// MARK: - Access log - Processed - get model status (dashboard)
+// MARK: - Access log - Processed - get features statuses (dashboard)
 
 public
 extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport, Failure == Never
@@ -110,13 +110,13 @@ public
 extension Publisher where Output == [FeatureStatus], Failure == Never
 {
     func matched(
-        with models: [SomeStateful.Type]
+        with features: [SomeStateful.Type]
     ) -> AnyPublisher<Output, Failure> {
 
         self
             .map { existingStatuses in
                 
-                models
+                features
                     .map { feature in
                         
                         existingStatuses
@@ -125,7 +125,7 @@ extension Publisher where Output == [FeatureStatus], Failure == Never
                                 if
                                     let state = $0.state
                                 {
-                                    return type(of: state).model.name == feature.name
+                                    return type(of: state).feature.name == feature.name
                                 }
                                 else
                                 {

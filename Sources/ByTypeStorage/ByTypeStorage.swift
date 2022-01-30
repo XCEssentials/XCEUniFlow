@@ -79,7 +79,7 @@ extension ByTypeStorage
     {
         allValues
             .map {
-                type(of: $0).model
+                type(of: $0).feature
             }
     }
     
@@ -98,7 +98,7 @@ extension ByTypeStorage
     
     func fetch<V: SomeState>(valueOfType _: V.Type = V.self) throws -> V
     {
-        let someResult = try fetch(valueForKey: V.Model.self)
+        let someResult = try fetch(valueForKey: V.Feature.self)
         
         //---
         
@@ -110,7 +110,7 @@ extension ByTypeStorage
         else
         {
             throw ReadDataError.valueTypeMismatch(
-                key: V.Model.self,
+                key: V.Feature.self,
                 expected: V.self,
                 actual: someResult
             )
@@ -134,11 +134,11 @@ extension ByTypeStorage
         
         //---
         
-        switch (data[V.Model.name], value)
+        switch (data[V.Feature.name], value)
         {
             case (.none, let newValue):
                 
-                outcome = .initialization(key: V.Model.self, newValue: newValue)
+                outcome = .initialization(key: V.Feature.self, newValue: newValue)
                 
                 //---
                 
@@ -146,7 +146,7 @@ extension ByTypeStorage
                 
                 //---
                 
-                data[V.Model.name] = newValue
+                data[V.Feature.name] = newValue
                 
             //---
                 
@@ -155,11 +155,11 @@ extension ByTypeStorage
                 if
                     type(of: oldValue) == type(of: newValue)
                 {
-                    outcome = .actualization(key: V.Model.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .actualization(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
                 }
                 else
                 {
-                    outcome = .transition(key: V.Model.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .transition(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
                 }
                 
                 //---
@@ -168,7 +168,7 @@ extension ByTypeStorage
                 
                 //---
                 
-                data[V.Model.name] = newValue
+                data[V.Feature.name] = newValue
         }
         
         //---

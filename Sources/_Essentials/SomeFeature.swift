@@ -62,7 +62,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         _ value: V
-    ) throws -> ByTypeStorage.History where V.Model == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
@@ -76,7 +76,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         with newValue: V
-    ) throws -> ByTypeStorage.History where V.Model == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
@@ -91,7 +91,7 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         _ valueOfType: V.Type = V.self,
         via mutationHandler: (inout V) throws -> Void
-    ) throws -> ByTypeStorage.History where V.Model == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -105,7 +105,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         with newValue: V
-    ) throws -> ByTypeStorage.History where V.Model == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -120,7 +120,7 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         from oldValueInstance: O,
         into newValue: N
-    ) throws -> ByTypeStorage.History where O.Model == Self, N.Model == Self {
+    ) throws -> ByTypeStorage.History where O.Feature == Self, N.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -135,7 +135,7 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         from oldValueType: O.Type,
         into newValue: N
-    ) throws -> ByTypeStorage.History where O.Model == Self, N.Model == Self {
+    ) throws -> ByTypeStorage.History where O.Feature == Self, N.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -149,7 +149,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         into newValue: V
-    ) throws -> ByTypeStorage.History where V.Model == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -177,7 +177,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         from fromValueType: V.Type
-    ) throws -> ByTypeStorage.History where V.Model == Self {
+    ) throws -> ByTypeStorage.History where V.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
