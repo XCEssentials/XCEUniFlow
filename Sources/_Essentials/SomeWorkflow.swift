@@ -25,4 +25,8 @@
  */
 
 public
-protocol SomeWorkflow: SomeFeature {}
+protocol SomeWorkflow: SomeFeature
+{
+    static
+    var bindings: [MutationBinding] { get }
+}

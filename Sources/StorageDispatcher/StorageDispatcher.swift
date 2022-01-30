@@ -275,8 +275,11 @@ extension StorageDispatcher
                         return nil
                 }
             }
+            .compactMap {
+                $0 as? SomeWorkflow.Type
+            }
             .map {(
-                key: $0,
+                workflow: $0,
                 bindings: $0
                     .bindings
                     .map {
@@ -288,7 +291,7 @@ extension StorageDispatcher
             }
             .forEach {
                 
-                self.bindings[$0.key.name] = $0.bindings
+                self.bindings[$0.workflow.name] = $0.bindings
             }
     }
     
