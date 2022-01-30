@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeModelBase
+protocol SomeStateful
 {
     static
     var bindings: [MutationBinding] { get }
@@ -37,7 +37,7 @@ protocol SomeModelBase
 //---
 
 public
-extension SomeModelBase
+extension SomeStateful
 {
     /// `ByTypeStorage` will use this as actual key.
     static

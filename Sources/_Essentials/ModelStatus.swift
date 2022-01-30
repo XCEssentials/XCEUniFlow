@@ -55,7 +55,7 @@ struct ModelStatus
     let indicator: StatusIndicator
     
     public
-    init(missing model: SomeModelBase.Type)
+    init(missing model: SomeStateful.Type)
     {
         self.title = model.displayName
         self.subtitle = "<missing>"
@@ -110,7 +110,7 @@ public
 extension Publisher where Output == [ModelStatus], Failure == Never
 {
     func matched(
-        with models: [SomeModelBase.Type]
+        with models: [SomeStateful.Type]
     ) -> AnyPublisher<Output, Failure> {
 
         self

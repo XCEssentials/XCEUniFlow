@@ -29,7 +29,7 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct AnyMutationOf<K: SomeModelBase>: SomeMutationDecriptor
+struct AnyMutationOf<K: SomeStateful>: SomeMutationDecriptor
 {
     public
     let timestamp: Date

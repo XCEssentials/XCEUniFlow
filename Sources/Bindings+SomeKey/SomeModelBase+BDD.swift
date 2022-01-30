@@ -25,7 +25,7 @@
  */
 
 public
-extension SomeModelBase
+extension SomeStateful
 {
     static
     func scenario(

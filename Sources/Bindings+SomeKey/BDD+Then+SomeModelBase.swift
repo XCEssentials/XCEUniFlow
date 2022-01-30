@@ -25,7 +25,7 @@
  */
 
 public
-extension BDD.GivenOrThenContext where S: SomeModelBase
+extension BDD.GivenOrThenContext where S: SomeStateful
 {
     func then(
         scope: String = #file,
@@ -60,7 +60,7 @@ extension BDD.GivenOrThenContext where S: SomeModelBase
 //---
 
 public
-extension BDD.ThenContext where S: SomeModelBase
+extension BDD.ThenContext where S: SomeStateful
 {
     func then(
         scope: String = #file,

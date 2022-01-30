@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeModel: SomeModelBase {}
+protocol SomeModel: SomeStateful {}
 
 //---
 

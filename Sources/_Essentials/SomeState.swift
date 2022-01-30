@@ -36,7 +36,7 @@ public
 extension SomeState
 {
     static
-    var model: SomeModelBase.Type
+    var model: SomeStateful.Type
     {
         Model.self
     }
