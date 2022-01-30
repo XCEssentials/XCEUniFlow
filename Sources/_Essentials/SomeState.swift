@@ -27,7 +27,7 @@
 public
 protocol SomeState: SomeStateBase
 {
-    associatedtype Model: SomeModel
+    associatedtype Model: SomeFeature
 }
 
 // MARK: - Helpers

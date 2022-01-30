@@ -25,12 +25,12 @@
  */
 
 public
-protocol SomeModel: SomeStateful {}
+protocol SomeFeature: SomeStateful {}
 
 //---
 
 public
-extension SomeModel
+extension SomeFeature
 {
     typealias Itself = Self
 }
@@ -38,7 +38,7 @@ extension SomeModel
 //---
 
 public
-extension SomeModel where Self: FeatureBase
+extension SomeFeature where Self: FeatureBase
 {
     @discardableResult
     func fetch<V: SomeState>(
