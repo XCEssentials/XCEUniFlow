@@ -65,7 +65,7 @@ class FeatureBase
     func activateSubscriptionsIfNeeded()
     {
         if
-            let observer = self as? SomeDispatcherObserver,
+            let observer = self as? SomeViewModel,
             let dispatcher = self.dispatcher
         {
             self.subscriptions = observer.observe(dispatcher)

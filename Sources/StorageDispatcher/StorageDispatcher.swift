@@ -42,6 +42,36 @@ class StorageDispatcher
     fileprivate
     typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
     
+    public
+    struct StatusProxy
+    {
+        let dispatcher: StorageDispatcher
+        
+        public
+        var accessLog: AnyPublisher<AccessReport, Never>
+        {
+            dispatcher
+                ._accessLog
+                .eraseToAnyPublisher()
+        }
+        
+        public
+        var status: AnyPublisher<[FeatureStatus], Never>
+        {
+            dispatcher
+                ._status
+                .eraseToAnyPublisher()
+        }
+        
+        public
+        var bindingsStatusLog: AnyPublisher<BindingStatus, Never>
+        {
+            dispatcher
+                ._bindingsStatusLog
+                .eraseToAnyPublisher()
+        }
+    }
+    
     //---
     
     private
@@ -62,27 +92,10 @@ class StorageDispatcher
     fileprivate
     let _bindingsStatusLog = BindingsStatusLog()
     
-    //---
-    
     public
-    var accessLog: AnyPublisher<AccessReport, Never>
+    var proxy: StatusProxy
     {
-        _accessLog
-            .eraseToAnyPublisher()
-    }
-    
-    public
-    var status: AnyPublisher<[FeatureStatus], Never>
-    {
-        _status
-            .eraseToAnyPublisher()
-    }
-    
-    public
-    var bindingsStatusLog: AnyPublisher<BindingStatus, Never>
-    {
-        _bindingsStatusLog
-            .eraseToAnyPublisher()
+        .init(dispatcher: self)
     }
     
     //---
@@ -99,7 +112,8 @@ class StorageDispatcher
         
         //---
         
-        self.statusSubscription = accessLog
+        self.statusSubscription = proxy
+            .accessLog
             .onProcessed
             .statusReport
             .sink { [weak self] in
@@ -331,7 +345,7 @@ struct MutationBinding
     enum Source
     {
         case inStoreBinding(SomeStateful.Type)
-        case externalBinding(SomeDispatcherObserver.Type)
+        case externalBinding(SomeViewModel.Type)
     }
 
     public
@@ -384,7 +398,7 @@ struct MutationBinding
             
             //---
             
-            return when(dispatcher.accessLog)
+            return when(dispatcher.proxy.accessLog)
                 .tryCompactMap { [weak dispatcher] in
 
                     guard let dispatcher = dispatcher else { return nil }
@@ -458,14 +472,14 @@ struct MutationBinding
     }
     
     //internal
-    init<S: SomeDispatcherObserver, W: Publisher, G>(
+    init<S: SomeViewModel, W: Publisher, G>(
         source: S,
         description: String,
         scope: String,
         location: Int,
         when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W,
         given: @escaping (StorageDispatcher, W.Output) throws -> G?,
-        then: @escaping (S, G) -> Void
+        then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -482,7 +496,7 @@ struct MutationBinding
             
             //---
             
-            return when(dispatcher.accessLog)
+            return when(dispatcher.proxy.accessLog)
                 .tryCompactMap { [weak dispatcher] in
 
                     guard let dispatcher = dispatcher else { return nil }
@@ -501,13 +515,14 @@ struct MutationBinding
                             )
                     }
                 )
-                .compactMap { [weak source] (givenOutput: G) -> Void? in
+                .compactMap { [weak dispatcher, weak source] (givenOutput: G) -> Void? in
 
+                    guard let dispatcher = dispatcher else { return nil }
                     guard let source = source else { return nil }
 
                     //---
 
-                    return then(source, givenOutput) // map into `Void` to erase type info
+                    return then(source, givenOutput, dispatcher.proxy) // map into `Void` to erase type info
                 }
                 .handleEvents(
                     receiveSubscription: { [weak dispatcher] _ in
