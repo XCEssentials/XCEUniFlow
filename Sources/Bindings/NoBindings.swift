@@ -28,7 +28,7 @@ public
 protocol NoBindings {}
 
 public
-extension NoBindings where Self: SomeStateful
+extension NoBindings where Self: SomeWorkflow
 {
     static
     var bindings: [MutationBinding] { [] }

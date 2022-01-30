@@ -28,9 +28,6 @@ public
 protocol SomeStateful
 {
     static
-    var bindings: [MutationBinding] { get }
-    
-    static
     var displayName: String { get }
 }
 
