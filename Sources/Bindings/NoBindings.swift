@@ -35,20 +35,8 @@ extension NoBindings where Self: SomeWorkflow
 }
 
 public
-extension NoBindings where Self: SomeDispatcherObserver
+extension NoBindings where Self: SomeViewModel
 {
-    var bindings: [MutationBinding] { [] }
-}
-
-//---
-
-public
-protocol NoInStoreBindings {}
-
-public
-extension NoInStoreBindings where Self: SomeStateful
-{
-    static
     var bindings: [MutationBinding] { [] }
 }
 
@@ -58,7 +46,7 @@ public
 protocol NoExternalBindings {}
 
 public
-extension NoExternalBindings where Self: SomeDispatcherObserver
+extension NoExternalBindings where Self: SomeViewModel
 {
     var bindings: [MutationBinding] { [] }
 }
