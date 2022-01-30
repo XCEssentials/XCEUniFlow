@@ -31,11 +31,11 @@ import XCERequirement
 
 //---
 
-class Arithmetics: FeatureBase, SomeModel, NoBindings
+class Arithmetics: FeatureBase, SomeFeature, NoBindings
 {
     struct Main: SomeState {
         
-        typealias Model = Arithmetics
+        typealias Feature = Arithmetics
 
         var val: Int
     }

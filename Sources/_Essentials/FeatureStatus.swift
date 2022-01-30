@@ -29,7 +29,7 @@ import Combine
 //---
 
 public
-struct ModelStatus
+struct FeatureStatus
 {
     public
     enum StatusIndicator: String, Equatable, Codable
@@ -55,9 +55,9 @@ struct ModelStatus
     let indicator: StatusIndicator
     
     public
-    init(missing model: SomeModelBase.Type)
+    init(missing feature: SomeStateful.Type)
     {
-        self.title = model.displayName
+        self.title = feature.displayName
         self.subtitle = "<missing>"
         self.state = nil
         self.indicator = .missing
@@ -66,7 +66,7 @@ struct ModelStatus
     public
     init(with state: SomeStateBase)
     {
-        self.title = type(of: state).model.displayName
+        self.title = type(of: state).feature.displayName
         self.subtitle = .init(describing: type(of: state).self)
         self.state = state
         
@@ -84,12 +84,12 @@ struct ModelStatus
     }
 }
 
-// MARK: - Access log - Processed - get model status (dashboard)
+// MARK: - Access log - Processed - get features statuses (dashboard)
 
 public
 extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport, Failure == Never
 {
-    var statusReport: AnyPublisher<[ModelStatus], Failure>
+    var statusReport: AnyPublisher<[FeatureStatus], Failure>
     {
         self
             .filter {
@@ -99,7 +99,7 @@ extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport
                 $0.storage
                     .allValues
                     .map(
-                        ModelStatus.init
+                        FeatureStatus.init
                     )
             }
             .eraseToAnyPublisher()
@@ -107,16 +107,16 @@ extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport
 }
 
 public
-extension Publisher where Output == [ModelStatus], Failure == Never
+extension Publisher where Output == [FeatureStatus], Failure == Never
 {
     func matched(
-        with models: [SomeModelBase.Type]
+        with features: [SomeStateful.Type]
     ) -> AnyPublisher<Output, Failure> {
 
         self
             .map { existingStatuses in
                 
-                models
+                features
                     .map { feature in
                         
                         existingStatuses
@@ -125,7 +125,7 @@ extension Publisher where Output == [ModelStatus], Failure == Never
                                 if
                                     let state = $0.state
                                 {
-                                    return type(of: state).model.name == feature.name
+                                    return type(of: state).feature.name == feature.name
                                 }
                                 else
                                 {

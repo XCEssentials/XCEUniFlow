@@ -94,7 +94,7 @@ extension ByTypeStorage
     func transition<O: SomeState, N: SomeState>(
         from _: O,
         into newValue: N
-    ) throws -> MutationAttemptOutcome where O.Model == N.Model /* NOTE: "O != N" is implied*/ {
+    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
         
         try transition(
             from: O.self,
@@ -107,7 +107,7 @@ extension ByTypeStorage
     func transition<O: SomeState, N: SomeState>(
         from _: O.Type,
         into newValue: N
-    ) throws -> MutationAttemptOutcome where O.Model == N.Model /* NOTE: "O != N" is implied*/ {
+    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
         
         try store(
             newValue,
@@ -151,7 +151,7 @@ extension ByTypeStorage
     @discardableResult
     mutating
     func deinitialize(
-        _ keyType: SomeModelBase.Type,
+        _ keyType: SomeStateful.Type,
         fromValueType: SomeStateBase.Type?, // = nil,
         strict: Bool // = true
     ) throws -> MutationAttemptOutcome {

@@ -25,13 +25,30 @@
  */
 
 public
-extension SomeModelBase
+protocol SomeStateful
 {
     static
-    func scenario(
-        _ description: String = ""
-    ) -> BDD.WhenContext<Self> {
-        
-        .init(description: description)
+    var bindings: [MutationBinding] { get }
+    
+    static
+    var displayName: String { get }
+}
+
+//---
+
+public
+extension SomeStateful
+{
+    /// `ByTypeStorage` will use this as actual key.
+    static
+    var name: String
+    {
+        .init(reflecting: Self.self)
+    }
+
+    static
+    var displayName: String
+    {
+        name
     }
 }

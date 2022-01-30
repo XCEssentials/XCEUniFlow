@@ -48,7 +48,7 @@ extension ByTypeStorage
 public
 extension ByTypeStorage.HistoryElement
 {
-    var key: SomeModelBase.Type
+    var key: SomeStateful.Type
     {
         switch self.outcome
         {
@@ -73,7 +73,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let oldValue: SomeStateBase?
@@ -136,7 +136,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let newValue: SomeStateBase
@@ -177,7 +177,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let newValue: SomeStateBase
@@ -222,7 +222,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let oldValue: SomeStateBase
@@ -268,7 +268,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let oldValue: SomeStateBase
@@ -312,7 +312,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let oldValue: SomeStateBase
@@ -356,7 +356,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
         
         public
         let oldValue: SomeStateBase
@@ -396,7 +396,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeModelBase.Type
+        let key: SomeStateful.Type
     }
     
     var asBlankRemovalOutcome: BlankRemovalOutcome?

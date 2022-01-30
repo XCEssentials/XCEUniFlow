@@ -27,11 +27,11 @@
 public
 enum MutationAttemptOutcome
 {
-    case initialization(key: SomeModelBase.Type, newValue: SomeStateBase)
-    case actualization(key: SomeModelBase.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
-    case transition(key: SomeModelBase.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
-    case deinitialization(key: SomeModelBase.Type, oldValue: SomeStateBase)
+    case initialization(key: SomeStateful.Type, newValue: SomeStateBase)
+    case actualization(key: SomeStateful.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
+    case transition(key: SomeStateful.Type, oldValue: SomeStateBase, newValue: SomeStateBase)
+    case deinitialization(key: SomeStateful.Type, oldValue: SomeStateBase)
     
     /// No removal operation has been performed, because no such key has been found.
-    case nothingToRemove(key: SomeModelBase.Type)
+    case nothingToRemove(key: SomeStateful.Type)
 }
