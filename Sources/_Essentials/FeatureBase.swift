@@ -32,7 +32,7 @@ open
 class FeatureBase
 {
     private(set)
-    var _dispatcher: StorageDispatcher!
+    var dispatcher: StorageDispatcher!
     {
         didSet
         {
@@ -47,7 +47,7 @@ class FeatureBase
     init(
         with storageDispatcher: StorageDispatcher? = nil
     ) {
-        self._dispatcher = storageDispatcher
+        self.dispatcher = storageDispatcher
         
         //---
         
@@ -58,7 +58,7 @@ class FeatureBase
     func configure(
         with storageDispatcher: StorageDispatcher
     ) {
-        self._dispatcher = storageDispatcher
+        self.dispatcher = storageDispatcher
     }
     
     private
@@ -66,7 +66,7 @@ class FeatureBase
     {
         if
             let observer = self as? SomeDispatcherObserver,
-            let dispatcher = self._dispatcher
+            let dispatcher = self.dispatcher
         {
             self.subscriptions = observer.observe(dispatcher)
         }
@@ -93,7 +93,7 @@ class FeatureBase
         
         // in uni-directionl data flow context we do not want to return anything directly
         // but we want to propagate thrown errors
-        _ = try _dispatcher.access(
+        _ = try dispatcher.access(
             scope: scope,
             context: context,
             location: location,
@@ -114,7 +114,7 @@ class FeatureBase
     ) {
         do
         {
-            try _dispatcher.access(
+            try dispatcher.access(
                 scope: scope,
                 context: context,
                 location: location,
@@ -139,7 +139,7 @@ class FeatureBase
     ) {
         do
         {
-            try _dispatcher.access(
+            try dispatcher.access(
                 scope: scope,
                 context: context,
                 location: location,
@@ -166,7 +166,7 @@ class FeatureBase
         
         do
         {
-            try _dispatcher.access(
+            try dispatcher.access(
                 scope: scope,
                 context: context,
                 location: location,
