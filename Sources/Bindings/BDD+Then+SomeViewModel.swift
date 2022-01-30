@@ -25,13 +25,13 @@
  */
 
 public
-extension BDD.GivenOrThenContext where S: SomeDispatcherObserver
+extension BDD.GivenOrThenContext where S: SomeViewModel
 {
     func then(
         scope: String = #file,
         location: Int = #line,
         with source: S,
-        _ then: @escaping (S, W.Output) -> Void
+        _ then: @escaping (S, W.Output, StorageDispatcher.StatusProxy) -> Void
     ) -> MutationBinding {
         
         .init(
@@ -43,6 +43,19 @@ extension BDD.GivenOrThenContext where S: SomeDispatcherObserver
             given: { $1 }, /// just pass `when` clause output straight through as is
             then: then
         )
+    }
+    
+    func then(
+        scope: String = #file,
+        location: Int = #line,
+        with source: S,
+        _ noProxyHandler: @escaping (S, W.Output) -> Void
+    ) -> MutationBinding {
+        
+        then(scope: scope, location: location, with: source) { src, input, _ in
+            
+            noProxyHandler(src, input)
+        }
     }
     
     func then(
@@ -62,13 +75,13 @@ extension BDD.GivenOrThenContext where S: SomeDispatcherObserver
 //---
 
 public
-extension BDD.ThenContext where S: SomeDispatcherObserver
+extension BDD.ThenContext where S: SomeViewModel
 {
     func then(
         scope: String = #file,
         location: Int = #line,
         with source: S,
-        _ then: @escaping (S, G) -> Void
+        _ then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
     ) -> MutationBinding {
         
         .init(
@@ -80,6 +93,19 @@ extension BDD.ThenContext where S: SomeDispatcherObserver
             given: given,
             then: then
         )
+    }
+    
+    func then(
+        scope: String = #file,
+        location: Int = #line,
+        with source: S,
+        _ noProxyHandler: @escaping (S, G) -> Void
+    ) -> MutationBinding {
+        
+        then(scope: scope, location: location, with: source) { src, input, _ in
+            
+            noProxyHandler(src, input)
+        }
     }
     
     func then(

@@ -24,13 +24,23 @@
  
  */
 
+import Combine
+
+//---
+
 public
-extension SomeDispatcherObserver
+protocol SomeViewModel: AnyObject
 {
-    func scenario(
-        _ description: String = ""
-    ) -> BDD.WhenContext<Self> {
-        
-        .init(description: description)
+    var bindings: [MutationBinding] { get }
+}
+
+public
+extension SomeViewModel
+{
+    typealias Itself = Self
+    
+    func observe(_ dispatcher: StorageDispatcher) -> [AnyCancellable]
+    {
+        bindings.map{ $0.construct(with: dispatcher) }
     }
 }
