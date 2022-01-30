@@ -49,12 +49,12 @@ extension BDD.GivenOrThenContext where S: SomeViewModel
         scope: String = #file,
         location: Int = #line,
         with source: S,
-        _ noProxyHandler: @escaping (S, W.Output) -> Void
+        _ noInputHandler: @escaping (S, StorageDispatcher.StatusProxy) -> Void
     ) -> MutationBinding {
         
-        then(scope: scope, location: location, with: source) { src, input, _ in
+        then(scope: scope, location: location, with: source) { src, _, proxy in
             
-            noProxyHandler(src, input)
+            noInputHandler(src, proxy)
         }
     }
     
