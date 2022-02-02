@@ -43,12 +43,12 @@ extension BDD.GivenOrThenContext
     }
     
     func given<G>(
-        _ outputOnlyHandler: @escaping (W.Output) -> G?
+        _ outputOnlyHandler: @escaping (W.Output) throws -> G?
     ) -> BDD.ThenContext<S, W, G> {
         
         given { _, output in
             
-            outputOnlyHandler(output)
+            try outputOnlyHandler(output)
         }
     }
 }
