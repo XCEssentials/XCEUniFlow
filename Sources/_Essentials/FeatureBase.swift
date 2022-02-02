@@ -54,7 +54,7 @@ class FeatureBase
         activateSubscriptionsIfNeeded()
     }
     
-    public
+    open
     func configure(
         with storageDispatcher: StorageDispatcher
     ) {
