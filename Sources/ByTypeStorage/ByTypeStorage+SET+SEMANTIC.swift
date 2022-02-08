@@ -23,12 +23,6 @@
  SOFTWARE.
  
  */
-
-public
-extension ByTypeStorage
-{
-    
-}
     
 // MARK: - Initialization
 
