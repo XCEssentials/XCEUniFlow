@@ -26,6 +26,7 @@
 
 import Foundation
 import Combine
+import XCEPipeline
 
 //---
 
@@ -33,14 +34,23 @@ public
 final
 class StorageDispatcher
 {
-    fileprivate
-    typealias AccessLog = PassthroughSubject<AccessReport, Never>
- 
-    fileprivate
-    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
+    typealias AccessHandler = (inout ByTypeStorage) throws -> Void
     
-    fileprivate
-    typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
+    public
+    enum AccessError: Error
+    {
+        case notOnMainThread
+        case noActiveTransaction
+        case anotherTransactionIsInProgress
+        case concurrentChangesDetected
+        
+        case errorDuringExecution(
+            scope: String,
+            context: String,
+            location: Int,
+            Error
+        )
+    }
     
     public
     struct StatusProxy
@@ -72,10 +82,31 @@ class StorageDispatcher
         }
     }
     
+    fileprivate
+    typealias Transaction = (
+        scope: String,
+        context: String,
+        location: Int,
+        tmpStorageCopy: ByTypeStorage,
+        lastHistoryResetId: String
+    )
+    
+    fileprivate
+    typealias AccessLog = PassthroughSubject<AccessReport, Never>
+ 
+    fileprivate
+    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
+    
+    fileprivate
+    typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
+    
     //---
     
     private
     var storage: ByTypeStorage
+    
+    private
+    var activeTransaction: Transaction?
     
     private
     var bindings: [String: [AnyCancellable]] = [:]
@@ -137,94 +168,71 @@ extension StorageDispatcher
         storage.allKeys
     }
     
-    typealias AccessHandler = (inout ByTypeStorage) throws -> Void
-    
-    enum AccessError: Error
-    {
-        case concurrentMutatingAccessDetected
-    }
-
-    /// Transaction-like isolation for mutations on the storage.
-    @discardableResult
-    func access(
+    func removeAll(
         scope: String = #file,
         context: String = #function,
-        location: Int = #line,
-        _ handler: AccessHandler
-    ) throws -> ByTypeStorage.History {
+        location: Int = #line
+    ) throws {
         
-        assert(Thread.isMainThread, "Must be on main thread!")
+        try access(scope: scope, context: context, location: location) {
+           
+            try $0.removeAll()
+        }
+    }
+}
+
+//internal
+extension StorageDispatcher
+{
+    func startTransaction(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line
+    ) throws {
+        
+        try Thread.isMainThread ?! AccessError.notOnMainThread
+        try (activeTransaction == nil) ?! AccessError.anotherTransactionIsInProgress
         
         //---
         
-        // we want to avoid partial changes to be applied in case the handler throws
-        var tmpCopyStorage = storage
-        let lastHistoryResetId = tmpCopyStorage.lastHistoryResetId
+        activeTransaction = (
+            scope,
+            context,
+            location,
+            storage,
+            storage.lastHistoryResetId
+        )
+    }
+    
+    @discardableResult
+    func commitTransaction() throws -> ByTypeStorage.History
+    {
+        try Thread.isMainThread ?! AccessError.notOnMainThread
+        
+        guard
+            var transaction = self.activeTransaction
+        else
+        {
+            throw AccessError.noActiveTransaction
+        }
+        
+        try (transaction.lastHistoryResetId == storage.lastHistoryResetId) ?! AccessError.concurrentChangesDetected
         
         //---
         
-        let mutationsToReport: ByTypeStorage.History
+        let mutationsToReport = transaction.tmpStorageCopy.resetHistory()
         
-        do
-        {
-            try handler(&tmpCopyStorage) // NOTE: another call to `access` can be made inside
-            
-            //---
-            
-            mutationsToReport = tmpCopyStorage.resetHistory()
-            
-            //---
-            
-            switch lastHistoryResetId == storage.lastHistoryResetId // still the same snapshot?
-            {
-                // no concurrent mutations have been done:
-                case true where !mutationsToReport.isEmpty: // and we have mutations to save
-                    
-                    // apply changes to permanent storage
-                    storage = tmpCopyStorage // NOTE: the history has already been cleared
-                    
-                // seems like another concurrent mutating access has been done:
-                case false where !mutationsToReport.isEmpty: // and we have mutations here
-                    
-                    // the API has been misused - mutations here and in a nested transaction?
-                    throw AccessError.concurrentMutatingAccessDetected
-                    
-                default:
-                    // if concurrent mutations have been applied, but we don't have mutations
-                    // here - it's totally fine to ignore, we jsut do nothing - no error, but also
-                    // IMPORTANT to NOTE: we do NOT apply the temporary copy back to the storage!
-                    break
-            }
-        }
-        catch
-        {
-            _accessLog.send(
-                .init(
-                    outcome: .rejected(
-                        reason: error /// NOTE: error from `handler` or `AccessError`
-                        ),
-                    storage: storage,
-                    env: .init(
-                        scope: scope,
-                        context: context,
-                        location: location
-                    )
-                )
-            )
-            
-            //---
-            
-            throw error
-        }
+        // apply changes to permanent storage
+        storage = transaction.tmpStorageCopy // NOTE: the history has already been cleared
+
+        activeTransaction = nil
         
         //---
         
         installBindings(
             basedOn: mutationsToReport
         )
-        
-        //---
-        
+
         _accessLog.send(
             .init(
                 outcome: .processed(
@@ -232,14 +240,12 @@ extension StorageDispatcher
                 ),
                 storage: storage,
                 env: .init(
-                    scope: scope,
-                    context: context,
-                    location: location
+                    scope: transaction.scope,
+                    context: transaction.context,
+                    location: transaction.location
                 )
             )
         )
-        
-        //---
         
         uninstallBindings(
             basedOn: mutationsToReport
@@ -250,17 +256,73 @@ extension StorageDispatcher
         return mutationsToReport
     }
     
-    @discardableResult
-    func removeAll(
+    func rejectTransaction(
+        reason: Error
+    ) throws {
+        
+        try Thread.isMainThread ?! AccessError.notOnMainThread
+        
+        guard
+            let transaction = self.activeTransaction
+        else
+        {
+            throw AccessError.noActiveTransaction
+        }
+        
+        //---
+        
+        _accessLog.send(
+            .init(
+                outcome: .rejected(
+                    reason: reason
+                    ),
+                storage: storage,
+                env: .init(
+                    scope: transaction.scope,
+                    context: transaction.context,
+                    location: transaction.location
+                )
+            )
+        )
+        
+        //---
+        
+        self.activeTransaction = nil
+    }
+    
+    func access(
         scope: String = #file,
         context: String = #function,
-        location: Int = #line
-    ) throws -> ByTypeStorage.History {
+        location: Int = #line,
+        _ handler: AccessHandler
+    ) throws {
         
-        try access(scope: scope, context: context, location: location) {
-           
-            try $0.removeAll()
+        try Thread.isMainThread ?! AccessError.notOnMainThread
+        
+        guard
+            var tmpStorageCopy = activeTransaction?.tmpStorageCopy
+        else
+        {
+            throw AccessError.noActiveTransaction
         }
+        
+        //---
+
+        do
+        {
+            try handler(&tmpStorageCopy)
+        }
+        catch
+        {
+            throw AccessError.errorDuringExecution(
+                scope: scope,
+                context: context,
+                location: location,
+                error
+            )
+        }
+        
+        activeTransaction?.tmpStorageCopy = tmpStorageCopy
     }
 }
 
