@@ -82,25 +82,6 @@ class FeatureBase
         subscriptions = []
     }
     
-    /// Group several read/write operations in one access report.
-    public
-    func access(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> Void
-    ) throws {
-        
-        // in uni-directionl data flow context we do not want to return anything directly
-        // but we want to propagate thrown errors
-        _ = try _dispatcher.access(
-            scope: scope,
-            context: context,
-            location: location,
-            { _ in try handler() }
-        )
-    }
-    
     /// Wrap throwing piece of code and crash with `fatalError` if an error is thrown.
     ///
     /// We call "must" and "must not" words of obligation. "Must" is the only word that imposes
@@ -112,19 +93,26 @@ class FeatureBase
         location: Int = #line,
         _ handler: () throws -> Void
     ) {
+        try! _dispatcher.startTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
+        
+        //---
+        
         do
         {
-            try _dispatcher.access(
-                scope: scope,
-                context: context,
-                location: location,
-                { _ in try handler() }
-            )
+            try handler()
         }
         catch
         {
             fatalError(error.localizedDescription)
         }
+        
+        //---
+        
+        try! _dispatcher.commitTransaction()
     }
     
     /// Wrap throwing piece of code and crash in DEBUG ONLY (via assertation) if an error is thrown.
@@ -137,19 +125,27 @@ class FeatureBase
         location: Int = #line,
         _ handler: () throws -> Void
     ) {
+        try! _dispatcher.startTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
+        
+        //---
+        
         do
         {
-            try _dispatcher.access(
-                scope: scope,
-                context: context,
-                location: location,
-                { _ in try handler() }
-            )
+            try handler()
         }
         catch
         {
             assertionFailure(error.localizedDescription)
+            try! _dispatcher.rejectTransaction(reason: error)
         }
+        
+        //---
+        
+        try! _dispatcher.commitTransaction()
     }
     
     /// Wrap throwing piece of code and fail softly by ignoring thrown error.
@@ -164,22 +160,27 @@ class FeatureBase
         _ handler: () throws -> Void
     ) -> Bool {
         
+        try! _dispatcher.startTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
+        
+        //---
+        
         do
         {
-            try _dispatcher.access(
-                scope: scope,
-                context: context,
-                location: location,
-                { _ in try handler() }
-            )
-            
-            //---
-            
-            return true
+            try handler()
         }
         catch
         {
+            try! _dispatcher.rejectTransaction(reason: error)
             return false
         }
+        
+        //---
+        
+        try! _dispatcher.commitTransaction()
+        return true
     }
 }

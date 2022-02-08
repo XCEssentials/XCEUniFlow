@@ -28,7 +28,6 @@ import XCTest
 
 import XCEPipeline
 import XCERequirement
-import SwiftHamcrest
 
 @testable
 import XCEUniFlow
@@ -39,12 +38,14 @@ class ArithmeticsTests: XCTestCase
 {
     typealias SUT = Arithmetics
     
+    var dispatcher: StorageDispatcher!
     var sut: Arithmetics!
     
     override
     func setUp()
     {
-        sut = Arithmetics(with: .init())
+        dispatcher = .init()
+        sut = Arithmetics(with: dispatcher)
         
         //---
         
@@ -55,6 +56,7 @@ class ArithmeticsTests: XCTestCase
     override
     func tearDown()
     {
+        dispatcher = nil
         sut = nil
     }
 }
@@ -66,7 +68,12 @@ extension ArithmeticsTests
     func test_initialization_success() throws
     {
         let input = SUT.Main(val: 0)
-        let output = try sut.initialize(with: input)
+        
+        try dispatcher.startTransaction()
+        
+        try sut.initialize(with: input)
+        
+        let output = try dispatcher.commitTransaction()
         
         //---
         
@@ -86,6 +93,9 @@ extension ArithmeticsTests
     func test_initialization_fails_ifAlreadyInitialized() throws
     {
         let input = SUT.Main(val: 0)
+        
+        try dispatcher.startTransaction()
+        
         try sut.initialize(with: input)
         
         //---
@@ -98,10 +108,11 @@ extension ArithmeticsTests
         catch
         {
             guard
-                let semanticError = error as? SemanticMutationError
+                case StorageDispatcher.AccessError.errorDuringExecution(_, _, _, let wrappedError) = error,
+                let semanticError = wrappedError as? SemanticMutationError
             else
             {
-                return XCTFail("Unexpected failure type")
+                return XCTFail("Unexpected failure type: \(error)")
             }
             
             guard
