@@ -112,7 +112,11 @@ class FeatureBase
         
         //---
         
-        try! _dispatcher.commitTransaction()
+        try! _dispatcher.commitTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
     }
     
     /// Wrap throwing piece of code and crash in DEBUG ONLY (via assertation) if an error is thrown.
@@ -140,12 +144,22 @@ class FeatureBase
         catch
         {
             assertionFailure(error.localizedDescription)
-            try! _dispatcher.rejectTransaction(reason: error)
+            
+            try! _dispatcher.rejectTransaction(
+                scope: scope,
+                context: context,
+                location: location,
+                reason: error
+            )
         }
         
         //---
         
-        try! _dispatcher.commitTransaction()
+        try! _dispatcher.commitTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
     }
     
     /// Wrap throwing piece of code and fail softly by ignoring thrown error.
@@ -174,13 +188,24 @@ class FeatureBase
         }
         catch
         {
-            try! _dispatcher.rejectTransaction(reason: error)
+            try! _dispatcher.rejectTransaction(
+                scope: scope,
+                context: context,
+                location: location,
+                reason: error
+            )
+            
             return false
         }
         
         //---
         
-        try! _dispatcher.commitTransaction()
+        try! _dispatcher.commitTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
+        
         return true
     }
 }
