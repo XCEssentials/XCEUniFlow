@@ -37,18 +37,37 @@ class StorageDispatcher
     typealias AccessHandler = (inout ByTypeStorage) throws -> Void
     
     public
+    typealias AccessOrigin = (
+        scope: String,
+        context: String,
+        location: Int
+        )
+    
+    public
     enum AccessError: Error
     {
-        case notOnMainThread
-        case noActiveTransaction
-        case anotherTransactionIsInProgress
-        case concurrentChangesDetected
+        case notOnMainThread(
+            AccessOrigin
+        )
         
-        case errorDuringExecution(
-            scope: String,
-            context: String,
-            location: Int,
-            Error
+        case noActiveTransaction(
+            AccessOrigin
+        )
+        
+        case anotherTransactionIsInProgress(
+            AccessOrigin,
+            anotherTransaction: AccessOrigin
+        )
+        
+        case concurrentChangesDetected(
+            AccessOrigin,
+            anotherTransaction: AccessOrigin
+        )
+        
+        case failureDuringAccess(
+            AccessOrigin,
+            transaction: AccessOrigin,
+            cause: Error
         )
     }
     
@@ -84,9 +103,7 @@ class StorageDispatcher
     
     fileprivate
     typealias Transaction = (
-        scope: String,
-        context: String,
-        location: Int,
+        origin: AccessOrigin,
         tmpStorageCopy: ByTypeStorage,
         lastHistoryResetId: String
     )
@@ -185,45 +202,51 @@ extension StorageDispatcher
 extension StorageDispatcher
 {
     func startTransaction(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line
+        scope s: String,
+        context c: String,
+        location l: Int
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread
-        try (activeTransaction == nil) ?! AccessError.anotherTransactionIsInProgress
+        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        
+        try (activeTransaction == nil) ?! AccessError.anotherTransactionIsInProgress(
+            (s, c, l),
+            anotherTransaction: activeTransaction!
+                .origin
+                ./ { ($0.scope, $0.context, $0.location) }
+        )
         
         //---
         
         activeTransaction = (
-            scope,
-            context,
-            location,
+            (s, c, l),
             storage,
             storage.lastHistoryResetId
         )
     }
     
     @discardableResult
-    func commitTransaction() throws -> ByTypeStorage.History
-    {
-        try Thread.isMainThread ?! AccessError.notOnMainThread
+    func commitTransaction(
+        scope s: String,
+        context c: String,
+        location l: Int
+    ) throws -> ByTypeStorage.History {
         
-        guard
-            var transaction = self.activeTransaction
-        else
-        {
-            throw AccessError.noActiveTransaction
-        }
+        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
         
-        try (transaction.lastHistoryResetId == storage.lastHistoryResetId) ?! AccessError.concurrentChangesDetected
+        var tr = try self.activeTransaction ?! AccessError.noActiveTransaction((s, c, l))
+        
+        try (tr.lastHistoryResetId == storage.lastHistoryResetId) ?! AccessError.concurrentChangesDetected(
+            (s, c, l),
+            anotherTransaction: tr.origin
+        )
         
         //---
         
-        let mutationsToReport = transaction.tmpStorageCopy.resetHistory()
+        let mutationsToReport = tr.tmpStorageCopy.resetHistory()
         
         // apply changes to permanent storage
-        storage = transaction.tmpStorageCopy // NOTE: the history has already been cleared
+        storage = tr.tmpStorageCopy // NOTE: the history has already been cleared
 
         activeTransaction = nil
         
@@ -240,9 +263,9 @@ extension StorageDispatcher
                 ),
                 storage: storage,
                 env: .init(
-                    scope: transaction.scope,
-                    context: transaction.context,
-                    location: transaction.location
+                    scope: tr.origin.scope,
+                    context: tr.origin.context,
+                    location: tr.origin.location
                 )
             )
         )
@@ -257,17 +280,15 @@ extension StorageDispatcher
     }
     
     func rejectTransaction(
+        scope s: String,
+        context c: String,
+        location l: Int,
         reason: Error
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread
+        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
         
-        guard
-            let transaction = self.activeTransaction
-        else
-        {
-            throw AccessError.noActiveTransaction
-        }
+        let tr = try self.activeTransaction ?! AccessError.noActiveTransaction((s, c, l))
         
         //---
         
@@ -278,9 +299,9 @@ extension StorageDispatcher
                     ),
                 storage: storage,
                 env: .init(
-                    scope: transaction.scope,
-                    context: transaction.context,
-                    location: transaction.location
+                    scope: tr.origin.scope,
+                    context: tr.origin.context,
+                    location: tr.origin.location
                 )
             )
         )
@@ -291,38 +312,32 @@ extension StorageDispatcher
     }
     
     func access(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
+        scope s: String,
+        context c: String,
+        location l: Int,
         _ handler: AccessHandler
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread
+        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
         
-        guard
-            var tmpStorageCopy = activeTransaction?.tmpStorageCopy
-        else
-        {
-            throw AccessError.noActiveTransaction
-        }
+        var tr = try activeTransaction ?! AccessError.noActiveTransaction((s, c, l))
         
         //---
 
         do
         {
-            try handler(&tmpStorageCopy)
+            try handler(&tr.tmpStorageCopy)
         }
         catch
         {
-            throw AccessError.errorDuringExecution(
-                scope: scope,
-                context: context,
-                location: location,
-                error
+            throw AccessError.failureDuringAccess(
+                (s, c, l),
+                transaction: tr.origin,
+                cause: error
             )
         }
         
-        activeTransaction?.tmpStorageCopy = tmpStorageCopy
+        activeTransaction = tr
     }
 }
 

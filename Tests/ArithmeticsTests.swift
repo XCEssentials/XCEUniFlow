@@ -69,11 +69,19 @@ extension ArithmeticsTests
     {
         let input = SUT.Main(val: 0)
         
-        try dispatcher.startTransaction()
+        try dispatcher.startTransaction(
+            scope: #file,
+            context: #function,
+            location: #line
+        )
         
         try sut.initialize(with: input)
         
-        let output = try dispatcher.commitTransaction()
+        let output = try dispatcher.commitTransaction(
+            scope: #file,
+            context: #function,
+            location: #line
+        )
         
         //---
         
@@ -94,7 +102,11 @@ extension ArithmeticsTests
     {
         let input = SUT.Main(val: 0)
         
-        try dispatcher.startTransaction()
+        try dispatcher.startTransaction(
+            scope: #file,
+            context: #function,
+            location: #line
+        )
         
         try sut.initialize(with: input)
         
@@ -108,7 +120,7 @@ extension ArithmeticsTests
         catch
         {
             guard
-                case StorageDispatcher.AccessError.errorDuringExecution(_, _, _, let wrappedError) = error,
+                case StorageDispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
                 let semanticError = wrappedError as? SemanticMutationError
             else
             {
