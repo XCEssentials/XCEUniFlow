@@ -42,16 +42,10 @@ extension SomeFeature where Self: FeatureBase
 {
     @discardableResult
     func fetch<V: SomeState>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
         _ valueOfType: V.Type = V.self
     ) throws -> V {
         
         try _dispatcher.fetch(
-            scope: scope,
-            context: context,
-            location: location,
             valueOfType: V.self
         )
     }
