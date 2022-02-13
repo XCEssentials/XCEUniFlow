@@ -119,7 +119,7 @@ class StorageDispatcher
     
     //---
     
-    private
+    private(set)
     var storage: ByTypeStorage
     
     private
