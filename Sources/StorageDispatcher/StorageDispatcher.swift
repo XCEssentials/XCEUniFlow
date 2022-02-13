@@ -184,11 +184,7 @@ extension StorageDispatcher
     {
         storage.allKeys
     }
-}
 
-//internal
-extension StorageDispatcher
-{
     func startTransaction(
         scope s: String,
         context c: String,
@@ -298,7 +294,11 @@ extension StorageDispatcher
         
         self.activeTransaction = nil
     }
-    
+}
+
+//internal
+extension StorageDispatcher
+{
     func access(
         scope s: String,
         context c: String,
