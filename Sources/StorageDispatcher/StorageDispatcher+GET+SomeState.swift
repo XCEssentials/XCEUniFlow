@@ -28,41 +28,21 @@ public
 extension StorageDispatcher
 {
     func fetch<V: SomeState>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
         valueOfType _: V.Type = V.self
     ) throws -> V {
         
-        var result: V!
-        
-        //---
-        
-        try access(scope: scope, context: context, location: location) {
-            
-            result = try $0.fetch(valueOfType: V.self)
-        }
-        
-        //---
-        
-        return result
+        try storage.fetch(valueOfType: V.self)
     }
     
     //---
     
     func hasValue<V: SomeState>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
         ofType _: V.Type
     ) -> Bool {
         
         do
         {
             _ = try fetch(
-                scope: scope,
-                context: context,
-                location: location,
                 valueOfType: V.self
             )
             
@@ -85,13 +65,10 @@ extension SomeState
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        from storage: StorageDispatcher
+        from dispatcher: StorageDispatcher
     ) throws -> Self {
         
-        try storage.fetch(
-            scope: scope,
-            context: context,
-            location: location,
+        try dispatcher.fetch(
             valueOfType: self
         )
     }
@@ -103,13 +80,10 @@ extension SomeState
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        in storage: StorageDispatcher
+        in dispatcher: StorageDispatcher
     ) -> Bool {
         
-        storage.hasValue(
-            scope: scope,
-            context: context,
-            location: location,
+        dispatcher.hasValue(
             ofType: self
         )
     }
