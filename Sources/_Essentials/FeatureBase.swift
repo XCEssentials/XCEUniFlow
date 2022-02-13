@@ -208,4 +208,45 @@ class FeatureBase
         
         return true
     }
+    
+    public
+    func transact(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> Void
+    ) throws {
+        
+        try! _dispatcher.startTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
+        
+        //---
+        
+        do
+        {
+            try handler()
+        }
+        catch
+        {
+            try! _dispatcher.rejectTransaction(
+                scope: scope,
+                context: context,
+                location: location,
+                reason: error
+            )
+            
+            throw error
+        }
+        
+        //---
+        
+        try! _dispatcher.commitTransaction(
+            scope: scope,
+            context: context,
+            location: location
+        )
+    }
 }
