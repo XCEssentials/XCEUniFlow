@@ -107,7 +107,7 @@ class FeatureBase
         }
         catch
         {
-            fatalError(error.localizedDescription)
+            fatalError("\(error)")
         }
         
         //---
@@ -143,7 +143,7 @@ class FeatureBase
         }
         catch
         {
-            assertionFailure(error.localizedDescription)
+            assertionFailure("\(error)")
             
             try! _dispatcher.rejectTransaction(
                 scope: scope,
