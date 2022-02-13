@@ -28,39 +28,19 @@ public
 extension StorageDispatcher
 {
     func fetch(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
         valueForKey keyType: SomeStateful.Type
     ) throws -> SomeStateBase {
         
-        var result: SomeStateBase!
-        
-        //---
-        
-        try access(scope: scope, context: context, location: location) {
-            
-            result = try $0.fetch(valueForKey: keyType)
-        }
-        
-        //---
-        
-        return result
+        try storage.fetch(valueForKey: keyType)
     }
     
     func hasValue(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
         withKey keyType: SomeStateful.Type
     ) -> Bool {
         
         do
         {
             _ = try fetch(
-                scope: scope,
-                context: context,
-                location: location,
                 valueForKey: keyType
             )
             
@@ -80,32 +60,20 @@ extension SomeStateful
 {
     static
     func fetch(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        from storage: StorageDispatcher
+        from dispatcher: StorageDispatcher
     ) throws -> SomeStateBase {
         
-        try storage.fetch(
-            scope: scope,
-            context: context,
-            location: location,
+        try dispatcher.fetch(
             valueForKey: self
         )
     }
     
     static
     func isPresent(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        in storage: StorageDispatcher
+        in dispatcher: StorageDispatcher
     ) -> Bool {
         
-        storage.hasValue(
-            scope: scope,
-            context: context,
-            location: location,
+        dispatcher.hasValue(
             withKey: self
         )
     }
