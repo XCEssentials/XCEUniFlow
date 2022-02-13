@@ -184,23 +184,7 @@ extension StorageDispatcher
     {
         storage.allKeys
     }
-    
-    func removeAll(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line
-    ) throws {
-        
-        try access(scope: scope, context: context, location: location) {
-           
-            try $0.removeAll()
-        }
-    }
-}
 
-//internal
-extension StorageDispatcher
-{
     func startTransaction(
         scope s: String,
         context c: String,
@@ -310,7 +294,11 @@ extension StorageDispatcher
         
         self.activeTransaction = nil
     }
-    
+}
+
+//internal
+extension StorageDispatcher
+{
     func access(
         scope s: String,
         context c: String,
@@ -338,6 +326,34 @@ extension StorageDispatcher
         }
         
         activeTransaction = tr
+    }
+    
+    func removeAll(
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line
+    ) throws {
+        
+        try! startTransaction(
+            scope: s,
+            context: c,
+            location: l
+        )
+        
+        //---
+        
+        try access(scope: s, context: c, location: l) {
+           
+            try $0.removeAll()
+        }
+        
+        //---
+        
+        try! commitTransaction(
+            scope: s,
+            context: c,
+            location: l
+        )
     }
 }
 
