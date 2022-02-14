@@ -186,9 +186,9 @@ extension StorageDispatcher
     }
 
     func startTransaction(
-        scope s: String,
-        context c: String,
-        location l: Int
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line
     ) throws {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
@@ -211,9 +211,9 @@ extension StorageDispatcher
     
     @discardableResult
     func commitTransaction(
-        scope s: String,
-        context c: String,
-        location l: Int
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line
     ) throws -> ByTypeStorage.History {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
@@ -264,9 +264,9 @@ extension StorageDispatcher
     }
     
     func rejectTransaction(
-        scope s: String,
-        context c: String,
-        location l: Int,
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line,
         reason: Error
     ) throws {
         
