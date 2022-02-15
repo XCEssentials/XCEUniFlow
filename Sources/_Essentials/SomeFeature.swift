@@ -38,8 +38,37 @@ extension SomeFeature
 //---
 
 public
+enum InitializationStatusCheckError: Error
+{
+    case alreadyInitialized(SomeStateful.Type)
+    case notInitializedYet(SomeStateful.Type)
+}
+
+//---
+
+public
 extension SomeFeature where Self: FeatureBase
 {
+    func ensureAwaitingInitialization() throws
+    {
+        guard
+            !_dispatcher.hasValue(withKey: Self.self)
+        else
+        {
+            throw InitializationStatusCheckError.alreadyInitialized(Self.self)
+        }
+    }
+    
+    func ensureAlreadyInitialized() throws
+    {
+        guard
+            _dispatcher.hasValue(withKey: Self.self)
+        else
+        {
+            throw InitializationStatusCheckError.notInitializedYet(Self.self)
+        }
+    }
+    
     @discardableResult
     func fetch<V: SomeState>(
         _ valueOfType: V.Type = V.self
