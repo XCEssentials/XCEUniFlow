@@ -115,7 +115,7 @@ class FeatureBase
             }
             else
             {
-                try! _dispatcher.rejectTransaction(
+                return try! _dispatcher.rejectTransaction(
                     scope: scope,
                     context: context,
                     location: location,
@@ -164,7 +164,7 @@ class FeatureBase
             }
             else
             {
-                try! _dispatcher.rejectTransaction(
+                return try! _dispatcher.rejectTransaction(
                     scope: scope,
                     context: context,
                     location: location,
