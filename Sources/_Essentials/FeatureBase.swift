@@ -24,6 +24,7 @@
  
  */
 
+import Foundation
 import Combine
 
 //---
@@ -107,7 +108,20 @@ class FeatureBase
         }
         catch
         {
-            fatalError("\(error)")
+            if
+                ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil
+            {
+                fatalError("\(error)")
+            }
+            else
+            {
+                try! _dispatcher.rejectTransaction(
+                    scope: scope,
+                    context: context,
+                    location: location,
+                    reason: error
+                )
+            }
         }
         
         //---
@@ -143,14 +157,20 @@ class FeatureBase
         }
         catch
         {
-            assertionFailure("\(error)")
-            
-            try! _dispatcher.rejectTransaction(
-                scope: scope,
-                context: context,
-                location: location,
-                reason: error
-            )
+            if
+                ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil
+            {
+                assertionFailure("\(error)")
+            }
+            else
+            {
+                try! _dispatcher.rejectTransaction(
+                    scope: scope,
+                    context: context,
+                    location: location,
+                    reason: error
+                )
+            }
         }
         
         //---
