@@ -36,8 +36,7 @@ extension BDDViewModel
         public
         let description: String
         
-        weak
-        var source: S!
+        let source: S
         
         //internal
         let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
@@ -49,6 +48,7 @@ extension BDDViewModel
             
             .init(
                 description: description,
+                source: source,
                 when: when,
                 given: given
             )

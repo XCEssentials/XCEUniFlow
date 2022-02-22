@@ -36,8 +36,7 @@ extension BDDViewModel
         public
         let description: String
         
-        weak
-        var source: S!
+        let source: S
         
         public
         func when<P: Publisher>(
