@@ -583,7 +583,7 @@ struct MutationBinding
         self.scope = scope
         self.location = location
 
-        self.body = { dispatcher, binding in
+        self.body = { [weak source] dispatcher, binding in
             
             assert(Thread.isMainThread, "Must be on main thread!")
             
@@ -608,7 +608,7 @@ struct MutationBinding
                             )
                     }
                 )
-                .compactMap { [weak dispatcher, weak source] (givenOutput: G) -> Void? in
+                .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
 
                     guard let dispatcher = dispatcher else { return nil }
                     guard let source = source else { return nil }

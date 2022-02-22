@@ -24,6 +24,8 @@
  
  */
 
+import XCTest
+
 import Foundation
 
 import XCEUniFlow
@@ -31,7 +33,7 @@ import XCERequirement
 
 //---
 
-class Arithmetics: FeatureBase, SomeFeature, NoBindings
+class Arithmetics: FeatureBase, SomeWorkflow, SomeViewModel
 {
     struct Main: SomeState {
         
@@ -39,6 +41,74 @@ class Arithmetics: FeatureBase, SomeFeature, NoBindings
 
         var val: Int
     }
+    
+    static
+    var onInitialization: (() -> Void)!
+    
+    static
+    var onActualization: (() -> Void)!
+    
+    static
+    var initCount = 0
+    
+    static
+    var deinitCount = 0
+    
+    static
+    func resetCounters()
+    {
+        initCount = 0
+        deinitCount = 0
+    }
+    
+    override
+    init(with storageDispatcher: StorageDispatcher? = nil)
+    {
+        super.init(with: storageDispatcher)
+        
+        //---
+        
+        Self.initCount += 1
+    }
+    
+    deinit
+    {
+        Self.deinitCount += 1
+    }
+}
+
+//---
+
+extension Arithmetics
+{
+    static
+    var bindings: [MutationBinding] {[
+        
+        scenario()
+            .when(
+                InitializationInto<Main>.completed
+            )
+            .then { _ in
+                onInitialization?()
+            },
+        
+        scenario()
+            .when(
+                ActualizationOf<Main>.completed
+            )
+            .then { _ in
+                onActualization?()
+            }
+    ]}
+    
+    var bindings: [MutationBinding] {[
+        
+        scenario()
+            .when(
+                InitializationInto<Main>.completed
+            )
+            .then(with: self) { _, _ in }
+    ]}
 }
 
 //---
