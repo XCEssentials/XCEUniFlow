@@ -82,7 +82,7 @@ class Arithmetics: FeatureBase, SomeWorkflow, SomeViewModel
 extension Arithmetics
 {
     static
-    var bindings: [MutationBinding] {[
+    var bindings: [BindingInStorage] {[
         
         scenario()
             .when(
@@ -101,13 +101,13 @@ extension Arithmetics
             }
     ]}
     
-    var bindings: [MutationBinding] {[
+    var bindings: [BindingViewModel] {[
         
         scenario()
             .when(
                 InitializationInto<Main>.completed
             )
-            .then(with: self) { _, _ in }
+            .then { _, _ in }
     ]}
 }
 

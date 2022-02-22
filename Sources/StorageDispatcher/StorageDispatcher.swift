@@ -93,10 +93,18 @@ class StorageDispatcher
         }
         
         public
-        var bindingsStatusLog: AnyPublisher<BindingStatus, Never>
+        var bindingsInStorageStatusLog: AnyPublisher<BindingInStorage.Status, Never>
         {
             dispatcher
-                ._bindingsStatusLog
+                ._bindingsInStorageStatusLog
+                .eraseToAnyPublisher()
+        }
+        
+        public
+        var bindingsViewModelStatusLog: AnyPublisher<BindingViewModel.Status, Never>
+        {
+            dispatcher
+                ._bindingsViewModelStatusLog
                 .eraseToAnyPublisher()
         }
     }
@@ -113,9 +121,6 @@ class StorageDispatcher
  
     fileprivate
     typealias Status = CurrentValueSubject<[FeatureStatus], Never>
-    
-    fileprivate
-    typealias BindingsStatusLog = PassthroughSubject<BindingStatus, Never>
     
     //---
     
@@ -138,7 +143,10 @@ class StorageDispatcher
     var statusSubscription: AnyCancellable?
     
     fileprivate
-    let _bindingsStatusLog = BindingsStatusLog()
+    let _bindingsInStorageStatusLog = PassthroughSubject<BindingInStorage.Status, Never>()
+    
+    fileprivate
+    let _bindingsViewModelStatusLog = PassthroughSubject<BindingViewModel.Status, Never>()
     
     public
     var proxy: StatusProxy
@@ -432,17 +440,27 @@ extension StorageDispatcher
 // MARK: - MutationBinding
 
 public
-struct MutationBinding
+struct BindingInStorage
 {
     public
-    enum Source
+    enum Status
     {
-        case inStoreBinding(SomeStateful.Type)
-        case externalBinding(SomeViewModel.Type)
+        case activated(BindingInStorage)
+        
+        /// After passing through `when` (and `given`,
+        /// if present) claus(es), right before `then`.
+        case triggered(BindingInStorage)
+        
+        /// After executing `then` clause.
+        case executed(BindingInStorage)
+        
+        case failed(BindingInStorage, Error)
+        
+        case cancelled(BindingInStorage)
     }
 
     public
-    let source: Source
+    let source: SomeStateful.Type
     
     public
     let description: String
@@ -480,7 +498,7 @@ struct MutationBinding
         
         //---
         
-        self.source = .inStoreBinding(S.self)
+        self.source = S.self
         self.description = description
         self.scope = scope
         self.location = location
@@ -504,7 +522,7 @@ struct MutationBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsInStorageStatusLog
                             .send(
                                 .triggered(binding)
                             )
@@ -522,7 +540,7 @@ struct MutationBinding
                     receiveSubscription: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsInStorageStatusLog
                             .send(
                                 .activated(binding)
                             )
@@ -530,7 +548,7 @@ struct MutationBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsInStorageStatusLog
                             .send(
                                 .executed(binding)
                             )
@@ -542,7 +560,7 @@ struct MutationBinding
                             case .failure(let error):
 
                                 dispatcher?
-                                    ._bindingsStatusLog
+                                    ._bindingsInStorageStatusLog
                                     .send(
                                         .failed(binding, error)
                                     )
@@ -554,7 +572,7 @@ struct MutationBinding
                     receiveCancel: { [weak dispatcher] in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsInStorageStatusLog
                             .send(
                                 .cancelled(binding)
                             )
@@ -562,6 +580,52 @@ struct MutationBinding
                 )
                 .eraseToAnyPublisher()
         }
+    }
+}
+
+public
+struct BindingViewModel
+{
+    public
+    enum Status
+    {
+        case activated(BindingViewModel)
+        
+        /// After passing through `when` (and `given`,
+        /// if present) claus(es), right before `then`.
+        case triggered(BindingViewModel)
+        
+        /// After executing `then` clause.
+        case executed(BindingViewModel)
+        
+        case failed(BindingViewModel, Error)
+        
+        case cancelled(BindingViewModel)
+    }
+
+    public
+    let source: SomeViewModel.Type
+    
+    public
+    let description: String
+    
+    public
+    let scope: String
+    
+    public
+    let location: Int
+    
+    //---
+    
+    private
+    let body: (StorageDispatcher, Self) -> AnyPublisher<Void, Error>
+    
+    //---
+    
+    //internal
+    func construct(with dispatcher: StorageDispatcher) -> AnyCancellable
+    {
+        body(dispatcher, self).sink(receiveCompletion: { _ in }, receiveValue: { })
     }
     
     //internal
@@ -578,7 +642,7 @@ struct MutationBinding
         
         //---
         
-        self.source = .externalBinding(S.self)
+        self.source = S.self
         self.description = description
         self.scope = scope
         self.location = location
@@ -602,7 +666,7 @@ struct MutationBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsViewModelStatusLog
                             .send(
                                 .triggered(binding)
                             )
@@ -621,7 +685,7 @@ struct MutationBinding
                     receiveSubscription: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsViewModelStatusLog
                             .send(
                                 .activated(binding)
                             )
@@ -629,7 +693,7 @@ struct MutationBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsViewModelStatusLog
                             .send(
                                 .executed(binding)
                             )
@@ -641,7 +705,7 @@ struct MutationBinding
                             case .failure(let error):
 
                                 dispatcher?
-                                    ._bindingsStatusLog
+                                    ._bindingsViewModelStatusLog
                                     .send(
                                         .failed(binding, error)
                                     )
@@ -653,7 +717,7 @@ struct MutationBinding
                     receiveCancel: { [weak dispatcher] in
 
                         dispatcher?
-                            ._bindingsStatusLog
+                            ._bindingsViewModelStatusLog
                             .send(
                                 .cancelled(binding)
                             )

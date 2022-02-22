@@ -29,26 +29,25 @@ import Combine
 //---
 
 public
-extension BDD.GivenOrThenContext
+protocol SomeViewModel: AnyObject
 {
-    func given<G>(
-        _ given: @escaping (StorageDispatcher, W.Output) throws -> G?
-    ) -> BDD.ThenContext<S, W, G> {
+    var bindings: [BindingViewModel] { get }
+}
+
+public
+extension SomeViewModel
+{
+    func scenario(
+        _ description: String = ""
+    ) -> BDDViewModel<Self>.WhenContext {
         
-        .init(
-            description: description,
-            when: when,
-            given: given
-        )
+        .init(description: description, source: self)
     }
     
-    func given<G>(
-        _ outputOnlyHandler: @escaping (W.Output) throws -> G?
-    ) -> BDD.ThenContext<S, W, G> {
-        
-        given { _, output in
-            
-            try outputOnlyHandler(output)
-        }
+    typealias Itself = Self
+    
+    func observe(_ dispatcher: StorageDispatcher) -> [AnyCancellable]
+    {
+        bindings.map{ $0.construct(with: dispatcher) }
     }
 }

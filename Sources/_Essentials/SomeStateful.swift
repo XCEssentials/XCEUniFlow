@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeStateful
+protocol SomeStateful: AnyObject
 {
     static
     var displayName: String { get }

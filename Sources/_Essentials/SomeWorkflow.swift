@@ -28,5 +28,19 @@ public
 protocol SomeWorkflow: SomeFeature
 {
     static
-    var bindings: [MutationBinding] { get }
+    var bindings: [BindingInStorage] { get }
+}
+
+//---
+
+public
+extension SomeWorkflow
+{
+    static
+    func scenario(
+        _ description: String = ""
+    ) -> BDDInStorage<Self>.WhenContext {
+        
+        .init(description: description)
+    }
 }
