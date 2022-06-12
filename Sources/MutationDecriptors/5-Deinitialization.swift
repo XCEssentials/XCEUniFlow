@@ -29,13 +29,13 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct DeinitializationFrom<Old: SomeState>: SomeMutationDecriptor
+struct Deinitialization: SomeMutationDecriptor
 {
     public
     let timestamp: Date
 
     public
-    let oldValue: Old
+    let oldValue: SomeStateBase
     
     public
     init?(
@@ -43,7 +43,7 @@ struct DeinitializationFrom<Old: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let oldValue = mutationReport.asDeinitialization?.oldValue as? Old
+            let oldValue = mutationReport.asDeinitialization?.oldValue
         else
         {
             return nil
