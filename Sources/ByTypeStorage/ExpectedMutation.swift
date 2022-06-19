@@ -49,8 +49,8 @@ enum ExpectedMutation
                 
                 break  // OK
                 
-            case (.transition(.some(let givenOldValueType)), .transition(_, let oldValue, _))
-                where givenOldValueType == type(of: oldValue):
+            case (.transition(.some(let givenStateType)), .transition(let oldStateValue, _))
+                where givenStateType == type(of: oldStateValue):
                 
                 break // OK
                 
@@ -58,8 +58,8 @@ enum ExpectedMutation
                 
                 break // OK
                 
-            case (.deinitialization(.some(let givenOldValueType), _), .deinitialization(let oldValue, _))
-                where givenOldValueType == type(of: oldValue):
+            case (.deinitialization(.some(let givenOldStateType), _), .deinitialization(let oldStateValue))
+                where givenOldStateType == type(of: oldStateValue):
                 
                 break // OK
                 
