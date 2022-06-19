@@ -52,11 +52,13 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case .initialization(let key, _),
-                    .actualization(let key, _, _),
-                    .transition(let key, _, _),
-                    .deinitialization(let key, _),
-                    .nothingToRemove(let key):
+            case .initialization(let state),
+                    .actualization(let state, _),
+                    .transition(let state, _),
+                    .deinitialization(let state):
+                return type(of: state).feature
+                
+            case .nothingToRemove(let key):
                 return key
         }
     }
@@ -86,30 +88,30 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .initialization(key, newValue):
+            case let .initialization(newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: newValue).feature,
                     oldValue: nil,
                     newValue: newValue
                 )
                 
-            case let .actualization(key, oldValue, newValue),
-                let .transition(key, oldValue, newValue):
+            case let .actualization(oldValue, newValue),
+                let .transition(oldValue, newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: oldValue).feature,
                     oldValue: oldValue,
                     newValue: newValue
                 )
                 
-            case let .deinitialization(key, oldValue):
+            case let .deinitialization(oldValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: oldValue).feature,
                     oldValue: oldValue,
                     newValue: nil
                 )
@@ -146,11 +148,11 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .initialization(key, newValue):
+            case let .initialization(newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: newValue).feature,
                     newValue: newValue
                 )
                 
@@ -188,13 +190,13 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .initialization(key, newValue),
-                    let .actualization(key, _, newValue),
-                    let .transition(key, _, newValue):
+            case let .initialization(newValue),
+                    let .actualization(_, newValue),
+                    let .transition(_, newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: newValue).feature,
                     newValue: newValue
                 )
                 
@@ -236,11 +238,11 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .actualization(key, oldValue, newValue), let .transition(key, oldValue, newValue):
+            case let .actualization(oldValue, newValue), let .transition(oldValue, newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: oldValue).feature,
                     oldValue: oldValue,
                     newValue: newValue
                 )
@@ -281,11 +283,11 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .actualization(key, oldValue, newValue):
+            case let .actualization(oldValue, newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: oldValue).feature,
                     oldValue: oldValue,
                     newValue: newValue
                 )
@@ -325,11 +327,11 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .transition(key, oldValue, newValue):
+            case let .transition(oldValue, newValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: oldValue).feature,
                     oldValue: oldValue,
                     newValue: newValue
                 )
@@ -366,11 +368,11 @@ extension ByTypeStorage.HistoryElement
     {
         switch self.outcome
         {
-            case let .deinitialization(key, oldValue):
+            case let .deinitialization(oldValue):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key,
+                    key: type(of: oldValue).feature,
                     oldValue: oldValue
                 )
                 

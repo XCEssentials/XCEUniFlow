@@ -88,13 +88,13 @@ extension ArithmeticsTests
         XCTAssertEqual(output.count, 1)
         
         guard
-            case let .initialization(key, newValue) = output[0].outcome
+            case let .initialization(newValue) = output[0].outcome
         else
         {
             return XCTFail("Unexpected output: \(output)")
         }
         
-        XCTAssert(key is SUT.Type)
+        XCTAssert(type(of: newValue).feature is SUT.Type)
         XCTAssertEqual((newValue as! SUT.Main).val, 0)
     }
     
@@ -135,13 +135,13 @@ extension ArithmeticsTests
             }
             
             guard
-                case let .actualization(key, oldValue, newValue) = semanticError.proposedOutcome
+                case let .actualization(oldValue, newValue) = semanticError.proposedOutcome
             else
             {
                 return XCTFail("Unexpected `proposedOutcome`: \(semanticError.proposedOutcome)")
             }
             
-            XCTAssert(key is SUT.Type)
+            XCTAssert(type(of: newValue).feature is SUT.Type)
             XCTAssertEqual((oldValue as! SUT.Main).val, 0)
             XCTAssertEqual((newValue as! SUT.Main).val, 0)
         }

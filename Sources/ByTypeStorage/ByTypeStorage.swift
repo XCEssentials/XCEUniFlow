@@ -134,11 +134,11 @@ extension ByTypeStorage
         
         //---
         
-        switch (data[V.Feature.name], value)
+        switch (data[type(of: value).feature.name], value)
         {
             case (.none, let newValue):
                 
-                outcome = .initialization(key: V.Feature.self, newValue: newValue)
+                outcome = .initialization(newValue: newValue)
                 
                 //---
                 
@@ -155,11 +155,11 @@ extension ByTypeStorage
                 if
                     type(of: oldValue) == type(of: newValue)
                 {
-                    outcome = .actualization(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .actualization(oldValue: oldValue, newValue: newValue)
                 }
                 else
                 {
-                    outcome = .transition(key: V.Feature.self, oldValue: oldValue, newValue: newValue)
+                    outcome = .transition(oldValue: oldValue, newValue: newValue)
                 }
                 
                 //---
@@ -209,7 +209,7 @@ extension ByTypeStorage
         {
             case .some(let oldValue):
                 
-                outcome = .deinitialization(key: keyType, oldValue: oldValue)
+                outcome = .deinitialization(oldValue: oldValue)
                 
                 //---
                 

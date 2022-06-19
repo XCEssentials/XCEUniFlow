@@ -383,8 +383,8 @@ extension StorageDispatcher
                 
                 switch report.outcome
                 {
-                    case .initialization(let key, _):
-                        return key
+                    case .initialization(let newValue):
+                        return type(of: newValue).feature
                         
                     default:
                         return nil
@@ -423,8 +423,8 @@ extension StorageDispatcher
                 
                 switch report.outcome
                 {
-                    case .deinitialization(let key, _):
-                        return key
+                    case .deinitialization(let oldValue):
+                        return type(of: oldValue).feature
                         
                     default:
                         return nil
