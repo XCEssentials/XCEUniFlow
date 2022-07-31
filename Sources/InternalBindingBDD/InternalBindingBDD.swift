@@ -26,4 +26,4 @@
 
 /// In-storage bindings (feature specific, no instance level access).
 public
-enum InternalBindingBDD<S: SomeWorkflow> {} // S - Source
+enum InternalBindingBDD<S: SomeInternalObserver> {} // S - Source

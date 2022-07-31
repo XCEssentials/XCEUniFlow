@@ -391,7 +391,7 @@ extension StorageDispatcher
                 }
             }
             .compactMap {
-                $0 as? SomeWorkflow.Type
+                $0 as? SomeInternalObserver.Type
             }
             .map {(
                 workflow: $0,
@@ -608,7 +608,7 @@ struct ExternalBinding
     }
 
     public
-    let source: SomeViewModel.Type
+    let source: SomeExternalObserver.Type
     
     public
     let description: String
@@ -633,7 +633,7 @@ struct ExternalBinding
     }
     
     //internal
-    init<S: SomeViewModel, W: Publisher, G>(
+    init<S: SomeExternalObserver, W: Publisher, G>(
         source: S,
         description: String,
         scope: String,

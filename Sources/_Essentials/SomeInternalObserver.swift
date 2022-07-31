@@ -24,30 +24,23 @@
  
  */
 
-import Combine
+public
+protocol SomeInternalObserver: SomeFeature
+{
+    static
+    var bindings: [InternalBinding] { get }
+}
 
 //---
 
 public
-protocol SomeViewModel: AnyObject
+extension SomeInternalObserver
 {
-    var bindings: [ExternalBinding] { get }
-}
-
-public
-extension SomeViewModel
-{
+    static
     func scenario(
         _ description: String = ""
-    ) -> ExternalBindingBDD<Self>.WhenContext {
+    ) -> InternalBindingBDD<Self>.WhenContext {
         
-        .init(description: description, source: self)
-    }
-    
-    typealias Itself = Self
-    
-    func observe(_ dispatcher: StorageDispatcher) -> [AnyCancellable]
-    {
-        bindings.map{ $0.construct(with: dispatcher) }
+        .init(description: description)
     }
 }

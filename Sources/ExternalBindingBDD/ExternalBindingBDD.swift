@@ -26,4 +26,4 @@
 
 /// External bindings (observer specific, with access to observer instance).
 public
-enum ExternalBindingBDD<S: SomeViewModel> {} // S - Source
+enum ExternalBindingBDD<S: SomeExternalObserver> {} // S - Source
