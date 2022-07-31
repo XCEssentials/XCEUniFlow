@@ -83,108 +83,41 @@ class FeatureBase
         subscriptions = []
     }
     
-    /// Wrap throwing piece of code and crash with `fatalError` if an error is thrown.
-    ///
-    /// We call "must" and "must not" words of obligation. "Must" is the only word that imposes
-    /// a legal obligation on your readers to tell them something is mandatory.
+    /// Indicates how an error should be reported
+    public
+    enum CriticalErrorReportingMethod
+    {
+        /// Via `fatalError`
+        case fatalError
+        
+        /// Via `assertionFailure`
+        case assertation
+    }
+    
+    /// Transaction within `handler` must be successful,
+    /// or a critical error will be reported.
+    @discardableResult
     public
     func must(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
+        reportVia reportingMethod: CriticalErrorReportingMethod = .assertation,
         _ handler: () throws -> Void
-    ) {
-        try! _dispatcher.startTransaction(
+    ) -> ByTypeStorage.History? {
+        
+        try? transact(
             scope: scope,
             context: context,
-            location: location
-        )
-        
-        //---
-        
-        do
-        {
-            try handler()
-        }
-        catch
-        {
-            if
-                ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil
-            {
-                fatalError("\(error)")
-            }
-            else
-            {
-                return try! _dispatcher.rejectTransaction(
-                    scope: scope,
-                    context: context,
-                    location: location,
-                    reason: error
-                )
-            }
-        }
-        
-        //---
-        
-        try! _dispatcher.commitTransaction(
-            scope: scope,
-            context: context,
-            location: location
+            location: location,
+            extraFailureReporting: reportingMethod,
+            handler
         )
     }
     
-    /// Wrap throwing piece of code and crash in DEBUG ONLY (via assertation) if an error is thrown.
-    ///
-    /// 'Shall' is used to express ideas and laws.
-    public
-    func shall(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> Void
-    ) {
-        try! _dispatcher.startTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
-        
-        //---
-        
-        do
-        {
-            try handler()
-        }
-        catch
-        {
-            if
-                ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil
-            {
-                assertionFailure("\(error)")
-            }
-            else
-            {
-                return try! _dispatcher.rejectTransaction(
-                    scope: scope,
-                    context: context,
-                    location: location,
-                    reason: error
-                )
-            }
-        }
-        
-        //---
-        
-        try! _dispatcher.commitTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
-    }
-    
-    /// Wrap throwing piece of code and fail softly by ignoring thrown error.
-    ///
-    /// 'Should' is used to express personal opinions and desires, and primarily to give advice.
+    /// Transaction within `handler` may fail,
+    /// but failure is an acceptable outcome
+    /// o no errors will be reported.
     @discardableResult
     public
     func should(
@@ -192,59 +125,35 @@ class FeatureBase
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> Void
-    ) -> Bool {
+    ) -> ByTypeStorage.History? {
         
-        try! _dispatcher.startTransaction(
+        try? transact(
             scope: scope,
             context: context,
-            location: location
+            location: location,
+            extraFailureReporting: .none,
+            handler
         )
-        
-        //---
-        
-        do
-        {
-            try handler()
-        }
-        catch
-        {
-            try! _dispatcher.rejectTransaction(
-                scope: scope,
-                context: context,
-                location: location,
-                reason: error
-            )
-            
-            return false
-        }
-        
-        //---
-        
-        try! _dispatcher.commitTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
-        
-        return true
     }
     
+    @discardableResult
     public
     func transact(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
+        extraFailureReporting: CriticalErrorReportingMethod? = nil,
         _ handler: () throws -> Void
-    ) throws {
-        
+    ) rethrows -> ByTypeStorage.History {
+
         try! _dispatcher.startTransaction(
             scope: scope,
             context: context,
             location: location
         )
-        
+
         //---
-        
+
         do
         {
             try handler()
@@ -257,13 +166,25 @@ class FeatureBase
                 location: location,
                 reason: error
             )
+
+            switch extraFailureReporting
+            {
+                case .fatalError:
+                    fatalError("\(error)")
+                    
+                case .assertation:
+                    assertionFailure("\(error)")
+                    
+                case .none:
+                    break
+            }
             
             throw error
         }
-        
+
         //---
-        
-        try! _dispatcher.commitTransaction(
+
+        return try! _dispatcher.commitTransaction(
             scope: scope,
             context: context,
             location: location
