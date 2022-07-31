@@ -49,8 +49,8 @@ class ArithmeticsTests: XCTestCase
         
         //---
         
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 0)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 0)
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 0)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 0)
     }
     
     override
@@ -153,11 +153,11 @@ extension ArithmeticsTests
         
         //---
         
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 0)
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 0)
     }
     
     func test_begin_doubleCallHasNoEffect() throws
@@ -167,11 +167,11 @@ extension ArithmeticsTests
         
         //---
         
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 0)
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 0)
     }
     
     func test_setExplicit_success() throws
@@ -181,11 +181,11 @@ extension ArithmeticsTests
 
         //---
 
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 5)
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 5)
     }
     
     func test_setExplicit_noEffectIfUninitialized() throws
@@ -194,8 +194,8 @@ extension ArithmeticsTests
 
         //---
 
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 0)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 0)
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 0)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 0)
     }
     
     func test_setExplicit_noEffectIfPreconditionFails() throws
@@ -205,10 +205,10 @@ extension ArithmeticsTests
 
         //---
 
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 0)
+        XCTAssertEqual(sut.dispatcher.allKeys.count, 1)
+        XCTAssertEqual(sut.dispatcher.allValues.count, 1)
+        XCTAssert(sut.dispatcher.allKeys[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allValues[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allValues[0] as! SUT.Main).val, 0)
     }
 }

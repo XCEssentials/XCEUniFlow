@@ -52,7 +52,7 @@ extension SomeFeature where Self: FeatureBase
     func ensureAwaitingInitialization() throws
     {
         guard
-            !_dispatcher.hasValue(withKey: Self.self)
+            !dispatcher.hasValue(withKey: Self.self)
         else
         {
             throw InitializationStatusCheckError.alreadyInitialized(Self.self)
@@ -62,7 +62,7 @@ extension SomeFeature where Self: FeatureBase
     func ensureAlreadyInitialized() throws
     {
         guard
-            _dispatcher.hasValue(withKey: Self.self)
+            dispatcher.hasValue(withKey: Self.self)
         else
         {
             throw InitializationStatusCheckError.notInitializedYet(Self.self)
@@ -74,7 +74,7 @@ extension SomeFeature where Self: FeatureBase
         _ valueOfType: V.Type = V.self
     ) throws -> V {
         
-        try _dispatcher.fetch(
+        try dispatcher.fetch(
             valueOfType: V.self
         )
     }
@@ -86,7 +86,7 @@ extension SomeFeature where Self: FeatureBase
         _ value: V
     ) throws where V.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
             
             try $0.store(value)
         }
@@ -99,7 +99,7 @@ extension SomeFeature where Self: FeatureBase
         with newValue: V
     ) throws where V.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
             
             try $0.initialize(with: newValue)
         }
@@ -113,7 +113,7 @@ extension SomeFeature where Self: FeatureBase
         via mutationHandler: (inout V) throws -> Void
     ) throws where V.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.actualize(V.self, via: mutationHandler)
         }
@@ -126,7 +126,7 @@ extension SomeFeature where Self: FeatureBase
         with newValue: V
     ) throws where V.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.actualize(with: newValue)
         }
@@ -140,7 +140,7 @@ extension SomeFeature where Self: FeatureBase
         into newValue: N
     ) throws where O.Feature == Self, N.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.transition(from: oldValueInstance, into: newValue)
         }
@@ -154,7 +154,7 @@ extension SomeFeature where Self: FeatureBase
         into newValue: N
     ) throws where O.Feature == Self, N.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.transition(from: O.self, into: newValue)
         }
@@ -167,7 +167,7 @@ extension SomeFeature where Self: FeatureBase
         into newValue: V
     ) throws where V.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.transition(into: newValue)
         }
@@ -180,7 +180,7 @@ extension SomeFeature where Self: FeatureBase
         strict: Bool = true
     ) throws {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.deinitialize(Self.self, fromValueType: nil, strict: strict)
         }
@@ -193,7 +193,7 @@ extension SomeFeature where Self: FeatureBase
         from fromValueType: V.Type
     ) throws where V.Feature == Self {
         
-        try _dispatcher.access(scope: scope, context: context, location: location) {
+        try dispatcher.access(scope: scope, context: context, location: location) {
            
             try $0.deinitialize(Self.self, fromValueType: fromValueType, strict: true)
         }

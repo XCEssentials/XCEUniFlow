@@ -32,8 +32,8 @@ import Combine
 open
 class FeatureBase
 {
-    private(set)
-    var _dispatcher: StorageDispatcher!
+    public private(set)
+    var dispatcher: StorageDispatcher!
     {
         didSet
         {
@@ -48,7 +48,7 @@ class FeatureBase
     init(
         with storageDispatcher: StorageDispatcher? = nil
     ) {
-        self._dispatcher = storageDispatcher
+        self.dispatcher = storageDispatcher
         
         //---
         
@@ -59,7 +59,7 @@ class FeatureBase
     func configure(
         with storageDispatcher: StorageDispatcher
     ) {
-        self._dispatcher = storageDispatcher
+        self.dispatcher = storageDispatcher
     }
     
     private
@@ -67,7 +67,7 @@ class FeatureBase
     {
         if
             let observer = self as? SomeViewModel,
-            let dispatcher = self._dispatcher
+            let dispatcher = self.dispatcher
         {
             self.subscriptions = observer.observe(dispatcher)
         }
@@ -81,113 +81,5 @@ class FeatureBase
     func removeAllSubscriptions()
     {
         subscriptions = []
-    }
-    
-    /// Indicates how an error should be reported
-    public
-    enum CriticalErrorReportingMethod
-    {
-        /// Via `fatalError`
-        case fatalError
-        
-        /// Via `assertionFailure`
-        case assertation
-    }
-    
-    /// Transaction within `handler` must be successful,
-    /// or a critical error will be reported.
-    @discardableResult
-    public
-    func must(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        reportVia reportingMethod: CriticalErrorReportingMethod = .assertation,
-        _ handler: () throws -> Void
-    ) -> ByTypeStorage.History? {
-        
-        try? transact(
-            scope: scope,
-            context: context,
-            location: location,
-            extraFailureReporting: reportingMethod,
-            handler
-        )
-    }
-    
-    /// Transaction within `handler` may fail,
-    /// but failure is an acceptable outcome
-    /// o no errors will be reported.
-    @discardableResult
-    public
-    func should(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> Void
-    ) -> ByTypeStorage.History? {
-        
-        try? transact(
-            scope: scope,
-            context: context,
-            location: location,
-            extraFailureReporting: .none,
-            handler
-        )
-    }
-    
-    @discardableResult
-    public
-    func transact(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        extraFailureReporting: CriticalErrorReportingMethod? = nil,
-        _ handler: () throws -> Void
-    ) rethrows -> ByTypeStorage.History {
-
-        try! _dispatcher.startTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
-
-        //---
-
-        do
-        {
-            try handler()
-        }
-        catch
-        {
-            try! _dispatcher.rejectTransaction(
-                scope: scope,
-                context: context,
-                location: location,
-                reason: error
-            )
-
-            switch extraFailureReporting
-            {
-                case .fatalError:
-                    fatalError("\(error)")
-                    
-                case .assertation:
-                    assertionFailure("\(error)")
-                    
-                case .none:
-                    break
-            }
-            
-            throw error
-        }
-
-        //---
-
-        return try! _dispatcher.commitTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
     }
 }
