@@ -24,6 +24,38 @@
  
  */
 
-/// View model bindings (observer specific, with access to observer instance).
+import Combine
+
+//---
+
 public
-enum BDDViewModel<S: SomeViewModel> {} // S - Source
+extension InternalBindingBDD
+{
+    struct WhenContext
+    {
+        public
+        let description: String
+        
+        public
+        func when<P: Publisher>(
+            _ when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> P
+        ) -> GivenOrThenContext<P> {
+            
+            .init(
+                description: description,
+                when: { when($0) }
+            )
+        }
+        
+        public
+        func when<M: SomeMutationDecriptor>(
+            _: M.Type = M.self
+        ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
+            
+            .init(
+                description: description,
+                when: { $0.onProcessed.mutation(M.self).eraseToAnyPublisher() }
+            )
+        }
+    }
+}

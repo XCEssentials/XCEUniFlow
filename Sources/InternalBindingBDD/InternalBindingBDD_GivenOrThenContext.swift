@@ -29,7 +29,7 @@ import Combine
 //---
 
 public
-extension BDDInStorage
+extension InternalBindingBDD
 {
     struct GivenOrThenContext<W: Publisher> // W - When
     {

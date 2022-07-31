@@ -39,7 +39,7 @@ extension SomeWorkflow
     static
     func scenario(
         _ description: String = ""
-    ) -> BDDInStorage<Self>.WhenContext {
+    ) -> InternalBindingBDD<Self>.WhenContext {
         
         .init(description: description)
     }

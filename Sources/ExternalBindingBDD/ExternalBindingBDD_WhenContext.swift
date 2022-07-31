@@ -29,63 +29,37 @@ import Combine
 //---
 
 public
-extension BDDViewModel
+extension ExternalBindingBDD
 {
-    struct ThenContext<W: Publisher, G> // W - When, G - Given
+    struct WhenContext
     {
         public
         let description: String
         
         let source: S
         
-        //internal
-        let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
-        
-        //internal
-        let given: (StorageDispatcher, W.Output) throws -> G?
-        
         public
-        func then(
-            scope: String = #file,
-            location: Int = #line,
-            _ then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
-        ) -> ExternalBinding {
+        func when<P: Publisher>(
+            _ when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> P
+        ) -> GivenOrThenContext<P> {
             
             .init(
-                source: source,
                 description: description,
-                scope: scope,
-                location: location,
-                when: when,
-                given: given,
-                then: then
+                source: source,
+                when: { when($0) }
             )
         }
         
         public
-        func then(
-            scope: String = #file,
-            location: Int = #line,
-            _ noProxyHandler: @escaping (S, G) -> Void
-        ) -> ExternalBinding {
+        func when<M: SomeMutationDecriptor>(
+            _: M.Type = M.self
+        ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
             
-            then(scope: scope, location: location) { src, input, _ in
-                
-                noProxyHandler(src, input)
-            }
-        }
-        
-        public
-        func then(
-            scope: String = #file,
-            location: Int = #line,
-            _ sourceOnlyHandler: @escaping (S) -> Void
-        ) -> ExternalBinding {
-            
-            then(scope: scope, location: location) { src, _ in
-                
-                sourceOnlyHandler(src)
-            }
+            .init(
+                description: description,
+                source: source,
+                when: { $0.onProcessed.mutation(M.self).eraseToAnyPublisher() }
+            )
         }
     }
 }

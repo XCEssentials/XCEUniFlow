@@ -29,33 +29,63 @@ import Combine
 //---
 
 public
-extension BDDInStorage
+extension ExternalBindingBDD
 {
-    struct WhenContext
+    struct ThenContext<W: Publisher, G> // W - When, G - Given
     {
         public
         let description: String
         
+        let source: S
+        
+        //internal
+        let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
+        
+        //internal
+        let given: (StorageDispatcher, W.Output) throws -> G?
+        
         public
-        func when<P: Publisher>(
-            _ when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> P
-        ) -> GivenOrThenContext<P> {
+        func then(
+            scope: String = #file,
+            location: Int = #line,
+            _ then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
+        ) -> ExternalBinding {
             
             .init(
+                source: source,
                 description: description,
-                when: { when($0) }
+                scope: scope,
+                location: location,
+                when: when,
+                given: given,
+                then: then
             )
         }
         
         public
-        func when<M: SomeMutationDecriptor>(
-            _: M.Type = M.self
-        ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
+        func then(
+            scope: String = #file,
+            location: Int = #line,
+            _ noProxyHandler: @escaping (S, G) -> Void
+        ) -> ExternalBinding {
             
-            .init(
-                description: description,
-                when: { $0.onProcessed.mutation(M.self).eraseToAnyPublisher() }
-            )
+            then(scope: scope, location: location) { src, input, _ in
+                
+                noProxyHandler(src, input)
+            }
+        }
+        
+        public
+        func then(
+            scope: String = #file,
+            location: Int = #line,
+            _ sourceOnlyHandler: @escaping (S) -> Void
+        ) -> ExternalBinding {
+            
+            then(scope: scope, location: location) { src, _ in
+                
+                sourceOnlyHandler(src)
+            }
         }
     }
 }

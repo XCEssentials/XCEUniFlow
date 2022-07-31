@@ -29,56 +29,33 @@ import Combine
 //---
 
 public
-extension BDDViewModel
+extension InternalBindingBDD
 {
-    struct GivenOrThenContext<W: Publisher> // W - When
+    struct ThenContext<W: Publisher, G> // W - When, G - Given
     {
         public
         let description: String
         
-        let source: S
-        
         //internal
         let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
         
-        public
-        func given<G>(
-            _ given: @escaping (StorageDispatcher, W.Output) throws -> G?
-        ) -> ThenContext<W, G> {
-            
-            .init(
-                description: description,
-                source: source,
-                when: when,
-                given: given
-            )
-        }
-        
-        public
-        func given<G>(
-            _ outputOnlyHandler: @escaping (W.Output) throws -> G?
-        ) -> ThenContext<W, G> {
-            
-            given { _, output in
-                
-                try outputOnlyHandler(output)
-            }
-        }
+        //internal
+        let given: (StorageDispatcher, W.Output) throws -> G?
         
         public
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (S, W.Output, StorageDispatcher.StatusProxy) -> Void
-        ) -> ExternalBinding {
+            _ then: @escaping (StorageDispatcher, G) -> Void
+        ) -> InternalBinding {
             
             .init(
-                source: source,
+                source: S.self,
                 description: description,
                 scope: scope,
                 location: location,
                 when: when,
-                given: { $1 }, /// just pass `when` clause output straight through as is
+                given: given,
                 then: then
             )
         }
@@ -87,25 +64,12 @@ extension BDDViewModel
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ noInputHandler: @escaping (S, StorageDispatcher.StatusProxy) -> Void
-        ) -> ExternalBinding {
+            _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> Void
+        ) -> InternalBinding {
             
-            then(scope: scope, location: location) { src, _, proxy in
+            then(scope: scope, location: location) { dispatcher, _ in
                 
-                noInputHandler(src, proxy)
-            }
-        }
-        
-        public
-        func then(
-            scope: String = #file,
-            location: Int = #line,
-            _ sourceOnlyHandler: @escaping (S) -> Void
-        ) -> ExternalBinding {
-            
-            then(scope: scope, location: location) { src, _ in
-                
-                sourceOnlyHandler(src)
+                dispatcherOnlyHandler(dispatcher)
             }
         }
     }

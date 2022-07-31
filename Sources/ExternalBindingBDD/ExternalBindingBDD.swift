@@ -24,6 +24,6 @@
  
  */
 
-/// In-storage bindings (feature specific, no instance level access).
+/// External bindings (observer specific, with access to observer instance).
 public
-enum BDDInStorage<S: SomeWorkflow> {} // S - Source
+enum ExternalBindingBDD<S: SomeViewModel> {} // S - Source

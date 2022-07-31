@@ -39,7 +39,7 @@ extension SomeViewModel
 {
     func scenario(
         _ description: String = ""
-    ) -> BDDViewModel<Self>.WhenContext {
+    ) -> ExternalBindingBDD<Self>.WhenContext {
         
         .init(description: description, source: self)
     }

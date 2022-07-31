@@ -24,42 +24,6 @@
  
  */
 
-import Combine
-
-//---
-
+/// In-storage bindings (feature specific, no instance level access).
 public
-extension BDDViewModel
-{
-    struct WhenContext
-    {
-        public
-        let description: String
-        
-        let source: S
-        
-        public
-        func when<P: Publisher>(
-            _ when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> P
-        ) -> GivenOrThenContext<P> {
-            
-            .init(
-                description: description,
-                source: source,
-                when: { when($0) }
-            )
-        }
-        
-        public
-        func when<M: SomeMutationDecriptor>(
-            _: M.Type = M.self
-        ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
-            
-            .init(
-                description: description,
-                source: source,
-                when: { $0.onProcessed.mutation(M.self).eraseToAnyPublisher() }
-            )
-        }
-    }
-}
+enum InternalBindingBDD<S: SomeWorkflow> {} // S - Source
