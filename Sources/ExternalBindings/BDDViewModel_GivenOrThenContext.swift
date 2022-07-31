@@ -70,7 +70,7 @@ extension BDDViewModel
             scope: String = #file,
             location: Int = #line,
             _ then: @escaping (S, W.Output, StorageDispatcher.StatusProxy) -> Void
-        ) -> BindingViewModel {
+        ) -> ExternalBinding {
             
             .init(
                 source: source,
@@ -88,7 +88,7 @@ extension BDDViewModel
             scope: String = #file,
             location: Int = #line,
             _ noInputHandler: @escaping (S, StorageDispatcher.StatusProxy) -> Void
-        ) -> BindingViewModel {
+        ) -> ExternalBinding {
             
             then(scope: scope, location: location) { src, _, proxy in
                 
@@ -101,7 +101,7 @@ extension BDDViewModel
             scope: String = #file,
             location: Int = #line,
             _ sourceOnlyHandler: @escaping (S) -> Void
-        ) -> BindingViewModel {
+        ) -> ExternalBinding {
             
             then(scope: scope, location: location) { src, _ in
                 

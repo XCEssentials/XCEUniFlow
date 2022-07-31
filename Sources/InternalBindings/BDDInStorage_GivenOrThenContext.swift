@@ -67,7 +67,7 @@ extension BDDInStorage
             scope: String = #file,
             location: Int = #line,
             _ then: @escaping (StorageDispatcher, W.Output) -> Void
-        ) -> BindingInStorage {
+        ) -> InternalBinding {
             
             .init(
                 source: S.self,
@@ -85,7 +85,7 @@ extension BDDInStorage
             scope: String = #file,
             location: Int = #line,
             _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> Void
-        ) -> BindingInStorage {
+        ) -> InternalBinding {
             
             then(scope: scope, location: location) { dispatcher, _ in
                 

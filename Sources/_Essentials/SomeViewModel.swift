@@ -31,7 +31,7 @@ import Combine
 public
 protocol SomeViewModel: AnyObject
 {
-    var bindings: [BindingViewModel] { get }
+    var bindings: [ExternalBinding] { get }
 }
 
 public

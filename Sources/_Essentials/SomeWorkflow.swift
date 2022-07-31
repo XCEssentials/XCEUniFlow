@@ -28,7 +28,7 @@ public
 protocol SomeWorkflow: SomeFeature
 {
     static
-    var bindings: [BindingInStorage] { get }
+    var bindings: [InternalBinding] { get }
 }
 
 //---

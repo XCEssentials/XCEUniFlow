@@ -29,14 +29,12 @@ import Combine
 //---
 
 public
-extension BDDViewModel
+extension BDDInStorage
 {
     struct ThenContext<W: Publisher, G> // W - When, G - Given
     {
         public
         let description: String
-        
-        let source: S
         
         //internal
         let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
@@ -48,11 +46,11 @@ extension BDDViewModel
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
-        ) -> BindingViewModel {
+            _ then: @escaping (StorageDispatcher, G) -> Void
+        ) -> InternalBinding {
             
             .init(
-                source: source,
+                source: S.self,
                 description: description,
                 scope: scope,
                 location: location,
@@ -66,25 +64,12 @@ extension BDDViewModel
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ noProxyHandler: @escaping (S, G) -> Void
-        ) -> BindingViewModel {
+            _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> Void
+        ) -> InternalBinding {
             
-            then(scope: scope, location: location) { src, input, _ in
+            then(scope: scope, location: location) { dispatcher, _ in
                 
-                noProxyHandler(src, input)
-            }
-        }
-        
-        public
-        func then(
-            scope: String = #file,
-            location: Int = #line,
-            _ sourceOnlyHandler: @escaping (S) -> Void
-        ) -> BindingViewModel {
-            
-            then(scope: scope, location: location) { src, _ in
-                
-                sourceOnlyHandler(src)
+                dispatcherOnlyHandler(dispatcher)
             }
         }
     }

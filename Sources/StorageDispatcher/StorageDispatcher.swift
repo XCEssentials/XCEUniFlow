@@ -93,7 +93,7 @@ class StorageDispatcher
         }
         
         public
-        var bindingsInStorageStatusLog: AnyPublisher<BindingInStorage.Status, Never>
+        var bindingsInStorageStatusLog: AnyPublisher<InternalBinding.Status, Never>
         {
             dispatcher
                 ._bindingsInStorageStatusLog
@@ -101,7 +101,7 @@ class StorageDispatcher
         }
         
         public
-        var bindingsViewModelStatusLog: AnyPublisher<BindingViewModel.Status, Never>
+        var bindingsViewModelStatusLog: AnyPublisher<ExternalBinding.Status, Never>
         {
             dispatcher
                 ._bindingsViewModelStatusLog
@@ -143,10 +143,10 @@ class StorageDispatcher
     var statusSubscription: AnyCancellable?
     
     fileprivate
-    let _bindingsInStorageStatusLog = PassthroughSubject<BindingInStorage.Status, Never>()
+    let _bindingsInStorageStatusLog = PassthroughSubject<InternalBinding.Status, Never>()
     
     fileprivate
-    let _bindingsViewModelStatusLog = PassthroughSubject<BindingViewModel.Status, Never>()
+    let _bindingsViewModelStatusLog = PassthroughSubject<ExternalBinding.Status, Never>()
     
     public
     var proxy: StatusProxy
@@ -439,24 +439,26 @@ extension StorageDispatcher
 
 // MARK: - MutationBinding
 
+/// Binding that is defined on type level in a feature and
+/// operates within given storage.
 public
-struct BindingInStorage
+struct InternalBinding
 {
     public
     enum Status
     {
-        case activated(BindingInStorage)
+        case activated(InternalBinding)
         
         /// After passing through `when` (and `given`,
         /// if present) claus(es), right before `then`.
-        case triggered(BindingInStorage)
+        case triggered(InternalBinding)
         
         /// After executing `then` clause.
-        case executed(BindingInStorage)
+        case executed(InternalBinding)
         
-        case failed(BindingInStorage, Error)
+        case failed(InternalBinding, Error)
         
-        case cancelled(BindingInStorage)
+        case cancelled(InternalBinding)
     }
 
     public
@@ -583,24 +585,26 @@ struct BindingInStorage
     }
 }
 
+/// Binding that is defined on instance level in an external observer and
+/// operates in context of a given storage + given observer instance.
 public
-struct BindingViewModel
+struct ExternalBinding
 {
     public
     enum Status
     {
-        case activated(BindingViewModel)
+        case activated(ExternalBinding)
         
         /// After passing through `when` (and `given`,
         /// if present) claus(es), right before `then`.
-        case triggered(BindingViewModel)
+        case triggered(ExternalBinding)
         
         /// After executing `then` clause.
-        case executed(BindingViewModel)
+        case executed(ExternalBinding)
         
-        case failed(BindingViewModel, Error)
+        case failed(ExternalBinding, Error)
         
-        case cancelled(BindingViewModel)
+        case cancelled(ExternalBinding)
     }
 
     public
