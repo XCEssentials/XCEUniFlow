@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeInternalObserver: SomeFeature
+protocol SomeObservingFeature: SomeFeature
 {
     static
     var bindings: [InternalBinding] { get }
@@ -34,7 +34,7 @@ protocol SomeInternalObserver: SomeFeature
 //---
 
 public
-extension SomeInternalObserver
+extension SomeObservingFeature
 {
     static
     func scenario(

@@ -122,6 +122,31 @@ class StorageDispatcher
     fileprivate
     typealias Status = CurrentValueSubject<[FeatureStatus], Never>
     
+    fileprivate
+    struct ExternalSubscription
+    {
+        typealias Identifier = ObjectIdentifier
+        
+        let identifier: Identifier
+        
+        private(set)
+        weak
+        var observer: SomeExternalObserver?
+        
+        let bindings: [AnyCancellable]
+        
+        init(
+            with observer: SomeExternalObserver,
+            bindings: [AnyCancellable]
+        ) {
+            // NOTE: 1 sub per observer per dispatcher only!
+            self.identifier = Identifier(observer)
+            
+            self.observer = observer
+            self.bindings = bindings
+        }
+    }
+    
     //---
     
     private(set)
@@ -131,7 +156,10 @@ class StorageDispatcher
     var activeTransaction: Transaction?
     
     private
-    var bindings: [String: [AnyCancellable]] = [:]
+    var internalBindings: [String: [AnyCancellable]] = [:]
+    
+    private
+    var externalBindings: [ExternalSubscription.Identifier: ExternalSubscription] = [:]
     
     fileprivate
     let _accessLog = AccessLog()
@@ -244,7 +272,7 @@ extension StorageDispatcher
         
         //---
         
-        installBindings(
+        installInternalBindings(
             basedOn: mutationsToReport
         )
 
@@ -262,9 +290,11 @@ extension StorageDispatcher
             )
         )
         
-        uninstallBindings(
+        uninstallInternalBindings(
             basedOn: mutationsToReport
         )
+        
+        cleanupExternalBindings()
         
         //---
         
@@ -365,13 +395,13 @@ extension StorageDispatcher
     }
 }
 
-// MARK: - Bindings management
+// MARK: - Internal bindings management
 
 private
 extension StorageDispatcher
 {
     /// This will install bindings for newly initialized keys.
-    func installBindings(
+    func installInternalBindings(
         basedOn reports: ByTypeStorage.History
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
@@ -379,7 +409,11 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeStateful.Type? in
+            .compactMap {
+                
+                report -> SomeStateful.Type? in
+                
+                //---
                 
                 switch report.outcome
                 {
@@ -391,27 +425,23 @@ extension StorageDispatcher
                 }
             }
             .compactMap {
-                $0 as? SomeInternalObserver.Type
+                $0 as? SomeObservingFeature.Type
             }
             .map {(
-                workflow: $0,
-                bindings: $0
-                    .bindings
-                    .map {
-                        $0.construct(with: self)
-                    }
+                observerType: $0,
+                bindings: $0.bindings.map { $0.construct(with: self) }
             )}
             .filter {
                 !$0.bindings.isEmpty
             }
             .forEach {
                 
-                self.bindings[$0.workflow.name] = $0.bindings
+                self.internalBindings[$0.observerType.name] = $0.bindings
             }
     }
     
     /// This will uninstall bindings for recently deinitialized keys.
-    func uninstallBindings(
+    func uninstallInternalBindings(
         basedOn reports: ByTypeStorage.History
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
@@ -419,7 +449,11 @@ extension StorageDispatcher
         //---
         
         reports
-            .compactMap { report -> SomeStateful.Type? in
+            .compactMap {
+                
+                report -> SomeStateful.Type? in
+                
+                //---
                 
                 switch report.outcome
                 {
@@ -432,12 +466,37 @@ extension StorageDispatcher
             }
             .forEach {
                 
-                self.bindings.removeValue(forKey: $0.name)
+                self.internalBindings.removeValue(forKey: $0.name)
             }
     }
 }
 
-// MARK: - MutationBinding
+// MARK: - External bindings management
+
+extension StorageDispatcher
+{
+    @discardableResult
+    public
+    func subscribe(_ observer: SomeExternalObserver) -> [AnyCancellable]
+    {
+        let newSubscribtion = observer
+            .bindings
+            .map{ $0.construct(with: self) }
+            ./ { ExternalSubscription(with: observer, bindings: $0) }
+        
+        externalBindings[newSubscribtion.identifier] = newSubscribtion
+        
+        return newSubscribtion.bindings
+    }
+    
+    private
+    func cleanupExternalBindings()
+    {
+        externalBindings = externalBindings.filter { $0.value.observer != nil }
+    }
+}
+
+// MARK: - Bindings
 
 /// Binding that is defined on type level in a feature and
 /// operates within given storage.

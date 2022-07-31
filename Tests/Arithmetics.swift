@@ -33,7 +33,7 @@ import XCERequirement
 
 //---
 
-class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
+class Arithmetics: FeatureBase, SomeObservingFeature, SomeExternalObserver
 {
     struct Main: SomeState {
         

@@ -43,11 +43,4 @@ extension SomeExternalObserver
         
         .init(description: description, source: self)
     }
-    
-    typealias Itself = Self
-    
-    func observe(_ dispatcher: StorageDispatcher) -> [AnyCancellable]
-    {
-        bindings.map{ $0.construct(with: dispatcher) }
-    }
 }

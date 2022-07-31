@@ -34,24 +34,12 @@ class FeatureBase
 {
     public private(set)
     var dispatcher: StorageDispatcher!
-    {
-        didSet
-        {
-            activateSubscriptionsIfNeeded()
-        }
-    }
-    
-    private
-    var subscriptions: [AnyCancellable] = []
     
     public
     init(
         with storageDispatcher: StorageDispatcher? = nil
     ) {
         self.dispatcher = storageDispatcher
-        
-        //---
-        
         activateSubscriptionsIfNeeded()
     }
     
@@ -60,6 +48,7 @@ class FeatureBase
         with storageDispatcher: StorageDispatcher
     ) {
         self.dispatcher = storageDispatcher
+        activateSubscriptionsIfNeeded()
     }
     
     private
@@ -69,17 +58,7 @@ class FeatureBase
             let observer = self as? SomeExternalObserver,
             let dispatcher = self.dispatcher
         {
-            self.subscriptions = observer.observe(dispatcher)
+            dispatcher.subscribe(observer)
         }
-        else
-        {
-            self.subscriptions = []
-        }
-    }
-    
-    public
-    func removeAllSubscriptions()
-    {
-        subscriptions = []
     }
 }
