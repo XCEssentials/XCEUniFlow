@@ -358,6 +358,28 @@ extension StorageDispatcher
         }
     }
     
+    func fetch<V: SomeState>(
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line,
+        valueOfType _: V.Type = V.self
+    ) throws -> V {
+        
+        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        
+        //---
+        
+        if
+            let tr = self.activeTransaction
+        {
+            return try tr.tmpStorageCopy.fetch(valueOfType: V.self)
+        }
+        else
+        {
+            return try storage.fetch(valueOfType: V.self)
+        }
+    }
+    
     func removeAll(
         scope s: String = #file,
         context c: String = #function,
