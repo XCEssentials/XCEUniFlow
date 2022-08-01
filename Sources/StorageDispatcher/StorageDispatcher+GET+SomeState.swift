@@ -26,16 +26,7 @@
 
 public
 extension StorageDispatcher
-{
-    func fetch<V: SomeState>(
-        valueOfType _: V.Type = V.self
-    ) throws -> V {
-        
-        try storage.fetch(valueOfType: V.self)
-    }
-    
-    //---
-    
+{   
     func hasValue<V: SomeState>(
         ofType _: V.Type
     ) -> Bool {
