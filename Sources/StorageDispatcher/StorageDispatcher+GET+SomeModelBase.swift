@@ -24,16 +24,14 @@
  
  */
 
+import Foundation
+import XCEPipeline
+
+//---
+
 public
 extension StorageDispatcher
 {
-    func fetch(
-        valueForKey keyType: SomeStateful.Type
-    ) throws -> SomeStateBase {
-        
-        try storage.fetch(valueForKey: keyType)
-    }
-    
     func hasValue(
         withKey keyType: SomeStateful.Type
     ) -> Bool {
