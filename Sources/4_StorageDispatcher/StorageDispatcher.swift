@@ -125,25 +125,19 @@ class StorageDispatcher
     fileprivate
     struct ExternalSubscription
     {
-        typealias Identifier = ObjectIdentifier
-        
-        let identifier: Identifier
-        
         private(set)
         weak
         var observer: SomeExternalObserver?
         
-        let bindings: [AnyCancellable]
+        /// Combine tokens of activated bindings (one per each binding)
+        let tokens: [AnyCancellable]
         
         init(
             with observer: SomeExternalObserver,
-            bindings: [AnyCancellable]
+            tokens: [AnyCancellable]
         ) {
-            // NOTE: 1 sub per observer per dispatcher only!
-            self.identifier = Identifier(observer)
-            
             self.observer = observer
-            self.bindings = bindings
+            self.tokens = tokens
         }
     }
     
@@ -159,7 +153,7 @@ class StorageDispatcher
     var internalBindings: [String: [AnyCancellable]] = [:]
     
     private
-    var externalBindings: [ExternalSubscription.Identifier: ExternalSubscription] = [:]
+    var externalBindings: [ObjectIdentifier: ExternalSubscription] = [:]
     
     fileprivate
     let _accessLog = AccessLog()
@@ -272,6 +266,8 @@ extension StorageDispatcher
         
         //---
         
+        cleanupExternalBindings()
+        
         installInternalBindings(
             basedOn: mutationsToReport
         )
@@ -293,8 +289,6 @@ extension StorageDispatcher
         uninstallInternalBindings(
             basedOn: mutationsToReport
         )
-        
-        cleanupExternalBindings()
         
         //---
         
@@ -519,20 +513,38 @@ extension StorageDispatcher
 
 extension StorageDispatcher
 {
+    /// Activates `observer` bindings within `self`
+    /// and stores binding tokens for as long
+    /// as `observer` is in memory, or until `unsubscribe`
+    /// for same `observer` is called.
+    ///
+    /// - Returns: array of Combine tokens (`AnyCancellable`)
+    ///     for activated bindings.
     @discardableResult
     public
     func subscribe(_ observer: SomeExternalObserver) -> [AnyCancellable]
     {
+        let observerId = ObjectIdentifier(observer)
+        
         let newSubscribtion = observer
             .bindings
             .map{ $0.construct(with: self) }
-            ./ { ExternalSubscription(with: observer, bindings: $0) }
+            ./ { ExternalSubscription(with: observer, tokens: $0) }
         
-        externalBindings[newSubscribtion.identifier] = newSubscribtion
+        externalBindings[observerId] = newSubscribtion
         
-        return newSubscribtion.bindings
+        return newSubscribtion.tokens
     }
     
+    /// Deactivates `observer` bindings within `self`.
+    public
+    func unsubscribe(_ observer: SomeExternalObserver)
+    {
+        let observerId = ObjectIdentifier(observer)
+        externalBindings[observerId] = nil
+    }
+    
+    /// Internal method to celanup
     private
     func cleanupExternalBindings()
     {

@@ -28,8 +28,13 @@
 public
 protocol SomeFeature: AnyObject
 {
+    /// Convenience helper that determines user-friendly feature name.
     static
     var displayName: String { get }
+    
+    /// Reference to a dispatcher in which context this feature
+    /// should execute it's actions.
+    var dispatcher: StorageDispatcher! { get }
 }
 
 //---
@@ -55,6 +60,9 @@ extension SomeFeature
 
 //---
 
+/// These errors are being thrown by special helpers
+/// that check if the feature is initialized or not
+/// within given `Dispatcher`.
 public
 enum InitializationStatusCheckError: Error
 {
@@ -65,8 +73,10 @@ enum InitializationStatusCheckError: Error
 //---
 
 public
-extension SomeFeature where Self: FeatureBase
+extension SomeFeature
 {
+    /// Throws `InitializationStatusCheckError` if `self` is
+    /// already initialized within `dispatcher`.
     func ensureAwaitingInitialization() throws
     {
         guard
@@ -77,6 +87,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Throws `InitializationStatusCheckError` if `self` is
+    /// NOT initialized yet within `dispatcher`.
     func ensureAlreadyInitialized() throws
     {
         guard
@@ -87,6 +99,7 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Allows to fetch any state of any feature from `dispatcher`.
     @discardableResult
     func fetch<V: SomeState>(
         _ valueOfType: V.Type = V.self
@@ -97,6 +110,8 @@ extension SomeFeature where Self: FeatureBase
         )
     }
     
+    /// Save given state of `self` within `dispatcher` - either
+    /// initialize, actuialize or transition into given `state`.
     func store<V: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -110,6 +125,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to initialize `self` into given `newState` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func initialize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -123,6 +140,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to actualize `self` using given `mutationHandler` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func actualize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -137,6 +156,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to actualize `self` into given `newState` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func actualize<V: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -150,6 +171,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to transition `self` into given `newState` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func transition<O: SomeState, N: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -164,6 +187,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to transition `self` into given `newState` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func transition<O: SomeState, N: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -178,6 +203,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to transition `self` into given `newState` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func transition<V: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -191,6 +218,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to deinitialize `self` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func deinitialize(
         scope: String = #file,
         context: String = #function,
@@ -204,6 +233,8 @@ extension SomeFeature where Self: FeatureBase
         }
     }
     
+    /// Attempts to deinitialize `self` from given `fromState` within `dispatcher`
+    /// or fails otherwise by throwing `SemanticMutationError`.
     func deinitialize<V: SomeState>(
         scope: String = #file,
         context: String = #function,

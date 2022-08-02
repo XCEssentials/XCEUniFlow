@@ -24,13 +24,12 @@
  
  */
 
-import Foundation
-import Combine
-
-//---
-
+/// Basic implemenrtation of a typical feature that covers 99%
+/// of use cases for a feature. Provides built-in storage for `Dispatcher`
+/// and allows to set it either during initialization or later
+/// via `configure` function.
 open
-class FeatureBase
+class FeatureBase: SomeFeature
 {
     public private(set)
     var dispatcher: StorageDispatcher!
@@ -40,7 +39,6 @@ class FeatureBase
         with storageDispatcher: StorageDispatcher? = nil
     ) {
         self.dispatcher = storageDispatcher
-        activateSubscriptionsIfNeeded()
     }
     
     open
@@ -48,17 +46,5 @@ class FeatureBase
         with storageDispatcher: StorageDispatcher
     ) {
         self.dispatcher = storageDispatcher
-        activateSubscriptionsIfNeeded()
-    }
-    
-    private
-    func activateSubscriptionsIfNeeded()
-    {
-        if
-            let observer = self as? SomeExternalObserver,
-            let dispatcher = self.dispatcher
-        {
-            dispatcher.subscribe(observer)
-        }
     }
 }
