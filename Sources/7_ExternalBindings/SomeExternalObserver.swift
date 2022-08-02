@@ -49,7 +49,7 @@ extension SomeExternalObserver
     
     /// Activates external bindings if `dispatcher` has been set already.
     func activateSubscriptionsIfPossible(
-        with dispatcher: StorageDispatcher?
+        with dispatcher: Dispatcher?
     ) {
         if
             let dispatcher = dispatcher

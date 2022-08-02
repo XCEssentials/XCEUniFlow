@@ -87,7 +87,7 @@ struct FeatureStatus
 // MARK: - Access log - Processed - get features statuses (dashboard)
 
 public
-extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport, Failure == Never
+extension Publisher where Output == Dispatcher.ProcessedAccessEventReport, Failure == Never
 {
     var statusReport: AnyPublisher<[FeatureStatus], Failure>
     {

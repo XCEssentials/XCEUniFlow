@@ -67,9 +67,9 @@ class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
     }
     
     required
-    init(with storageDispatcher: StorageDispatcher? = nil)
+    init(with dispatcher: Dispatcher? = nil)
     {
-        super.init(with: storageDispatcher)
+        super.init(with: dispatcher)
         
         //---
         

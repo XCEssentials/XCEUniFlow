@@ -7,7 +7,7 @@ import XCEUniFlow
 
 class BindingsTests: XCTestCase
 {
-    var dispatcher: StorageDispatcher!
+    var dispatcher: Dispatcher!
     
     var sut: Arithmetics!
     

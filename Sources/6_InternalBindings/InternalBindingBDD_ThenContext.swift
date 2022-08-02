@@ -37,16 +37,16 @@ extension InternalBindingBDD
         let description: String
         
         //internal
-        let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
+        let when: (AnyPublisher<Dispatcher.AccessReport, Never>) -> W
         
         //internal
-        let given: (StorageDispatcher, W.Output) throws -> G?
+        let given: (Dispatcher, W.Output) throws -> G?
         
         public
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (StorageDispatcher, G) -> Void
+            _ then: @escaping (Dispatcher, G) -> Void
         ) -> InternalBinding {
             
             .init(
@@ -64,7 +64,7 @@ extension InternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ dispatcherOnlyHandler: @escaping (StorageDispatcher) -> Void
+            _ dispatcherOnlyHandler: @escaping (Dispatcher) -> Void
         ) -> InternalBinding {
             
             then(scope: scope, location: location) { dispatcher, _ in

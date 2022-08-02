@@ -40,7 +40,7 @@ extension ExternalBindingBDD
         
         public
         func when<P: Publisher>(
-            _ when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> P
+            _ when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> P
         ) -> GivenOrThenContext<P> {
             
             .init(

@@ -39,11 +39,11 @@ extension ExternalBindingBDD
         let source: S
         
         //internal
-        let when: (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W
+        let when: (AnyPublisher<Dispatcher.AccessReport, Never>) -> W
         
         public
         func given<G>(
-            _ given: @escaping (StorageDispatcher, W.Output) throws -> G?
+            _ given: @escaping (Dispatcher, W.Output) throws -> G?
         ) -> ThenContext<W, G> {
             
             .init(
@@ -69,7 +69,7 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (S, W.Output, StorageDispatcher.Proxy) -> Void
+            _ then: @escaping (S, W.Output, Dispatcher.Proxy) -> Void
         ) -> ExternalBinding {
             
             .init(
@@ -87,7 +87,7 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ noInputHandler: @escaping (S, StorageDispatcher.Proxy) -> Void
+            _ noInputHandler: @escaping (S, Dispatcher.Proxy) -> Void
         ) -> ExternalBinding {
             
             then(scope: scope, location: location) { src, _, proxy in

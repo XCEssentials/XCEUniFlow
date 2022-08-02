@@ -32,7 +32,7 @@ import XCEPipeline
 
 public
 final
-class StorageDispatcher
+class Dispatcher
 {
     typealias AccessHandler = (inout Storage) throws -> Void
     
@@ -74,7 +74,7 @@ class StorageDispatcher
     public
     struct Proxy
     {
-        let dispatcher: StorageDispatcher
+        let dispatcher: Dispatcher
         
         public
         var accessLog: AnyPublisher<AccessReport, Never>
@@ -203,7 +203,7 @@ class StorageDispatcher
 // MARK: - Access data
 
 public
-extension StorageDispatcher
+extension Dispatcher
 {
     var allValues: [SomeStateBase]
     {
@@ -329,7 +329,7 @@ extension StorageDispatcher
 }
 
 //internal
-extension StorageDispatcher
+extension Dispatcher
 {
     func access(
         scope s: String,
@@ -436,7 +436,7 @@ extension StorageDispatcher
 // MARK: - Internal bindings management
 
 private
-extension StorageDispatcher
+extension Dispatcher
 {
     /// This will install bindings for newly initialized keys.
     func installInternalBindings(
@@ -511,7 +511,7 @@ extension StorageDispatcher
 
 // MARK: - External bindings management
 
-extension StorageDispatcher
+extension Dispatcher
 {
     /// Activates `observer` bindings within `self`
     /// and stores binding tokens for as long
@@ -591,12 +591,12 @@ struct InternalBinding
     //---
     
     private
-    let body: (StorageDispatcher, Self) -> AnyPublisher<Void, Error>
+    let body: (Dispatcher, Self) -> AnyPublisher<Void, Error>
     
     //---
     
     //internal
-    func construct(with dispatcher: StorageDispatcher) -> AnyCancellable
+    func construct(with dispatcher: Dispatcher) -> AnyCancellable
     {
         body(dispatcher, self).sink(receiveCompletion: { _ in }, receiveValue: { })
     }
@@ -607,9 +607,9 @@ struct InternalBinding
         description: String,
         scope: String,
         location: Int,
-        when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W,
-        given: @escaping (StorageDispatcher, W.Output) throws -> G?,
-        then: @escaping (StorageDispatcher, G) -> Void
+        when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> W,
+        given: @escaping (Dispatcher, W.Output) throws -> G?,
+        then: @escaping (Dispatcher, G) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -737,12 +737,12 @@ struct ExternalBinding
     //---
     
     private
-    let body: (StorageDispatcher, Self) -> AnyPublisher<Void, Error>
+    let body: (Dispatcher, Self) -> AnyPublisher<Void, Error>
     
     //---
     
     //internal
-    func construct(with dispatcher: StorageDispatcher) -> AnyCancellable
+    func construct(with dispatcher: Dispatcher) -> AnyCancellable
     {
         body(dispatcher, self).sink(receiveCompletion: { _ in }, receiveValue: { })
     }
@@ -753,9 +753,9 @@ struct ExternalBinding
         description: String,
         scope: String,
         location: Int,
-        when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W,
-        given: @escaping (StorageDispatcher, W.Output) throws -> G?,
-        then: @escaping (S, G, StorageDispatcher.Proxy) -> Void
+        when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> W,
+        given: @escaping (Dispatcher, W.Output) throws -> G?,
+        then: @escaping (S, G, Dispatcher.Proxy) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         

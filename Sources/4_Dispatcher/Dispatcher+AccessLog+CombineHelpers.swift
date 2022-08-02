@@ -3,9 +3,9 @@ import Combine
 // MARK: - Access log - Processed vs. Rejected
 
 public
-extension Publisher where Output == StorageDispatcher.AccessReport, Failure == Never
+extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
 {
-    var onProcessed: AnyPublisher<StorageDispatcher.ProcessedAccessEventReport, Failure>
+    var onProcessed: AnyPublisher<Dispatcher.ProcessedAccessEventReport, Failure>
     {
         return self
             .compactMap {
@@ -29,7 +29,7 @@ extension Publisher where Output == StorageDispatcher.AccessReport, Failure == N
             .eraseToAnyPublisher()
     }
     
-    var onRejected: AnyPublisher<StorageDispatcher.RejectedAccessEventReport, Failure>
+    var onRejected: AnyPublisher<Dispatcher.RejectedAccessEventReport, Failure>
     {
         return self
             .compactMap {
@@ -57,7 +57,7 @@ extension Publisher where Output == StorageDispatcher.AccessReport, Failure == N
 // MARK: - Access log - Processed - get individual mutations
 
 public
-extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport, Failure == Never
+extension Publisher where Output == Dispatcher.ProcessedAccessEventReport, Failure == Never
 {
     var mutation: AnyPublisher<Storage.HistoryElement, Failure>
     {

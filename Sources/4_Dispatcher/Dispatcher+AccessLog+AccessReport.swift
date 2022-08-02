@@ -29,7 +29,7 @@ import Foundation /// to access `Date` type
 //---
 
 public
-extension StorageDispatcher
+extension Dispatcher
 {
     struct AccessReport
     {
@@ -50,7 +50,7 @@ extension StorageDispatcher
 // MARK: - Nested types
 
 public
-extension StorageDispatcher.AccessReport
+extension Dispatcher.AccessReport
 {
     enum Outcome
     {
@@ -85,7 +85,7 @@ extension StorageDispatcher.AccessReport
 // MARK: - Processed vs. Rejected
 
 public
-extension StorageDispatcher
+extension Dispatcher
 {
     struct ProcessedAccessEventReport
     {

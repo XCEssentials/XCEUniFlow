@@ -32,20 +32,20 @@ open
 class FeatureBase: SomeFeature
 {
     public private(set)
-    var dispatcher: StorageDispatcher!
+    var dispatcher: Dispatcher!
     
     public
     required
     init(
-        with storageDispatcher: StorageDispatcher? = nil
+        with dispatcher: Dispatcher? = nil
     ) {
-        self.dispatcher = storageDispatcher
+        self.dispatcher = dispatcher
     }
     
     open
     func configure(
-        with storageDispatcher: StorageDispatcher
+        with dispatcher: Dispatcher
     ) {
-        self.dispatcher = storageDispatcher
+        self.dispatcher = dispatcher
     }
 }

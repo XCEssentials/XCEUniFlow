@@ -38,7 +38,7 @@ class ArithmeticsTests: XCTestCase
 {
     typealias SUT = Arithmetics
     
-    var dispatcher: StorageDispatcher!
+    var dispatcher: Dispatcher!
     var sut: Arithmetics!
     
     override
@@ -120,7 +120,7 @@ extension ArithmeticsTests
         catch
         {
             guard
-                case StorageDispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
+                case Dispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
                 let semanticError = wrappedError as? SemanticMutationError
             else
             {

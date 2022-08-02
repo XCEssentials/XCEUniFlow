@@ -25,7 +25,7 @@
  */
 
 public
-extension StorageDispatcher
+extension Dispatcher
 {
     /// Indicates how an error should be reported
     enum CriticalErrorReportingMethod

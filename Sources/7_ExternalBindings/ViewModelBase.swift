@@ -54,7 +54,7 @@ extension ViewModelBase where M: FeatureBase
     /// activates subscriptions, if possible.
     convenience
     init(
-        with dispatcher: StorageDispatcher? = nil
+        with dispatcher: Dispatcher? = nil
     ) {
         self.init(model: .init(with: dispatcher))
         
@@ -67,7 +67,7 @@ extension ViewModelBase where M: FeatureBase
     /// Passes through `dispatcher` into `model` and
     /// activates subscriptions, if possible.
     func configure(
-        with dispatcher: StorageDispatcher
+        with dispatcher: Dispatcher
     ) {
         self.model.configure(with: dispatcher)
         

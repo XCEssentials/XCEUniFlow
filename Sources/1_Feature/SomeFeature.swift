@@ -34,7 +34,7 @@ protocol SomeFeature: AnyObject
     
     /// Reference to a dispatcher in which context this feature
     /// should execute it's actions.
-    var dispatcher: StorageDispatcher! { get }
+    var dispatcher: Dispatcher! { get }
 }
 
 //---

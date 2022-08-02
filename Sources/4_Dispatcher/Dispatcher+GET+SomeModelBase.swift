@@ -24,17 +24,22 @@
  
  */
 
+import Foundation
+import XCEPipeline
+
+//---
+
 public
-extension StorageDispatcher
-{   
-    func hasValue<V: SomeState>(
-        ofType _: V.Type
+extension Dispatcher
+{
+    func hasValue(
+        withKey keyType: SomeFeature.Type
     ) -> Bool {
         
         do
         {
             _ = try fetch(
-                valueOfType: V.self
+                valueForKey: keyType
             )
             
             return true
@@ -49,33 +54,25 @@ extension StorageDispatcher
 //---
 
 public
-extension SomeState
+extension SomeFeature
 {
     static
     func fetch(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        from dispatcher: StorageDispatcher
-    ) throws -> Self {
+        from dispatcher: Dispatcher
+    ) throws -> SomeStateBase {
         
         try dispatcher.fetch(
-            valueOfType: self
+            valueForKey: self
         )
     }
     
-    //---
-    
     static
     func isPresent(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        in dispatcher: StorageDispatcher
+        in dispatcher: Dispatcher
     ) -> Bool {
         
         dispatcher.hasValue(
-            ofType: self
+            withKey: self
         )
     }
 }
