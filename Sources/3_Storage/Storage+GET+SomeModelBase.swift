@@ -25,7 +25,7 @@
  */
 
 public
-extension ByTypeStorage
+extension Storage
 {
     subscript(_ keyType: SomeFeature.Type) -> SomeStateBase?
     {
@@ -44,13 +44,13 @@ public
 extension SomeFeature
 {
     static
-    func fetch(from storage: ByTypeStorage) throws -> SomeStateBase
+    func fetch(from storage: Storage) throws -> SomeStateBase
     {
         try storage.fetch(valueForKey: self)
     }
 
     static
-    func isPresent(in storage: ByTypeStorage) -> Bool
+    func isPresent(in storage: Storage) -> Bool
     {
         storage.hasValue(withKey: self)
     }

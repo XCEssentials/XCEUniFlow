@@ -29,7 +29,7 @@ import Foundation
 //---
 
 public
-extension ByTypeStorage
+extension Storage
 {
     typealias History = [HistoryElement]
     
@@ -46,7 +46,7 @@ extension ByTypeStorage
 //---
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     var key: SomeFeature.Type
     {
@@ -67,7 +67,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - AnyMutation helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     struct AnyMutationOutcome
     {
@@ -130,7 +130,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - Initialization helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     struct InitializationOutcome
     {
@@ -170,7 +170,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - Setting helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     /// Operation that results with given key being present in the storage.
     struct SettingOutcome
@@ -215,7 +215,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - Update helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     /// Operation that has both old and new values.
     struct UpdateOutcome
@@ -262,7 +262,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - Actualization helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     struct ActualizationOutcome
     {
@@ -306,7 +306,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - Transition helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     struct TransitionOutcome
     {
@@ -350,7 +350,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - Deinitialization helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     struct DeinitializationOutcome
     {
@@ -390,7 +390,7 @@ extension ByTypeStorage.HistoryElement
 // MARK: - BlankRemoval helpers
 
 public
-extension ByTypeStorage.HistoryElement
+extension Storage.HistoryElement
 {
     struct BlankRemovalOutcome
     {

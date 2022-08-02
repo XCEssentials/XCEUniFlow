@@ -27,7 +27,7 @@
 // MARK: - Initialization
 
 public
-extension ByTypeStorage
+extension Storage
 {
     @discardableResult
     mutating
@@ -45,7 +45,7 @@ extension ByTypeStorage
 // MARK: - Actualization
 
 public
-extension ByTypeStorage
+extension Storage
 {
     @discardableResult
     mutating
@@ -81,7 +81,7 @@ extension ByTypeStorage
 // MARK: - Transition
 
 public
-extension ByTypeStorage
+extension Storage
 {
     @discardableResult
     mutating
@@ -140,7 +140,7 @@ extension ByTypeStorage
 // MARK: - Deinitialization
 
 public
-extension ByTypeStorage
+extension Storage
 {
     @discardableResult
     mutating

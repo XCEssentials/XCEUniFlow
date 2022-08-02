@@ -29,7 +29,7 @@ import Foundation
 //---
 
 public
-struct ByTypeStorage
+struct Storage
 {
     private
     var data: [String: SomeStateBase] = [:]
@@ -49,7 +49,7 @@ struct ByTypeStorage
 // MARK: - Nested types
 
 public
-extension ByTypeStorage
+extension Storage
 {
     enum ReadDataError: Error
     {
@@ -68,7 +68,7 @@ extension ByTypeStorage
 // MARK: - GET data
 
 public
-extension ByTypeStorage
+extension Storage
 {
     var allValues: [SomeStateBase]
     {
@@ -121,7 +121,7 @@ extension ByTypeStorage
 // MARK: - SET data
 
 public
-extension ByTypeStorage
+extension Storage
 {
     @discardableResult
     mutating
@@ -186,7 +186,7 @@ extension ByTypeStorage
 // MARK: - REMOVE data
 
 public
-extension ByTypeStorage
+extension Storage
 {
     @discardableResult
     mutating
@@ -253,7 +253,7 @@ extension ByTypeStorage
 // MARK: - History management
 
 //internal
-extension ByTypeStorage
+extension Storage
 {
     mutating
     func logHistoryEvent(

@@ -42,7 +42,7 @@ struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
     
     public
     init?(
-        from mutationReport: ByTypeStorage.HistoryElement
+        from mutationReport: Storage.HistoryElement
     ) {
         
         guard

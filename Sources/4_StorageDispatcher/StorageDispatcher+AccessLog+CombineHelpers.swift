@@ -59,7 +59,7 @@ extension Publisher where Output == StorageDispatcher.AccessReport, Failure == N
 public
 extension Publisher where Output == StorageDispatcher.ProcessedAccessEventReport, Failure == Never
 {
-    var mutation: AnyPublisher<ByTypeStorage.HistoryElement, Failure>
+    var mutation: AnyPublisher<Storage.HistoryElement, Failure>
     {
         self
             .flatMap(

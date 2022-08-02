@@ -39,7 +39,7 @@ struct DeinitializationOf<K: SomeFeature>: SomeMutationDecriptor
     
     public
     init?(
-        from mutationReport: ByTypeStorage.HistoryElement
+        from mutationReport: Storage.HistoryElement
     ) {
         
         guard

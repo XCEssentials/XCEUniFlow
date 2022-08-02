@@ -34,7 +34,7 @@ public
 final
 class StorageDispatcher
 {
-    typealias AccessHandler = (inout ByTypeStorage) throws -> Void
+    typealias AccessHandler = (inout Storage) throws -> Void
     
     public
     typealias AccessOrigin = (
@@ -112,7 +112,7 @@ class StorageDispatcher
     fileprivate
     typealias Transaction = (
         origin: AccessOrigin,
-        tmpStorageCopy: ByTypeStorage,
+        tmpStorageCopy: Storage,
         lastHistoryResetId: String
     )
     
@@ -144,7 +144,7 @@ class StorageDispatcher
     //---
     
     private(set)
-    var storage: ByTypeStorage
+    var storage: Storage
     
     private
     var activeTransaction: Transaction?
@@ -180,7 +180,7 @@ class StorageDispatcher
     
     public
     init(
-        with storage: ByTypeStorage = ByTypeStorage()
+        with storage: Storage = Storage()
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -244,7 +244,7 @@ extension StorageDispatcher
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws -> ByTypeStorage.History {
+    ) throws -> Storage.History {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
         
@@ -440,7 +440,7 @@ extension StorageDispatcher
 {
     /// This will install bindings for newly initialized keys.
     func installInternalBindings(
-        basedOn reports: ByTypeStorage.History
+        basedOn reports: Storage.History
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -480,7 +480,7 @@ extension StorageDispatcher
     
     /// This will uninstall bindings for recently deinitialized keys.
     func uninstallInternalBindings(
-        basedOn reports: ByTypeStorage.History
+        basedOn reports: Storage.History
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         

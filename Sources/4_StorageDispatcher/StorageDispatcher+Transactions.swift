@@ -46,7 +46,7 @@ extension StorageDispatcher
         location: Int = #line,
         reportVia reportingMethod: CriticalErrorReportingMethod = .assertation,
         _ handler: () throws -> Void
-    ) -> ByTypeStorage.History? {
+    ) -> Storage.History? {
         
         try? transact(
             scope: scope,
@@ -66,7 +66,7 @@ extension StorageDispatcher
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> Void
-    ) -> ByTypeStorage.History? {
+    ) -> Storage.History? {
         
         try? transact(
             scope: scope,
@@ -84,7 +84,7 @@ extension StorageDispatcher
         location: Int = #line,
         extraFailureReporting: CriticalErrorReportingMethod? = nil,
         _ handler: () throws -> Void
-    ) rethrows -> ByTypeStorage.History {
+    ) rethrows -> Storage.History {
 
         try! startTransaction(
             scope: scope,

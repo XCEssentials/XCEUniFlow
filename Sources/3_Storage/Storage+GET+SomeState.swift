@@ -25,7 +25,7 @@
  */
 
 public
-extension ByTypeStorage
+extension Storage
 {
     subscript<V: SomeState>(_ valueType: V.Type = V.self) -> V?
     {
@@ -44,7 +44,7 @@ public
 extension SomeState
 {
     static
-    func fetch(from storage: ByTypeStorage) throws -> Self
+    func fetch(from storage: Storage) throws -> Self
     {
         try storage.fetch(valueOfType: self)
     }
@@ -52,7 +52,7 @@ extension SomeState
     //---
 
     static
-    func isPresent(in storage: ByTypeStorage) -> Bool
+    func isPresent(in storage: Storage) -> Bool
     {
         storage.hasValue(ofType: self)
     }

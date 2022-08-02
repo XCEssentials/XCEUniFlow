@@ -40,7 +40,7 @@ extension StorageDispatcher
         let outcome: Outcome
         
         public
-        let storage: ByTypeStorage
+        let storage: Storage
         
         public
         let env: EnvironmentInfo
@@ -58,7 +58,7 @@ extension StorageDispatcher.AccessReport
         ///
         /// Any occurred mutations (see payload) have already been applied to the `storage`.
         case processed(
-            mutations: ByTypeStorage.History
+            mutations: Storage.History
         )
         
         /// Access request has been rejected due to an error thrown from access handler.
@@ -93,10 +93,10 @@ extension StorageDispatcher
         let timestamp: Date
         
         public
-        let mutations: ByTypeStorage.History
+        let mutations: Storage.History
         
         public
-        let storage: ByTypeStorage
+        let storage: Storage
         
         public
         let env: AccessReport.EnvironmentInfo
@@ -111,7 +111,7 @@ extension StorageDispatcher
         let reason: Error
         
         public
-        let storage: ByTypeStorage
+        let storage: Storage
         
         public
         let env: AccessReport.EnvironmentInfo

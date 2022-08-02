@@ -34,7 +34,7 @@ protocol SomeMutationDecriptor
     var timestamp: Date { get }
     
     init?(
-        from mutationReport: ByTypeStorage.HistoryElement
+        from mutationReport: Storage.HistoryElement
     )
 }
 
