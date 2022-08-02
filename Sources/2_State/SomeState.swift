@@ -36,7 +36,7 @@ public
 extension SomeState
 {
     static
-    var feature: SomeStateful.Type
+    var feature: SomeFeatureBase.Type
     {
         Feature.self
     }

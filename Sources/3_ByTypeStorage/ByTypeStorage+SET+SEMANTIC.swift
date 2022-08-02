@@ -145,7 +145,7 @@ extension ByTypeStorage
     @discardableResult
     mutating
     func deinitialize(
-        _ keyType: SomeStateful.Type,
+        _ keyType: SomeFeatureBase.Type,
         fromValueType: SomeStateBase.Type?, // = nil,
         strict: Bool // = true
     ) throws -> MutationAttemptOutcome {

@@ -29,7 +29,7 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct DeinitializationOf<K: SomeStateful>: SomeMutationDecriptor
+struct DeinitializationOf<K: SomeFeatureBase>: SomeMutationDecriptor
 {
     public
     let timestamp: Date

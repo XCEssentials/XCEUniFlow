@@ -33,5 +33,5 @@ enum MutationAttemptOutcome
     case deinitialization(oldValue: SomeStateBase)
     
     /// No removal operation has been performed, because no such key has been found.
-    case nothingToRemove(key: SomeStateful.Type)
+    case nothingToRemove(key: SomeFeatureBase.Type)
 }

@@ -27,12 +27,12 @@
 public
 extension ByTypeStorage
 {
-    subscript(_ keyType: SomeStateful.Type) -> SomeStateBase?
+    subscript(_ keyType: SomeFeatureBase.Type) -> SomeStateBase?
     {
         try? fetch(valueForKey: keyType)
     }
     
-    func hasValue(withKey keyType: SomeStateful.Type) -> Bool
+    func hasValue(withKey keyType: SomeFeatureBase.Type) -> Bool
     {
         self[keyType] != nil
     }
@@ -41,7 +41,7 @@ extension ByTypeStorage
 //---
 
 public
-extension SomeStateful
+extension SomeFeatureBase
 {
     static
     func fetch(from storage: ByTypeStorage) throws -> SomeStateBase

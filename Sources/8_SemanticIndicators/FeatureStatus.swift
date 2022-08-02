@@ -55,7 +55,7 @@ struct FeatureStatus
     let indicator: StatusIndicator
     
     public
-    init(missing feature: SomeStateful.Type)
+    init(missing feature: SomeFeatureBase.Type)
     {
         self.title = feature.displayName
         self.subtitle = "<missing>"
@@ -110,7 +110,7 @@ public
 extension Publisher where Output == [FeatureStatus], Failure == Never
 {
     func matched(
-        with features: [SomeStateful.Type]
+        with features: [SomeFeatureBase.Type]
     ) -> AnyPublisher<Output, Failure> {
 
         self

@@ -24,8 +24,12 @@
  
  */
 
+/// Generic semantic marker that represents a Feature.
 public
-protocol SomeFeature: SomeStateful {}
+protocol SomeFeature: SomeFeatureBase
+{
+    
+}
 
 //---
 
@@ -40,8 +44,8 @@ extension SomeFeature
 public
 enum InitializationStatusCheckError: Error
 {
-    case alreadyInitialized(SomeStateful.Type)
-    case notInitializedYet(SomeStateful.Type)
+    case alreadyInitialized(SomeFeatureBase.Type)
+    case notInitializedYet(SomeFeatureBase.Type)
 }
 
 //---

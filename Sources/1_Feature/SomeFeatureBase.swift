@@ -24,8 +24,9 @@
  
  */
 
+/// Non-generic semantic marker that represents a Feature.
 public
-protocol SomeStateful: AnyObject
+protocol SomeFeatureBase: AnyObject
 {
     static
     var displayName: String { get }
@@ -34,7 +35,7 @@ protocol SomeStateful: AnyObject
 //---
 
 public
-extension SomeStateful
+extension SomeFeatureBase
 {
     /// `ByTypeStorage` will use this as actual key.
     static
