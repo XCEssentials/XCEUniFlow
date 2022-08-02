@@ -24,23 +24,6 @@
  
  */
 
+/// In-storage bindings (feature specific, no instance level access).
 public
-protocol SomeObservingFeature: SomeFeature
-{
-    static
-    var bindings: [InternalBinding] { get }
-}
-
-//---
-
-public
-extension SomeObservingFeature
-{
-    static
-    func scenario(
-        _ description: String = ""
-    ) -> InternalBindingBDD<Self>.WhenContext {
-        
-        .init(description: description)
-    }
-}
+enum InternalBindingBDD<S: SomeInternalObserver> {} // S - Source

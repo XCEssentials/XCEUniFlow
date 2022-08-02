@@ -24,6 +24,25 @@
  
  */
 
-/// In-storage bindings (feature specific, no instance level access).
+/// A feature that also has bindings and can observe/react on mutations
+/// that happen within `Dispatcher` where such feature is initialized.
 public
-enum InternalBindingBDD<S: SomeObservingFeature> {} // S - Source
+protocol SomeInternalObserver: SomeFeature
+{
+    static
+    var bindings: [InternalBinding] { get }
+}
+
+//---
+
+public
+extension SomeInternalObserver
+{
+    static
+    func scenario(
+        _ description: String = ""
+    ) -> InternalBindingBDD<Self>.WhenContext {
+        
+        .init(description: description)
+    }
+}

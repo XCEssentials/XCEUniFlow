@@ -463,18 +463,18 @@ extension StorageDispatcher
                 }
             }
             .compactMap {
-                $0 as? SomeObservingFeature.Type
+                $0 as? SomeInternalObserver.Type
             }
             .map {(
                 observerType: $0,
-                bindings: $0.bindings.map { $0.construct(with: self) }
+                tokens: $0.bindings.map { $0.construct(with: self) }
             )}
             .filter {
-                !$0.bindings.isEmpty
+                !$0.tokens.isEmpty
             }
             .forEach {
                 
-                self.internalBindings[$0.observerType.name] = $0.bindings
+                self.internalBindings[$0.observerType.name] = $0.tokens
             }
     }
     

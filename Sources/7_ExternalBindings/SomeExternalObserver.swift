@@ -24,15 +24,17 @@
  
  */
 
-import Combine
-
-//---
-
+/// External observer of mutations that happen inside a given `Dispatcher`.
+///
+/// Instance of such type can be subscribed for updates via
+/// `subscribe` function of `Dispatcher` instance.
 public
 protocol SomeExternalObserver: AnyObject
 {
     var bindings: [ExternalBinding] { get }
 }
+
+//---
 
 public
 extension SomeExternalObserver
