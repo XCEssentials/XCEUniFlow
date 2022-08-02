@@ -33,6 +33,11 @@ import XCERequirement
 
 //---
 
+final
+class ArithmeticsVM: ViewModelBase<Arithmetics> {}
+
+//---
+
 class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
 {
     struct Main: SomeState {
@@ -61,7 +66,7 @@ class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
         deinitCount = 0
     }
     
-    override
+    required
     init(with storageDispatcher: StorageDispatcher? = nil)
     {
         super.init(with: storageDispatcher)

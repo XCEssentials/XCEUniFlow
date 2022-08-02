@@ -35,6 +35,7 @@ class FeatureBase: SomeFeature
     var dispatcher: StorageDispatcher!
     
     public
+    required
     init(
         with storageDispatcher: StorageDispatcher? = nil
     ) {

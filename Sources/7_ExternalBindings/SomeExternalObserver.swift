@@ -39,10 +39,22 @@ protocol SomeExternalObserver: AnyObject
 public
 extension SomeExternalObserver
 {
+    /// Begins binding declaration.
     func scenario(
         _ description: String = ""
     ) -> ExternalBindingBDD<Self>.WhenContext {
         
         .init(description: description, source: self)
+    }
+    
+    /// Activates external bindings if `dispatcher` has been set already.
+    func activateSubscriptionsIfPossible(
+        with dispatcher: StorageDispatcher?
+    ) {
+        if
+            let dispatcher = dispatcher
+        {
+            dispatcher.subscribe(self)
+        }
     }
 }
