@@ -48,7 +48,7 @@ extension ByTypeStorage
 public
 extension ByTypeStorage.HistoryElement
 {
-    var key: SomeFeatureBase.Type
+    var key: SomeFeature.Type
     {
         switch self.outcome
         {
@@ -75,7 +75,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let oldValue: SomeStateBase?
@@ -138,7 +138,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let newValue: SomeStateBase
@@ -179,7 +179,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let newValue: SomeStateBase
@@ -224,7 +224,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let oldValue: SomeStateBase
@@ -270,7 +270,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let oldValue: SomeStateBase
@@ -314,7 +314,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let oldValue: SomeStateBase
@@ -358,7 +358,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
         
         public
         let oldValue: SomeStateBase
@@ -398,7 +398,7 @@ extension ByTypeStorage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeatureBase.Type
+        let key: SomeFeature.Type
     }
     
     var asBlankRemovalOutcome: BlankRemovalOutcome?

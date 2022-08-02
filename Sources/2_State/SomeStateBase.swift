@@ -28,5 +28,5 @@ public
 protocol SomeStateBase
 {
     static
-    var feature: SomeFeatureBase.Type { get }
+    var feature: SomeFeature.Type { get }
 }

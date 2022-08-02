@@ -216,7 +216,7 @@ extension StorageDispatcher
         storage.allValues
     }
     
-    var allKeys: [SomeFeatureBase.Type]
+    var allKeys: [SomeFeature.Type]
     {
         storage.allKeys
     }
@@ -370,7 +370,7 @@ extension StorageDispatcher
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line,
-        valueForKey keyType: SomeFeatureBase.Type
+        valueForKey keyType: SomeFeature.Type
     ) throws -> SomeStateBase {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
@@ -455,7 +455,7 @@ extension StorageDispatcher
         reports
             .compactMap {
                 
-                report -> SomeFeatureBase.Type? in
+                report -> SomeFeature.Type? in
                 
                 //---
                 
@@ -495,7 +495,7 @@ extension StorageDispatcher
         reports
             .compactMap {
                 
-                report -> SomeFeatureBase.Type? in
+                report -> SomeFeature.Type? in
                 
                 //---
                 
@@ -565,7 +565,7 @@ struct InternalBinding
     }
 
     public
-    let source: SomeFeatureBase.Type
+    let source: SomeFeature.Type
     
     public
     let description: String
@@ -590,7 +590,7 @@ struct InternalBinding
     }
     
     //internal
-    init<S: SomeFeatureBase, W: Publisher, G>(
+    init<S: SomeFeature, W: Publisher, G>(
         source: S.Type,
         description: String,
         scope: String,

@@ -29,7 +29,7 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct InitializationOf<T: SomeFeatureBase>: SomeMutationDecriptor
+struct InitializationOf<T: SomeFeature>: SomeMutationDecriptor
 {
     public
     let timestamp: Date

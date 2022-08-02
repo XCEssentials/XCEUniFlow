@@ -24,11 +24,12 @@
  
  */
 
-/// Generic semantic marker that represents a Feature.
+/// Semantic marker that represents a Feature.
 public
-protocol SomeFeature: SomeFeatureBase
+protocol SomeFeature: AnyObject
 {
-    
+    static
+    var displayName: String { get }
 }
 
 //---
@@ -37,6 +38,19 @@ public
 extension SomeFeature
 {
     typealias Itself = Self
+    
+    /// `ByTypeStorage` will use this as actual key.
+    static
+    var name: String
+    {
+        .init(reflecting: Self.self)
+    }
+
+    static
+    var displayName: String
+    {
+        name
+    }
 }
 
 //---
@@ -44,8 +58,8 @@ extension SomeFeature
 public
 enum InitializationStatusCheckError: Error
 {
-    case alreadyInitialized(SomeFeatureBase.Type)
-    case notInitializedYet(SomeFeatureBase.Type)
+    case alreadyInitialized(SomeFeature.Type)
+    case notInitializedYet(SomeFeature.Type)
 }
 
 //---

@@ -54,11 +54,11 @@ extension ByTypeStorage
     enum ReadDataError: Error
     {
         case keyNotFound(
-            SomeFeatureBase.Type
+            SomeFeature.Type
         )
         
         case valueTypeMismatch(
-            key: SomeFeatureBase.Type,
+            key: SomeFeature.Type,
             expected: SomeStateBase.Type,
             actual: SomeStateBase
         )
@@ -75,7 +75,7 @@ extension ByTypeStorage
         .init(data.values)
     }
     
-    var allKeys: [SomeFeatureBase.Type]
+    var allKeys: [SomeFeature.Type]
     {
         allValues
             .map {
@@ -83,7 +83,7 @@ extension ByTypeStorage
             }
     }
     
-    func fetch(valueForKey keyType: SomeFeatureBase.Type) throws -> SomeStateBase
+    func fetch(valueForKey keyType: SomeFeature.Type) throws -> SomeStateBase
     {
         if
             let result = data[keyType.name]
@@ -191,7 +191,7 @@ extension ByTypeStorage
     @discardableResult
     mutating
     func removeValue(
-        forKey keyType: SomeFeatureBase.Type,
+        forKey keyType: SomeFeature.Type,
         fromValueType: SomeStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {

@@ -33,7 +33,7 @@ public
 extension StorageDispatcher
 {
     func hasValue(
-        withKey keyType: SomeFeatureBase.Type
+        withKey keyType: SomeFeature.Type
     ) -> Bool {
         
         do
@@ -54,7 +54,7 @@ extension StorageDispatcher
 //---
 
 public
-extension SomeFeatureBase
+extension SomeFeature
 {
     static
     func fetch(
