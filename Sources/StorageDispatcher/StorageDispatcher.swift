@@ -72,7 +72,7 @@ class StorageDispatcher
     }
     
     public
-    struct StatusProxy
+    struct Proxy
     {
         let dispatcher: StorageDispatcher
         
@@ -93,18 +93,18 @@ class StorageDispatcher
         }
         
         public
-        var bindingsInStorageStatusLog: AnyPublisher<InternalBinding.Status, Never>
+        var internalBindingsStatusLog: AnyPublisher<InternalBinding.Status, Never>
         {
             dispatcher
-                ._bindingsInStorageStatusLog
+                ._internalBindingsStatusLog
                 .eraseToAnyPublisher()
         }
         
         public
-        var bindingsViewModelStatusLog: AnyPublisher<ExternalBinding.Status, Never>
+        var externalBindingsStatusLog: AnyPublisher<ExternalBinding.Status, Never>
         {
             dispatcher
-                ._bindingsViewModelStatusLog
+                ._externalBindingsStatusLog
                 .eraseToAnyPublisher()
         }
     }
@@ -171,13 +171,13 @@ class StorageDispatcher
     var statusSubscription: AnyCancellable?
     
     fileprivate
-    let _bindingsInStorageStatusLog = PassthroughSubject<InternalBinding.Status, Never>()
+    let _internalBindingsStatusLog = PassthroughSubject<InternalBinding.Status, Never>()
     
     fileprivate
-    let _bindingsViewModelStatusLog = PassthroughSubject<ExternalBinding.Status, Never>()
+    let _externalBindingsStatusLog = PassthroughSubject<ExternalBinding.Status, Never>()
     
     public
-    var proxy: StatusProxy
+    var proxy: Proxy
     {
         .init(dispatcher: self)
     }
@@ -627,7 +627,7 @@ struct InternalBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsInStorageStatusLog
+                            ._internalBindingsStatusLog
                             .send(
                                 .triggered(binding)
                             )
@@ -645,7 +645,7 @@ struct InternalBinding
                     receiveSubscription: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsInStorageStatusLog
+                            ._internalBindingsStatusLog
                             .send(
                                 .activated(binding)
                             )
@@ -653,7 +653,7 @@ struct InternalBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsInStorageStatusLog
+                            ._internalBindingsStatusLog
                             .send(
                                 .executed(binding)
                             )
@@ -665,7 +665,7 @@ struct InternalBinding
                             case .failure(let error):
 
                                 dispatcher?
-                                    ._bindingsInStorageStatusLog
+                                    ._internalBindingsStatusLog
                                     .send(
                                         .failed(binding, error)
                                     )
@@ -677,7 +677,7 @@ struct InternalBinding
                     receiveCancel: { [weak dispatcher] in
 
                         dispatcher?
-                            ._bindingsInStorageStatusLog
+                            ._internalBindingsStatusLog
                             .send(
                                 .cancelled(binding)
                             )
@@ -743,7 +743,7 @@ struct ExternalBinding
         location: Int,
         when: @escaping (AnyPublisher<StorageDispatcher.AccessReport, Never>) -> W,
         given: @escaping (StorageDispatcher, W.Output) throws -> G?,
-        then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
+        then: @escaping (S, G, StorageDispatcher.Proxy) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -773,7 +773,7 @@ struct ExternalBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsViewModelStatusLog
+                            ._externalBindingsStatusLog
                             .send(
                                 .triggered(binding)
                             )
@@ -792,7 +792,7 @@ struct ExternalBinding
                     receiveSubscription: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsViewModelStatusLog
+                            ._externalBindingsStatusLog
                             .send(
                                 .activated(binding)
                             )
@@ -800,7 +800,7 @@ struct ExternalBinding
                     receiveOutput: { [weak dispatcher] _ in
 
                         dispatcher?
-                            ._bindingsViewModelStatusLog
+                            ._externalBindingsStatusLog
                             .send(
                                 .executed(binding)
                             )
@@ -812,7 +812,7 @@ struct ExternalBinding
                             case .failure(let error):
 
                                 dispatcher?
-                                    ._bindingsViewModelStatusLog
+                                    ._externalBindingsStatusLog
                                     .send(
                                         .failed(binding, error)
                                     )
@@ -824,7 +824,7 @@ struct ExternalBinding
                     receiveCancel: { [weak dispatcher] in
 
                         dispatcher?
-                            ._bindingsViewModelStatusLog
+                            ._externalBindingsStatusLog
                             .send(
                                 .cancelled(binding)
                             )

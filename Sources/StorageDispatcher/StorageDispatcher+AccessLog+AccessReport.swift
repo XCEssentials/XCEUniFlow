@@ -76,7 +76,7 @@ extension StorageDispatcher.AccessReport
         
         public
         let context: String
-        
+            
         public
         let location: Int
     }

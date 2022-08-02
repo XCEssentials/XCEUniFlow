@@ -48,7 +48,7 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (S, G, StorageDispatcher.StatusProxy) -> Void
+            _ then: @escaping (S, G, StorageDispatcher.Proxy) -> Void
         ) -> ExternalBinding {
             
             .init(
