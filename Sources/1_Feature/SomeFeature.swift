@@ -126,7 +126,7 @@ extension SomeFeature
     }
     
     /// Attempts to initialize `self` into given `newState` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func initialize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -141,7 +141,7 @@ extension SomeFeature
     }
     
     /// Attempts to actualize `self` using given `mutationHandler` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func actualize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -157,7 +157,7 @@ extension SomeFeature
     }
     
     /// Attempts to actualize `self` into given `newState` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func actualize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -172,7 +172,7 @@ extension SomeFeature
     }
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func transition<O: SomeState, N: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -188,7 +188,7 @@ extension SomeFeature
     }
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func transition<O: SomeState, N: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -204,7 +204,7 @@ extension SomeFeature
     }
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func transition<S: SomeState>(
         scope: String = #file,
         context: String = #function,
@@ -219,7 +219,7 @@ extension SomeFeature
     }
     
     /// Attempts to deinitialize `self` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func deinitialize(
         scope: String = #file,
         context: String = #function,
@@ -234,7 +234,7 @@ extension SomeFeature
     }
     
     /// Attempts to deinitialize `self` from given `fromState` within `dispatcher`
-    /// or fails otherwise by throwing `SemanticMutationError`.
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func deinitialize<S: SomeState>(
         scope: String = #file,
         context: String = #function,

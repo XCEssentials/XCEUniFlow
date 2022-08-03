@@ -27,6 +27,16 @@
 public
 enum ExpectedMutation
 {
+    public
+    struct SemanticError: Error
+    {
+        public
+        let expectedMutation: ExpectedMutation
+        
+        public
+        let proposedOutcome: MutationAttemptOutcome
+    }
+
     case auto
     case initialization
     case actualization
@@ -72,7 +82,8 @@ enum ExpectedMutation
                 break // OK
                 
             default:
-                throw SemanticMutationError(
+                
+                throw SemanticError(
                     expectedMutation: self,
                     proposedOutcome: outcome
                 )

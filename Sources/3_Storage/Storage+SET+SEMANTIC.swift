@@ -105,9 +105,11 @@ extension Storage
         into newState: S
     ) throws -> MutationAttemptOutcome {
         
+        // NOTE: we explicitly set expectations by using same type
+        
         try store(
             newState,
-            expectedMutation: .actualization // we explicitly set expectations by using same type
+            expectedMutation: .actualization
         )
     }
     

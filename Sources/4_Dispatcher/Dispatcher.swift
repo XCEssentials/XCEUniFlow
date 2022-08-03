@@ -34,8 +34,6 @@ public
 final
 class Dispatcher
 {
-    typealias AccessHandler = (inout Storage) throws -> Void
-    
     public
     typealias AccessOrigin = (
         scope: String,
@@ -335,7 +333,7 @@ extension Dispatcher
         scope s: String,
         context c: String,
         location l: Int,
-        _ handler: AccessHandler
+        _ handler: (inout Storage) throws -> Void
     ) throws {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))

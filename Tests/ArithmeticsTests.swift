@@ -121,7 +121,7 @@ extension ArithmeticsTests
         {
             guard
                 case Dispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
-                let semanticError = wrappedError as? SemanticMutationError
+                let semanticError = wrappedError as? ExpectedMutation.SemanticError
             else
             {
                 return XCTFail("Unexpected failure type: \(error)")

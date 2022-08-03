@@ -79,3 +79,58 @@ extension Publisher where Output == Dispatcher.ProcessedAccessEventReport, Failu
             .eraseToAnyPublisher()
     }
 }
+
+// MARK: - Access log - Processed - get features statuses (dashboard)
+
+public
+extension Publisher where Output == Dispatcher.ProcessedAccessEventReport, Failure == Never
+{
+    var statusReport: AnyPublisher<[FeatureStatus], Failure>
+    {
+        self
+            .filter {
+                !$0.mutations.isEmpty
+            }
+            .map {
+                $0.storage
+                    .allStates
+                    .map(
+                        FeatureStatus.init
+                    )
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+public
+extension Publisher where Output == [FeatureStatus], Failure == Never
+{
+    func matched(
+        with features: [SomeFeature.Type]
+    ) -> AnyPublisher<Output, Failure> {
+
+        self
+            .map { existingStatuses in
+                
+                features
+                    .map { feature in
+                        
+                        existingStatuses
+                            .first(where: {
+                                
+                                if
+                                    let state = $0.state
+                                {
+                                    return type(of: state).feature.name == feature.name
+                                }
+                                else
+                                {
+                                    return false
+                                }
+                            })
+                            ?? .init(missing: feature)
+                    }
+            }
+            .eraseToAnyPublisher()
+    }
+}
