@@ -32,18 +32,19 @@ public
 struct DeinitializationFrom<Old: SomeState>: SomeMutationDecriptor
 {
     public
+    let oldState: Old
+    
+    public
     let timestamp: Date
 
     public
-    let oldValue: Old
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
         
         guard
-            let oldValue = mutationReport.asDeinitialization?.oldState as? Old
+            let deinitialization = Deinitialization(from: report),
+            let oldState = deinitialization.oldState as? Old
         else
         {
             return nil
@@ -51,7 +52,7 @@ struct DeinitializationFrom<Old: SomeState>: SomeMutationDecriptor
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.oldValue = oldValue
+        self.oldState = oldState
+        self.timestamp = report.timestamp
     }
 }

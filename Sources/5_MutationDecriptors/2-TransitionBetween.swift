@@ -32,22 +32,23 @@ public
 struct TransitionBetween<Old: SomeState, New: SomeState>: SomeMutationDecriptor
 {
     public
+    let oldState: Old
+    
+    public
+    let newState: New
+    
+    public
     let timestamp: Date
 
     public
-    let oldValue: Old
-    
-    public
-    let newValue: New
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
         
         guard
-            let oldValue = mutationReport.asTransition?.oldState as? Old,
-            let newValue = mutationReport.asTransition?.newState as? New
+            let transition = Transition(from: report),
+            let oldState = transition.oldState as? Old,
+            let newState = transition.newState as? New
         else
         {
             return nil
@@ -55,9 +56,9 @@ struct TransitionBetween<Old: SomeState, New: SomeState>: SomeMutationDecriptor
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.oldValue = oldValue
-        self.newValue = newValue
+        self.oldState = oldState
+        self.newState = newState
+        self.timestamp = report.timestamp
     }
 }
 

@@ -28,31 +28,39 @@ import Foundation /// for access to `Date` type
 
 //---
 
-/// Operation that results with given feature being present in the storage.
 public
-struct SettingInto<New: SomeState>: SomeMutationDecriptor
+struct Actualization: SomeMutationDecriptor
 {
+    public
+    let oldState: SomeStateBase
+
+    public
+    let newState: SomeStateBase
+
+    public
+    let feature: SomeFeature.Type
+
     public
     let timestamp: Date
 
     public
-    let newValue: New
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
-        
-        guard
-            let newValue = mutationReport.asSetting?.newState as? New
-        else
+        switch report.outcome
         {
-            return nil
+            case let .actualization(oldState, newState):
+                
+                self.oldState = oldState
+                self.newState = newState
+                
+            default:
+                return nil
         }
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.newValue = newValue
+        self.feature = report.feature
+        self.timestamp = report.timestamp
     }
 }

@@ -29,21 +29,25 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct AnyDeinitialization: SomeMutationDecriptor
+struct TransitionOf<F: SomeFeature>: SomeMutationDecriptor
 {
+    public
+    let oldState: SomeStateBase
+    
+    public
+    let newState: SomeStateBase
+    
     public
     let timestamp: Date
 
     public
-    let oldValue: SomeStateBase
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
         
         guard
-            let deinitialization = mutationReport.asDeinitialization
+            report.feature == F.self,
+            let transition = Transition(from: report)
         else
         {
             return nil
@@ -51,7 +55,8 @@ struct AnyDeinitialization: SomeMutationDecriptor
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.oldValue = deinitialization.oldState
+        self.oldState = transition.oldState
+        self.newState = transition.newState
+        self.timestamp = report.timestamp
     }
 }

@@ -32,18 +32,19 @@ public
 struct InitializationInto<New: SomeState>: SomeMutationDecriptor
 {
     public
+    let newState: New
+    
+    public
     let timestamp: Date
 
     public
-    let newValue: New
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
         
         guard
-            let newValue = mutationReport.asInitialization?.newState as? New
+            let initialization = Initialization(from: report),
+            let newState = initialization.newState as? New
         else
         {
             return nil
@@ -51,7 +52,7 @@ struct InitializationInto<New: SomeState>: SomeMutationDecriptor
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.newValue = newValue
+        self.newState = newState
+        self.timestamp = report.timestamp
     }
 }

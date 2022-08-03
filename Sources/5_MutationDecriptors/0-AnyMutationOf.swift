@@ -29,25 +29,24 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct AnyMutationOf<K: SomeFeature>: SomeMutationDecriptor
+struct AnyMutationOf<F: SomeFeature>: SomeMutationDecriptor
 {
+    public
+    let oldState: SomeStateBase?
+    
+    public
+    let newState: SomeStateBase?
+    
     public
     let timestamp: Date
 
     public
-    let oldValue: SomeStateBase?
-    
-    public
-    let newValue: SomeStateBase?
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
-        
         guard
-            let anyMutation = mutationReport.asAnyMutation,
-            anyMutation.feature.name == K.name
+            report.feature == F.self,
+            let anyMutation = AnyMutation(from: report)
         else
         {
             return nil
@@ -55,8 +54,8 @@ struct AnyMutationOf<K: SomeFeature>: SomeMutationDecriptor
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.oldValue = anyMutation.oldState
-        self.newValue = anyMutation.newState
+        self.oldState = anyMutation.oldState
+        self.newState = anyMutation.newState
+        self.timestamp = anyMutation.timestamp
     }
 }

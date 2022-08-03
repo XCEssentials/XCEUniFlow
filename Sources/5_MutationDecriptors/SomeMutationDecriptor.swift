@@ -34,7 +34,7 @@ protocol SomeMutationDecriptor
     var timestamp: Date { get }
     
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     )
 }
 
@@ -43,7 +43,7 @@ extension SomeMutationDecriptor
 {
     /// Syntax sugar to look nicer in `when` statements.
     static
-    var completed: Self.Type
+    var done: Self.Type
     {
         self
     }

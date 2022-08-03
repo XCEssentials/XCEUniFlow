@@ -29,22 +29,22 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct DeinitializationOf<K: SomeFeature>: SomeMutationDecriptor
+struct DeinitializationOf<F: SomeFeature>: SomeMutationDecriptor
 {
+    public
+    let oldState: SomeStateBase
+    
     public
     let timestamp: Date
 
     public
-    let oldValue: SomeStateBase
-    
-    public
     init?(
-        from mutationReport: Storage.HistoryElement
+        from report: Storage.HistoryElement
     ) {
         
         guard
-            let deinitialization = mutationReport.asDeinitialization,
-            deinitialization.feature.name == K.name
+            report.feature == F.self,
+            let deinitialization = Deinitialization(from: report)
         else
         {
             return nil
@@ -52,7 +52,7 @@ struct DeinitializationOf<K: SomeFeature>: SomeMutationDecriptor
         
         //---
         
-        self.timestamp = mutationReport.timestamp
-        self.oldValue = deinitialization.oldState
+        self.oldState = deinitialization.oldState
+        self.timestamp = report.timestamp
     }
 }

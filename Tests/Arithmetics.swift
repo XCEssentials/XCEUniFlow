@@ -91,7 +91,7 @@ extension Arithmetics
         
         scenario()
             .when(
-                InitializationInto<Main>.completed
+                InitializationInto<Main>.done
             )
             .then { _ in
                 onInitialization?()
@@ -99,7 +99,7 @@ extension Arithmetics
         
         scenario()
             .when(
-                ActualizationOf<Main>.completed
+                ActualizationIn<Main>.done
             )
             .then { _ in
                 onActualization?()
@@ -110,7 +110,7 @@ extension Arithmetics
         
         scenario()
             .when(
-                InitializationInto<Main>.completed
+                InitializationInto<Main>.done
             )
             .then { _, _ in }
     ]}

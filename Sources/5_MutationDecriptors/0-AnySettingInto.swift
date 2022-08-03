@@ -28,14 +28,12 @@ import Foundation /// for access to `Date` type
 
 //---
 
+/// Mutation that results feature `F` being present in the storage.
 public
-struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
+struct AnySettingInto<New: SomeState>: SomeMutationDecriptor
 {
     public
-    let oldState: Old
-    
-    public
-    let newState: SomeStateBase
+    let newState: New
     
     public
     let timestamp: Date
@@ -46,8 +44,8 @@ struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let transition = Transition(from: report),
-            let oldState = transition.oldState as? Old
+            let anySetting = AnySetting(from: report),
+            let newState = anySetting.newState as? New
         else
         {
             return nil
@@ -55,8 +53,7 @@ struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
         
         //---
         
-        self.oldState = oldState
-        self.newState = transition.newState
+        self.newState = newState
         self.timestamp = report.timestamp
     }
 }

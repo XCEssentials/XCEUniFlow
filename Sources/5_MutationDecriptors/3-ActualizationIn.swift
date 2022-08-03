@@ -29,13 +29,13 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
+struct ActualizationIn<S: SomeState>: SomeMutationDecriptor
 {
     public
-    let oldState: Old
+    let oldState: S
     
     public
-    let newState: SomeStateBase
+    let newState: S
     
     public
     let timestamp: Date
@@ -46,8 +46,9 @@ struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let transition = Transition(from: report),
-            let oldState = transition.oldState as? Old
+            let actualization = Actualization(from: report),
+            let oldState = actualization.oldState as? S,
+            let newState = actualization.newState as? S
         else
         {
             return nil
@@ -56,7 +57,7 @@ struct TransitionFrom<Old: SomeState>: SomeMutationDecriptor
         //---
         
         self.oldState = oldState
-        self.newState = transition.newState
+        self.newState = newState
         self.timestamp = report.timestamp
     }
 }
