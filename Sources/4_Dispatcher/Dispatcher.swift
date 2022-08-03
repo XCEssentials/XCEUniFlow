@@ -34,113 +34,6 @@ public
 final
 class Dispatcher
 {
-    public
-    typealias AccessOrigin = (
-        scope: String,
-        context: String,
-        location: Int
-        )
-    
-    public
-    enum AccessError: Error
-    {
-        case notOnMainThread(
-            AccessOrigin
-        )
-        
-        case noActiveTransaction(
-            AccessOrigin
-        )
-        
-        case anotherTransactionIsInProgress(
-            AccessOrigin,
-            anotherTransaction: AccessOrigin
-        )
-        
-        case concurrentChangesDetected(
-            AccessOrigin,
-            anotherTransaction: AccessOrigin
-        )
-        
-        case failureDuringAccess(
-            AccessOrigin,
-            transaction: AccessOrigin,
-            cause: Error
-        )
-    }
-    
-    public
-    struct Proxy
-    {
-        let dispatcher: Dispatcher
-        
-        public
-        var accessLog: AnyPublisher<AccessReport, Never>
-        {
-            dispatcher
-                ._accessLog
-                .eraseToAnyPublisher()
-        }
-        
-        public
-        var status: AnyPublisher<[FeatureStatus], Never>
-        {
-            dispatcher
-                ._status
-                .eraseToAnyPublisher()
-        }
-        
-        public
-        var internalBindingsStatusLog: AnyPublisher<InternalBinding.Status, Never>
-        {
-            dispatcher
-                ._internalBindingsStatusLog
-                .eraseToAnyPublisher()
-        }
-        
-        public
-        var externalBindingsStatusLog: AnyPublisher<ExternalBinding.Status, Never>
-        {
-            dispatcher
-                ._externalBindingsStatusLog
-                .eraseToAnyPublisher()
-        }
-    }
-    
-    fileprivate
-    typealias Transaction = (
-        origin: AccessOrigin,
-        tmpStorageCopy: Storage,
-        lastHistoryResetId: String
-    )
-    
-    fileprivate
-    typealias AccessLog = PassthroughSubject<AccessReport, Never>
- 
-    fileprivate
-    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
-    
-    fileprivate
-    struct ExternalSubscription
-    {
-        private(set)
-        weak
-        var observer: SomeExternalObserver?
-        
-        /// Combine tokens of activated bindings (one per each binding)
-        let tokens: [AnyCancellable]
-        
-        init(
-            with observer: SomeExternalObserver,
-            tokens: [AnyCancellable]
-        ) {
-            self.observer = observer
-            self.tokens = tokens
-        }
-    }
-    
-    //---
-    
     private(set)
     var storage: Storage
     
@@ -195,6 +88,195 @@ class Dispatcher
             .sink { [weak self] in
                 self?._status.send($0)
             }
+    }
+}
+
+// MARK: - Nested types
+
+extension Dispatcher
+{
+    public
+    struct AccessReport
+    {
+        public
+        enum Outcome
+        {
+            /// Access request has been succesfully processed.
+            ///
+            /// Any occurred mutations (see payload) have already been applied to the `storage`.
+            case processed(
+                mutations: Storage.History
+            )
+            
+            /// Access request has been rejected due to an error thrown from access handler.
+            ///
+            /// NO changes have been applied to the `storage`.
+            case rejected(
+                reason: Error
+            )
+        }
+        
+        public
+        struct EnvironmentInfo
+        {
+            public
+            let scope: String
+            
+            public
+            let context: String
+                
+            public
+            let location: Int
+        }
+        
+        public
+        let timestamp = Date()
+        
+        public
+        let outcome: Outcome
+        
+        public
+        let storage: Storage
+        
+        public
+        let env: EnvironmentInfo
+    }
+    
+    public
+    typealias AccessOrigin = (
+        scope: String,
+        context: String,
+        location: Int
+        )
+    
+    public
+    enum AccessError: Error
+    {
+        case notOnMainThread(
+            AccessOrigin
+        )
+        
+        case noActiveTransaction(
+            AccessOrigin
+        )
+        
+        case anotherTransactionIsInProgress(
+            AccessOrigin,
+            anotherTransaction: AccessOrigin
+        )
+        
+        case concurrentChangesDetected(
+            AccessOrigin,
+            anotherTransaction: AccessOrigin
+        )
+        
+        case failureDuringAccess(
+            AccessOrigin,
+            transaction: AccessOrigin,
+            cause: Error
+        )
+    }
+    
+    fileprivate
+    typealias AccessLog = PassthroughSubject<AccessReport, Never>
+    
+    fileprivate
+    typealias Transaction = (
+        origin: AccessOrigin,
+        tmpStorageCopy: Storage,
+        lastHistoryResetId: String
+    )
+    
+    public
+    struct ProcessedAccessEventReport
+    {
+        public
+        let timestamp: Date
+        
+        public
+        let mutations: Storage.History
+        
+        public
+        let storage: Storage
+        
+        public
+        let env: AccessReport.EnvironmentInfo
+    }
+    
+    public
+    struct RejectedAccessEventReport
+    {
+        public
+        let timestamp: Date
+        
+        public
+        let reason: Error
+        
+        public
+        let storage: Storage
+        
+        public
+        let env: AccessReport.EnvironmentInfo
+    }
+    
+    fileprivate
+    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
+    
+    fileprivate
+    struct ExternalSubscription
+    {
+        private(set)
+        weak
+        var observer: SomeExternalObserver?
+        
+        /// Combine tokens of activated bindings (one per each binding)
+        let tokens: [AnyCancellable]
+        
+        init(
+            with observer: SomeExternalObserver,
+            tokens: [AnyCancellable]
+        ) {
+            self.observer = observer
+            self.tokens = tokens
+        }
+    }
+    
+    public
+    struct Proxy
+    {
+        let dispatcher: Dispatcher
+        
+        public
+        var accessLog: AnyPublisher<AccessReport, Never>
+        {
+            dispatcher
+                ._accessLog
+                .eraseToAnyPublisher()
+        }
+        
+        public
+        var status: AnyPublisher<[FeatureStatus], Never>
+        {
+            dispatcher
+                ._status
+                .eraseToAnyPublisher()
+        }
+        
+        public
+        var internalBindingsStatusLog: AnyPublisher<InternalBinding.Status, Never>
+        {
+            dispatcher
+                ._internalBindingsStatusLog
+                .eraseToAnyPublisher()
+        }
+        
+        public
+        var externalBindingsStatusLog: AnyPublisher<ExternalBinding.Status, Never>
+        {
+            dispatcher
+                ._externalBindingsStatusLog
+                .eraseToAnyPublisher()
+        }
     }
 }
 
