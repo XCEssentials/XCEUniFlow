@@ -47,10 +47,22 @@ class Dispatcher
     var externalBindings: [ObjectIdentifier: ExternalSubscription] = [:]
     
     fileprivate
-    let _accessLog = AccessLog()
+    let _accessLog = PassthroughSubject<AccessReport, Never>()
+    
+    public
+    var accessLog: AnyPublisher<AccessReport, Never>
+    {
+        _accessLog.eraseToAnyPublisher()
+    }
     
     fileprivate
-    let _status = Status([])
+    let _status = CurrentValueSubject<[FeatureStatus], Never>([])
+    
+    public
+    var status: AnyPublisher<[FeatureStatus], Never>
+    {
+        _status.eraseToAnyPublisher()
+    }
     
     private
     var statusSubscription: AnyCancellable?
@@ -58,13 +70,19 @@ class Dispatcher
     fileprivate
     let _internalBindingsStatusLog = PassthroughSubject<InternalBinding.Status, Never>()
     
+    public
+    var internalBindingsStatusLog: AnyPublisher<InternalBinding.Status, Never>
+    {
+        _internalBindingsStatusLog.eraseToAnyPublisher()
+    }
+    
     fileprivate
     let _externalBindingsStatusLog = PassthroughSubject<ExternalBinding.Status, Never>()
     
     public
-    var proxy: Proxy
+    var externalBindingsStatusLog: AnyPublisher<ExternalBinding.Status, Never>
     {
-        .init(dispatcher: self)
+        _externalBindingsStatusLog.eraseToAnyPublisher()
     }
     
     //---
@@ -81,8 +99,7 @@ class Dispatcher
         
         //---
         
-        self.statusSubscription = proxy
-            .accessLog
+        self.statusSubscription = accessLog
             .onProcessed
             .statusReport
             .sink { [weak self] in
@@ -178,9 +195,6 @@ extension Dispatcher
     }
     
     fileprivate
-    typealias AccessLog = PassthroughSubject<AccessReport, Never>
-    
-    fileprivate
     typealias Transaction = (
         origin: AccessOrigin,
         tmpStorageCopy: Storage,
@@ -220,9 +234,6 @@ extension Dispatcher
     }
     
     fileprivate
-    typealias Status = CurrentValueSubject<[FeatureStatus], Never>
-    
-    fileprivate
     struct ExternalSubscription
     {
         private(set)
@@ -238,44 +249,6 @@ extension Dispatcher
         ) {
             self.observer = observer
             self.tokens = tokens
-        }
-    }
-    
-    public
-    struct Proxy
-    {
-        let dispatcher: Dispatcher
-        
-        public
-        var accessLog: AnyPublisher<AccessReport, Never>
-        {
-            dispatcher
-                ._accessLog
-                .eraseToAnyPublisher()
-        }
-        
-        public
-        var status: AnyPublisher<[FeatureStatus], Never>
-        {
-            dispatcher
-                ._status
-                .eraseToAnyPublisher()
-        }
-        
-        public
-        var internalBindingsStatusLog: AnyPublisher<InternalBinding.Status, Never>
-        {
-            dispatcher
-                ._internalBindingsStatusLog
-                .eraseToAnyPublisher()
-        }
-        
-        public
-        var externalBindingsStatusLog: AnyPublisher<ExternalBinding.Status, Never>
-        {
-            dispatcher
-                ._externalBindingsStatusLog
-                .eraseToAnyPublisher()
         }
     }
 }
@@ -706,7 +679,7 @@ struct InternalBinding
             
             //---
             
-            return when(dispatcher.proxy.accessLog)
+            return when(dispatcher.accessLog)
                 .tryCompactMap { [weak dispatcher] in
 
                     guard let dispatcher = dispatcher else { return nil }
@@ -835,7 +808,7 @@ struct ExternalBinding
         location: Int,
         when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> W,
         given: @escaping (Dispatcher, W.Output) throws -> G?,
-        then: @escaping (S, G, Dispatcher.Proxy) -> Void
+        then: @escaping (S, G, Dispatcher) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -852,7 +825,7 @@ struct ExternalBinding
             
             //---
             
-            return when(dispatcher.proxy.accessLog)
+            return when(dispatcher.accessLog)
                 .tryCompactMap { [weak dispatcher] in
 
                     guard let dispatcher = dispatcher else { return nil }
@@ -878,7 +851,7 @@ struct ExternalBinding
 
                     //---
 
-                    return then(source, givenOutput, dispatcher.proxy) // map into `Void` to erase type info
+                    return then(source, givenOutput, dispatcher) // map into `Void` to erase type info
                 }
                 .handleEvents(
                     receiveSubscription: { [weak dispatcher] _ in
