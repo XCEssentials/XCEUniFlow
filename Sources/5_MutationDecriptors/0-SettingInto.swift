@@ -28,7 +28,7 @@ import Foundation /// for access to `Date` type
 
 //---
 
-/// Operation that results with given key being present in the storage.
+/// Operation that results with given feature being present in the storage.
 public
 struct SettingInto<New: SomeState>: SomeMutationDecriptor
 {
@@ -44,7 +44,7 @@ struct SettingInto<New: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let newValue = mutationReport.asSetting?.newValue as? New
+            let newValue = mutationReport.asSetting?.newState as? New
         else
         {
             return nil

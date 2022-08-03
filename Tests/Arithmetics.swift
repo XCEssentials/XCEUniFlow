@@ -136,7 +136,7 @@ extension Arithmetics
     {
         dispatcher.should {
             
-            var main: Main = try fetch()
+            var main: Main = try fetchState()
             
             //---
             
@@ -156,7 +156,7 @@ extension Arithmetics
     {
         dispatcher.should {
             
-            var main: Main = try fetch()
+            var main: Main = try fetchState()
             
             //---
             

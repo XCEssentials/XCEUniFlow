@@ -205,14 +205,14 @@ class Dispatcher
 public
 extension Dispatcher
 {
-    var allValues: [SomeStateBase]
+    var allStates: [SomeStateBase]
     {
-        storage.allValues
+        storage.allStates
     }
     
-    var allKeys: [SomeFeature.Type]
+    var allFeatures: [SomeFeature.Type]
     {
-        storage.allKeys
+        storage.allFeatures
     }
 
     func startTransaction(
@@ -360,11 +360,11 @@ extension Dispatcher
         activeTransaction = tr
     }
     
-    func fetch(
+    func fetchState(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line,
-        valueForKey keyType: SomeFeature.Type
+        forFeature featureType: SomeFeature.Type
     ) throws -> SomeStateBase {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
@@ -374,20 +374,20 @@ extension Dispatcher
         if
             let tr = self.activeTransaction
         {
-            return try tr.tmpStorageCopy.fetch(valueForKey: keyType)
+            return try tr.tmpStorageCopy.fetchState(forFeature: featureType)
         }
         else
         {
-            return try storage.fetch(valueForKey: keyType)
+            return try storage.fetchState(forFeature: featureType)
         }
     }
     
-    func fetch<V: SomeState>(
+    func fetchState<S: SomeState>(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line,
-        valueOfType _: V.Type = V.self
-    ) throws -> V {
+        ofType _: S.Type = S.self
+    ) throws -> S {
         
         try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
         
@@ -396,11 +396,11 @@ extension Dispatcher
         if
             let tr = self.activeTransaction
         {
-            return try tr.tmpStorageCopy.fetch(valueOfType: V.self)
+            return try tr.tmpStorageCopy.fetchState(ofType: S.self)
         }
         else
         {
-            return try storage.fetch(valueOfType: V.self)
+            return try storage.fetchState(ofType: S.self)
         }
     }
     
@@ -455,8 +455,8 @@ extension Dispatcher
                 
                 switch report.outcome
                 {
-                    case .initialization(let newValue):
-                        return type(of: newValue).feature
+                    case .initialization(let newState):
+                        return type(of: newState).feature
                         
                     default:
                         return nil
@@ -495,8 +495,8 @@ extension Dispatcher
                 
                 switch report.outcome
                 {
-                    case .deinitialization(let oldValue):
-                        return type(of: oldValue).feature
+                    case .deinitialization(let oldState):
+                        return type(of: oldState).feature
                         
                     default:
                         return nil

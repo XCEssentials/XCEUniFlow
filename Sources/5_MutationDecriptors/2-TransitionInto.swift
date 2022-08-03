@@ -46,8 +46,8 @@ struct TransitionInto<New: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let oldValue = mutationReport.asTransition?.oldValue,
-            let newValue = mutationReport.asTransition?.newValue as? New
+            let oldValue = mutationReport.asTransition?.oldState,
+            let newValue = mutationReport.asTransition?.newState as? New
         else
         {
             return nil

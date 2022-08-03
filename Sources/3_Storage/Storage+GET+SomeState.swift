@@ -27,14 +27,14 @@
 public
 extension Storage
 {
-    subscript<V: SomeState>(_ valueType: V.Type = V.self) -> V?
+    subscript<S: SomeState>(_: S.Type) -> S?
     {
-        try? fetch(valueOfType: V.self)
+        try? fetchState(ofType: S.self)
     }
     
-    func hasValue<V: SomeState>(ofType valueType: V.Type) -> Bool
+    func hasState<S: SomeState>(ofType _: S.Type) -> Bool
     {
-        self[V.self] != nil
+        self[S.self] != nil
     }
 }
 
@@ -46,7 +46,7 @@ extension SomeState
     static
     func fetch(from storage: Storage) throws -> Self
     {
-        try storage.fetch(valueOfType: self)
+        try storage.fetchState(ofType: self)
     }
 
     //---
@@ -54,6 +54,6 @@ extension SomeState
     static
     func isPresent(in storage: Storage) -> Bool
     {
-        storage.hasValue(ofType: self)
+        storage.hasState(ofType: self)
     }
 }

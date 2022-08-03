@@ -31,12 +31,12 @@ extension Storage
 {
     @discardableResult
     mutating
-    func initialize<V: SomeState>(
-        with newValue: V
+    func initialize<S: SomeState>(
+        with newState: S
     ) throws -> MutationAttemptOutcome {
         
         try store(
-            newValue,
+            newState,
             expectedMutation: .initialization
         )
     }
@@ -49,12 +49,12 @@ extension Storage
 {
     @discardableResult
     mutating
-    func actualize<V: SomeState>(
-        _: V.Type = V.self,
-        via mutationHandler: (inout V) throws -> Void
+    func actualize<S: SomeState>(
+        _: S.Type = S.self,
+        via mutationHandler: (inout S) throws -> Void
     ) throws -> MutationAttemptOutcome {
         
-        var state: V = try fetch()
+        var state: S = try fetchState()
         
         //---
         
@@ -67,12 +67,12 @@ extension Storage
     
     @discardableResult
     mutating
-    func actualize<V: SomeState>(
-        with newValue: V
+    func actualize<S: SomeState>(
+        with newState: S
     ) throws -> MutationAttemptOutcome {
         
         try store(
-            newValue,
+            newState,
             expectedMutation: .actualization
         )
     }
@@ -86,53 +86,40 @@ extension Storage
     @discardableResult
     mutating
     func transition<O: SomeState, N: SomeState>(
-        from _: O,
-        into newValue: N
-    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
-        
-        try transition(
-            from: O.self,
-            into: newValue
-        )
-    }
-    
-    @discardableResult
-    mutating
-    func transition<O: SomeState, N: SomeState>(
         from _: O.Type,
-        into newValue: N
+        into newState: N
     ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
         
         try store(
-            newValue,
-            expectedMutation: .transition(fromValueType: O.self)
+            newState,
+            expectedMutation: .transition(fromStateType: O.self)
         )
     }
     
-    /// Transition edge case where we've been given same type for both old and new value,
+    /// Transition edge case where we've been given same type for both old and new states,
     /// so in best case scenario it is going to be actualization.
     @discardableResult
     mutating
-    func transition<V: SomeState>(
-        from _: V.Type,
-        into newValue: V
+    func transition<S: SomeState>(
+        from _: S.Type,
+        into newState: S
     ) throws -> MutationAttemptOutcome {
         
         try store(
-            newValue,
+            newState,
             expectedMutation: .actualization // we explicitly set expectations by using same type
         )
     }
     
     @discardableResult
     mutating
-    func transition<V: SomeState>(
-        into newValue: V
+    func transition<S: SomeState>(
+        into newState: S
     ) throws -> MutationAttemptOutcome {
         
         try store(
-            newValue,
-            expectedMutation: .transition(fromValueType: nil)
+            newState,
+            expectedMutation: .transition(fromStateType: nil)
         )
     }
 }
@@ -145,14 +132,14 @@ extension Storage
     @discardableResult
     mutating
     func deinitialize(
-        _ keyType: SomeFeature.Type,
-        fromValueType: SomeStateBase.Type?, // = nil,
+        _ feature: SomeFeature.Type,
+        fromStateType: SomeStateBase.Type?, // = nil,
         strict: Bool // = true
     ) throws -> MutationAttemptOutcome {
         
-        try removeValue(
-            forKey: keyType,
-            fromValueType: fromValueType,
+        try removeState(
+            forFeature: feature,
+            fromStateType: fromStateType,
             strict: strict
         )
     }

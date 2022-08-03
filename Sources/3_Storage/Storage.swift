@@ -53,12 +53,12 @@ extension Storage
 {
     enum ReadDataError: Error
     {
-        case keyNotFound(
+        case featureNotFound(
             SomeFeature.Type
         )
         
-        case valueTypeMismatch(
-            key: SomeFeature.Type,
+        case stateTypeMismatch(
+            feature: SomeFeature.Type,
             expected: SomeStateBase.Type,
             actual: SomeStateBase
         )
@@ -70,49 +70,49 @@ extension Storage
 public
 extension Storage
 {
-    var allValues: [SomeStateBase]
+    var allStates: [SomeStateBase]
     {
         .init(data.values)
     }
     
-    var allKeys: [SomeFeature.Type]
+    var allFeatures: [SomeFeature.Type]
     {
-        allValues
+        allStates
             .map {
                 type(of: $0).feature
             }
     }
     
-    func fetch(valueForKey keyType: SomeFeature.Type) throws -> SomeStateBase
+    func fetchState(forFeature featureType: SomeFeature.Type) throws -> SomeStateBase
     {
         if
-            let result = data[keyType.name]
+            let result = data[featureType.name]
         {
             return result
         }
         else
         {
-            throw ReadDataError.keyNotFound(keyType)
+            throw ReadDataError.featureNotFound(featureType)
         }
     }
     
-    func fetch<V: SomeState>(valueOfType _: V.Type = V.self) throws -> V
+    func fetchState<S: SomeState>(ofType _: S.Type = S.self) throws -> S
     {
-        let someResult = try fetch(valueForKey: V.Feature.self)
+        let someState = try fetchState(forFeature: S.Feature.self)
         
         //---
         
         if
-            let result = someResult as? V
+            let result = someState as? S
         {
             return result
         }
         else
         {
-            throw ReadDataError.valueTypeMismatch(
-                key: V.Feature.self,
-                expected: V.self,
-                actual: someResult
+            throw ReadDataError.stateTypeMismatch(
+                feature: S.Feature.self,
+                expected: S.self,
+                actual: someState
             )
         }
     }
@@ -125,8 +125,8 @@ extension Storage
 {
     @discardableResult
     mutating
-    func store<V: SomeState>(
-        _ value: V,
+    func store<S: SomeState>(
+        _ state: S,
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
         
@@ -134,11 +134,11 @@ extension Storage
         
         //---
         
-        switch (data[type(of: value).feature.name], value)
+        switch (data[type(of: state).feature.name], state)
         {
-            case (.none, let newValue):
+            case (.none, let newState):
                 
-                outcome = .initialization(newValue: newValue)
+                outcome = .initialization(newState: newState)
                 
                 //---
                 
@@ -146,20 +146,20 @@ extension Storage
                 
                 //---
                 
-                data[V.Feature.name] = newValue
+                data[S.Feature.name] = newState
                 
             //---
                 
-            case (.some(let oldValue), let newValue):
+            case (.some(let oldState), let newState):
                 
                 if
-                    type(of: oldValue) == type(of: newValue)
+                    type(of: oldState) == type(of: newState)
                 {
-                    outcome = .actualization(oldValue: oldValue, newValue: newValue)
+                    outcome = .actualization(oldState: oldState, newState: newState)
                 }
                 else
                 {
-                    outcome = .transition(oldValue: oldValue, newValue: newValue)
+                    outcome = .transition(oldState: oldState, newState: newState)
                 }
                 
                 //---
@@ -168,7 +168,7 @@ extension Storage
                 
                 //---
                 
-                data[V.Feature.name] = newValue
+                data[S.Feature.name] = newState
         }
         
         //---
@@ -190,14 +190,14 @@ extension Storage
 {
     @discardableResult
     mutating
-    func removeValue(
-        forKey keyType: SomeFeature.Type,
-        fromValueType: SomeStateBase.Type? = nil,
+    func removeState(
+        forFeature feature: SomeFeature.Type,
+        fromStateType: SomeStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {
         
         let implicitlyExpectedMutation: ExpectedMutation = .deinitialization(
-            fromValueType: fromValueType,
+            fromStateType: fromStateType,
             strict: strict
         )
         
@@ -205,11 +205,11 @@ extension Storage
         
         //---
         
-        switch data[keyType.name]
+        switch data[feature.name]
         {
-            case .some(let oldValue):
+            case .some(let oldState):
                 
-                outcome = .deinitialization(oldValue: oldValue)
+                outcome = .deinitialization(oldState: oldState)
                 
                 //---
                 
@@ -217,11 +217,11 @@ extension Storage
                 
                 //---
                 
-                data.removeValue(forKey: keyType.name)
+                data.removeValue(forKey: feature.name)
                 
             case .none:
                 
-                outcome = .nothingToRemove(key: keyType)
+                outcome = .nothingToRemove(feature: feature)
                 
                 //---
                 
@@ -243,9 +243,9 @@ extension Storage
     mutating
     func removeAll() throws -> [MutationAttemptOutcome] {
         
-        try allKeys
+        try allFeatures
             .map {
-                try removeValue(forKey: $0, fromValueType: nil, strict: false)
+                try removeState(forFeature: $0, fromStateType: nil, strict: false)
             }
     }
 }

@@ -80,7 +80,7 @@ extension SomeFeature
     func ensureAwaitingInitialization() throws
     {
         guard
-            !dispatcher.hasValue(withKey: Self.self)
+            !dispatcher.hasFeatureInitialized(Self.self)
         else
         {
             throw InitializationStatusCheckError.alreadyInitialized(Self.self)
@@ -92,7 +92,7 @@ extension SomeFeature
     func ensureAlreadyInitialized() throws
     {
         guard
-            dispatcher.hasValue(withKey: Self.self)
+            dispatcher.hasFeatureInitialized(Self.self)
         else
         {
             throw InitializationStatusCheckError.notInitializedYet(Self.self)
@@ -101,73 +101,73 @@ extension SomeFeature
     
     /// Allows to fetch any state of any feature from `dispatcher`.
     @discardableResult
-    func fetch<V: SomeState>(
-        _ valueOfType: V.Type = V.self
-    ) throws -> V {
+    func fetchState<S: SomeState>(
+        _: S.Type = S.self
+    ) throws -> S {
         
-        try dispatcher.fetch(
-            valueOfType: V.self
+        try dispatcher.fetchState(
+            ofType: S.self
         )
     }
     
     /// Save given state of `self` within `dispatcher` - either
     /// initialize, actuialize or transition into given `state`.
-    func store<V: SomeState>(
+    func store<S: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ value: V
-    ) throws where V.Feature == Self {
+        _ state: S
+    ) throws where S.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
-            try $0.store(value)
+            try $0.store(state)
         }
     }
     
     /// Attempts to initialize `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `SemanticMutationError`.
-    func initialize<V: SomeState>(
+    func initialize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        with newValue: V
-    ) throws where V.Feature == Self {
+        with newState: S
+    ) throws where S.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
-            try $0.initialize(with: newValue)
+            try $0.initialize(with: newState)
         }
     }
     
     /// Attempts to actualize `self` using given `mutationHandler` within `dispatcher`
     /// or fails otherwise by throwing `SemanticMutationError`.
-    func actualize<V: SomeState>(
+    func actualize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ valueOfType: V.Type = V.self,
-        via mutationHandler: (inout V) throws -> Void
-    ) throws where V.Feature == Self {
+        _: S.Type = S.self,
+        via mutationHandler: (inout S) throws -> Void
+    ) throws where S.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.actualize(V.self, via: mutationHandler)
+            try $0.actualize(S.self, via: mutationHandler)
         }
     }
     
     /// Attempts to actualize `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `SemanticMutationError`.
-    func actualize<V: SomeState>(
+    func actualize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        with newValue: V
-    ) throws where V.Feature == Self {
+        with newState: S
+    ) throws where S.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.actualize(with: newValue)
+            try $0.actualize(with: newState)
         }
     }
     
@@ -177,13 +177,13 @@ extension SomeFeature
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        from oldValueInstance: O,
-        into newValue: N
+        from _: O, // for convenience - we can pass an instance, does not matter
+        into newState: N
     ) throws where O.Feature == Self, N.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.transition(from: oldValueInstance, into: newValue)
+            try $0.transition(from: O.self, into: newState)
         }
     }
     
@@ -193,28 +193,28 @@ extension SomeFeature
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        from oldValueType: O.Type,
-        into newValue: N
+        from _: O.Type,
+        into newState: N
     ) throws where O.Feature == Self, N.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.transition(from: O.self, into: newValue)
+            try $0.transition(from: O.self, into: newState)
         }
     }
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `SemanticMutationError`.
-    func transition<V: SomeState>(
+    func transition<S: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        into newValue: V
-    ) throws where V.Feature == Self {
+        into newState: S
+    ) throws where S.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.transition(into: newValue)
+            try $0.transition(into: newState)
         }
     }
     
@@ -229,22 +229,22 @@ extension SomeFeature
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.deinitialize(Self.self, fromValueType: nil, strict: strict)
+            try $0.deinitialize(Self.self, fromStateType: nil, strict: strict)
         }
     }
     
     /// Attempts to deinitialize `self` from given `fromState` within `dispatcher`
     /// or fails otherwise by throwing `SemanticMutationError`.
-    func deinitialize<V: SomeState>(
+    func deinitialize<S: SomeState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        from fromValueType: V.Type
-    ) throws where V.Feature == Self {
+        from _: S.Type
+    ) throws where S.Feature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
-            try $0.deinitialize(Self.self, fromValueType: fromValueType, strict: true)
+            try $0.deinitialize(Self.self, fromStateType: S.self, strict: true)
         }
     }
 }

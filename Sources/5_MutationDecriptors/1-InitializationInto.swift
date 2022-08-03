@@ -43,7 +43,7 @@ struct InitializationInto<New: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let newValue = mutationReport.asInitialization?.newValue as? New
+            let newValue = mutationReport.asInitialization?.newState as? New
         else
         {
             return nil

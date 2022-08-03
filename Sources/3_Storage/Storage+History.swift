@@ -48,18 +48,20 @@ extension Storage
 public
 extension Storage.HistoryElement
 {
-    var key: SomeFeature.Type
+    var feature: SomeFeature.Type
     {
         switch self.outcome
         {
-            case .initialization(let state),
-                    .actualization(let state, _),
-                    .transition(let state, _),
-                    .deinitialization(let state):
+            case
+                .initialization(let state),
+                .actualization(let state, _),
+                .transition(let state, _),
+                .deinitialization(let state):
+                
                 return type(of: state).feature
                 
-            case .nothingToRemove(let key):
-                return key
+            case .nothingToRemove(let feature):
+                return feature
         }
     }
 }
@@ -75,45 +77,45 @@ extension Storage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let oldValue: SomeStateBase?
+        let oldState: SomeStateBase?
         
         public
-        let newValue: SomeStateBase?
+        let newState: SomeStateBase?
     }
     
     var asAnyMutation: AnyMutationOutcome?
     {
         switch self.outcome
         {
-            case let .initialization(newValue):
+            case let .initialization(newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: newValue).feature,
-                    oldValue: nil,
-                    newValue: newValue
+                    feature: type(of: newState).feature,
+                    oldState: nil,
+                    newState: newState
                 )
                 
-            case let .actualization(oldValue, newValue),
-                let .transition(oldValue, newValue):
+            case let .actualization(oldState, newState),
+                let .transition(oldState, newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: oldValue).feature,
-                    oldValue: oldValue,
-                    newValue: newValue
+                    feature: type(of: oldState).feature,
+                    oldState: oldState,
+                    newState: newState
                 )
                 
-            case let .deinitialization(oldValue):
+            case let .deinitialization(oldState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: oldValue).feature,
-                    oldValue: oldValue,
-                    newValue: nil
+                    feature: type(of: oldState).feature,
+                    oldState: oldState,
+                    newState: nil
                 )
                 
             default:
@@ -138,22 +140,22 @@ extension Storage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let newValue: SomeStateBase
+        let newState: SomeStateBase
     }
     
     var asInitialization: InitializationOutcome?
     {
         switch self.outcome
         {
-            case let .initialization(newValue):
+            case let .initialization(newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: newValue).feature,
-                    newValue: newValue
+                    feature: type(of: newState).feature,
+                    newState: newState
                 )
                 
             default:
@@ -172,17 +174,17 @@ extension Storage.HistoryElement
 public
 extension Storage.HistoryElement
 {
-    /// Operation that results with given key being present in the storage.
+    /// Operation that results with given feature being present in the storage.
     struct SettingOutcome
     {
         public
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let newValue: SomeStateBase
+        let newState: SomeStateBase
     }
     
     /// Operation that results with given key being present in the storage.
@@ -190,14 +192,15 @@ extension Storage.HistoryElement
     {
         switch self.outcome
         {
-            case let .initialization(newValue),
-                    let .actualization(_, newValue),
-                    let .transition(_, newValue):
+            case
+                let .initialization(newState),
+                let .actualization(_, newState),
+                let .transition(_, newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: newValue).feature,
-                    newValue: newValue
+                    feature: type(of: newState).feature,
+                    newState: newState
                 )
                 
             default:
@@ -217,34 +220,36 @@ extension Storage.HistoryElement
 public
 extension Storage.HistoryElement
 {
-    /// Operation that has both old and new values.
+    /// Operation that has both old and new states.
     struct UpdateOutcome
     {
         public
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let oldValue: SomeStateBase
+        let oldState: SomeStateBase
         
         public
-        let newValue: SomeStateBase
+        let newState: SomeStateBase
     }
     
-    /// Operation that has both old and new values.
+    /// Operation that has both old and new states.
     var asUpdate: UpdateOutcome?
     {
         switch self.outcome
         {
-            case let .actualization(oldValue, newValue), let .transition(oldValue, newValue):
+            case
+                let .actualization(oldState, newState),
+                let .transition(oldState, newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: oldValue).feature,
-                    oldValue: oldValue,
-                    newValue: newValue
+                    feature: type(of: oldState).feature,
+                    oldState: oldState,
+                    newState: newState
                 )
                 
             default:
@@ -252,7 +257,7 @@ extension Storage.HistoryElement
         }
     }
     
-    /// Operation that has both old and new values.
+    /// Operation that has both old and new states.
     var isUpdate: Bool
     {
         asUpdate != nil
@@ -270,26 +275,26 @@ extension Storage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let oldValue: SomeStateBase
+        let oldState: SomeStateBase
         
         public
-        let newValue: SomeStateBase
+        let newState: SomeStateBase
     }
     
     var asActualization: ActualizationOutcome?
     {
         switch self.outcome
         {
-            case let .actualization(oldValue, newValue):
+            case let .actualization(oldState, newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: oldValue).feature,
-                    oldValue: oldValue,
-                    newValue: newValue
+                    feature: type(of: oldState).feature,
+                    oldState: oldState,
+                    newState: newState
                 )
                 
             default:
@@ -314,26 +319,26 @@ extension Storage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let oldValue: SomeStateBase
+        let oldState: SomeStateBase
         
         public
-        let newValue: SomeStateBase
+        let newState: SomeStateBase
     }
     
     var asTransition: TransitionOutcome?
     {
         switch self.outcome
         {
-            case let .transition(oldValue, newValue):
+            case let .transition(oldState, newState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: oldValue).feature,
-                    oldValue: oldValue,
-                    newValue: newValue
+                    feature: type(of: oldState).feature,
+                    oldState: oldState,
+                    newState: newState
                 )
                 
             default:
@@ -358,22 +363,22 @@ extension Storage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
         
         public
-        let oldValue: SomeStateBase
+        let oldState: SomeStateBase
     }
     
     var asDeinitialization: DeinitializationOutcome?
     {
         switch self.outcome
         {
-            case let .deinitialization(oldValue):
+            case let .deinitialization(oldState):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: type(of: oldValue).feature,
-                    oldValue: oldValue
+                    feature: type(of: oldState).feature,
+                    oldState: oldState
                 )
                 
             default:
@@ -398,18 +403,18 @@ extension Storage.HistoryElement
         let timestamp: Date
     
         public
-        let key: SomeFeature.Type
+        let feature: SomeFeature.Type
     }
     
     var asBlankRemovalOutcome: BlankRemovalOutcome?
     {
         switch self.outcome
         {
-            case let .nothingToRemove(key):
+            case let .nothingToRemove(feature):
                 
                 return .init(
                     timestamp: self.timestamp,
-                    key: key
+                    feature: feature
                 )
                 
             default:

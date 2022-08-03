@@ -32,14 +32,14 @@ import XCEPipeline
 public
 extension Dispatcher
 {
-    func hasValue(
-        withKey keyType: SomeFeature.Type
+    func hasFeatureInitialized(
+        _ featureType: SomeFeature.Type
     ) -> Bool {
         
         do
         {
-            _ = try fetch(
-                valueForKey: keyType
+            _ = try fetchState(
+                forFeature: featureType
             )
             
             return true
@@ -61,8 +61,8 @@ extension SomeFeature
         from dispatcher: Dispatcher
     ) throws -> SomeStateBase {
         
-        try dispatcher.fetch(
-            valueForKey: self
+        try dispatcher.fetchState(
+            forFeature: self
         )
     }
     
@@ -71,8 +71,8 @@ extension SomeFeature
         in dispatcher: Dispatcher
     ) -> Bool {
         
-        dispatcher.hasValue(
-            withKey: self
+        dispatcher.hasFeatureInitialized(
+            self
         )
     }
 }

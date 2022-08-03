@@ -30,8 +30,8 @@ enum ExpectedMutation
     case auto
     case initialization
     case actualization
-    case transition(fromValueType: SomeStateBase.Type?)
-    case deinitialization(fromValueType: SomeStateBase.Type?, strict: Bool)
+    case transition(fromStateType: SomeStateBase.Type?)
+    case deinitialization(fromStateType: SomeStateBase.Type?, strict: Bool)
     
     func validateProposedOutcome(_ outcome: MutationAttemptOutcome) throws -> Void
     {
@@ -49,8 +49,8 @@ enum ExpectedMutation
                 
                 break  // OK
                 
-            case (.transition(.some(let givenStateType)), .transition(let oldStateValue, _))
-                where givenStateType == type(of: oldStateValue):
+            case (.transition(.some(let givenStateType)), .transition(let oldState, _))
+                where givenStateType == type(of: oldState):
                 
                 break // OK
                 
@@ -58,8 +58,8 @@ enum ExpectedMutation
                 
                 break // OK
                 
-            case (.deinitialization(.some(let givenOldStateType), _), .deinitialization(let oldStateValue))
-                where givenOldStateType == type(of: oldStateValue):
+            case (.deinitialization(.some(let givenOldStateType), _), .deinitialization(let oldState))
+                where givenOldStateType == type(of: oldState):
                 
                 break // OK
                 

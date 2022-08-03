@@ -27,14 +27,14 @@
 public
 extension Dispatcher
 {   
-    func hasValue<V: SomeState>(
-        ofType _: V.Type
+    func hasState<S: SomeState>(
+        ofType _: S.Type
     ) -> Bool {
         
         do
         {
-            _ = try fetch(
-                valueOfType: V.self
+            _ = try fetchState(
+                ofType: S.self
             )
             
             return true
@@ -59,8 +59,8 @@ extension SomeState
         from dispatcher: Dispatcher
     ) throws -> Self {
         
-        try dispatcher.fetch(
-            valueOfType: self
+        try dispatcher.fetchState(
+            ofType: self
         )
     }
     
@@ -74,7 +74,7 @@ extension SomeState
         in dispatcher: Dispatcher
     ) -> Bool {
         
-        dispatcher.hasValue(
+        dispatcher.hasState(
             ofType: self
         )
     }

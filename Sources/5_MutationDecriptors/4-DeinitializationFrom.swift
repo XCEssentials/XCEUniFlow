@@ -43,7 +43,7 @@ struct DeinitializationFrom<Old: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let oldValue = mutationReport.asDeinitialization?.oldValue as? Old
+            let oldValue = mutationReport.asDeinitialization?.oldState as? Old
         else
         {
             return nil

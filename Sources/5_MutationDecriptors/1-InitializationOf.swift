@@ -44,7 +44,7 @@ struct InitializationOf<T: SomeFeature>: SomeMutationDecriptor
         
         guard
             let initialization = mutationReport.asInitialization,
-            initialization.key.name == T.name
+            initialization.feature.name == T.name
         else
         {
             return nil
@@ -53,6 +53,6 @@ struct InitializationOf<T: SomeFeature>: SomeMutationDecriptor
         //---
         
         self.timestamp = mutationReport.timestamp
-        self.newValue = initialization.newValue
+        self.newValue = initialization.newState
     }
 }

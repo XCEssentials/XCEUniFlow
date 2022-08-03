@@ -97,7 +97,7 @@ extension Publisher where Output == Dispatcher.ProcessedAccessEventReport, Failu
             }
             .map {
                 $0.storage
-                    .allValues
+                    .allStates
                     .map(
                         FeatureStatus.init
                     )

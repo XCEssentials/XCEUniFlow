@@ -47,7 +47,7 @@ struct AnyMutationOf<K: SomeFeature>: SomeMutationDecriptor
         
         guard
             let anyMutation = mutationReport.asAnyMutation,
-            anyMutation.key.name == K.name
+            anyMutation.feature.name == K.name
         else
         {
             return nil
@@ -56,7 +56,7 @@ struct AnyMutationOf<K: SomeFeature>: SomeMutationDecriptor
         //---
         
         self.timestamp = mutationReport.timestamp
-        self.oldValue = anyMutation.oldValue
-        self.newValue = anyMutation.newValue
+        self.oldValue = anyMutation.oldState
+        self.newValue = anyMutation.newState
     }
 }

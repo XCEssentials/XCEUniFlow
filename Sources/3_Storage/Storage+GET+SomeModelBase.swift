@@ -27,14 +27,14 @@
 public
 extension Storage
 {
-    subscript(_ keyType: SomeFeature.Type) -> SomeStateBase?
+    subscript(_ feature: SomeFeature.Type) -> SomeStateBase?
     {
-        try? fetch(valueForKey: keyType)
+        try? fetchState(forFeature: feature)
     }
     
-    func hasValue(withKey keyType: SomeFeature.Type) -> Bool
+    func hasFeature(_ feature: SomeFeature.Type) -> Bool
     {
-        self[keyType] != nil
+        self[feature] != nil
     }
 }
 
@@ -44,14 +44,14 @@ public
 extension SomeFeature
 {
     static
-    func fetch(from storage: Storage) throws -> SomeStateBase
+    func fetchState(from storage: Storage) throws -> SomeStateBase
     {
-        try storage.fetch(valueForKey: self)
+        try storage.fetchState(forFeature: self)
     }
 
     static
     func isPresent(in storage: Storage) -> Bool
     {
-        storage.hasValue(withKey: self)
+        storage.hasFeature(self)
     }
 }

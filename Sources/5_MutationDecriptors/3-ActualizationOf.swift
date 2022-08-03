@@ -30,16 +30,16 @@ import Foundation /// for access to `Date` type
 
 /// Operation that has both old and new values.
 public
-struct ActualizationOf<V: SomeState>: SomeMutationDecriptor
+struct ActualizationOf<S: SomeState>: SomeMutationDecriptor
 {
     public
     let timestamp: Date
 
     public
-    let oldValue: V
+    let oldValue: S
     
     public
-    let newValue: V
+    let newValue: S
     
     public
     init?(
@@ -47,8 +47,8 @@ struct ActualizationOf<V: SomeState>: SomeMutationDecriptor
     ) {
         
         guard
-            let oldValue = mutationReport.asActualization?.oldValue as? V,
-            let newValue = mutationReport.asActualization?.newValue as? V
+            let oldValue = mutationReport.asActualization?.oldState as? S,
+            let newValue = mutationReport.asActualization?.newState as? S
         else
         {
             return nil
