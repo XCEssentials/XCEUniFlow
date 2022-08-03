@@ -134,19 +134,6 @@ extension Dispatcher
         }
         
         public
-        struct EnvironmentInfo
-        {
-            public
-            let scope: String
-            
-            public
-            let context: String
-                
-            public
-            let location: Int
-        }
-        
-        public
         let timestamp = Date()
         
         public
@@ -156,15 +143,21 @@ extension Dispatcher
         let storage: Storage
         
         public
-        let env: EnvironmentInfo
+        let origin: AccessOrigin
     }
     
     public
-    typealias AccessOrigin = (
-        scope: String,
-        context: String,
-        location: Int
-        )
+    struct AccessOrigin
+    {
+        public
+        let scope: String
+        
+        public
+        let context: String
+            
+        public
+        let location: Int
+    }
     
     public
     enum AccessError: Error
@@ -214,7 +207,7 @@ extension Dispatcher
         let storage: Storage
         
         public
-        let env: AccessReport.EnvironmentInfo
+        let origin: AccessOrigin
     }
     
     public
@@ -230,7 +223,7 @@ extension Dispatcher
         let storage: Storage
         
         public
-        let env: AccessReport.EnvironmentInfo
+        let origin: AccessOrigin
     }
     
     fileprivate
@@ -274,19 +267,17 @@ extension Dispatcher
         location l: Int = #line
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
         
         try (activeTransaction == nil) ?! AccessError.anotherTransactionIsInProgress(
-            (s, c, l),
-            anotherTransaction: activeTransaction!
-                .origin
-                ./ { ($0.scope, $0.context, $0.location) }
+            .init(scope: s, context: c, location: l),
+            anotherTransaction: activeTransaction!.origin
         )
         
         //---
         
         activeTransaction = (
-            (s, c, l),
+            .init(scope: s, context: c, location: l),
             storage,
             storage.lastHistoryResetId
         )
@@ -299,12 +290,12 @@ extension Dispatcher
         location l: Int = #line
     ) throws -> Storage.History {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
         
-        var tr = try self.activeTransaction ?! AccessError.noActiveTransaction((s, c, l))
+        var tr = try self.activeTransaction ?! AccessError.noActiveTransaction(.init(scope: s, context: c, location: l))
         
         try (tr.lastHistoryResetId == storage.lastHistoryResetId) ?! AccessError.concurrentChangesDetected(
-            (s, c, l),
+            .init(scope: s, context: c, location: l),
             anotherTransaction: tr.origin
         )
         
@@ -331,11 +322,7 @@ extension Dispatcher
                     mutations: mutationsToReport
                 ),
                 storage: storage,
-                env: .init(
-                    scope: tr.origin.scope,
-                    context: tr.origin.context,
-                    location: tr.origin.location
-                )
+                origin: tr.origin
             )
         )
         
@@ -355,9 +342,9 @@ extension Dispatcher
         reason: Error
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
         
-        let tr = try self.activeTransaction ?! AccessError.noActiveTransaction((s, c, l))
+        let tr = try self.activeTransaction ?! AccessError.noActiveTransaction(.init(scope: s, context: c, location: l))
         
         //---
         
@@ -367,11 +354,7 @@ extension Dispatcher
                     reason: reason
                     ),
                 storage: storage,
-                env: .init(
-                    scope: tr.origin.scope,
-                    context: tr.origin.context,
-                    location: tr.origin.location
-                )
+                origin: tr.origin
             )
         )
         
@@ -391,9 +374,9 @@ extension Dispatcher
         _ handler: (inout Storage) throws -> Void
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
         
-        var tr = try activeTransaction ?! AccessError.noActiveTransaction((s, c, l))
+        var tr = try activeTransaction ?! AccessError.noActiveTransaction(.init(scope: s, context: c, location: l))
         
         //---
 
@@ -404,7 +387,7 @@ extension Dispatcher
         catch
         {
             throw AccessError.failureDuringAccess(
-                (s, c, l),
+                .init(scope: s, context: c, location: l),
                 transaction: tr.origin,
                 cause: error
             )
@@ -420,7 +403,7 @@ extension Dispatcher
         forFeature featureType: SomeFeature.Type
     ) throws -> SomeStateBase {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
         
         //---
         
@@ -442,7 +425,7 @@ extension Dispatcher
         ofType _: S.Type = S.self
     ) throws -> S {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread((s, c, l))
+        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
         
         //---
         
