@@ -38,7 +38,7 @@ extension ExternalBindingBDD
         
         let source: S
         
-        public
+        //internal
         func when<P: Publisher>(
             _ when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> P
         ) -> GivenOrThenContext<P> {
@@ -46,7 +46,7 @@ extension ExternalBindingBDD
             .init(
                 description: description,
                 source: source,
-                when: { when($0) }
+                when: when
             )
         }
         
@@ -58,7 +58,12 @@ extension ExternalBindingBDD
             .init(
                 description: description,
                 source: source,
-                when: { $0.onProcessed.mutation(M.self).eraseToAnyPublisher() }
+                when: {
+                    $0.onProcessed
+                        .perEachMutation
+                        .as(M.self)
+                        .eraseToAnyPublisher()
+                }
             )
         }
     }
