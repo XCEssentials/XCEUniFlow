@@ -33,7 +33,12 @@ import XCERequirement
 
 //---
 
-class Arithmetics: FeatureBase, SomeWorkflow, SomeViewModel
+final
+class ArithmeticsVM: ViewModelBase<Arithmetics> {}
+
+//---
+
+class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
 {
     struct Main: SomeState {
         
@@ -61,10 +66,10 @@ class Arithmetics: FeatureBase, SomeWorkflow, SomeViewModel
         deinitCount = 0
     }
     
-    override
-    init(with storageDispatcher: StorageDispatcher? = nil)
+    required
+    init(with dispatcher: Dispatcher? = nil)
     {
-        super.init(with: storageDispatcher)
+        super.init(with: dispatcher)
         
         //---
         
@@ -82,11 +87,11 @@ class Arithmetics: FeatureBase, SomeWorkflow, SomeViewModel
 extension Arithmetics
 {
     static
-    var bindings: [BindingInStorage] {[
+    var bindings: [InternalBinding] {[
         
         scenario()
             .when(
-                InitializationInto<Main>.completed
+                InitializationInto<Main>.done
             )
             .then { _ in
                 onInitialization?()
@@ -94,18 +99,18 @@ extension Arithmetics
         
         scenario()
             .when(
-                ActualizationOf<Main>.completed
+                ActualizationIn<Main>.done
             )
             .then { _ in
                 onActualization?()
             }
     ]}
     
-    var bindings: [BindingViewModel] {[
+    var bindings: [ExternalBinding] {[
         
         scenario()
             .when(
-                InitializationInto<Main>.completed
+                InitializationInto<Main>.done
             )
             .then { _, _ in }
     ]}
@@ -117,7 +122,7 @@ extension Arithmetics
 {
     func begin(with value: Int = 0)
     {
-        should {
+        dispatcher.should {
             
             let main = Main(val: value)
             
@@ -129,9 +134,9 @@ extension Arithmetics
 
     func setExplicit(value: Int)
     {
-        should {
+        dispatcher.should {
             
-            var main: Main = try fetch()
+            var main: Main = try fetchState()
             
             //---
             
@@ -149,9 +154,9 @@ extension Arithmetics
 
     func incFive()
     {
-        should {
+        dispatcher.should {
             
-            var main: Main = try fetch()
+            var main: Main = try fetchState()
             
             //---
             
