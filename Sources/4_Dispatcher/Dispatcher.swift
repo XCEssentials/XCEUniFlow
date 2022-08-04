@@ -175,7 +175,7 @@ extension Dispatcher
             anotherTransaction: AccessOrigin
         )
         
-        case concurrentChangesDetected(
+        case internalInconsistencyDetected(
             AccessOrigin,
             anotherTransaction: AccessOrigin
         )
@@ -190,8 +190,7 @@ extension Dispatcher
     fileprivate
     typealias Transaction = (
         origin: AccessOrigin,
-        tmpStorageCopy: Storage,
-        lastHistoryResetId: String
+        recoverySnapshot: Storage
     )
     
     public
@@ -267,19 +266,30 @@ extension Dispatcher
         location l: Int = #line
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
-        try (activeTransaction == nil) ?! AccessError.anotherTransactionIsInProgress(
-            .init(scope: s, context: c, location: l),
-            anotherTransaction: activeTransaction!.origin
-        )
+        guard
+            activeTransaction == nil
+        else
+        {
+            throw AccessError.anotherTransactionIsInProgress(
+                .init(scope: s, context: c, location: l),
+                anotherTransaction: activeTransaction!.origin
+            )
+        }
         
         //---
         
         activeTransaction = (
             .init(scope: s, context: c, location: l),
-            storage,
-            storage.lastHistoryResetId
+            storage
         )
     }
     
@@ -290,22 +300,37 @@ extension Dispatcher
         location l: Int = #line
     ) throws -> Storage.History {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
-        var tr = try self.activeTransaction ?! AccessError.noActiveTransaction(.init(scope: s, context: c, location: l))
+        guard
+            let tr = self.activeTransaction
+        else
+        {
+            throw AccessError.noActiveTransaction(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
-        try (tr.lastHistoryResetId == storage.lastHistoryResetId) ?! AccessError.concurrentChangesDetected(
-            .init(scope: s, context: c, location: l),
-            anotherTransaction: tr.origin
-        )
+        guard
+            tr.recoverySnapshot.lastHistoryResetId == storage.lastHistoryResetId
+        else
+        {
+            throw AccessError.internalInconsistencyDetected(
+                .init(scope: s, context: c, location: l),
+                anotherTransaction: tr.origin
+            )
+        }
         
         //---
         
-        let mutationsToReport = tr.tmpStorageCopy.resetHistory()
-        
-        // apply changes to permanent storage
-        storage = tr.tmpStorageCopy // NOTE: the history has already been cleared
-
+        let mutationsToReport = storage.resetHistory()
         activeTransaction = nil
         
         //---
@@ -342,9 +367,28 @@ extension Dispatcher
         reason: Error
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
-        let tr = try self.activeTransaction ?! AccessError.noActiveTransaction(.init(scope: s, context: c, location: l))
+        guard
+            let tr = self.activeTransaction
+        else
+        {
+            throw AccessError.noActiveTransaction(
+                .init(scope: s, context: c, location: l)
+            )
+        }
+        
+        //---
+        
+        storage = tr.recoverySnapshot
+        self.activeTransaction = nil
         
         //---
         
@@ -357,10 +401,6 @@ extension Dispatcher
                 origin: tr.origin
             )
         )
-        
-        //---
-        
-        self.activeTransaction = nil
     }
 }
 
@@ -374,15 +414,29 @@ extension Dispatcher
         _ handler: (inout Storage) throws -> Void
     ) throws {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
-        var tr = try activeTransaction ?! AccessError.noActiveTransaction(.init(scope: s, context: c, location: l))
+        guard
+            let tr = self.activeTransaction
+        else
+        {
+            throw AccessError.noActiveTransaction(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
         //---
 
         do
         {
-            try handler(&tr.tmpStorageCopy)
+            try handler(&storage)
         }
         catch
         {
@@ -392,8 +446,6 @@ extension Dispatcher
                 cause: error
             )
         }
-        
-        activeTransaction = tr
     }
     
     func fetchState(
@@ -403,19 +455,18 @@ extension Dispatcher
         forFeature featureType: SomeFeature.Type
     ) throws -> SomeStateBase {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
         //---
         
-        if
-            let tr = self.activeTransaction
-        {
-            return try tr.tmpStorageCopy.fetchState(forFeature: featureType)
-        }
-        else
-        {
-            return try storage.fetchState(forFeature: featureType)
-        }
+        return try storage.fetchState(forFeature: featureType)
     }
     
     func fetchState<S: SomeState>(
@@ -425,26 +476,25 @@ extension Dispatcher
         ofType _: S.Type = S.self
     ) throws -> S {
         
-        try Thread.isMainThread ?! AccessError.notOnMainThread(.init(scope: s, context: c, location: l))
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
         
         //---
         
-        if
-            let tr = self.activeTransaction
-        {
-            return try tr.tmpStorageCopy.fetchState(ofType: S.self)
-        }
-        else
-        {
-            return try storage.fetchState(ofType: S.self)
-        }
+        return try storage.fetchState(ofType: S.self)
     }
     
-    func removeAll(
+    func resetStorage(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws {
+    ) {
         
         try! startTransaction(
             scope: s,
@@ -454,9 +504,9 @@ extension Dispatcher
         
         //---
         
-        try access(scope: s, context: c, location: l) {
+        try! access(scope: s, context: c, location: l) {
            
-            try $0.removeAll()
+            try! $0.removeAll()
         }
         
         //---
