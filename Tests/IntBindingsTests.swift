@@ -51,13 +51,6 @@ class IntBindingsTests: XCTestCase
     }
 }
 
-// MARK: - Nested types
-
-extension IntBindingsTests
-{
-    
-}
-
 // MARK: - Tests
 
 extension IntBindingsTests
@@ -130,8 +123,8 @@ extension IntBindingsTests
         }
         
         SUT.expectInitialization = expectation(description: "Initialization")
-        SUT.expectDeinitialization = expectation(description: "Deinitialization")
         SUT.expectTransition = expectation(description: "Transition")
+        SUT.expectDeinitialization = expectation(description: "Deinitialization")
         
         let sut = SUT(with: dispatcher)
         
