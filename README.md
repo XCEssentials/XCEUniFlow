@@ -143,16 +143,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 }
 ```
 
-### DispatcherProxy
-
-For safety reasons, it is not recommended to pass reference to dispatcher across the app. Instead, there is a special lightweight data structure called `DispatcherProxy` that provides access to essential functionality of a given dispatcher and supposed to be freely passed/copied/stored as many times as it is needed.
-
-Access dispatcher proxy as follows:
-
-```swift
-let theProxy = dispatcher.proxy
-```
-
 For each data type that will need access to global app state, it is recommended to implement `DispatcherInitializable` or `DispatcherBindable` protocol. These two protocols implement [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection) and unify how potential observers are being connected with dispatcher.
 
 Here is example of custom UIWindow-subclass that implements `DispatcherInitializable` protocol.

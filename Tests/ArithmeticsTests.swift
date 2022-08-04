@@ -38,7 +38,7 @@ class ArithmeticsTests: XCTestCase
 {
     typealias SUT = Arithmetics
     
-    var dispatcher: StorageDispatcher!
+    var dispatcher: Dispatcher!
     var sut: Arithmetics!
     
     override
@@ -49,8 +49,8 @@ class ArithmeticsTests: XCTestCase
         
         //---
         
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 0)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 0)
+        XCTAssertEqual(sut.dispatcher.allFeatures.count, 0)
+        XCTAssertEqual(sut.dispatcher.allStates.count, 0)
     }
     
     override
@@ -120,8 +120,8 @@ extension ArithmeticsTests
         catch
         {
             guard
-                case StorageDispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
-                let semanticError = wrappedError as? SemanticMutationError
+                case Dispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
+                let semanticError = wrappedError as? ExpectedMutation.SemanticError
             else
             {
                 return XCTFail("Unexpected failure type: \(error)")
@@ -153,11 +153,11 @@ extension ArithmeticsTests
         
         //---
         
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 0)
+        XCTAssertEqual(sut.dispatcher.allFeatures.count, 1)
+        XCTAssertEqual(sut.dispatcher.allStates.count, 1)
+        XCTAssert(sut.dispatcher.allFeatures[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allStates[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allStates[0] as! SUT.Main).val, 0)
     }
     
     func test_begin_doubleCallHasNoEffect() throws
@@ -167,11 +167,11 @@ extension ArithmeticsTests
         
         //---
         
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 0)
+        XCTAssertEqual(sut.dispatcher.allFeatures.count, 1)
+        XCTAssertEqual(sut.dispatcher.allStates.count, 1)
+        XCTAssert(sut.dispatcher.allFeatures[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allStates[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allStates[0] as! SUT.Main).val, 0)
     }
     
     func test_setExplicit_success() throws
@@ -181,11 +181,11 @@ extension ArithmeticsTests
 
         //---
 
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 5)
+        XCTAssertEqual(sut.dispatcher.allFeatures.count, 1)
+        XCTAssertEqual(sut.dispatcher.allStates.count, 1)
+        XCTAssert(sut.dispatcher.allFeatures[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allStates[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allStates[0] as! SUT.Main).val, 5)
     }
     
     func test_setExplicit_noEffectIfUninitialized() throws
@@ -194,8 +194,8 @@ extension ArithmeticsTests
 
         //---
 
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 0)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 0)
+        XCTAssertEqual(sut.dispatcher.allFeatures.count, 0)
+        XCTAssertEqual(sut.dispatcher.allStates.count, 0)
     }
     
     func test_setExplicit_noEffectIfPreconditionFails() throws
@@ -205,10 +205,10 @@ extension ArithmeticsTests
 
         //---
 
-        XCTAssertEqual(sut._dispatcher.allKeys.count, 1)
-        XCTAssertEqual(sut._dispatcher.allValues.count, 1)
-        XCTAssert(sut._dispatcher.allKeys[0] is SUT.Type)
-        XCTAssert(sut._dispatcher.allValues[0] is SUT.Main)
-        XCTAssertEqual((sut._dispatcher.allValues[0] as! SUT.Main).val, 0)
+        XCTAssertEqual(sut.dispatcher.allFeatures.count, 1)
+        XCTAssertEqual(sut.dispatcher.allStates.count, 1)
+        XCTAssert(sut.dispatcher.allFeatures[0] is SUT.Type)
+        XCTAssert(sut.dispatcher.allStates[0] is SUT.Main)
+        XCTAssertEqual((sut.dispatcher.allStates[0] as! SUT.Main).val, 0)
     }
 }
