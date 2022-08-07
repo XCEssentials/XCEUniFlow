@@ -31,32 +31,25 @@ import Combine
 public
 extension ExternalBindingBDD
 {
-    struct GivenOrThenContext<W: Publisher> // W - When
+    struct GivenOrThenContext<W: SomeMutationDecriptor> // W - When
     {
         public
         let description: String
         
-        let source: S
-        
-        //internal
-        let when: (AnyPublisher<Dispatcher.AccessReport, Never>) -> W
-        
         public
         func given<G>(
-            _ given: @escaping (Dispatcher, W.Output) throws -> G?
+            _ given: @escaping (Dispatcher, W) throws -> G?
         ) -> ThenContext<W, G> {
             
             .init(
                 description: description,
-                source: source,
-                when: when,
                 given: given
             )
         }
         
         public
         func given<G>(
-            _ outputOnlyHandler: @escaping (W.Output) throws -> G?
+            _ outputOnlyHandler: @escaping (W) throws -> G?
         ) -> ThenContext<W, G> {
             
             given { _, output in
@@ -69,15 +62,14 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (S, W.Output, Dispatcher) -> Void
+            _ then: @escaping (W, Dispatcher) -> Void
         ) -> ExternalBinding {
             
             .init(
-                source: source,
                 description: description,
                 scope: scope,
+                context: S.self,
                 location: location,
-                when: when,
                 given: { $1 }, /// just pass `when` clause output straight through as is
                 then: then
             )
@@ -87,12 +79,12 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ noInputHandler: @escaping (S, Dispatcher) -> Void
+            _ noInputHandler: @escaping (Dispatcher) -> Void
         ) -> ExternalBinding {
             
-            then(scope: scope, location: location) { src, _, dispatcher in
+            then(scope: scope, location: location) { _, dispatcher in
                 
-                noInputHandler(src, dispatcher)
+                noInputHandler(dispatcher)
             }
         }
         
@@ -100,12 +92,12 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ sourceOnlyHandler: @escaping (S) -> Void
+            _ sourceOnlyHandler: @escaping () -> Void
         ) -> ExternalBinding {
             
-            then(scope: scope, location: location) { src, _ in
+            then(scope: scope, location: location) { _, _ in
                 
-                sourceOnlyHandler(src)
+                sourceOnlyHandler()
             }
         }
     }

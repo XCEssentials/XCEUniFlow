@@ -1,5 +1,16 @@
 import Combine
 
+//---
+
+public
+extension Publisher
+{
+    func executeNow()
+    {
+        _ = sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+    }
+}
+
 // MARK: - Access log - Processed vs. Rejected
 
 public
@@ -59,24 +70,20 @@ extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
 public
 extension Publisher where Output == Dispatcher.ProcessedAccessEventReport, Failure == Never
 {
-    var mutation: AnyPublisher<Storage.HistoryElement, Failure>
+    var perEachMutation: AnyPublisher<Storage.HistoryElement, Failure>
     {
-        self
-            .flatMap(
-                \.mutations.publisher
-            )
-            .eraseToAnyPublisher()
+        flatMap(\.mutations.publisher).eraseToAnyPublisher()
     }
-    
-    func mutation<T: SomeMutationDecriptor>(
+}
+
+public
+extension Publisher where Output == Storage.HistoryElement, Failure == Never
+{
+    func `as`<T: SomeMutationDecriptor>(
         _: T.Type
     ) -> AnyPublisher<T, Failure> {
         
-        mutation
-            .compactMap(
-                T.init(from:)
-            )
-            .eraseToAnyPublisher()
+        compactMap(T.init(from:)).eraseToAnyPublisher()
     }
 }
 

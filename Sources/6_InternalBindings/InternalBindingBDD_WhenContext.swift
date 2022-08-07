@@ -54,7 +54,11 @@ extension InternalBindingBDD
             
             .init(
                 description: description,
-                when: { $0.onProcessed.mutation(M.self).eraseToAnyPublisher() }
+                when: { $0.onProcessed
+                    .perEachMutation
+                    .as(M.self)
+                    .eraseToAnyPublisher()
+                }
             )
         }
     }

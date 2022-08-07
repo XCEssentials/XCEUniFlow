@@ -106,8 +106,8 @@ extension Arithmetics
             }
     ]}
     
-    var bindings: [ExternalBinding] {[
-        
+    func bindings() -> [ExternalBinding]
+    {[
         scenario()
             .when(
                 InitializationInto<Main>.done
