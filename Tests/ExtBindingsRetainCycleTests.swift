@@ -99,7 +99,7 @@ extension ExtBindingsRetainCycleTests
                 Self.expectDeinitialization.fulfill()
             }
             
-            let bindings: [ExternalBinding] = []
+            func bindings() -> [ExternalBinding] {[]}
         }
         
         //---
@@ -118,7 +118,7 @@ extension ExtBindingsRetainCycleTests
         waitForExpectations(timeout: 1)
     }
     
-    func test_observer_usingProvidedSourceRef_withoutSubscribing()
+    func test_observer_withoutSubscribing()
     {
         // GIVEN
 
@@ -141,11 +141,11 @@ extension ExtBindingsRetainCycleTests
                 Self.expectDeinitialization.fulfill()
             }
 
-            var bindings: [ExternalBinding]
+            func bindings() -> [ExternalBinding]
             {[
                 scenario()
                     .when(InitializationInto<SUT.One>.done)
-                    .then { $0.value = "1" }
+                    .then { self.value = "2" }
             ]}
         }
 
@@ -165,55 +165,7 @@ extension ExtBindingsRetainCycleTests
         waitForExpectations(timeout: 1)
     }
     
-    func test_observer_usingProvidedSourceRef_storingBindings_withoutSubscribing()
-    {
-        // GIVEN
-
-        final
-        class SUT: FeatureBase
-        {
-            struct One: SomeState { typealias Feature = SUT }
-        }
-
-        final
-        class Observer: SomeExternalObserver
-        {
-            static
-            var expectDeinitialization: XCTestExpectation!
-
-            var value: String?
-
-            deinit
-            {
-                Self.expectDeinitialization.fulfill()
-            }
-
-            lazy
-            var bindings: [ExternalBinding] = [
-                
-                scenario()
-                    .when(InitializationInto<SUT.One>.done)
-                    .then { $0.value = "1" }
-            ]
-        }
-
-        //---
-
-        var observer: Observer! = Observer()
-
-        Observer.expectDeinitialization = expectation(description: "Deinit")
-
-        // WHEN
-
-        _ = observer
-        observer = nil
-
-        // THEN
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func test_observer_usingProvidedSourceRef_withSubscribing()
+    func test_observer_withSubscribing()
     {
         // GIVEN
 
@@ -236,256 +188,12 @@ extension ExtBindingsRetainCycleTests
                 Self.expectDeinitialization.fulfill()
             }
             
-            var bindings: [ExternalBinding]
+            func bindings() -> [ExternalBinding]
             {[
                 scenario()
                     .when(InitializationInto<SUT.One>.done)
-                    .then { $0.value = "1" }
+                    .then { self.value = "2" }
             ]}
-        }
-        
-        //---
-        
-        var observer: Observer! = Observer()
-        
-        Observer.expectDeinitialization = expectation(description: "Deinit")
-        
-        dispatcher.subscribe(observer)
-        
-        // WHEN
-        
-        _ = observer
-        observer = nil
-        
-        // THEN
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func test_observer_usingProvidedSourceRef_storingBindings_withSubscribing()
-    {
-        // GIVEN
-
-        final
-        class SUT: FeatureBase
-        {
-            struct One: SomeState { typealias Feature = SUT }
-        }
-        
-        final
-        class Observer: SomeExternalObserver
-        {
-            static
-            var expectDeinitialization: XCTestExpectation!
-            
-            var value: String?
-            
-            deinit
-            {
-                Self.expectDeinitialization.fulfill()
-            }
-            
-            lazy
-            var bindings: [ExternalBinding] = [
-                
-                scenario()
-                    .when(InitializationInto<SUT.One>.done)
-                    .then { $0.value = "1" }
-            ]
-        }
-        
-        //---
-        
-        var observer: Observer! = Observer()
-        
-        Observer.expectDeinitialization = expectation(description: "Deinit")
-        
-        dispatcher.subscribe(observer)
-        
-        // WHEN
-        
-        _ = observer
-        observer = nil
-        
-        // THEN
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func test_observer_usingDirectSelfRef_withoutSubscribing()
-    {
-        // GIVEN
-
-        final
-        class SUT: FeatureBase
-        {
-            struct One: SomeState { typealias Feature = SUT }
-        }
-
-        final
-        class Observer: SomeExternalObserver
-        {
-            static
-            var expectDeinitialization: XCTestExpectation!
-
-            var value: String?
-
-            deinit
-            {
-                Self.expectDeinitialization.fulfill()
-            }
-
-            var bindings: [ExternalBinding]
-            {[
-                scenario()
-                    .when(InitializationInto<SUT.One>.done)
-                    .then { _ in self.value = "2" }
-            ]}
-        }
-
-        //---
-
-        var observer: Observer! = Observer()
-
-        Observer.expectDeinitialization = expectation(description: "Deinit")
-
-        // WHEN
-
-        _ = observer
-        observer = nil
-
-        // THEN
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func test_observer_usingDirectSelfRef_storingBindings_withoutSubscribing()
-    {
-        // GIVEN
-
-        final
-        class SUT: FeatureBase
-        {
-            struct One: SomeState { typealias Feature = SUT }
-        }
-
-        final
-        class Observer: SomeExternalObserver
-        {
-            static
-            var expectDeinitialization: XCTestExpectation!
-
-            var value: String?
-
-            deinit
-            {
-                Self.expectDeinitialization.fulfill()
-            }
-
-            lazy
-            var bindings: [ExternalBinding] = [
-                
-                scenario()
-                    .when(InitializationInto<SUT.One>.done)
-                    .then { _ in self.value = "2" }
-            ]
-        }
-
-        //---
-
-        var observer: Observer! = Observer()
-
-        Observer.expectDeinitialization = expectation(description: "Deinit")
-
-        // WHEN
-
-        _ = observer
-        observer = nil
-
-        // THEN
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func test_observer_usingDirectSelfRef_withSubscribing()
-    {
-        // GIVEN
-
-        final
-        class SUT: FeatureBase
-        {
-            struct One: SomeState { typealias Feature = SUT }
-        }
-        
-        final
-        class Observer: SomeExternalObserver
-        {
-            static
-            var expectDeinitialization: XCTestExpectation!
-            
-            var value: String?
-            
-            deinit
-            {
-                Self.expectDeinitialization.fulfill()
-            }
-            
-            var bindings: [ExternalBinding]
-            {[
-                scenario()
-                    .when(InitializationInto<SUT.One>.done)
-                    .then { _ in self.value = "2" }
-            ]}
-        }
-        
-        //---
-        
-        var observer: Observer! = Observer()
-        
-        Observer.expectDeinitialization = expectation(description: "Deinit")
-        
-        dispatcher.subscribe(observer)
-        
-        // WHEN
-        
-        _ = observer
-        observer = nil
-        
-        // THEN
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func test_observer_usingDirectSelfRef_storingBindings_withSubscribing()
-    {
-        // GIVEN
-
-        final
-        class SUT: FeatureBase
-        {
-            struct One: SomeState { typealias Feature = SUT }
-        }
-        
-        final
-        class Observer: SomeExternalObserver
-        {
-            static
-            var expectDeinitialization: XCTestExpectation!
-            
-            var value: String?
-            
-            deinit
-            {
-                Self.expectDeinitialization.fulfill()
-            }
-            
-            lazy
-            var bindings: [ExternalBinding] = [
-                
-                scenario()
-                    .when(InitializationInto<SUT.One>.done)
-                    .then { _ in self.value = "2" }
-            ]
         }
         
         //---

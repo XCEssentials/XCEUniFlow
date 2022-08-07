@@ -107,19 +107,19 @@ extension ExtBindingsTests
 
 extension ExtBindingsTests
 {
-    var bindings: [ExternalBinding]
+    func bindings() -> [ExternalBinding]
     {[
         scenario()
             .when(InitializationInto<SUT.One>.done)
-            .then { $0.expectInitialization.fulfill() },
+            .then { self.expectInitialization.fulfill() },
 
         scenario()
             .when(TransitionBetween<SUT.One, SUT.Two>.done)
-            .then { $0.expectTransition.fulfill() },
+            .then { self.expectTransition.fulfill() },
 
         scenario()
             .when(DeinitializationFrom<SUT.Two>.done)
-            .then { $0.expectDeinitialization.fulfill() }
+            .then { self.expectDeinitialization.fulfill() }
     ]}
 }
 

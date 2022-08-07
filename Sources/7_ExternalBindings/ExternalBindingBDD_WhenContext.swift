@@ -36,34 +36,13 @@ extension ExternalBindingBDD
         public
         let description: String
         
-        let source: S
-        
-        //internal
-        func when<P: Publisher>(
-            _ when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> P
-        ) -> GivenOrThenContext<P> {
-            
-            .init(
-                description: description,
-                source: source,
-                when: when
-            )
-        }
-        
         public
         func when<M: SomeMutationDecriptor>(
             _: M.Type = M.self
-        ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
+        ) -> GivenOrThenContext<M> {
             
             .init(
-                description: description,
-                source: source,
-                when: {
-                    $0.onProcessed
-                        .perEachMutation
-                        .as(M.self)
-                        .eraseToAnyPublisher()
-                }
+                description: description
             )
         }
     }

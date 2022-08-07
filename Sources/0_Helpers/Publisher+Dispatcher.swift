@@ -1,5 +1,16 @@
 import Combine
 
+//---
+
+public
+extension Publisher
+{
+    func executeNow()
+    {
+        _ = sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+    }
+}
+
 // MARK: - Access log - Processed vs. Rejected
 
 public

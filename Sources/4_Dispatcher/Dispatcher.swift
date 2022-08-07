@@ -67,6 +67,9 @@ class Dispatcher
     private
     var statusSubscription: AnyCancellable?
     
+    private
+    var externalBindingsSubscription: AnyCancellable?
+    
     fileprivate
     let _internalBindingsStatusLog = PassthroughSubject<InternalBinding.Status, Never>()
     
@@ -104,6 +107,32 @@ class Dispatcher
             .statusReport
             .sink { [weak self] in
                 self?._status.send($0)
+            }
+        
+        self.externalBindingsSubscription = accessLog
+            .onProcessed
+            .perEachMutation
+            .sink { [weak self] mutation in
+                
+                guard let dispatcher = self else { return }
+                
+                //---
+                
+                dispatcher
+                    .externalBindings
+                    .values
+                    .compactMap {
+                        $0.observer
+                    }
+                    .flatMap {
+                        $0.bindings()
+                    }
+                    .forEach {
+                        $0.execute(
+                            with: dispatcher,
+                            mutation: mutation
+                        )
+                    }
             }
     }
 }
@@ -232,15 +261,10 @@ extension Dispatcher
         weak
         var observer: SomeExternalObserver?
         
-        /// Combine tokens of activated bindings (one per each binding)
-        let tokens: [AnyCancellable]
-        
         init(
-            with observer: SomeExternalObserver,
-            tokens: [AnyCancellable]
+            with observer: SomeExternalObserver
         ) {
             self.observer = observer
-            self.tokens = tokens
         }
     }
 }
@@ -599,27 +623,15 @@ extension Dispatcher
 
 extension Dispatcher
 {
-    /// Activates `observer` bindings within `self`
-    /// and stores binding tokens for as long
-    /// as `observer` is in memory, or until `unsubscribe`
-    /// for same `observer` is called.
-    ///
-    /// - Returns: array of Combine tokens (`AnyCancellable`)
-    ///     for activated bindings.
-    @discardableResult
+    /// Registers `observer` for bindings execution
+    /// within `self` for as long as `observer` is
+    /// in memory, or until `unsubscribe` is called
+    /// for same `observer`.
     public
-    func subscribe(_ observer: SomeExternalObserver) -> [AnyCancellable]
+    func subscribe(_ observer: SomeExternalObserver)
     {
         let observerId = ObjectIdentifier(observer)
-        
-        let newSubscribtion = observer
-            .bindings
-            .map{ $0.construct(with: self) }
-            ./ { ExternalSubscription(with: observer, tokens: $0) }
-        
-        externalBindings[observerId] = newSubscribtion
-        
-        return newSubscribtion.tokens
+        externalBindings[observerId] = ExternalSubscription(with: observer)
     }
     
     /// Deactivates `observer` bindings within `self`.
@@ -809,13 +821,13 @@ struct ExternalBinding
     }
 
     public
-    let source: SomeExternalObserver.Type
-    
-    public
     let description: String
     
     public
     let scope: String
+    
+    public
+    let context: SomeExternalObserver.Type
     
     public
     let location: Int
@@ -823,42 +835,42 @@ struct ExternalBinding
     //---
     
     private
-    let body: (Dispatcher, Self) -> AnyPublisher<Void, Error>
+    let body: (Storage.HistoryElement, Dispatcher, Self) -> Void
     
     //---
     
     //internal
-    func construct(with dispatcher: Dispatcher) -> AnyCancellable
+    func execute(with dispatcher: Dispatcher, mutation: Storage.HistoryElement)
     {
-        body(dispatcher, self).sink(receiveCompletion: { _ in }, receiveValue: { })
+        body(mutation, dispatcher, self)
     }
     
     //internal
-    init<S: SomeExternalObserver, W: Publisher, G>(
-        source: S,
+    init<S: SomeExternalObserver, W: SomeMutationDecriptor, G>(
         description: String,
         scope: String,
+        context: S.Type,
         location: Int,
-        when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> W,
-        given: @escaping (Dispatcher, W.Output) throws -> G?,
-        then: @escaping (S, G, Dispatcher) -> Void
+        given: @escaping (Dispatcher, W) throws -> G?,
+        then: @escaping (G, Dispatcher) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
         //---
         
-        self.source = S.self
         self.description = description
         self.scope = scope
+        self.context = S.self
         self.location = location
 
-        self.body = { [weak source] dispatcher, binding in
+        self.body = { mutation, dispatcher, binding in
             
             assert(Thread.isMainThread, "Must be on main thread!")
             
             //---
             
-            return when(dispatcher.accessLog)
+            Just(mutation)
+                .as(W.self)
                 .tryCompactMap { [weak dispatcher] in
 
                     guard let dispatcher = dispatcher else { return nil }
@@ -880,11 +892,10 @@ struct ExternalBinding
                 .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
 
                     guard let dispatcher = dispatcher else { return nil }
-                    guard let source = source else { return nil }
 
                     //---
 
-                    return then(source, givenOutput, dispatcher) // map into `Void` to erase type info
+                    return then(givenOutput, dispatcher) // map into `Void` to erase type info
                 }
                 .handleEvents(
                     receiveSubscription: { [weak dispatcher] _ in
@@ -928,7 +939,7 @@ struct ExternalBinding
                             )
                     }
                 )
-                .eraseToAnyPublisher()
+                .executeNow()
         }
     }
 }

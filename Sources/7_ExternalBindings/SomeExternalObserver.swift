@@ -24,6 +24,10 @@
  
  */
 
+import Combine
+
+//---
+
 /// External observer of mutations that happen inside a given `Dispatcher`.
 ///
 /// Instance of such type can be subscribed for updates via
@@ -31,7 +35,7 @@
 public
 protocol SomeExternalObserver: AnyObject
 {
-    var bindings: [ExternalBinding] { get }
+    func bindings() -> [ExternalBinding]
 }
 
 //---
@@ -44,17 +48,13 @@ extension SomeExternalObserver
         _ description: String = ""
     ) -> ExternalBindingBDD<Self>.WhenContext {
         
-        .init(description: description, source: self)
+        .init(description: description)
     }
     
-    /// Activates external bindings if `dispatcher` has been set already.
-    func activateSubscriptionsIfPossible(
-        with dispatcher: Dispatcher?
+    /// Activates external bindings with given `dispatcher`.
+    func activateSubscriptions(
+        with dispatcher: Dispatcher
     ) {
-        if
-            let dispatcher = dispatcher
-        {
-            dispatcher.subscribe(self)
-        }
+        dispatcher.subscribe(self)
     }
 }

@@ -31,32 +31,26 @@ import Combine
 public
 extension ExternalBindingBDD
 {
-    struct ThenContext<W: Publisher, G> // W - When, G - Given
+    struct ThenContext<W: SomeMutationDecriptor, G> // W - When, G - Given
     {
         public
         let description: String
         
-        let source: S
-        
         //internal
-        let when: (AnyPublisher<Dispatcher.AccessReport, Never>) -> W
-        
-        //internal
-        let given: (Dispatcher, W.Output) throws -> G?
+        let given: (Dispatcher, W) throws -> G?
         
         public
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (S, G, Dispatcher) -> Void
+            _ then: @escaping (G, Dispatcher) -> Void
         ) -> ExternalBinding {
             
             .init(
-                source: source,
                 description: description,
                 scope: scope,
+                context: S.self,
                 location: location,
-                when: when,
                 given: given,
                 then: then
             )
@@ -66,12 +60,12 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ noProxyHandler: @escaping (S, G) -> Void
+            _ noDispatcherHandler: @escaping (G) -> Void
         ) -> ExternalBinding {
             
-            then(scope: scope, location: location) { src, input, _ in
+            then(scope: scope, location: location) { input, _ in
                 
-                noProxyHandler(src, input)
+                noDispatcherHandler(input)
             }
         }
         
@@ -79,12 +73,12 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ sourceOnlyHandler: @escaping (S) -> Void
+            _ sourceOnlyHandler: @escaping () -> Void
         ) -> ExternalBinding {
             
-            then(scope: scope, location: location) { src, _ in
+            then(scope: scope, location: location) { _, _ in
                 
-                sourceOnlyHandler(src)
+                sourceOnlyHandler()
             }
         }
     }
