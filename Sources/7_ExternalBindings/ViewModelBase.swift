@@ -60,8 +60,12 @@ extension ViewModelBase where M: FeatureBase
         
         //---
         
-        (self as? SomeExternalObserver)
-            .map { $0.activateSubscriptionsIfPossible(with: dispatcher) }
+        if
+            let dispatcher = dispatcher
+        {
+            (self as? SomeExternalObserver)
+                .map { $0.activateSubscriptions(with: dispatcher) }
+        }
     }
     
     /// Passes through `dispatcher` into `model` and
@@ -74,6 +78,6 @@ extension ViewModelBase where M: FeatureBase
         //---
         
         (self as? SomeExternalObserver)
-            .map { $0.activateSubscriptionsIfPossible(with: dispatcher) }
+            .map { $0.activateSubscriptions(with: dispatcher) }
     }
 }
