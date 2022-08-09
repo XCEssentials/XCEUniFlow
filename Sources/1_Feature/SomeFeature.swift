@@ -28,6 +28,10 @@
 public
 protocol SomeFeature: AnyObject
 {
+    /// `Storage` will use this as actual key.
+    static
+    var name: String { get }
+    
     /// Convenience helper that determines user-friendly feature name.
     static
     var displayName: String { get }
@@ -44,7 +48,6 @@ extension SomeFeature
 {
     typealias Itself = Self
     
-    /// `ByTypeStorage` will use this as actual key.
     static
     var name: String
     {
