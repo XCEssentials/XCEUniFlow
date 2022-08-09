@@ -42,14 +42,26 @@ extension SomeFeatureTests
         final
         class FeatureA: FeatureBase {}
         
-        class FeatureB: FeatureBase { static var name: String = "123" }
+        class FeatureB: FeatureBase
+        {
+            static
+            var name: String = "BBB"
+            
+            static
+            var displayName: String = "B"
+        }
         
         final
         class ViewModelB: FeatureB {}
         
         XCTAssertTrue(FeatureA.name.contains("FeatureA"))
         XCTAssertFalse(FeatureB.name.contains("FeatureB"))
-        XCTAssertEqual(FeatureB.name, "123")
-        XCTAssertEqual(ViewModelB.name, "123")
+        XCTAssertEqual(FeatureB.name, "BBB")
+        XCTAssertEqual(ViewModelB.name, "BBB")
+
+        XCTAssertTrue(FeatureA.displayName.contains("FeatureA"))
+        XCTAssertFalse(FeatureB.displayName.contains("FeatureB"))
+        XCTAssertEqual(FeatureB.displayName, "B")
+        XCTAssertEqual(ViewModelB.displayName, "B")
     }
 }
