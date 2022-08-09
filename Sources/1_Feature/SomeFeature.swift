@@ -28,14 +28,6 @@
 public
 protocol SomeFeature: AnyObject
 {
-    /// `Storage` will use this as actual key.
-    static
-    var name: String { get }
-    
-    /// Convenience helper that determines user-friendly feature name.
-    static
-    var displayName: String { get }
-    
     /// Reference to a dispatcher in which context this feature
     /// should execute it's actions.
     var dispatcher: Dispatcher! { get }
@@ -48,16 +40,18 @@ extension SomeFeature
 {
     typealias Itself = Self
     
+    /// `Storage` will use this as actual key.
     static
     var name: String
     {
         .init(reflecting: Self.self)
     }
 
+    /// Convenience helper that determines user-friendly feature name.
     static
     var displayName: String
     {
-        name
+        .init(reflecting: Self.self)
     }
 }
 
