@@ -31,6 +31,24 @@
 open
 class FeatureBase: SomeFeature
 {
+    public
+    static
+    var name: String
+    {
+        // full type name, including enclosing types for nested declarations:
+        .init(reflecting: Self.self)
+    }
+
+    public
+    static
+    var displayName: String
+    {
+        Self.name
+            .split(separator: ".")
+            .dropFirst() // drop app/module name
+            .joined(separator: ".")
+    }
+    
     public private(set)
     var dispatcher: Dispatcher!
     
