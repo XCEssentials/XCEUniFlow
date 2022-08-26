@@ -24,67 +24,15 @@
  
  */
 
-public
 extension Dispatcher
 {
-    /// Indicates how an error should be reported
-    enum CriticalErrorReportingMethod
-    {
-        /// Via `fatalError`
-        case fatalError
-        
-        /// Via `assertionFailure`
-        case assertation
-    }
-    
-    /// Transaction within `handler` must be successful,
-    /// or a critical error will be reported.
-    @discardableResult
-    func must(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        reportVia reportingMethod: CriticalErrorReportingMethod = .assertation,
-        _ handler: () throws -> Void
-    ) -> Storage.History? {
-        
-        try? transact(
-            scope: scope,
-            context: context,
-            location: location,
-            extraFailureReporting: reportingMethod,
-            handler
-        )
-    }
-    
-    /// Transaction within `handler` may fail,
-    /// but failure is an acceptable outcome
-    /// o no errors will be reported.
-    @discardableResult
-    func should(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> Void
-    ) -> Storage.History? {
-        
-        try? transact(
-            scope: scope,
-            context: context,
-            location: location,
-            extraFailureReporting: .none,
-            handler
-        )
-    }
-    
     @discardableResult
     func transact(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        extraFailureReporting: CriticalErrorReportingMethod? = nil,
         _ handler: () throws -> Void
-    ) rethrows -> Storage.History {
+    ) -> AccessReport {
 
         try! startTransaction(
             scope: scope,
@@ -100,26 +48,12 @@ extension Dispatcher
         }
         catch
         {
-            try! rejectTransaction(
+            return try! rejectTransaction(
                 scope: scope,
                 context: context,
                 location: location,
                 reason: error
             )
-
-            switch extraFailureReporting
-            {
-                case .fatalError:
-                    fatalError("\(error)")
-                    
-                case .assertation:
-                    assertionFailure("\(error)")
-                    
-                case .none:
-                    break
-            }
-            
-            throw error
         }
 
         //---
@@ -128,6 +62,65 @@ extension Dispatcher
             scope: scope,
             context: context,
             location: location
+        )
+    }
+}
+
+// MARK: - Semantic transaction helpers
+
+public
+extension SomeFeature
+{
+    /// Transaction within `handler` must be successful,
+    /// or a critical error will be thrown (in `DEBUG` mode only).
+    @discardableResult
+    func must(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> Void
+    ) -> Dispatcher.AccessReport {
+        
+        let report = dispatcher.transact(
+            scope: scope,
+            context: context,
+            location: location,
+            handler
+        )
+        
+        //---
+        
+        #if DEBUG
+        
+        if
+            case .rejected(let reason) = report.outcome
+        {
+            assertionFailure("❌ [UniFlow] Transaction failed: \(reason)")
+        }
+        
+        #endif
+        
+        //---
+        
+        return report
+    }
+    
+    /// Transaction within `handler` may fail,
+    /// but failure is an acceptable outcome,
+    /// so no errors will be reported.
+    @discardableResult
+    func should(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> Void
+    ) -> Dispatcher.AccessReport {
+        
+        dispatcher.transact(
+            scope: scope,
+            context: context,
+            location: location,
+            handler
         )
     }
 }

@@ -45,7 +45,7 @@ struct Deinitialization: SomeMutationDecriptor
         from report: Storage.HistoryElement
     ) {
         
-        switch report.outcome
+        switch report.operation
         {
             case let .deinitialization(oldState):
                 

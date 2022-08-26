@@ -317,12 +317,11 @@ extension Dispatcher
         )
     }
     
-    @discardableResult
     func commitTransaction(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws -> Storage.History {
+    ) throws -> AccessReport {
         
         guard
             Thread.isMainThread
@@ -364,8 +363,8 @@ extension Dispatcher
         installInternalBindings(
             basedOn: mutationsToReport
         )
-
-        _accessLog.send(
+        
+        let report = AccessReport
             .init(
                 outcome: .processed(
                     mutations: mutationsToReport
@@ -373,7 +372,8 @@ extension Dispatcher
                 storage: storage,
                 origin: tr.origin
             )
-        )
+
+        _accessLog.send(report)
         
         uninstallInternalBindings(
             basedOn: mutationsToReport
@@ -381,7 +381,7 @@ extension Dispatcher
         
         //---
         
-        return mutationsToReport
+        return report
     }
     
     func rejectTransaction(
@@ -389,7 +389,7 @@ extension Dispatcher
         context c: String = #function,
         location l: Int = #line,
         reason: Error
-    ) throws {
+    ) throws -> AccessReport {
         
         guard
             Thread.isMainThread
@@ -416,7 +416,7 @@ extension Dispatcher
         
         //---
         
-        _accessLog.send(
+        let report = AccessReport
             .init(
                 outcome: .rejected(
                     reason: reason
@@ -424,7 +424,10 @@ extension Dispatcher
                 storage: storage,
                 origin: tr.origin
             )
-        )
+        
+        _accessLog.send(report)
+        
+        return report
     }
 }
 
@@ -535,7 +538,7 @@ extension Dispatcher
         
         //---
         
-        try! commitTransaction(
+        _ = try! commitTransaction(
             scope: s,
             context: c,
             location: l
@@ -563,7 +566,7 @@ extension Dispatcher
                 
                 //---
                 
-                switch report.outcome
+                switch report.operation
                 {
                     case .initialization(let newState):
                         return type(of: newState).feature
@@ -603,7 +606,7 @@ extension Dispatcher
                 
                 //---
                 
-                switch report.outcome
+                switch report.operation
                 {
                     case .deinitialization(let oldState):
                         return type(of: oldState).feature

@@ -44,7 +44,7 @@ struct Initialization: SomeMutationDecriptor
     init?(
         from report: Storage.HistoryElement
     ) {
-        switch report.outcome
+        switch report.operation
         {
             case let .initialization(newState):
                 

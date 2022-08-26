@@ -261,7 +261,7 @@ extension Storage
     ) {
         
         history.append(
-            .init(outcome: outcome)
+            .init(operation: outcome)
         )
     }
     

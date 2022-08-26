@@ -77,7 +77,7 @@ extension ArithmeticsTests
         
         try sut.initialize(with: input)
         
-        let output = try dispatcher.commitTransaction(
+        let report = try dispatcher.commitTransaction(
             scope: #file,
             context: #function,
             location: #line
@@ -85,13 +85,20 @@ extension ArithmeticsTests
         
         //---
         
-        XCTAssertEqual(output.count, 1)
-        
         guard
-            case let .initialization(newValue) = output[0].outcome
+            case .processed(let mutations) = report.outcome
         else
         {
-            return XCTFail("Unexpected output: \(output)")
+            return XCTFail("Unexpected failure: \(report.outcome)")
+        }
+        
+        XCTAssertEqual(mutations.count, 1)
+        
+        guard
+            case let .initialization(newValue) = mutations[0].operation
+        else
+        {
+            return XCTFail("Unexpected operation: \(mutations[0].operation)")
         }
         
         XCTAssert(type(of: newValue).feature is SUT.Type)
