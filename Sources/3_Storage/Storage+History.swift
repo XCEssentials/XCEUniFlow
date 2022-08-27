@@ -39,7 +39,7 @@ extension Storage
         let timestamp: Date = .init()
     
         public
-        let outcome: MutationAttemptOutcome
+        let operation: MutationAttemptOutcome
     }
 }
 
@@ -50,7 +50,7 @@ extension Storage.HistoryElement
 {
     var feature: SomeFeature.Type
     {
-        switch self.outcome
+        switch self.operation
         {
             case
                 .initialization(let state),

@@ -65,6 +65,34 @@ class ArithmeticsTests: XCTestCase
 
 extension ArithmeticsTests
 {
+    func test_accessLog_reportsImmediately()
+    {
+        // GIVEN
+        
+        let expect1 = expectation(description: "Rejection report")
+        let expect2 = expectation(description: "Continue after triggering action")
+        
+        let sub = dispatcher
+            .accessLog
+            .onRejected
+            .sink { _ in
+                
+                expect1.fulfill()
+            }
+        
+        _ = sub // silence warning
+        
+        // WHEN
+        
+        sut.incFive() // expect to FAIL, cause we didn't initialize yet
+        expect2.fulfill()
+        
+        // THEN
+        
+        XCTAssertFalse(SUT.isPresent(in: dispatcher))
+        wait(for: [expect1, expect2], timeout: 1, enforceOrder: true)
+    }
+    
     func test_initialization_success() throws
     {
         let input = SUT.Main(val: 0)
@@ -77,7 +105,7 @@ extension ArithmeticsTests
         
         try sut.initialize(with: input)
         
-        let output = try dispatcher.commitTransaction(
+        let report = try dispatcher.commitTransaction(
             scope: #file,
             context: #function,
             location: #line
@@ -85,13 +113,13 @@ extension ArithmeticsTests
         
         //---
         
-        XCTAssertEqual(output.count, 1)
+        XCTAssertEqual(report.mutations.count, 1)
         
         guard
-            case let .initialization(newValue) = output[0].outcome
+            case let .initialization(newValue) = report.mutations[0].operation
         else
         {
-            return XCTFail("Unexpected output: \(output)")
+            return XCTFail("Unexpected operation: \(report.mutations[0].operation)")
         }
         
         XCTAssert(type(of: newValue).feature is SUT.Type)

@@ -79,7 +79,7 @@ extension ExtBindingsTests
         
         func start()
         {
-            dispatcher.must {
+            must {
 
                 try initialize(with: One())
             }
@@ -87,7 +87,7 @@ extension ExtBindingsTests
 
         func proceed()
         {
-            dispatcher.must {
+            must {
 
                 try transition(from: One.self, into: Two())
             }
@@ -95,7 +95,7 @@ extension ExtBindingsTests
 
         func finish()
         {
-            dispatcher.must {
+            must {
 
                 try deinitialize(from: Two.self)
             }

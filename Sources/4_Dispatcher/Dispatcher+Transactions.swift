@@ -24,73 +24,25 @@
  
  */
 
-public
+import XCEPipeline
+
+//---
+
 extension Dispatcher
 {
-    /// Indicates how an error should be reported
-    enum CriticalErrorReportingMethod
-    {
-        /// Via `fatalError`
-        case fatalError
-        
-        /// Via `assertionFailure`
-        case assertation
-    }
-    
-    /// Transaction within `handler` must be successful,
-    /// or a critical error will be reported.
-    @discardableResult
-    func must(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        reportVia reportingMethod: CriticalErrorReportingMethod = .assertation,
-        _ handler: () throws -> Void
-    ) -> Storage.History? {
-        
-        try? transact(
-            scope: scope,
-            context: context,
-            location: location,
-            extraFailureReporting: reportingMethod,
-            handler
-        )
-    }
-    
-    /// Transaction within `handler` may fail,
-    /// but failure is an acceptable outcome
-    /// o no errors will be reported.
-    @discardableResult
-    func should(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> Void
-    ) -> Storage.History? {
-        
-        try? transact(
-            scope: scope,
-            context: context,
-            location: location,
-            extraFailureReporting: .none,
-            handler
-        )
-    }
+    public
+    typealias TransactionOutcome = Result<ProcessedActionReport, RejectedActionReport>
     
     @discardableResult
     func transact(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        extraFailureReporting: CriticalErrorReportingMethod? = nil,
         _ handler: () throws -> Void
-    ) rethrows -> Storage.History {
+    ) -> TransactionOutcome {
 
-        try! startTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
+        try! (scope, context, location)
+            ./ startTransaction(scope:context:location:)
 
         //---
 
@@ -100,34 +52,74 @@ extension Dispatcher
         }
         catch
         {
-            try! rejectTransaction(
-                scope: scope,
-                context: context,
-                location: location,
-                reason: error
-            )
-
-            switch extraFailureReporting
-            {
-                case .fatalError:
-                    fatalError("\(error)")
-                    
-                case .assertation:
-                    assertionFailure("\(error)")
-                    
-                case .none:
-                    break
-            }
-            
-            throw error
+            return try! (scope, context, location, error)
+                ./ rejectTransaction(scope:context:location:reason:)
+                ./ Result.failure(_:)
         }
 
         //---
 
-        return try! commitTransaction(
+        return try! (scope, context, location)
+            ./ commitTransaction(scope:context:location:)
+            ./ Result.success(_:)
+    }
+}
+
+// MARK: - Semantic transaction helpers
+
+public
+extension SomeFeature
+{
+    /// Transaction within `handler` must be successful,
+    /// or a critical error will be thrown (in `DEBUG` mode only).
+    @discardableResult
+    func must(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> Void
+    ) -> Dispatcher.TransactionOutcome {
+        
+        let result = dispatcher.transact(
             scope: scope,
             context: context,
-            location: location
+            location: location,
+            handler
+        )
+        
+        //---
+        
+        #if DEBUG
+        
+        if
+            case .failure(let report) = result
+        {
+            assertionFailure("❌ [UniFlow] Transaction failed: \(report)")
+        }
+        
+        #endif
+        
+        //---
+        
+        return result
+    }
+    
+    /// Transaction within `handler` may fail,
+    /// but failure is an acceptable outcome,
+    /// so no errors will be reported.
+    @discardableResult
+    func should(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> Void
+    ) -> Dispatcher.TransactionOutcome {
+        
+        dispatcher.transact(
+            scope: scope,
+            context: context,
+            location: location,
+            handler
         )
     }
 }

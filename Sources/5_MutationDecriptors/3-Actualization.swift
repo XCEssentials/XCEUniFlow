@@ -47,7 +47,7 @@ struct Actualization: SomeMutationDecriptor
     init?(
         from report: Storage.HistoryElement
     ) {
-        switch report.outcome
+        switch report.operation
         {
             case let .actualization(oldState, newState):
                 

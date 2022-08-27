@@ -122,7 +122,7 @@ extension Arithmetics
 {
     func begin(with value: Int = 0)
     {
-        dispatcher.should {
+        should {
             
             let main = Main(val: value)
             
@@ -134,7 +134,7 @@ extension Arithmetics
 
     func setExplicit(value: Int)
     {
-        dispatcher.should {
+        should {
             
             var main: Main = try fetchState()
             
@@ -154,7 +154,7 @@ extension Arithmetics
 
     func incFive()
     {
-        dispatcher.should {
+        should {
             
             var main: Main = try fetchState()
             
