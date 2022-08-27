@@ -24,6 +24,10 @@
  
  */
 
+import XCEPipeline
+
+//---
+
 extension Dispatcher
 {
     @discardableResult
@@ -34,11 +38,8 @@ extension Dispatcher
         _ handler: () throws -> Void
     ) -> AccessReport {
 
-        try! startTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
+        try! (scope, context, location)
+            ./ startTransaction(scope:context:location:)
 
         //---
 
@@ -48,21 +49,14 @@ extension Dispatcher
         }
         catch
         {
-            return try! rejectTransaction(
-                scope: scope,
-                context: context,
-                location: location,
-                reason: error
-            )
+            return try! (scope, context, location, error)
+                ./ rejectTransaction(scope:context:location:reason:)
         }
 
         //---
 
-        return try! commitTransaction(
-            scope: scope,
-            context: context,
-            location: location
-        )
+        return try! (scope, context, location)
+            ./ commitTransaction(scope:context:location:)
     }
 }
 

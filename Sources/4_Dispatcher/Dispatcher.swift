@@ -223,7 +223,7 @@ extension Dispatcher
     )
     
     public
-    struct ProcessedAccessEventReport
+    struct ProcessedActionReport
     {
         public
         let timestamp: Date
@@ -239,7 +239,7 @@ extension Dispatcher
     }
     
     public
-    struct RejectedAccessEventReport
+    struct RejectedActionReport: Error
     {
         public
         let timestamp: Date
