@@ -65,6 +65,34 @@ class ArithmeticsTests: XCTestCase
 
 extension ArithmeticsTests
 {
+    func test_accessLog_reportsImmediately()
+    {
+        // GIVEN
+        
+        let expect1 = expectation(description: "Rejection report")
+        let expect2 = expectation(description: "Continue after triggering action")
+        
+        let sub = dispatcher
+            .accessLog
+            .onRejected
+            .sink { _ in
+                
+                expect1.fulfill()
+            }
+        
+        _ = sub // silence warning
+        
+        // WHEN
+        
+        sut.incFive() // expect to FAIL, cause we didn't initialize yet
+        expect2.fulfill()
+        
+        // THEN
+        
+        XCTAssertFalse(SUT.isPresent(in: dispatcher))
+        wait(for: [expect1, expect2], timeout: 1, enforceOrder: true)
+    }
+    
     func test_initialization_success() throws
     {
         let input = SUT.Main(val: 0)
