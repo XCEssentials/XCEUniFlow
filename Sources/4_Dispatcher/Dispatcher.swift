@@ -321,7 +321,7 @@ extension Dispatcher
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws -> AccessReport {
+    ) throws -> ProcessedActionReport {
         
         guard
             Thread.isMainThread
@@ -381,7 +381,12 @@ extension Dispatcher
         
         //---
         
-        return report
+        return .init(
+            timestamp: report.timestamp,
+            mutations: mutationsToReport,
+            storage: report.storage,
+            origin: report.origin
+        )
     }
     
     func rejectTransaction(
@@ -389,7 +394,7 @@ extension Dispatcher
         context c: String = #function,
         location l: Int = #line,
         reason: Error
-    ) throws -> AccessReport {
+    ) throws -> RejectedActionReport {
         
         guard
             Thread.isMainThread
@@ -427,7 +432,12 @@ extension Dispatcher
         
         _accessLog.send(report)
         
-        return report
+        return .init(
+            timestamp: report.timestamp,
+            reason: reason,
+            storage: report.storage,
+            origin: report.origin
+        )
     }
 }
 

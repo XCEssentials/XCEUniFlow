@@ -113,20 +113,13 @@ extension ArithmeticsTests
         
         //---
         
-        guard
-            case .processed(let mutations) = report.outcome
-        else
-        {
-            return XCTFail("Unexpected failure: \(report.outcome)")
-        }
-        
-        XCTAssertEqual(mutations.count, 1)
+        XCTAssertEqual(report.mutations.count, 1)
         
         guard
-            case let .initialization(newValue) = mutations[0].operation
+            case let .initialization(newValue) = report.mutations[0].operation
         else
         {
-            return XCTFail("Unexpected operation: \(mutations[0].operation)")
+            return XCTFail("Unexpected operation: \(report.mutations[0].operation)")
         }
         
         XCTAssert(type(of: newValue).feature is SUT.Type)

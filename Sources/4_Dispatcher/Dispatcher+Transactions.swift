@@ -30,13 +30,16 @@ import XCEPipeline
 
 extension Dispatcher
 {
+    public
+    typealias TransactionOutcome = Result<ProcessedActionReport, RejectedActionReport>
+    
     @discardableResult
     func transact(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> Void
-    ) -> AccessReport {
+    ) -> TransactionOutcome {
 
         try! (scope, context, location)
             ./ startTransaction(scope:context:location:)
@@ -51,12 +54,14 @@ extension Dispatcher
         {
             return try! (scope, context, location, error)
                 ./ rejectTransaction(scope:context:location:reason:)
+                ./ Result.failure(_:)
         }
 
         //---
 
         return try! (scope, context, location)
             ./ commitTransaction(scope:context:location:)
+            ./ Result.success(_:)
     }
 }
 
@@ -73,9 +78,9 @@ extension SomeFeature
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> Void
-    ) -> Dispatcher.AccessReport {
+    ) -> Dispatcher.TransactionOutcome {
         
-        let report = dispatcher.transact(
+        let result = dispatcher.transact(
             scope: scope,
             context: context,
             location: location,
@@ -87,16 +92,16 @@ extension SomeFeature
         #if DEBUG
         
         if
-            case .rejected(let reason) = report.outcome
+            case .failure(let report) = result
         {
-            assertionFailure("❌ [UniFlow] Transaction failed: \(reason)")
+            assertionFailure("❌ [UniFlow] Transaction failed: \(report)")
         }
         
         #endif
         
         //---
         
-        return report
+        return result
     }
     
     /// Transaction within `handler` may fail,
@@ -108,7 +113,7 @@ extension SomeFeature
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> Void
-    ) -> Dispatcher.AccessReport {
+    ) -> Dispatcher.TransactionOutcome {
         
         dispatcher.transact(
             scope: scope,
