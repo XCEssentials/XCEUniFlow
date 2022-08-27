@@ -42,13 +42,15 @@ extension SomeFeatureTests
         final
         class FeatureA: FeatureBase {}
         
-        class FeatureB: FeatureBase
+        class FeatureB: SomeFeature
         {
             static
-            var name: String = "BBB"
+            var name: String { "BBB" }
             
             static
-            var displayName: String = "B"
+            var displayName: String { "B" }
+            
+            var dispatcher: Dispatcher!
         }
         
         final

@@ -223,7 +223,7 @@ extension Dispatcher
     )
     
     public
-    struct ProcessedAccessEventReport
+    struct ProcessedActionReport
     {
         public
         let timestamp: Date
@@ -239,7 +239,7 @@ extension Dispatcher
     }
     
     public
-    struct RejectedAccessEventReport
+    struct RejectedActionReport: Error
     {
         public
         let timestamp: Date
@@ -317,12 +317,11 @@ extension Dispatcher
         )
     }
     
-    @discardableResult
     func commitTransaction(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws -> Storage.History {
+    ) throws -> ProcessedActionReport {
         
         guard
             Thread.isMainThread
@@ -364,8 +363,8 @@ extension Dispatcher
         installInternalBindings(
             basedOn: mutationsToReport
         )
-
-        _accessLog.send(
+        
+        let report = AccessReport
             .init(
                 outcome: .processed(
                     mutations: mutationsToReport
@@ -373,7 +372,8 @@ extension Dispatcher
                 storage: storage,
                 origin: tr.origin
             )
-        )
+
+        _accessLog.send(report)
         
         uninstallInternalBindings(
             basedOn: mutationsToReport
@@ -381,7 +381,12 @@ extension Dispatcher
         
         //---
         
-        return mutationsToReport
+        return .init(
+            timestamp: report.timestamp,
+            mutations: mutationsToReport,
+            storage: report.storage,
+            origin: report.origin
+        )
     }
     
     func rejectTransaction(
@@ -389,7 +394,7 @@ extension Dispatcher
         context c: String = #function,
         location l: Int = #line,
         reason: Error
-    ) throws {
+    ) throws -> RejectedActionReport {
         
         guard
             Thread.isMainThread
@@ -416,7 +421,7 @@ extension Dispatcher
         
         //---
         
-        _accessLog.send(
+        let report = AccessReport
             .init(
                 outcome: .rejected(
                     reason: reason
@@ -424,6 +429,14 @@ extension Dispatcher
                 storage: storage,
                 origin: tr.origin
             )
+        
+        _accessLog.send(report)
+        
+        return .init(
+            timestamp: report.timestamp,
+            reason: reason,
+            storage: report.storage,
+            origin: report.origin
         )
     }
 }
@@ -535,7 +548,7 @@ extension Dispatcher
         
         //---
         
-        try! commitTransaction(
+        _ = try! commitTransaction(
             scope: s,
             context: c,
             location: l
@@ -563,7 +576,7 @@ extension Dispatcher
                 
                 //---
                 
-                switch report.outcome
+                switch report.operation
                 {
                     case .initialization(let newState):
                         return type(of: newState).feature
@@ -603,7 +616,7 @@ extension Dispatcher
                 
                 //---
                 
-                switch report.outcome
+                switch report.operation
                 {
                     case .deinitialization(let oldState):
                         return type(of: oldState).feature

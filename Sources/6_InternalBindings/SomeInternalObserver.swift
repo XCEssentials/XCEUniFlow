@@ -38,6 +38,8 @@ protocol SomeInternalObserver: SomeFeature
 public
 extension SomeInternalObserver
 {
+    typealias Itself = Self
+    
     static
     func scenario(
         _ description: String = ""
