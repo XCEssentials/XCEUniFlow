@@ -66,4 +66,18 @@ extension SomeFeatureTests
         XCTAssertEqual(FeatureB.displayName, "B")
         XCTAssertEqual(ViewModelB.displayName, "B")
     }
+    
+    func test_featureName_custom() throws
+    {
+        final
+        class FeatureA: FeatureBase, WithCustomDisplayName
+        {
+            static
+            var customDisplayName: String { "CustomDisplayName" }
+        }
+        
+        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
+        XCTAssertFalse(FeatureA.displayName.contains("FeatureA"))
+        XCTAssertEqual(FeatureA.displayName, "CustomDisplayName")
+    }
 }
