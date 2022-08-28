@@ -32,7 +32,7 @@ import XCEPipeline
 
 public
 final
-class Dispatcher
+class Dispatcher: ObservableObject
 {
     private(set)
     var storage: Storage
