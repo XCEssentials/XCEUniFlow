@@ -48,6 +48,17 @@ extension ExternalBindingBDD
         }
         
         public
+        func given(
+            _ given: @escaping (Dispatcher, W) throws -> Bool
+        ) -> ThenContext<W, Void?> {
+            
+            .init(
+                description: description,
+                given: { try given($0, $1) ? () : nil }
+            )
+        }
+        
+        public
         func given<G>(
             _ outputOnlyHandler: @escaping (W) throws -> G?
         ) -> ThenContext<W, G> {
@@ -59,10 +70,21 @@ extension ExternalBindingBDD
         }
         
         public
+        func given(
+            _ outputOnlyHandler: @escaping (W) throws -> Bool
+        ) -> ThenContext<W, Void?> {
+            
+            given { _, output in
+                
+                try outputOnlyHandler(output) ? () : nil
+            }
+        }
+        
+        public
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (W, Dispatcher) -> Void
+            _ then: @escaping (Dispatcher, W) -> Void
         ) -> ExternalBinding {
             
             .init(
@@ -82,7 +104,7 @@ extension ExternalBindingBDD
             _ noInputHandler: @escaping (Dispatcher) -> Void
         ) -> ExternalBinding {
             
-            then(scope: scope, location: location) { _, dispatcher in
+            then(scope: scope, location: location) { dispatcher, _ in
                 
                 noInputHandler(dispatcher)
             }

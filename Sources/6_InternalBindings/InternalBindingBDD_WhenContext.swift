@@ -43,7 +43,7 @@ extension InternalBindingBDD
             
             .init(
                 description: description,
-                when: { when($0) }
+                when: when
             )
         }
         

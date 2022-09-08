@@ -43,7 +43,7 @@ extension ExternalBindingBDD
         func then(
             scope: String = #file,
             location: Int = #line,
-            _ then: @escaping (G, Dispatcher) -> Void
+            _ then: @escaping (Dispatcher, G) -> Void
         ) -> ExternalBinding {
             
             .init(
@@ -63,7 +63,7 @@ extension ExternalBindingBDD
             _ noDispatcherHandler: @escaping (G) -> Void
         ) -> ExternalBinding {
             
-            then(scope: scope, location: location) { input, _ in
+            then(scope: scope, location: location) { _, input in
                 
                 noDispatcherHandler(input)
             }
