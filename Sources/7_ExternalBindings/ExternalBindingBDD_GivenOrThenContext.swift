@@ -48,6 +48,17 @@ extension ExternalBindingBDD
         }
         
         public
+        func given(
+            _ given: @escaping (Dispatcher, W) throws -> Bool
+        ) -> ThenContext<W, Void?> {
+            
+            .init(
+                description: description,
+                given: { try given($0, $1) ? () : nil }
+            )
+        }
+        
+        public
         func given<G>(
             _ outputOnlyHandler: @escaping (W) throws -> G?
         ) -> ThenContext<W, G> {
@@ -55,6 +66,17 @@ extension ExternalBindingBDD
             given { _, output in
                 
                 try outputOnlyHandler(output)
+            }
+        }
+        
+        public
+        func given(
+            _ outputOnlyHandler: @escaping (W) throws -> Bool
+        ) -> ThenContext<W, Void?> {
+            
+            given { _, output in
+                
+                try outputOnlyHandler(output) ? () : nil
             }
         }
         

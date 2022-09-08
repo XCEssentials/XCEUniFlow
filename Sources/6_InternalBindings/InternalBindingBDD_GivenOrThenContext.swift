@@ -52,6 +52,18 @@ extension InternalBindingBDD
         }
         
         public
+        func given(
+            _ given: @escaping (Dispatcher, W.Output) throws -> Bool
+        ) -> ThenContext<W, Void?> {
+            
+            .init(
+                description: description,
+                when: when,
+                given: { try given($0, $1) ? () : nil }
+            )
+        }
+        
+        public
         func given<G>(
             _ outputOnlyHandler: @escaping (W.Output) throws -> G?
         ) -> ThenContext<W, G> {
@@ -59,6 +71,17 @@ extension InternalBindingBDD
             given { _, output in
                 
                 try outputOnlyHandler(output)
+            }
+        }
+        
+        public
+        func given(
+            _ outputOnlyHandler: @escaping (W.Output) throws -> Bool
+        ) -> ThenContext<W, Void?> {
+            
+            given { _, output in
+                
+                try outputOnlyHandler(output) ? () : nil
             }
         }
         
