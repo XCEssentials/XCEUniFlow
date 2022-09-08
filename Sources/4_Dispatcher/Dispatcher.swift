@@ -865,7 +865,7 @@ struct ExternalBinding
         context: S.Type,
         location: Int,
         given: @escaping (Dispatcher, W) throws -> G?,
-        then: @escaping (G, Dispatcher) -> Void
+        then: @escaping (Dispatcher, G) -> Void
     ) {
         assert(Thread.isMainThread, "Must be on main thread!")
         
@@ -908,7 +908,7 @@ struct ExternalBinding
 
                     //---
 
-                    return then(givenOutput, dispatcher) // map into `Void` to erase type info
+                    return then(dispatcher, givenOutput) // map into `Void` to erase type info
                 }
                 .handleEvents(
                     receiveSubscription: { [weak dispatcher] _ in
