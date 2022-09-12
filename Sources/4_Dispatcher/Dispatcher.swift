@@ -677,24 +677,24 @@ struct InternalBinding
         
         /// After passing through `when` (and `given`,
         /// if present) claus(es), right before `then`.
-        case triggered(InternalBinding)
+        case triggered(InternalBinding, output: Any)
         
         /// After executing `then` clause.
-        case executed(InternalBinding)
+        case executed(InternalBinding, input: Any)
         
         case failed(InternalBinding, Error)
         
         case cancelled(InternalBinding)
     }
-
-    public
-    let source: SomeFeature.Type
     
     public
     let description: String
     
     public
     let scope: String
+    
+    public
+    let source: SomeFeature.Type
     
     public
     let location: Int
@@ -747,12 +747,12 @@ struct InternalBinding
                     return try given(dispatcher, $0)
                 }
                 .handleEvents(
-                    receiveOutput: { [weak dispatcher] _ in
+                    receiveOutput: { [weak dispatcher] in
 
                         dispatcher?
                             ._internalBindingsStatusLog
                             .send(
-                                .triggered(binding)
+                                .triggered(binding, output: $0)
                             )
                     }
                 )
@@ -773,12 +773,12 @@ struct InternalBinding
                                 .activated(binding)
                             )
                     },
-                    receiveOutput: { [weak dispatcher] _ in
+                    receiveOutput: { [weak dispatcher] in
 
                         dispatcher?
                             ._internalBindingsStatusLog
                             .send(
-                                .executed(binding)
+                                .executed(binding, input: $0)
                             )
                     },
                     receiveCompletion: { [weak dispatcher] in
@@ -823,10 +823,10 @@ struct ExternalBinding
         
         /// After passing through `when` (and `given`,
         /// if present) claus(es), right before `then`.
-        case triggered(ExternalBinding)
+        case triggered(ExternalBinding, output: Any)
         
         /// After executing `then` clause.
-        case executed(ExternalBinding)
+        case executed(ExternalBinding, input: Any)
         
         case failed(ExternalBinding, Error)
         
@@ -840,7 +840,7 @@ struct ExternalBinding
     let scope: String
     
     public
-    let context: SomeExternalObserver.Type
+    let source: SomeExternalObserver.Type
     
     public
     let location: Int
@@ -873,7 +873,7 @@ struct ExternalBinding
         
         self.description = description
         self.scope = scope
-        self.context = S.self
+        self.source = S.self
         self.location = location
 
         self.body = { mutation, dispatcher, binding in
@@ -893,12 +893,12 @@ struct ExternalBinding
                     return try given(dispatcher, $0)
                 }
                 .handleEvents(
-                    receiveOutput: { [weak dispatcher] _ in
+                    receiveOutput: { [weak dispatcher] in
 
                         dispatcher?
                             ._externalBindingsStatusLog
                             .send(
-                                .triggered(binding)
+                                .triggered(binding, output: $0)
                             )
                     }
                 )
@@ -919,12 +919,12 @@ struct ExternalBinding
                                 .activated(binding)
                             )
                     },
-                    receiveOutput: { [weak dispatcher] _ in
+                    receiveOutput: { [weak dispatcher] in
 
                         dispatcher?
                             ._externalBindingsStatusLog
                             .send(
-                                .executed(binding)
+                                .executed(binding, input: $0)
                             )
                     },
                     receiveCompletion: { [weak dispatcher] in
