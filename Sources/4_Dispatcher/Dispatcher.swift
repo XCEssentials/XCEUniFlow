@@ -677,7 +677,7 @@ struct InternalBinding
         
         /// After passing through `when` (and `given`,
         /// if present) claus(es), right before `then`.
-        case triggered(InternalBinding, output: Any)
+        case triggered(InternalBinding, input: Any, output: Any)
         
         /// After executing `then` clause.
         case executed(InternalBinding, input: Any)
@@ -738,24 +738,29 @@ struct InternalBinding
             //---
             
             return when(dispatcher.accessLog)
-                .tryCompactMap { [weak dispatcher] in
+                .tryCompactMap { [weak dispatcher] mutation in
 
                     guard let dispatcher = dispatcher else { return nil }
 
                     //---
 
-                    return try given(dispatcher, $0)
-                }
-                .handleEvents(
-                    receiveOutput: { [weak dispatcher] in
-
-                        dispatcher?
+                    let result = try given(dispatcher, mutation)
+                    
+                    result.map {
+                        
+                        dispatcher
                             ._internalBindingsStatusLog
                             .send(
-                                .triggered(binding, output: $0)
+                                .triggered(
+                                    binding,
+                                    input: mutation,
+                                    output: $0
+                                )
                             )
                     }
-                )
+                    
+                    return result
+                }
                 .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
                     
                     guard let dispatcher = dispatcher else { return nil }
@@ -823,7 +828,7 @@ struct ExternalBinding
         
         /// After passing through `when` (and `given`,
         /// if present) claus(es), right before `then`.
-        case triggered(ExternalBinding, output: Any)
+        case triggered(ExternalBinding, input: Any, output: Any)
         
         /// After executing `then` clause.
         case executed(ExternalBinding, input: Any)
@@ -884,24 +889,29 @@ struct ExternalBinding
             
             Just(mutation)
                 .as(W.self)
-                .tryCompactMap { [weak dispatcher] in
+                .tryCompactMap { [weak dispatcher] mutation in
 
                     guard let dispatcher = dispatcher else { return nil }
 
                     //---
 
-                    return try given(dispatcher, $0)
-                }
-                .handleEvents(
-                    receiveOutput: { [weak dispatcher] in
-
-                        dispatcher?
+                    let result = try given(dispatcher, mutation)
+                    
+                    result.map {
+                        
+                        dispatcher
                             ._externalBindingsStatusLog
                             .send(
-                                .triggered(binding, output: $0)
+                                .triggered(
+                                    binding,
+                                    input: mutation,
+                                    output: $0
+                                )
                             )
                     }
-                )
+                    
+                    return result
+                }
                 .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
 
                     guard let dispatcher = dispatcher else { return nil }
