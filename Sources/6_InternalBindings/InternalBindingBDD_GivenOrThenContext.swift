@@ -54,7 +54,7 @@ extension InternalBindingBDD
         public
         func given(
             _ given: @escaping (Dispatcher, W.Output) throws -> Bool
-        ) -> ThenContext<W, Void?> {
+        ) -> ThenContext<W, Void> {
             
             .init(
                 description: description,
@@ -77,7 +77,7 @@ extension InternalBindingBDD
         public
         func given(
             _ outputOnlyHandler: @escaping (W.Output) throws -> Bool
-        ) -> ThenContext<W, Void?> {
+        ) -> ThenContext<W, Void> {
             
             given { _, output in
                 
