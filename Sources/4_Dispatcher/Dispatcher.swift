@@ -283,6 +283,48 @@ extension Dispatcher
     {
         storage.allFeatures
     }
+    
+    func fetchState(
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line,
+        forFeature featureType: SomeFeature.Type
+    ) throws -> SomeStateBase {
+        
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
+        
+        //---
+        
+        return try storage.fetchState(forFeature: featureType)
+    }
+    
+    func fetchState<S: SomeState>(
+        scope s: String = #file,
+        context c: String = #function,
+        location l: Int = #line,
+        ofType _: S.Type = S.self
+    ) throws -> S {
+        
+        guard
+            Thread.isMainThread
+        else
+        {
+            throw AccessError.notOnMainThread(
+                .init(scope: s, context: c, location: l)
+            )
+        }
+        
+        //---
+        
+        return try storage.fetchState(ofType: S.self)
+    }
 
     func startTransaction(
         scope s: String = #file,
@@ -483,48 +525,6 @@ extension Dispatcher
                 cause: error
             )
         }
-    }
-    
-    func fetchState(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
-        forFeature featureType: SomeFeature.Type
-    ) throws -> SomeStateBase {
-        
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
-        
-        //---
-        
-        return try storage.fetchState(forFeature: featureType)
-    }
-    
-    func fetchState<S: SomeState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
-        ofType _: S.Type = S.self
-    ) throws -> S {
-        
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
-        
-        //---
-        
-        return try storage.fetchState(ofType: S.self)
     }
     
     func resetStorage(
