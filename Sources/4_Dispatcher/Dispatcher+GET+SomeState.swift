@@ -44,6 +44,26 @@ extension Dispatcher
             return false
         }
     }
+    
+    func ensureHasAnyState(fromTheList whitelist: [SomeStateBase.Type]) throws
+    {
+        let allStatesTypes = allStates.map { type(of: $0) }
+        
+        guard
+            let _ = whitelist
+                .first(where: {
+                    
+                    targetStateType in
+                    
+                    //---
+                    
+                    allStatesTypes.contains(where: { $0 == targetStateType })
+                })
+        else
+        {
+            throw CurrentStateCheckError.currentStateIsNotInTheList(whitelist)
+        }
+    }
 }
 
 //---
