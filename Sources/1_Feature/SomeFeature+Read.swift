@@ -24,6 +24,8 @@
  
  */
 
+import XCEPipeline
+
 /// These errors are being thrown by special helpers
 /// that check if the feature is initialized or not
 /// within given `Dispatcher`.
@@ -32,6 +34,12 @@ enum InitializationStatusCheckError: Error
 {
     case alreadyInitialized(SomeFeature.Type)
     case notInitializedYet(SomeFeature.Type)
+}
+
+public
+enum CurrentStateCheckError: Error
+{
+    case currentStateIsNotInTheList([SomeStateBase.Type])
 }
 
 //---
@@ -60,6 +68,22 @@ extension SomeFeature
         else
         {
             throw InitializationStatusCheckError.notInitializedYet(Self.self)
+        }
+    }
+    
+    func ensureCurrentState(isInTheList whitelist: [SomeStateBase.Type]) throws
+    {
+        let typeOfCurrentState = try dispatcher
+            .fetchState(
+                forFeature: Self.self
+            )
+            ./ { type(of: $0) }
+        
+        guard
+            whitelist.contains(where: { $0 == typeOfCurrentState })
+        else
+        {
+            throw CurrentStateCheckError.currentStateIsNotInTheList(whitelist)
         }
     }
     
