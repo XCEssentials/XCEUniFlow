@@ -74,7 +74,7 @@ extension ExternalBindingBDD
             scope: String = #file,
             location: Int = #line,
             _ sourceOnlyHandler: @escaping () -> Void
-        ) -> ExternalBinding {
+        ) -> ExternalBinding where G == Void {
             
             then(scope: scope, location: location) { _, _ in
                 
