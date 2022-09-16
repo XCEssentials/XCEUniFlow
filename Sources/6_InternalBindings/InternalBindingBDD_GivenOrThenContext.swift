@@ -41,6 +41,7 @@ extension InternalBindingBDD
         
         public
         func given<G>(
+            _: G.Type = G.self,
             _ given: @escaping (Dispatcher, W.Output) throws -> G?
         ) -> ThenContext<W, G> {
             
@@ -52,7 +53,7 @@ extension InternalBindingBDD
         }
         
         public
-        func given(
+        func givenIf(
             _ given: @escaping (Dispatcher, W.Output) throws -> Bool
         ) -> ThenContext<W, Void> {
             
@@ -65,6 +66,7 @@ extension InternalBindingBDD
         
         public
         func given<G>(
+            _: G.Type = G.self,
             _ outputOnlyHandler: @escaping (W.Output) throws -> G?
         ) -> ThenContext<W, G> {
             
@@ -75,7 +77,7 @@ extension InternalBindingBDD
         }
         
         public
-        func given(
+        func givenIf(
             _ outputOnlyHandler: @escaping (W.Output) throws -> Bool
         ) -> ThenContext<W, Void> {
             
