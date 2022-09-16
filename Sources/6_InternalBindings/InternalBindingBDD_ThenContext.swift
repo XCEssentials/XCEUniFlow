@@ -65,7 +65,7 @@ extension InternalBindingBDD
             scope: String = #file,
             location: Int = #line,
             _ dispatcherOnlyHandler: @escaping (Dispatcher) -> Void
-        ) -> InternalBinding {
+        ) -> InternalBinding where G == Void {
             
             then(scope: scope, location: location) { dispatcher, _ in
                 
