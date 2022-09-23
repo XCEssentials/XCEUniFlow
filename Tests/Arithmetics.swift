@@ -34,7 +34,7 @@ import XCERequirement
 //---
 
 final
-class ArithmeticsVM: ViewModelBase<Arithmetics> {}
+class ArithmeticsVM: ModelContainer<Arithmetics> {}
 
 //---
 

@@ -24,8 +24,8 @@
  
  */
 
-/// Basic View Model type implementation to use as super class for
-/// `SwiftUI` view models with built-in storage for feature instance,
+/// Basic model wrapper type implementation to use as super class for
+/// view models (e.g. in `SwiftUI`) with built-in storage for feature instance,
 /// which is considered to be Model layer (according to MVVM pattern).
 ///
 /// In case `M` is a `FeatureBase` subclass - it provides default
@@ -33,8 +33,11 @@
 /// `dispatcher` straight into the `model` and also activate bindings
 /// in case `Self` is also an external observer (a.k.a. `SomeExternalObserver`).
 open
-class ViewModelBase<M: SomeFeature>
+class ModelContainer<T: SomeFeature>
 {
+    public
+    typealias M = T
+    
     /// Corresponding model instance, which is supposed to be used
     /// to pass input from View to Model layer.
     public
@@ -48,7 +51,7 @@ class ViewModelBase<M: SomeFeature>
 }
 
 public
-extension ViewModelBase where M: FeatureBase
+extension ModelContainer where M: FeatureBase
 {
     /// Initializes `model` with `dispatcher` and
     /// activates subscriptions, if possible.
