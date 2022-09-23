@@ -70,6 +70,24 @@ extension Dispatcher
 public
 extension SomeFeature
 {
+    @discardableResult
+    func execute(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> Void
+    ) throws -> Dispatcher.ProcessedActionReport {
+        
+        try dispatcher
+            .transact(
+                scope: scope,
+                context: context,
+                location: location,
+                handler
+            )
+            .get()
+    }
+    
     /// Transaction within `handler` must be successful,
     /// or a critical error will be thrown (in `DEBUG` mode only).
     @discardableResult
