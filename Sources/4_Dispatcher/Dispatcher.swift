@@ -358,7 +358,7 @@ extension Dispatcher
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws -> ProcessedActionReport {
+    ) throws -> Storage.History {
         
         guard
             let tr = self.activeTransaction
@@ -409,12 +409,7 @@ extension Dispatcher
         
         //---
         
-        return .init(
-            timestamp: report.timestamp,
-            mutations: mutationsToReport,
-            storage: report.storage,
-            origin: report.origin
-        )
+        return mutationsToReport
     }
     
     func rejectTransaction(
@@ -422,7 +417,7 @@ extension Dispatcher
         context c: String = #function,
         location l: Int = #line,
         reason: Error
-    ) throws -> RejectedActionReport {
+    ) throws {
         
         guard
             let tr = self.activeTransaction
@@ -450,13 +445,6 @@ extension Dispatcher
             )
         
         _accessLog.send(report)
-        
-        return .init(
-            timestamp: report.timestamp,
-            reason: reason,
-            storage: report.storage,
-            origin: report.origin
-        )
     }
     
     func access(
