@@ -130,7 +130,7 @@ extension Storage
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
         
-        let outcome: MutationAttemptOutcome
+        let proposedOutcome: MutationAttemptOutcome
         
         //---
         
@@ -138,11 +138,14 @@ extension Storage
         {
             case (.none, let newState):
                 
-                outcome = .initialization(newState: newState)
+                proposedOutcome = .initialization(newState: newState)
                 
                 //---
                 
-                try expectedMutation.validateProposedOutcome(outcome)
+                try SemanticError.validateProposedOutcome(
+                    expected: expectedMutation,
+                    proposed: proposedOutcome
+                )
                 
                 //---
                 
@@ -155,16 +158,19 @@ extension Storage
                 if
                     type(of: oldState) == type(of: newState)
                 {
-                    outcome = .actualization(oldState: oldState, newState: newState)
+                    proposedOutcome = .actualization(oldState: oldState, newState: newState)
                 }
                 else
                 {
-                    outcome = .transition(oldState: oldState, newState: newState)
+                    proposedOutcome = .transition(oldState: oldState, newState: newState)
                 }
                 
                 //---
                 
-                try expectedMutation.validateProposedOutcome(outcome)
+                try SemanticError.validateProposedOutcome(
+                    expected: expectedMutation,
+                    proposed: proposedOutcome
+                )
                 
                 //---
                 
@@ -174,12 +180,12 @@ extension Storage
         //---
               
         logHistoryEvent(
-            outcome: outcome
+            outcome: proposedOutcome
         )
         
         //---
         
-        return outcome
+        return proposedOutcome
     }
 }
 
@@ -201,7 +207,7 @@ extension Storage
             strict: strict
         )
         
-        let outcome: MutationAttemptOutcome
+        let proposedOutcome: MutationAttemptOutcome
         
         //---
         
@@ -209,11 +215,14 @@ extension Storage
         {
             case .some(let oldState):
                 
-                outcome = .deinitialization(oldState: oldState)
+                proposedOutcome = .deinitialization(oldState: oldState)
                 
                 //---
                 
-                try implicitlyExpectedMutation.validateProposedOutcome(outcome)
+                try SemanticError.validateProposedOutcome(
+                    expected: implicitlyExpectedMutation,
+                    proposed: proposedOutcome
+                )
                 
                 //---
                 
@@ -221,22 +230,25 @@ extension Storage
                 
             case .none:
                 
-                outcome = .nothingToRemove(feature: feature)
+                proposedOutcome = .nothingToRemove(feature: feature)
                 
                 //---
                 
-                try implicitlyExpectedMutation.validateProposedOutcome(outcome)
+                try SemanticError.validateProposedOutcome(
+                    expected: implicitlyExpectedMutation,
+                    proposed: proposedOutcome
+                )
         }
         
         //---
               
         logHistoryEvent(
-            outcome: outcome
+            outcome: proposedOutcome
         )
         
         //---
         
-        return outcome
+        return proposedOutcome
     }
     
     @discardableResult

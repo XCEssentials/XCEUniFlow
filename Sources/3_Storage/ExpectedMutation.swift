@@ -27,66 +27,9 @@
 public
 enum ExpectedMutation
 {
-    public
-    struct SemanticError: Error
-    {
-        public
-        let expectedMutation: ExpectedMutation
-        
-        public
-        let proposedOutcome: MutationAttemptOutcome
-    }
-
     case auto
     case initialization
     case actualization
     case transition(fromStateType: SomeStateBase.Type?)
     case deinitialization(fromStateType: SomeStateBase.Type?, strict: Bool)
-    
-    func validateProposedOutcome(_ outcome: MutationAttemptOutcome) throws -> Void
-    {
-        switch (self, outcome)
-        {
-            case (.auto, _):
-                
-                break // OK
-                
-            case (.initialization, .initialization):
-                
-                break // OK
-                
-            case (.actualization, .actualization):
-                
-                break  // OK
-                
-            case (.transition(.some(let givenStateType)), .transition(let oldState, _))
-                where givenStateType == type(of: oldState):
-                
-                break // OK
-                
-            case (.transition(.none), .transition):
-                
-                break // OK
-                
-            case (.deinitialization(.some(let givenOldStateType), _), .deinitialization(let oldState))
-                where givenOldStateType == type(of: oldState):
-                
-                break // OK
-                
-            case (.deinitialization(.none, _), .deinitialization):
-                
-                break // OK
-                
-            case (.deinitialization(.none, strict: false), .nothingToRemove):
-                
-                break // OK
-                
-            default:
-                
-                throw SemanticError(
-                    expectedMutation: self,
-                    proposedOutcome: outcome
-                )
-        }
-    }
 }
