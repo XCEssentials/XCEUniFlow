@@ -354,6 +354,7 @@ extension Dispatcher
         )
     }
     
+    @discardableResult
     func commitTransaction(
         scope s: String = #file,
         context c: String = #function,

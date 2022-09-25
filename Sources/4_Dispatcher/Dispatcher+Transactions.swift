@@ -31,15 +31,15 @@ import XCEPipeline
 extension Dispatcher
 {
     public
-    typealias TransactionOutcome = Result<Storage.History, Error>
+    typealias TransactionOutcome<T> = Result<T, Error>
     
     @discardableResult
-    func transact(
+    func transact<T>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: () throws -> Void
-    ) -> TransactionOutcome {
+        _ handler: () throws -> T
+    ) -> TransactionOutcome<T> {
 
         /// ‼️ NOTE: use `barrier` for exclusive access during whole transaction
         executionQueue.sync(flags: .barrier) {
@@ -51,7 +51,15 @@ extension Dispatcher
 
             do
             {
-                try handler()
+                let output = try handler()
+                
+                try! (scope, context, location)
+                    .* commitTransaction(scope:context:location:)
+                
+                //---
+
+                return output
+                    ./ Result.success(_:)
             }
             catch
             {
@@ -61,12 +69,6 @@ extension Dispatcher
                 return error
                     ./ Result.failure(_:)
             }
-
-            //---
-
-            return try! (scope, context, location)
-                ./ commitTransaction(scope:context:location:)
-                ./ Result.success(_:)
         }
     }
 }
@@ -77,12 +79,12 @@ public
 extension SomeFeature
 {
     @discardableResult
-    func execute(
+    func execute<T>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: () throws -> Void
-    ) throws -> Storage.History {
+        _ handler: () throws -> T
+    ) throws -> T {
         
         try dispatcher
             .transact(
@@ -97,19 +99,20 @@ extension SomeFeature
     /// Transaction within `handler` must be successful,
     /// or a critical error will be thrown (in `DEBUG` mode only).
     @discardableResult
-    func must(
+    func must<T>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: () throws -> Void
-    ) -> Dispatcher.TransactionOutcome {
+        _ handler: () throws -> T
+    ) -> Dispatcher.TransactionOutcome<T> {
         
-        let result = dispatcher.transact(
-            scope: scope,
-            context: context,
-            location: location,
-            handler
-        )
+        let result = dispatcher
+            .transact(
+                scope: scope,
+                context: context,
+                location: location,
+                handler
+            )
         
         //---
         
@@ -132,18 +135,19 @@ extension SomeFeature
     /// but failure is an acceptable outcome,
     /// so no errors will be reported.
     @discardableResult
-    func should(
+    func should<T>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: () throws -> Void
-    ) -> Dispatcher.TransactionOutcome {
+        _ handler: () throws -> T
+    ) -> Dispatcher.TransactionOutcome<T> {
         
-        dispatcher.transact(
-            scope: scope,
-            context: context,
-            location: location,
-            handler
-        )
+        dispatcher
+            .transact(
+                scope: scope,
+                context: context,
+                location: location,
+                handler
+            )
     }
 }
