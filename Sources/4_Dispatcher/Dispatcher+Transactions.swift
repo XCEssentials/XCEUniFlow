@@ -31,7 +31,7 @@ import XCEPipeline
 extension Dispatcher
 {
     public
-    typealias TransactionOutcome = Result<ProcessedActionReport, RejectedActionReport>
+    typealias TransactionOutcome = Result<Storage.History, Error>
     
     @discardableResult
     func transact(
@@ -55,8 +55,10 @@ extension Dispatcher
             }
             catch
             {
-                return try! (scope, context, location, error)
+                try! (scope, context, location, error)
                     ./ rejectTransaction(scope:context:location:reason:)
+                
+                return error
                     ./ Result.failure(_:)
             }
 
@@ -80,7 +82,7 @@ extension SomeFeature
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> Void
-    ) throws -> Dispatcher.ProcessedActionReport {
+    ) throws -> Storage.History {
         
         try dispatcher
             .transact(
