@@ -41,27 +41,31 @@ extension Dispatcher
         _ handler: () throws -> Void
     ) -> TransactionOutcome {
 
-        try! (scope, context, location)
-            ./ startTransaction(scope:context:location:)
+        /// ‼️ NOTE: use `barrier` for exclusive access during whole transaction
+        executionQueue.sync(flags: .barrier) {
+            
+            try! (scope, context, location)
+                ./ startTransaction(scope:context:location:)
 
-        //---
+            //---
 
-        do
-        {
-            try handler()
+            do
+            {
+                try handler()
+            }
+            catch
+            {
+                return try! (scope, context, location, error)
+                    ./ rejectTransaction(scope:context:location:reason:)
+                    ./ Result.failure(_:)
+            }
+
+            //---
+
+            return try! (scope, context, location)
+                ./ commitTransaction(scope:context:location:)
+                ./ Result.success(_:)
         }
-        catch
-        {
-            return try! (scope, context, location, error)
-                ./ rejectTransaction(scope:context:location:reason:)
-                ./ Result.failure(_:)
-        }
-
-        //---
-
-        return try! (scope, context, location)
-            ./ commitTransaction(scope:context:location:)
-            ./ Result.success(_:)
     }
 }
 

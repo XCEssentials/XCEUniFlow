@@ -34,8 +34,30 @@ public
 final
 class Dispatcher: ObservableObject
 {
-    private(set)
+    let executionQueue: DispatchQueue
+    
+    private
+    var _storage: Storage
+    
     var storage: Storage
+    {
+        get
+        {
+            if
+                activeTransaction == nil
+            {
+                return executionQueue.sync {
+                    _storage
+                }
+            }
+            else
+            {
+                /// NOTE: we are in transaction and already must be
+                /// on correct queue
+                return _storage
+            }
+        }
+    }
     
     private
     var activeTransaction: Transaction?
@@ -90,15 +112,25 @@ class Dispatcher: ObservableObject
     
     //---
     
+    /// Initializes dispatcher.
+    ///
+    /// - Parameters:
+    ///     - `storage`: underslaying storage for features, empty by default;
+    ///     - `executionQueue`: the queue for read/write operations to storage.
     public
     init(
-        with storage: Storage = Storage()
+        with storage: Storage = Storage(),
+        executionQueue: DispatchQueue? = nil
     ) {
-        assert(Thread.isMainThread, "Must be on main thread!")
+        let executionQueue = executionQueue ?? .init(
+            label: "com.xcessentials.Dispatcher.\(UUID().uuidString)",
+            attributes: .concurrent
+        )
         
         //---
         
-        self.storage = storage
+        self.executionQueue = executionQueue
+        self._storage = storage
         
         //---
         
@@ -191,10 +223,6 @@ extension Dispatcher
     public
     enum AccessError: Error
     {
-        case notOnMainThread(
-            AccessOrigin
-        )
-        
         case noActiveTransaction(
             AccessOrigin
         )
@@ -285,61 +313,28 @@ extension Dispatcher
     }
     
     func fetchState(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
         forFeature featureType: SomeFeature.Type
     ) throws -> SomeStateBase {
         
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
-        
-        //---
-        
-        return try storage.fetchState(forFeature: featureType)
+        try storage.fetchState(forFeature: featureType)
     }
     
     func fetchState<S: SomeState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
         ofType _: S.Type = S.self
     ) throws -> S {
         
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
-        
-        //---
-        
-        return try storage.fetchState(ofType: S.self)
+        try storage.fetchState(ofType: S.self)
     }
+}
 
+//internal
+extension Dispatcher
+{
     func startTransaction(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
     ) throws {
-        
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
         
         guard
             activeTransaction == nil
@@ -355,7 +350,7 @@ extension Dispatcher
         
         activeTransaction = (
             .init(scope: s, context: c, location: l),
-            storage
+            _storage
         )
     }
     
@@ -364,15 +359,6 @@ extension Dispatcher
         context c: String = #function,
         location l: Int = #line
     ) throws -> ProcessedActionReport {
-        
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
         
         guard
             let tr = self.activeTransaction
@@ -395,7 +381,7 @@ extension Dispatcher
         
         //---
         
-        let mutationsToReport = storage.resetHistory()
+        let mutationsToReport = _storage.resetHistory()
         activeTransaction = nil
         
         //---
@@ -411,7 +397,7 @@ extension Dispatcher
                 outcome: .processed(
                     mutations: mutationsToReport
                 ),
-                storage: storage,
+                storage: _storage,
                 origin: tr.origin
             )
 
@@ -439,15 +425,6 @@ extension Dispatcher
     ) throws -> RejectedActionReport {
         
         guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
-        
-        guard
             let tr = self.activeTransaction
         else
         {
@@ -458,7 +435,7 @@ extension Dispatcher
         
         //---
         
-        storage = tr.recoverySnapshot
+        _storage = tr.recoverySnapshot
         self.activeTransaction = nil
         
         //---
@@ -468,7 +445,7 @@ extension Dispatcher
                 outcome: .rejected(
                     reason: reason
                     ),
-                storage: storage,
+                storage: _storage,
                 origin: tr.origin
             )
         
@@ -481,26 +458,13 @@ extension Dispatcher
             origin: report.origin
         )
     }
-}
-
-//internal
-extension Dispatcher
-{
+    
     func access(
         scope s: String,
         context c: String,
         location l: Int,
         _ handler: (inout Storage) throws -> Void
     ) throws {
-        
-        guard
-            Thread.isMainThread
-        else
-        {
-            throw AccessError.notOnMainThread(
-                .init(scope: s, context: c, location: l)
-            )
-        }
         
         guard
             let tr = self.activeTransaction
@@ -515,7 +479,7 @@ extension Dispatcher
 
         do
         {
-            try handler(&storage)
+            try handler(&_storage)
         }
         catch
         {
@@ -565,10 +529,6 @@ extension Dispatcher
     func installInternalBindings(
         basedOn reports: Storage.History
     ) {
-        assert(Thread.isMainThread, "Must be on main thread!")
-        
-        //---
-        
         reports
             .compactMap {
                 
@@ -605,10 +565,6 @@ extension Dispatcher
     func uninstallInternalBindings(
         basedOn reports: Storage.History
     ) {
-        assert(Thread.isMainThread, "Must be on main thread!")
-        
-        //---
-        
         reports
             .compactMap {
                 
@@ -722,20 +678,12 @@ struct InternalBinding
         given: @escaping (Dispatcher, W.Output) throws -> G?,
         then: @escaping (Dispatcher, G) -> Void
     ) {
-        assert(Thread.isMainThread, "Must be on main thread!")
-        
-        //---
-        
         self.source = S.self
         self.description = description
         self.scope = scope
         self.location = location
         
         self.body = { dispatcher, binding in
-            
-            assert(Thread.isMainThread, "Must be on main thread!")
-            
-            //---
             
             return when(dispatcher.accessLog)
                 .tryCompactMap { [weak dispatcher] mutation in
@@ -872,20 +820,12 @@ struct ExternalBinding
         given: @escaping (Dispatcher, W) throws -> G?,
         then: @escaping (Dispatcher, G) -> Void
     ) {
-        assert(Thread.isMainThread, "Must be on main thread!")
-        
-        //---
-        
         self.description = description
         self.scope = scope
         self.source = S.self
         self.location = location
 
         self.body = { mutation, dispatcher, binding in
-            
-            assert(Thread.isMainThread, "Must be on main thread!")
-            
-            //---
             
             Just(mutation)
                 .as(W.self)
