@@ -49,7 +49,7 @@ extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
                 
                 switch $0.outcome
                 {
-                    case .processed(let mutations):
+                    case .success(let mutations):
                         
                         return .init(
                             timestamp: $0.timestamp,
@@ -73,7 +73,7 @@ extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
                 
                 switch $0.outcome
                 {
-                    case .rejected(let reason):
+                    case .failure(let reason):
                         
                         return .init(
                             timestamp: $0.timestamp,

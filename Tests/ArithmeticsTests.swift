@@ -148,7 +148,7 @@ extension ArithmeticsTests
         catch
         {
             guard
-                case Dispatcher.AccessError.failureDuringAccess(_, _, let wrappedError) = error,
+                case Dispatcher.AccessError.failureDuringAccess(_, let wrappedError) = error,
                 let semanticError = wrappedError as? ExpectedMutation.SemanticError
             else
             {
