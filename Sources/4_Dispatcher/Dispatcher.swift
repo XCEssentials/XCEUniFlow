@@ -177,32 +177,17 @@ extension Dispatcher
     struct AccessReport
     {
         public
-        enum Outcome
-        {
-            /// Access request has been succesfully processed.
-            ///
-            /// Any occurred mutations (see payload) have already been applied to the `storage`.
-            case processed(
-                mutations: Storage.History
-            )
-            
-            /// Access request has been rejected due to an error thrown from access handler.
-            ///
-            /// NO changes have been applied to the `storage`.
-            case rejected(
-                reason: Error
-            )
-        }
-        
-        public
         let timestamp = Date()
         
+        /// Outcome of the access event (success/failure).
         public
-        let outcome: Outcome
+        let outcome: Result<Storage.History, Error>
         
+        /// Snapshot of the storage at the time of the event.
         public
         let storage: Storage
         
+        /// Origin of the event.
         public
         let origin: AccessOrigin
     }
@@ -211,35 +196,30 @@ extension Dispatcher
     struct AccessOrigin
     {
         public
-        let scope: String
+        let file: String
         
         public
-        let context: String
+        let function: String
             
         public
-        let location: Int
+        let line: Int
     }
     
     public
     enum AccessError: Error
     {
-        case noActiveTransaction(
-            AccessOrigin
-        )
+        case noActiveTransaction
         
         case anotherTransactionIsInProgress(
-            AccessOrigin,
             anotherTransaction: AccessOrigin
         )
         
         case internalInconsistencyDetected(
-            AccessOrigin,
             anotherTransaction: AccessOrigin
         )
         
         case failureDuringAccess(
-            AccessOrigin,
-            transaction: AccessOrigin,
+            line: Int,
             cause: Error
         )
     }
@@ -259,9 +239,12 @@ extension Dispatcher
         public
         let mutations: Storage.History
         
+        /// Snapshot of the storage at the time of the event
+        /// (including the mutations listed above).
         public
         let storage: Storage
         
+        /// Origin of the event.
         public
         let origin: AccessOrigin
     }
@@ -275,9 +258,12 @@ extension Dispatcher
         public
         let reason: Error
         
+        /// Snapshot of the storage at the time of the event
+        /// (no mutations were applied as result of this event).
         public
         let storage: Storage
         
+        /// Origin of the event.
         public
         let origin: AccessOrigin
     }
@@ -341,7 +327,6 @@ extension Dispatcher
         else
         {
             throw AccessError.anotherTransactionIsInProgress(
-                .init(scope: s, context: c, location: l),
                 anotherTransaction: activeTransaction!.origin
             )
         }
@@ -349,7 +334,7 @@ extension Dispatcher
         //---
         
         activeTransaction = (
-            .init(scope: s, context: c, location: l),
+            .init(file: s, function: c, line: l),
             _storage
         )
     }
@@ -365,9 +350,7 @@ extension Dispatcher
             let tr = self.activeTransaction
         else
         {
-            throw AccessError.noActiveTransaction(
-                .init(scope: s, context: c, location: l)
-            )
+            throw AccessError.noActiveTransaction
         }
         
         guard
@@ -375,7 +358,6 @@ extension Dispatcher
         else
         {
             throw AccessError.internalInconsistencyDetected(
-                .init(scope: s, context: c, location: l),
                 anotherTransaction: tr.origin
             )
         }
@@ -395,8 +377,8 @@ extension Dispatcher
         
         let report = AccessReport
             .init(
-                outcome: .processed(
-                    mutations: mutationsToReport
+                outcome: .success(
+                    mutationsToReport
                 ),
                 storage: _storage,
                 origin: tr.origin
@@ -424,9 +406,7 @@ extension Dispatcher
             let tr = self.activeTransaction
         else
         {
-            throw AccessError.noActiveTransaction(
-                .init(scope: s, context: c, location: l)
-            )
+            throw AccessError.noActiveTransaction
         }
         
         //---
@@ -438,9 +418,9 @@ extension Dispatcher
         
         let report = AccessReport
             .init(
-                outcome: .rejected(
-                    reason: reason
-                    ),
+                outcome: .failure(
+                    reason
+                ),
                 storage: _storage,
                 origin: tr.origin
             )
@@ -456,12 +436,10 @@ extension Dispatcher
     ) throws {
         
         guard
-            let tr = self.activeTransaction
+            self.activeTransaction != nil
         else
         {
-            throw AccessError.noActiveTransaction(
-                .init(scope: s, context: c, location: l)
-            )
+            throw AccessError.noActiveTransaction
         }
         
         //---
@@ -473,8 +451,7 @@ extension Dispatcher
         catch
         {
             throw AccessError.failureDuringAccess(
-                .init(scope: s, context: c, location: l),
-                transaction: tr.origin,
+                line: l,
                 cause: error
             )
         }
