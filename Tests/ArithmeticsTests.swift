@@ -105,13 +105,20 @@ extension ArithmeticsTests
         
         try sut.initialize(with: input)
         
-        let mutations = try dispatcher.commitTransaction(
+        let report = try dispatcher.commitTransaction(
             scope: #file,
             context: #function,
             location: #line
         )
         
         //---
+        
+        guard
+            case .success(let mutations) = report.outcome
+        else
+        {
+            return XCTFail("Didn't expect to fail!")
+        }
         
         XCTAssertEqual(mutations.count, 1)
         

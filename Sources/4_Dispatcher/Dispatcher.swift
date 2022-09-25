@@ -316,6 +316,72 @@ extension Dispatcher
 //internal
 extension Dispatcher
 {
+    @discardableResult
+    func transact<T>(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: () throws -> T
+    ) -> Result<T, Error> {
+
+        var report: AccessReport!
+        
+        /// ‼️ NOTE: use `barrier` for exclusive access during whole transaction
+        let result = executionQueue.sync(flags: .barrier) {
+            
+            try! (scope, context, location)
+                ./ startTransaction(scope:context:location:)
+
+            //---
+
+            do
+            {
+                let output = try handler()
+                
+                report = try! (scope, context, location)
+                    ./ commitTransaction(scope:context:location:)
+                
+                //---
+
+                return output
+                    ./ Result<T, Error>.success(_:)
+            }
+            catch
+            {
+                report = try! (scope, context, location, error)
+                    ./ rejectTransaction(scope:context:location:reason:)
+                
+                return error
+                    ./ Result<T, Error>.failure(_:)
+            }
+        }
+        
+        //---
+        
+        switch report.outcome
+        {
+            case .success(let mutationsToReport):
+                cleanupExternalBindings()
+                
+                installInternalBindings(
+                    basedOn: mutationsToReport
+                )
+                
+                _accessLog.send(report)
+                
+                uninstallInternalBindings(
+                    basedOn: mutationsToReport
+                )
+                
+            case .failure:
+                _accessLog.send(report)
+        }
+        
+        //---
+        
+        return result
+    }
+    
     func startTransaction(
         scope s: String = #file,
         context c: String = #function,
@@ -339,12 +405,11 @@ extension Dispatcher
         )
     }
     
-    @discardableResult
     func commitTransaction(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line
-    ) throws -> Storage.History {
+    ) throws -> AccessReport {
         
         guard
             let tr = self.activeTransaction
@@ -369,30 +434,13 @@ extension Dispatcher
         
         //---
         
-        cleanupExternalBindings()
-        
-        installInternalBindings(
-            basedOn: mutationsToReport
+        return .init(
+            outcome: .success(
+                mutationsToReport
+            ),
+            storage: _storage,
+            origin: tr.origin
         )
-        
-        let report = AccessReport
-            .init(
-                outcome: .success(
-                    mutationsToReport
-                ),
-                storage: _storage,
-                origin: tr.origin
-            )
-
-        _accessLog.send(report)
-        
-        uninstallInternalBindings(
-            basedOn: mutationsToReport
-        )
-        
-        //---
-        
-        return mutationsToReport
     }
     
     func rejectTransaction(
@@ -400,7 +448,7 @@ extension Dispatcher
         context c: String = #function,
         location l: Int = #line,
         reason: Error
-    ) throws {
+    ) throws -> AccessReport {
         
         guard
             let tr = self.activeTransaction
@@ -416,17 +464,16 @@ extension Dispatcher
         
         //---
         
-        let report = AccessReport
-            .init(
-                outcome: .failure(
-                    reason
-                ),
-                storage: _storage,
-                origin: tr.origin
-            )
-        
-        _accessLog.send(report)
+        return .init(
+            outcome: .failure(
+                reason
+            ),
+            storage: _storage,
+            origin: tr.origin
+        )
     }
+    
+    
     
     func access(
         scope s: String,
