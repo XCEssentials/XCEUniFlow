@@ -28,51 +28,6 @@ import XCEPipeline
 
 //---
 
-extension Dispatcher
-{
-    public
-    typealias TransactionOutcome<T> = Result<T, Error>
-    
-    @discardableResult
-    func transact<T>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> T
-    ) -> TransactionOutcome<T> {
-
-        /// ‼️ NOTE: use `barrier` for exclusive access during whole transaction
-        executionQueue.sync(flags: .barrier) {
-            
-            try! (scope, context, location)
-                ./ startTransaction(scope:context:location:)
-
-            //---
-
-            do
-            {
-                let output = try handler()
-                
-                try! (scope, context, location)
-                    .* commitTransaction(scope:context:location:)
-                
-                //---
-
-                return output
-                    ./ Result.success(_:)
-            }
-            catch
-            {
-                try! (scope, context, location, error)
-                    ./ rejectTransaction(scope:context:location:reason:)
-                
-                return error
-                    ./ Result.failure(_:)
-            }
-        }
-    }
-}
-
 // MARK: - Semantic transaction helpers
 
 public
@@ -104,7 +59,7 @@ extension SomeFeature
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> T
-    ) -> Dispatcher.TransactionOutcome<T> {
+    ) -> Result<T, Error> {
         
         let result = dispatcher
             .transact(
@@ -140,7 +95,7 @@ extension SomeFeature
         context: String = #function,
         location: Int = #line,
         _ handler: () throws -> T
-    ) -> Dispatcher.TransactionOutcome<T> {
+    ) -> Result<T, Error> {
         
         dispatcher
             .transact(
