@@ -71,6 +71,16 @@ extension SomeFeature
         }
     }
     
+    func ensureCurrentStateIs(_ desiredState: SomeStateBase.Type) throws
+    {
+        try ensureCurrentState(isInTheList: [desiredState])
+    }
+    
+    func ensureCurrentState(isOneOf whitelist: SomeStateBase.Type...) throws
+    {
+        try ensureCurrentState(isInTheList: whitelist)
+    }
+    
     func ensureCurrentState(isInTheList whitelist: [SomeStateBase.Type]) throws
     {
         let typeOfCurrentState = try dispatcher
