@@ -25,7 +25,7 @@
  */
 
 public
-enum MutationAttemptOutcome
+enum MutationAttemptOutcome: CustomStringConvertible
 {
     case initialization(newState: SomeStateBase)
     case actualization(oldState: SomeStateBase, newState: SomeStateBase)
@@ -34,4 +34,26 @@ enum MutationAttemptOutcome
     
     /// No removal operation has been performed, because no such key has been found.
     case nothingToRemove(feature: SomeFeature.Type)
+    
+    public
+    var description: String
+    {
+        switch self
+        {
+            case .initialization(let newState):
+                return ".initialization(newState: \(type(of: newState))"
+                
+            case .actualization(let oldState, let newState):
+                return ".actualization(oldState: \(type(of: oldState)), newState: \(type(of: newState))"
+                
+            case .transition(let oldState, let newState):
+                return ".transition(oldState: \(type(of: oldState)), newState: \(type(of: newState))"
+                
+            case .deinitialization(let oldState):
+                return ".deinitialization(oldState: \(type(of: oldState))"
+                
+            case .nothingToRemove(let feature):
+                return ".nothingToRemove(feature: \(feature.name)"
+        }
+    }
 }
