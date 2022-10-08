@@ -88,6 +88,29 @@ extension InternalBindingBDD
         }
         
         public
+        func given<G>(
+            _: G.Type = G.self,
+            _ dispOnlyHandler: @escaping (Dispatcher) throws -> G?
+        ) -> ThenContext<W, G> {
+            
+            given { disp, _ in
+                
+                try dispOnlyHandler(disp)
+            }
+        }
+        
+        public
+        func givenIf(
+            _ dispOnlyHandler: @escaping (Dispatcher) throws -> Bool
+        ) -> ThenContext<W, Void> {
+            
+            given { disp, _ in
+                
+                try dispOnlyHandler(disp) ? () : nil
+            }
+        }
+        
+        public
         func then(
             scope: String = #file,
             location: Int = #line,
