@@ -146,4 +146,142 @@ extension IntBindingsTests
             enforceOrder: true
         )
     }
+    
+    func test_bindingsGivenOverloads()
+    {
+        // GIVEN
+        
+        final
+        class SUT: FeatureBase, SomeInternalObserver
+        {
+            static
+            func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<SUT>) -> Int?
+            {
+                0
+            }
+            
+            static
+            func inMutationOutInt(_ mut: InitializationOf<SUT>) -> Int?
+            {
+                1
+            }
+            
+            static
+            func inDispatcherOutInt(_ disp: Dispatcher) -> Int?
+            {
+                2
+            }
+            
+            static
+            func inBothOutBool(_ disp: Dispatcher, _ mut: InitializationOf<SUT>) -> Bool
+            {
+                false
+            }
+            
+            static
+            func inMutationOutBool(_ mut: InitializationOf<SUT>) -> Bool
+            {
+                false
+            }
+            
+            static
+            func inDispatcherOutBool(_ disp: Dispatcher) -> Bool
+            {
+                false
+            }
+            
+            struct One: SomeState
+            {
+                typealias Feature = SUT
+            }
+            
+            func start()
+            {
+                must {
+                    
+                    try initialize(with: One())
+                }
+            }
+            
+            static
+            var bindings: [InternalBinding]
+            {[
+                scenario("")
+                    .when(
+                        InitializationOf<SUT>.done
+                    )
+                    .given {
+                        inBothOutInt($0, $1)
+                    }
+                    .then {
+                        XCTAssertEqual($1, 0)
+                    },
+                
+                scenario("")
+                    .when(
+                        InitializationOf<SUT>.done
+                    )
+                    .given {
+                        inMutationOutInt($0)
+                    }
+                    .then {
+                        XCTAssertEqual($1, 1)
+                    },
+                
+                scenario("")
+                    .when(
+                        InitializationOf<SUT>.done
+                    )
+                    .given {
+                        inDispatcherOutInt($0)
+                    }
+                    .then {
+                        XCTAssertEqual($1, 2)
+                    },
+                
+                scenario("")
+                    .when(
+                        InitializationOf<SUT>.done
+                    )
+                    .givenIf {
+                        inBothOutBool($0, $1)
+                    }
+                    .then { _ in
+                        XCTFail("Did not expect to reach this point!")
+                    },
+                
+                scenario("")
+                    .when(
+                        InitializationOf<SUT>.done
+                    )
+                    .givenIf {
+                        inMutationOutBool($0)
+                    }
+                    .then { _ in
+                        XCTFail("Did not expect to reach this point!")
+                    },
+                
+                scenario("")
+                    .when(
+                        InitializationOf<SUT>.done
+                    )
+                    .givenIf {
+                        inDispatcherOutBool($0)
+                    }
+                    .then { _ in
+                        XCTFail("Did not expect to reach this point!")
+                    }
+            ]}
+        }
+        
+        let sut = SUT(with: dispatcher)
+        
+        // WHEN
+        
+        sut.start()
+        
+        // THEN
+        
+        // expect no failures...
+    }
 }
