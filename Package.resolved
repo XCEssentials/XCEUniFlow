@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/XCEssentials/Pipeline",
         "state": {
           "branch": null,
-          "revision": "61efc30d52396931989480c45c28e5469d268c2f",
-          "version": "3.7.5"
+          "revision": "1826d08b5ae80fc45c8ef091414e6218c4250671",
+          "version": "3.8.0"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/XCEssentials/Requirement",
         "state": {
           "branch": null,
-          "revision": "29217e77814a3d7ca76eaa46eeb2f9ba28206006",
-          "version": "2.3.0"
+          "revision": "0978f6e49c048629bca747fc571f627714304981",
+          "version": "2.4.0"
         }
       }
     ]
