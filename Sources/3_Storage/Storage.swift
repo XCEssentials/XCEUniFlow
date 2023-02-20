@@ -125,16 +125,17 @@ extension Storage
 {
     @discardableResult
     mutating
-    func store<S: SomeState>(
-        _ state: S,
+    func store(
+        _ state: SomeStateBase,
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
         
         let proposedOutcome: MutationAttemptOutcome
+        let featureName = type(of: state).feature.name
         
         //---
         
-        switch (data[type(of: state).feature.name], state)
+        switch (data[featureName], state)
         {
             case (.none, let newState):
                 
@@ -149,7 +150,7 @@ extension Storage
                 
                 //---
                 
-                data[S.Feature.name] = newState
+                data[featureName] = newState
                 
             //---
                 
@@ -174,7 +175,7 @@ extension Storage
                 
                 //---
                 
-                data[S.Feature.name] = newState
+                data[featureName] = newState
         }
         
         //---
