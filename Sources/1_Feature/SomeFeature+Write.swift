@@ -27,14 +27,16 @@
 public
 extension SomeFeature
 {
-    /// Save given state of `self` within `dispatcher` - either
+    /// Save given state within `dispatcher` - either
     /// initialize, actuialize or transition into given `state`.
-    func store<S: SomeState>(
+    ///
+    /// NOTE: can be any feature, NOT onnly `self`.
+    func store(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ state: S
-    ) throws where S.Feature == Self {
+        _ state: SomeStateBase
+    ) throws {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
