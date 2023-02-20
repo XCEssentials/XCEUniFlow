@@ -97,14 +97,23 @@ extension SomeFeature
         }
     }
     
-    /// Allows to fetch any state of any feature from `dispatcher`.
-    @discardableResult
+    /// Fetch state `S` of any feature from `dispatcher`.
     func fetchState<S: SomeState>(
         _: S.Type = S.self
     ) throws -> S {
         
         try dispatcher.fetchState(
             ofType: S.self
+        )
+    }
+    
+    /// Fetch any state of feature `F` from `dispatcher`.
+    func fetchState<F: SomeFeature>(
+        for _: F.Type
+    ) throws -> SomeStateBase {
+        
+        try dispatcher.fetchState(
+            forFeature: F.self
         )
     }
 }
