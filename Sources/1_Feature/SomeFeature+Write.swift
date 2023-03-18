@@ -152,7 +152,7 @@ extension SomeFeature
         }
     }
     
-    /// Attempts to deinitialize `self` from given `fromState` within `dispatcher`
+    /// Attempts to deinitialize `self` from state `S` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
     func deinitialize<S: SomeState>(
         scope: String = #file,
@@ -165,5 +165,22 @@ extension SomeFeature
            
             try $0.deinitialize(Self.self, fromStateType: S.self, strict: true)
         }
+    }
+    
+    /// Attempts to deinitialize `self` from state `S` within `dispatcher`
+    /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
+    func deinitialize<S: SomeState>(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        from _: S
+    ) throws where S.Feature == Self {
+        
+        try deinitialize(
+            scope: scope,
+            context: context,
+            location: location,
+            from: S.self
+        )
     }
 }
