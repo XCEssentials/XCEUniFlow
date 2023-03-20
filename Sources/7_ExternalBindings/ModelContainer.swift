@@ -48,6 +48,11 @@ class ModelContainer<T: SomeFeature>
     {
         self.model = model
     }
+    
+    deinit
+    {
+        (model as? WithCleanupAction)?.cleanup()
+    }
 }
 
 public
