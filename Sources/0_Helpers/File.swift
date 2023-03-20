@@ -33,7 +33,7 @@ protocol WithCleanupAction: SomeFeature
 //---
 
 public
-protocol WithDefaultCleanupAction: SomeFeature {}
+protocol WithDefaultCleanupAction: WithCleanupAction {}
 
 public
 extension WithDefaultCleanupAction
