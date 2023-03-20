@@ -44,7 +44,7 @@ class ModelContainer<T: SomeFeature>
     let model: M
     
     public
-    init(model: M)
+    init(model: M) throws
     {
         self.model = model
     }
@@ -58,8 +58,9 @@ extension ModelContainer where M: FeatureBase
     convenience
     init(
         with dispatcher: Dispatcher? = nil
-    ) {
-        self.init(model: .init(with: dispatcher))
+    ) throws {
+        
+        try self.init(model: .init(with: dispatcher))
         
         //---
         
