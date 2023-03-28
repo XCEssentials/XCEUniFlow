@@ -71,23 +71,23 @@ extension SomeFeature
         }
     }
     
-    func ensureCurrentStateIs(_ desiredState: SomeStateBase.Type) throws
+    @discardableResult
+    func ensureCurrentStateIs(_ desiredState: SomeStateBase.Type) throws -> SomeStateBase
     {
         try ensureCurrentState(isInTheList: [desiredState])
     }
     
-    func ensureCurrentState(isOneOf whitelist: SomeStateBase.Type...) throws
+    @discardableResult
+    func ensureCurrentState(isOneOf whitelist: SomeStateBase.Type...) throws -> SomeStateBase
     {
         try ensureCurrentState(isInTheList: whitelist)
     }
     
-    func ensureCurrentState(isInTheList whitelist: [SomeStateBase.Type]) throws
+    @discardableResult
+    func ensureCurrentState(isInTheList whitelist: [SomeStateBase.Type]) throws -> SomeStateBase
     {
-        let typeOfCurrentState = try dispatcher
-            .fetchState(
-                forFeature: Self.self
-            )
-            ./ { type(of: $0) }
+        let state = try fetchCurrentState()
+        let typeOfCurrentState = type(of: state)
         
         guard
             whitelist.contains(where: { $0 == typeOfCurrentState })
@@ -95,6 +95,8 @@ extension SomeFeature
         {
             throw CurrentStateCheckError.currentStateIsNotInTheList(whitelist)
         }
+        
+        return state
     }
     
     /// Fetch state `S` of any feature from `dispatcher`.
@@ -114,6 +116,14 @@ extension SomeFeature
         
         try dispatcher.fetchState(
             forFeature: F.self
+        )
+    }
+    
+    /// Fetch current state of `Self` from `dispatcher`.
+    func fetchCurrentState() throws -> SomeStateBase {
+        
+        try dispatcher.fetchState(
+            forFeature: Self.self
         )
     }
 }
