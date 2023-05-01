@@ -651,8 +651,6 @@ struct InternalBinding
         /// After executing `then` clause.
         case executed(InternalBinding, input: Any)
         
-        case failed(InternalBinding, Error)
-        
         case cancelled(InternalBinding)
     }
     
@@ -671,7 +669,7 @@ struct InternalBinding
     //---
     
     private
-    let body: (Dispatcher, Self) -> AnyPublisher<Void, Error>
+    let body: (Dispatcher, Self) -> AnyPublisher<Void, Never>
     
     //---
     
@@ -690,7 +688,8 @@ struct InternalBinding
         when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> W,
         given: @escaping (Dispatcher, W.Output) throws -> G?,
         then: @escaping (Dispatcher, G) -> Void
-    ) {
+    ) where W.Failure == Never {
+        
         self.source = S.self
         self.description = description
         self.scope = scope
@@ -699,28 +698,29 @@ struct InternalBinding
         self.body = { dispatcher, binding in
             
             return when(dispatcher.accessLog)
-                .tryCompactMap { [weak dispatcher] mutation in
+                .compactMap { [weak dispatcher] mutation in
 
-                    guard let dispatcher = dispatcher else { return nil }
+                    guard
+                        let dispatcher = dispatcher,
+                        let givenOutput = try? given(dispatcher, mutation)
+                    else
+                    {
+                        return nil
+                    }
 
                     //---
 
-                    let result = try given(dispatcher, mutation)
-                    
-                    result.map {
-                        
-                        dispatcher
-                            ._internalBindingsStatusLog
-                            .send(
-                                .triggered(
-                                    binding,
-                                    input: mutation,
-                                    output: $0
-                                )
+                    dispatcher
+                        ._internalBindingsStatusLog
+                        .send(
+                            .triggered(
+                                binding,
+                                input: mutation,
+                                output: givenOutput
                             )
-                    }
+                        )
                     
-                    return result
+                    return givenOutput
                 }
                 .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
                     
@@ -746,22 +746,6 @@ struct InternalBinding
                             .send(
                                 .executed(binding, input: $0)
                             )
-                    },
-                    receiveCompletion: { [weak dispatcher] in
-
-                        switch $0
-                        {
-                            case .failure(let error):
-
-                                dispatcher?
-                                    ._internalBindingsStatusLog
-                                    .send(
-                                        .failed(binding, error)
-                                    )
-
-                            default:
-                                break
-                        }
                     },
                     receiveCancel: { [weak dispatcher] in
 
@@ -793,8 +777,6 @@ struct ExternalBinding
         
         /// After executing `then` clause.
         case executed(ExternalBinding, input: Any)
-        
-        case failed(ExternalBinding, Error)
         
         case cancelled(ExternalBinding)
     }
@@ -842,28 +824,29 @@ struct ExternalBinding
             
             Just(mutation)
                 .as(W.self)
-                .tryCompactMap { [weak dispatcher] mutation in
+                .compactMap { [weak dispatcher] mutation in
 
-                    guard let dispatcher = dispatcher else { return nil }
+                    guard
+                        let dispatcher = dispatcher,
+                        let givenOutput = try? given(dispatcher, mutation)
+                    else
+                    {
+                        return nil
+                    }
 
                     //---
 
-                    let result = try given(dispatcher, mutation)
-                    
-                    result.map {
-                        
-                        dispatcher
-                            ._externalBindingsStatusLog
-                            .send(
-                                .triggered(
-                                    binding,
-                                    input: mutation,
-                                    output: $0
-                                )
+                    dispatcher
+                        ._externalBindingsStatusLog
+                        .send(
+                            .triggered(
+                                binding,
+                                input: mutation,
+                                output: givenOutput
                             )
-                    }
+                        )
                     
-                    return result
+                    return givenOutput
                 }
                 .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
 
@@ -889,22 +872,6 @@ struct ExternalBinding
                             .send(
                                 .executed(binding, input: $0)
                             )
-                    },
-                    receiveCompletion: { [weak dispatcher] in
-
-                        switch $0
-                        {
-                            case .failure(let error):
-
-                                dispatcher?
-                                    ._externalBindingsStatusLog
-                                    .send(
-                                        .failed(binding, error)
-                                    )
-
-                            default:
-                                break
-                        }
                     },
                     receiveCancel: { [weak dispatcher] in
 
