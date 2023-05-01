@@ -55,6 +55,9 @@ class FeatureBase: SomeFeature
                 .split(separator: ".")
                 .dropFirst() // drop app/module name
                 .joined(separator: ".")
+                .split(separator: ":")
+                .last
+                .map(String.init) ?? ""
         }
     }
     
