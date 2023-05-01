@@ -31,7 +31,7 @@ import Combine
 public
 extension InternalBindingBDD
 {
-    struct GivenOrThenContext<W: Publisher> // W - When
+    struct GivenOrThenContext<W: Publisher> where W.Failure == Never // W - When
     {
         public
         let description: String
