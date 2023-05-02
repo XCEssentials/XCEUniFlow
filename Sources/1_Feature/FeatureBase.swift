@@ -24,6 +24,8 @@
  
  */
 
+import XCERequirement
+
 /// Basic implemenrtation of a typical feature that covers 99%
 /// of use cases for a feature. Provides built-in storage for `Dispatcher`
 /// and allows to set it either during initialization or later
@@ -61,21 +63,28 @@ class FeatureBase: SomeFeature
         }
     }
     
-    public private(set)
+    private(set)
     var dispatcher: Dispatcher!
     
     public
-    required
-    init(
-        with dispatcher: Dispatcher? = nil
-    ) {
-        self.dispatcher = dispatcher
+    var isReady: Bool
+    {
+        dispatcher != nil
     }
     
-    open
-    func configure(
+    public
+    required
+    init() {}
+    
+    public
+    func makeReady(
         with dispatcher: Dispatcher
-    ) {
+    ) throws {
+        
+        try Check.that("Dispatcher has NOT been set yet.", !isReady)
+        
+        //---
+        
         self.dispatcher = dispatcher
     }
 }
