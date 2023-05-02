@@ -41,48 +41,40 @@ class ModelContainer<T: SomeFeature>
     /// Corresponding model instance, which is supposed to be used
     /// to pass input from View to Model layer.
     public
-    let model: M
+    let model = M()
     
     public
-    init(model: M) throws
+    var isReady: Bool
     {
-        self.model = model
+        model.isReady
     }
+    
+    public
+    required
+    init() {}
     
     deinit
     {
         (model as? WithCleanupAction)?.cleanup()
     }
-}
 
-public
-extension ModelContainer where M: FeatureBase
-{
-    /// Initializes `model` with `dispatcher` and
-    /// activates subscriptions, if possible.
-    convenience
-    init(
-        with dispatcher: Dispatcher? = nil
+    /// Configure `model` to use given `dispatcher`,
+    /// if it has not been configured yet,  and
+    /// activate subscriptions, if possible.
+    ///
+    /// This is designated point of initilization,
+    /// override and extend this function to access
+    /// corresponding dispatcher via `model`, configure
+    /// instance of custom subclass and throw any
+    /// access errors to the upper layer.
+    ///
+    /// - Throws: if it has been already configured earlier.
+    open
+    func makeReady(
+        with dispatcher: Dispatcher
     ) throws {
         
-        try self.init(model: .init(with: dispatcher))
-        
-        //---
-        
-        if
-            let dispatcher = dispatcher
-        {
-            (self as? SomeExternalObserver)
-                .map { $0.activateSubscriptions(with: dispatcher) }
-        }
-    }
-    
-    /// Passes through `dispatcher` into `model` and
-    /// activates subscriptions, if possible.
-    func configure(
-        with dispatcher: Dispatcher
-    ) {
-        self.model.configure(with: dispatcher)
+        try model.makeReady(with: dispatcher)
         
         //---
         

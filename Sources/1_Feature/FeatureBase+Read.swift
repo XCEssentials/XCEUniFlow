@@ -45,7 +45,7 @@ enum CurrentStateCheckError: Error
 //---
 
 public
-extension SomeFeature
+extension FeatureBase
 {
     /// Throws `InitializationStatusCheckError` if `self` is
     /// already initialized within `dispatcher`.

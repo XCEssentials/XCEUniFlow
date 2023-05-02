@@ -67,9 +67,9 @@ class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
     }
     
     required
-    init(with dispatcher: Dispatcher? = nil)
+    init()
     {
-        super.init(with: dispatcher)
+        super.init()
         
         //---
         

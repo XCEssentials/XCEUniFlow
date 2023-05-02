@@ -31,7 +31,7 @@ import XCEPipeline
 // MARK: - Semantic transaction helpers
 
 public
-extension SomeFeature
+extension FeatureBase
 {
     @discardableResult
     func execute<T>(
