@@ -36,7 +36,18 @@ protocol SomeFeature: AnyObject
     static
     var displayName: String { get }
     
-    /// Reference to a dispatcher in which context this feature
-    /// should execute it's actions.
-    var dispatcher: Dispatcher! { get }
+    /// Indicates whatever it already has been configured with
+    /// a dispatcher or not yet.
+    var isReady: Bool { get }
+    
+    /// Deliberatly require implementation to be initialized
+    /// without any parameters, forcing to support
+    /// lazy/late configuration with dispatcher.
+    init()
+    
+    /// Configure this feature to use given `dispatcher`,
+    /// if it has not been configured yet.
+    ///
+    /// - Throws: if it has been already configured earlier.
+    func makeReady(with dispatcher: Dispatcher) throws
 }

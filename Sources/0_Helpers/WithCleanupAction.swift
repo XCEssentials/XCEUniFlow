@@ -36,7 +36,7 @@ public
 protocol WithDefaultCleanupAction: WithCleanupAction {}
 
 public
-extension WithDefaultCleanupAction
+extension WithDefaultCleanupAction where Self: FeatureBase
 {
     func cleanup()
     {

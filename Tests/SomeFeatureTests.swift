@@ -51,6 +51,17 @@ extension SomeFeatureTests
             var displayName: String { "B" }
             
             var dispatcher: Dispatcher!
+            
+            private(set)
+            var isReady: Bool = false
+            
+            required
+            init() {}
+            
+            func makeReady(with dispatcher: Dispatcher) throws
+            {
+                isReady = true
+            }
         }
         
         final
