@@ -55,7 +55,7 @@ class IntBindingsTests: XCTestCase
 
 extension IntBindingsTests
 {
-    func test_bindingsOrder() throws
+    func test_bindingsOrder()
     {
         // GIVEN
         
@@ -126,8 +126,7 @@ extension IntBindingsTests
         SUT.expectTransition = expectation(description: "Transition")
         SUT.expectDeinitialization = expectation(description: "Deinitialization")
         
-        let sut = SUT()
-        try sut.makeReady(with: dispatcher)
+        let sut = SUT(with: dispatcher)
         
         // WHEN
         
@@ -148,7 +147,7 @@ extension IntBindingsTests
         )
     }
     
-    func test_bindingsGivenOverloads() throws
+    func test_bindingsGivenOverloads()
     {
         // GIVEN
         
@@ -275,8 +274,7 @@ extension IntBindingsTests
             ]}
         }
         
-        let sut = SUT()
-        try sut.makeReady(with: dispatcher)
+        let sut = SUT(with: dispatcher)
         
         // WHEN
         
