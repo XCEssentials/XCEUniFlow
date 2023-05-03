@@ -92,4 +92,17 @@ class ModelContainer<T: SomeFeature>
         (self as? SomeExternalObserver)
             .map { $0.activateSubscriptions(with: dispatcher) }
     }
+    
+    /// Calls `makeReady` and returns `self` for
+    /// convenient chaining initilization with
+    /// subsequent configuration.
+    public
+    func configured(
+        with dispatcher: Dispatcher
+    ) throws -> Self {
+        
+        try makeReady(with: dispatcher)
+        
+        return self
+    }
 }
