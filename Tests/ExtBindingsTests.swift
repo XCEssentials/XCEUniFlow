@@ -44,8 +44,7 @@ class ExtBindingsTests: XCTestCase, SomeExternalObserver
     func setUp()
     {
         dispatcher = .init()
-        sut = SUT()
-        try! sut.makeReady(with: dispatcher)
+        sut = SUT(with: dispatcher)
         dispatcher.subscribe(self)
     }
 
