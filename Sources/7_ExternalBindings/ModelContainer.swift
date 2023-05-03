@@ -24,6 +24,8 @@
  
  */
 
+import XCERequirement
+
 /// Basic model wrapper type implementation to use as super class for
 /// view models (e.g. in `SwiftUI`) with built-in storage for feature instance,
 /// which is considered to be Model layer (according to MVVM pattern).
@@ -41,12 +43,15 @@ class ModelContainer<T: SomeFeature>
     /// Corresponding model instance, which is supposed to be used
     /// to pass input from View to Model layer.
     public
-    let model = M()
+    private(set)
+    var model: M!
     
+    /// Indicates whatever it has already been configured with
+    /// a dispatcher and ready for work, or not yet.
     public
     var isReady: Bool
     {
-        model.isReady
+        model != nil
     }
     
     public
@@ -55,11 +60,15 @@ class ModelContainer<T: SomeFeature>
     
     deinit
     {
-        (model as? WithCleanupAction)?.cleanup()
+        if
+            isReady
+        {
+            (model as? WithCleanupAction)?.cleanup()
+        }
     }
 
-    /// Configure `model` to use given `dispatcher`,
-    /// if it has not been configured yet,  and
+    /// Initialize `model` with given `dispatcher`,
+    /// if it has not been set yet, and
     /// activate subscriptions, if possible.
     ///
     /// This is designated point of initilization,
@@ -74,9 +83,11 @@ class ModelContainer<T: SomeFeature>
         with dispatcher: Dispatcher
     ) throws {
         
-        try model.makeReady(with: dispatcher)
+        try Check.that("Dispatcher has NOT been set yet.", !isReady)
         
         //---
+        
+        self.model = .init(with: dispatcher)
         
         (self as? SomeExternalObserver)
             .map { $0.activateSubscriptions(with: dispatcher) }

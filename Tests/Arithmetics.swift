@@ -67,9 +67,9 @@ class Arithmetics: FeatureBase, SomeInternalObserver, SomeExternalObserver
     }
     
     required
-    init()
+    init(with dispatcher: Dispatcher)
     {
-        super.init()
+        super.init(with: dispatcher)
         
         //---
         

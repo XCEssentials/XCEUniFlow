@@ -12,17 +12,16 @@ class BindingsTests: XCTestCase
     var sut: Arithmetics!
     
     override
-    func setUpWithError() throws
+    func setUp()
     {
         dispatcher = .init()
-        sut = Arithmetics()
-        try sut.makeReady(with: dispatcher)
+        sut = Arithmetics(with: dispatcher)
         Arithmetics.onInitialization = nil
         Arithmetics.onActualization = nil
     }
 
     override
-    func tearDownWithError() throws
+    func tearDown()
     {
         Arithmetics.onInitialization = nil
         Arithmetics.onActualization = nil
@@ -72,7 +71,7 @@ extension BindingsTests
         waitForExpectations(timeout: 1, handler: nil)
     }
     
-    func test_memoryManagementInBinding() throws
+    func test_memoryManagementInBinding()
     {
         // GIVEN
         
@@ -82,8 +81,7 @@ extension BindingsTests
         XCTAssertEqual(Arithmetics.initCount, 0)
         XCTAssertEqual(Arithmetics.deinitCount, 0)
         
-        sut = Arithmetics()
-        try sut.makeReady(with: dispatcher)
+        sut = Arithmetics(with: dispatcher)
         
         // WHEN
         

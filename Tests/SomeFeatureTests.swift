@@ -56,9 +56,7 @@ extension SomeFeatureTests
             var isReady: Bool = false
             
             required
-            init() {}
-            
-            func makeReady(with dispatcher: Dispatcher) throws
+            init(with dispatcher: Dispatcher)
             {
                 isReady = true
             }

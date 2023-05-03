@@ -45,8 +45,7 @@ class ArithmeticsTests: XCTestCase
     func setUp()
     {
         dispatcher = .init()
-        sut = Arithmetics()
-        try! sut.makeReady(with: dispatcher)
+        sut = Arithmetics(with: dispatcher)
         
         //---
         
