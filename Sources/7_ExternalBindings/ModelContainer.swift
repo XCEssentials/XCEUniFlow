@@ -43,66 +43,17 @@ class ModelContainer<T: SomeFeature>
     /// Corresponding model instance, which is supposed to be used
     /// to pass input from View to Model layer.
     public
-    private(set)
-    var model: M!
-    
-    /// Indicates whatever it has already been configured with
-    /// a dispatcher and ready for work, or not yet.
-    public
-    var isReady: Bool
-    {
-        model != nil
-    }
+    let model: M
     
     public
     required
-    init() {}
+    init(with dispatcher: Dispatcher)
+    {
+        self.model = .init(with: dispatcher)
+    }
     
     deinit
     {
-        if
-            isReady
-        {
-            (model as? WithCleanupAction)?.cleanup()
-        }
-    }
-
-    /// Initialize `model` with given `dispatcher`,
-    /// if it has not been set yet, and
-    /// activate subscriptions, if possible.
-    ///
-    /// This is designated point of initilization,
-    /// override and extend this function to access
-    /// corresponding dispatcher via `model`, configure
-    /// instance of custom subclass and throw any
-    /// access errors to the upper layer.
-    ///
-    /// - Throws: if it has been already configured earlier.
-    open
-    func makeReady(
-        with dispatcher: Dispatcher
-    ) throws {
-        
-        try Check.that("Dispatcher has NOT been set yet.", !isReady)
-        
-        //---
-        
-        self.model = .init(with: dispatcher)
-        
-        (self as? SomeExternalObserver)
-            .map { $0.activateSubscriptions(with: dispatcher) }
-    }
-    
-    /// Calls `makeReady` and returns `self` for
-    /// convenient chaining initilization with
-    /// subsequent configuration.
-    public
-    func configured(
-        with dispatcher: Dispatcher
-    ) throws -> Self {
-        
-        try makeReady(with: dispatcher)
-        
-        return self
+        (model as? WithCleanupAction)?.cleanup()
     }
 }
