@@ -65,25 +65,14 @@ class ModelContainer<T: SomeFeature>
     
     /// Initialize an instance of `M` with given `dispatcher`,
     /// if it has not been set yet.
-    ///
-    /// - Returns: `true` if it was awaiting configuration and
-    ///     the `model` just has been set; `false` otherwise
-    ///     (means it has been already configured earlier).
-    @discardableResult
     open
     func configure(
         with dispatcher: Dispatcher
-    ) -> Bool {
-        
+    ) {
         if
             awaitingConfiguration
         {
             self.model = .init(with: dispatcher)
-            return true
-        }
-        else
-        {
-            return false
         }
     }
     
