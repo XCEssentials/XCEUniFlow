@@ -70,7 +70,7 @@ class ModelContainer<T: SomeFeature>
     ///     the `model` just has been set; `false` otherwise
     ///     (means it has been already configured earlier).
     @discardableResult
-    public
+    open
     func configure(
         with dispatcher: Dispatcher
     ) -> Bool {
