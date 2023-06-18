@@ -42,14 +42,43 @@ class ModelContainer<T: SomeFeature>
     
     /// Corresponding model instance, which is supposed to be used
     /// to pass input from View to Model layer.
-    public
-    let model: M
+    public private(set)
+    var model: M?
     
     public
-    required
-    init(with dispatcher: Dispatcher)
+    var awaitingConfiguration: Bool
     {
-        self.model = .init(with: dispatcher)
+        model == nil
+    }
+    
+    public
+    var isConfigured: Bool
+    {
+        model != nil
+    }
+    
+    /// Initialize an instance of `M` with given `dispatcher`,
+    /// if it has not been set yet.
+    ///
+    /// - Returns: `true` if it was awaiting configuration and
+    ///     the `model` just has been set; `false` otherwise
+    ///     (means it has been already configured earlier).
+    @discardableResult
+    public
+    func configure(
+        with dispatcher: Dispatcher
+    ) -> Bool {
+        
+        if
+            awaitingConfiguration
+        {
+            self.model = .init(with: dispatcher)
+            return true
+        }
+        else
+        {
+            return false
+        }
     }
     
     deinit
