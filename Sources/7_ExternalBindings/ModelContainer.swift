@@ -48,7 +48,16 @@ class ModelContainer<T: SomeFeature>
     public
     init(with dispatcher: Dispatcher? = nil)
     {
-        self.model = dispatcher.map(M.init)
+        guard let dispatcher = dispatcher else { return }
+        
+        //---
+        
+        self.model = .init(with: dispatcher)
+        
+        //---
+        
+        (self as? SomeExternalObserver)
+            .map { $0.activateSubscriptions(with: dispatcher) }
     }
     
     public
@@ -73,6 +82,11 @@ class ModelContainer<T: SomeFeature>
             awaitingConfiguration
         {
             self.model = .init(with: dispatcher)
+            
+            //---
+            
+            (self as? SomeExternalObserver)
+                .map { $0.activateSubscriptions(with: dispatcher) }
         }
     }
     
