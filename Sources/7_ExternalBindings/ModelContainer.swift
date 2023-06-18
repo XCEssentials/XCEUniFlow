@@ -46,6 +46,12 @@ class ModelContainer<T: SomeFeature>
     var model: M?
     
     public
+    init(with dispatcher: Dispatcher? = nil)
+    {
+        self.model = dispatcher.map(M.init)
+    }
+    
+    public
     var awaitingConfiguration: Bool
     {
         model == nil
