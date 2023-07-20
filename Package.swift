@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.8
 
 import PackageDescription
 
@@ -18,13 +18,11 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            name: "XCERequirement",
-            url: "https://github.com/XCEssentials/Requirement",
-            .upToNextMajor(from: "2.3.0")),
+            url: "https://github.com/XCEssentials/XCERequirement",
+            .upToNextMinor(from: "2.6.0")),
         .package(
-            name: "XCEPipeline",
-            url: "https://github.com/XCEssentials/Pipeline",
-            .upToNextMajor(from: "3.7.0")),
+            url: "https://github.com/XCEssentials/XCEPipeline",
+            .upToNextMinor(from: "3.9.0")),
     ],
     targets: [
         .target(
