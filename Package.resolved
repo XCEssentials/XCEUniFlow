@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "XCEPipeline",
-        "repositoryURL": "https://github.com/XCEssentials/Pipeline",
-        "state": {
-          "branch": null,
-          "revision": "692b22f4f0bc4a8f1bbca2473c52e99268b6549b",
-          "version": "3.8.3"
-        }
-      },
-      {
-        "package": "XCERequirement",
-        "repositoryURL": "https://github.com/XCEssentials/Requirement",
-        "state": {
-          "branch": null,
-          "revision": "0978f6e49c048629bca747fc571f627714304981",
-          "version": "2.4.0"
-        }
+  "pins" : [
+    {
+      "identity" : "xcepipeline",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/XCEssentials/XCEPipeline",
+      "state" : {
+        "revision" : "bccd037616b6fe5529f2bf3e861d8bc373f23341",
+        "version" : "3.9.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "xcerequirement",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/XCEssentials/XCERequirement",
+      "state" : {
+        "revision" : "4fb67bfac01f166dc4938759a8265940a74f6995",
+        "version" : "2.6.1"
+      }
+    }
+  ],
+  "version" : 2
 }
