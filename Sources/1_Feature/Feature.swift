@@ -26,7 +26,7 @@
 
 /// Semantic marker that represents a Feature.
 public
-protocol Feature: AnyObject
+protocol Feature
 {
     /// `Storage` will use this as actual key.
     static
