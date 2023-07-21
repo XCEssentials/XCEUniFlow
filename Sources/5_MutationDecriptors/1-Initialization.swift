@@ -35,7 +35,7 @@ struct Initialization: MutationDecriptor
     let newState: FeatureStateBase
     
     public
-    let feature: SomeFeature.Type
+    let feature: Feature.Type
     
     public
     let timestamp: Date

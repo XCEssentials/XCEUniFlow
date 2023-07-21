@@ -27,7 +27,7 @@
 /// A feature that also has bindings and can observe/react on mutations
 /// that happen within `Dispatcher` where such feature is initialized.
 public
-protocol InternalObserver: SomeFeature
+protocol InternalObserver: Feature
 {
     static
     var bindings: [InternalBinding] { get }

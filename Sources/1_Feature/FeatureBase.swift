@@ -29,7 +29,7 @@
 /// and allows to set it either during initialization or later
 /// via `configure` function.
 open
-class FeatureBase: SomeFeature
+class FeatureBase: Feature
 {
     public
     static

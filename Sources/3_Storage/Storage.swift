@@ -54,11 +54,11 @@ extension Storage
     enum ReadDataError: Error
     {
         case featureNotFound(
-            SomeFeature.Type
+            Feature.Type
         )
         
         case stateTypeMismatch(
-            feature: SomeFeature.Type,
+            feature: Feature.Type,
             expected: FeatureStateBase.Type,
             actual: FeatureStateBase
         )
@@ -75,7 +75,7 @@ extension Storage
         .init(data.values)
     }
     
-    var allFeatures: [SomeFeature.Type]
+    var allFeatures: [Feature.Type]
     {
         allStates
             .map {
@@ -83,7 +83,7 @@ extension Storage
             }
     }
     
-    func fetchState(forFeature featureType: SomeFeature.Type) throws -> FeatureStateBase
+    func fetchState(forFeature featureType: Feature.Type) throws -> FeatureStateBase
     {
         if
             let result = data[featureType.name]
@@ -198,7 +198,7 @@ extension Storage
     @discardableResult
     mutating
     func removeState(
-        forFeature feature: SomeFeature.Type,
+        forFeature feature: Feature.Type,
         fromStateType: FeatureStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {

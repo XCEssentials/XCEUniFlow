@@ -32,8 +32,8 @@ import XCEPipeline
 public
 enum InitializationStatusCheckError: Error
 {
-    case alreadyInitialized(SomeFeature.Type)
-    case notInitializedYet(SomeFeature.Type)
+    case alreadyInitialized(Feature.Type)
+    case notInitializedYet(Feature.Type)
 }
 
 public
@@ -110,7 +110,7 @@ extension FeatureBase
     }
     
     /// Fetch any state of feature `F` from `dispatcher`.
-    func fetchState<F: SomeFeature>(
+    func fetchState<F: Feature>(
         for _: F.Type
     ) throws -> FeatureStateBase {
         

@@ -139,7 +139,7 @@ public
 extension Publisher where Output == [FeatureStatus], Failure == Never
 {
     func matched(
-        with features: [SomeFeature.Type]
+        with features: [Feature.Type]
     ) -> AnyPublisher<Output, Failure> {
 
         self

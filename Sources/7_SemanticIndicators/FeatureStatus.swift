@@ -55,7 +55,7 @@ struct FeatureStatus
     let indicator: StatusIndicator
     
     public
-    init(missing feature: SomeFeature.Type)
+    init(missing feature: Feature.Type)
     {
         self.title = feature.displayName
         self.subtitle = "<missing>"

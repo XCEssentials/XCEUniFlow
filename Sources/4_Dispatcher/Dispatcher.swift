@@ -238,13 +238,13 @@ extension Dispatcher
         storage.allStates
     }
     
-    var allFeatures: [SomeFeature.Type]
+    var allFeatures: [Feature.Type]
     {
         storage.allFeatures
     }
     
     func fetchState(
-        forFeature featureType: SomeFeature.Type
+        forFeature featureType: Feature.Type
     ) throws -> FeatureStateBase {
         
         try storage.fetchState(forFeature: featureType)
@@ -493,7 +493,7 @@ extension Dispatcher
         reports
             .compactMap {
                 
-                report -> SomeFeature.Type? in
+                report -> Feature.Type? in
                 
                 //---
                 
@@ -529,7 +529,7 @@ extension Dispatcher
         reports
             .compactMap {
                 
-                report -> SomeFeature.Type? in
+                report -> Feature.Type? in
                 
                 //---
                 
@@ -578,7 +578,7 @@ struct InternalBinding
     let scope: String
     
     public
-    let source: SomeFeature.Type
+    let source: Feature.Type
     
     public
     let location: Int
@@ -597,7 +597,7 @@ struct InternalBinding
     }
     
     //internal
-    init<S: SomeFeature, W: Publisher, G>(
+    init<S: Feature, W: Publisher, G>(
         source: S.Type,
         description: String,
         scope: String,

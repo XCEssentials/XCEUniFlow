@@ -24,55 +24,34 @@
  
  */
 
-import Foundation
-import XCEPipeline
-
-//---
-
 public
-extension Dispatcher
+extension Storage
 {
-    func hasFeatureInitialized(
-        _ featureType: SomeFeature.Type
-    ) -> Bool {
-        
-        do
-        {
-            _ = try fetchState(
-                forFeature: featureType
-            )
-            
-            return true
-        }
-        catch
-        {
-            return false
-        }
+    subscript(_ feature: Feature.Type) -> FeatureStateBase?
+    {
+        try? fetchState(forFeature: feature)
+    }
+    
+    func hasFeature(_ feature: Feature.Type) -> Bool
+    {
+        self[feature] != nil
     }
 }
 
 //---
 
 public
-extension SomeFeature
+extension Feature
 {
     static
-    func fetch(
-        from dispatcher: Dispatcher
-    ) throws -> FeatureStateBase {
-        
-        try dispatcher.fetchState(
-            forFeature: self
-        )
+    func fetchState(from storage: Storage) throws -> FeatureStateBase
+    {
+        try storage.fetchState(forFeature: self)
     }
-    
+
     static
-    func isPresent(
-        in dispatcher: Dispatcher
-    ) -> Bool {
-        
-        dispatcher.hasFeatureInitialized(
-            self
-        )
+    func isPresent(in storage: Storage) -> Bool
+    {
+        storage.hasFeature(self)
     }
 }

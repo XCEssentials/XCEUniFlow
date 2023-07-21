@@ -33,7 +33,7 @@ enum MutationAttemptOutcome: CustomStringConvertible
     case deinitialization(oldState: FeatureStateBase)
     
     /// No removal operation has been performed, because no such key has been found.
-    case nothingToRemove(feature: SomeFeature.Type)
+    case nothingToRemove(feature: Feature.Type)
     
     public
     var description: String

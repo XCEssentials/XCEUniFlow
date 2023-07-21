@@ -25,7 +25,7 @@
  */
 
 public
-extension SomeFeature where Self: FeatureBase
+extension Feature where Self: FeatureBase
 {
     /// Save given state within `dispatcher` - either
     /// initialize, actuialize or transition into given `state`.
