@@ -507,7 +507,7 @@ extension Dispatcher
                 }
             }
             .compactMap {
-                $0 as? SomeInternalObserver.Type
+                $0 as? InternalObserver.Type
             }
             .map {(
                 observerType: $0,

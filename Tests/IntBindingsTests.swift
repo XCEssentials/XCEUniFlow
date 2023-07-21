@@ -60,7 +60,7 @@ extension IntBindingsTests
         // GIVEN
         
         final
-        class SUT: FeatureBase, SomeInternalObserver
+        class SUT: FeatureBase, InternalObserver
         {
             static
             var expectInitialization: XCTestExpectation!
@@ -152,7 +152,7 @@ extension IntBindingsTests
         // GIVEN
         
         final
-        class SUT: FeatureBase, SomeInternalObserver
+        class SUT: FeatureBase, InternalObserver
         {
             static
             func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<SUT>) -> Int?

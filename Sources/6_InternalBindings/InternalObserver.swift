@@ -27,7 +27,7 @@
 /// A feature that also has bindings and can observe/react on mutations
 /// that happen within `Dispatcher` where such feature is initialized.
 public
-protocol SomeInternalObserver: SomeFeature
+protocol InternalObserver: SomeFeature
 {
     static
     var bindings: [InternalBinding] { get }
@@ -36,7 +36,7 @@ protocol SomeInternalObserver: SomeFeature
 //---
 
 public
-extension SomeInternalObserver
+extension InternalObserver
 {
     typealias Itself = Self
     
