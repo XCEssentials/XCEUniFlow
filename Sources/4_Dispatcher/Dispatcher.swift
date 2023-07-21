@@ -233,7 +233,7 @@ extension Dispatcher
 public
 extension Dispatcher
 {
-    var allStates: [SomeStateBase]
+    var allStates: [FeatureStateBase]
     {
         storage.allStates
     }
@@ -245,7 +245,7 @@ extension Dispatcher
     
     func fetchState(
         forFeature featureType: SomeFeature.Type
-    ) throws -> SomeStateBase {
+    ) throws -> FeatureStateBase {
         
         try storage.fetchState(forFeature: featureType)
     }

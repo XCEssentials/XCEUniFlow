@@ -32,7 +32,7 @@ public
 struct TransitionInto<New: FeatureState>: MutationDecriptor
 {
     public
-    let oldState: SomeStateBase
+    let oldState: FeatureStateBase
     
     public
     let newState: New

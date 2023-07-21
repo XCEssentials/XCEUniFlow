@@ -35,7 +35,7 @@ extension SomeFeature where Self: FeatureBase
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ state: SomeStateBase
+        _ state: FeatureStateBase
     ) throws {
         
         try dispatcher.access(scope: scope, context: context, location: location) {

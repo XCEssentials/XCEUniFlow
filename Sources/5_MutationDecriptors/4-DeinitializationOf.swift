@@ -32,7 +32,7 @@ public
 struct DeinitializationOf<F: SomeFeature>: MutationDecriptor
 {
     public
-    let oldState: SomeStateBase
+    let oldState: FeatureStateBase
     
     public
     let timestamp: Date

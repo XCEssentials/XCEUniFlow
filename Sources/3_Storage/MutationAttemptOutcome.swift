@@ -27,10 +27,10 @@
 public
 enum MutationAttemptOutcome: CustomStringConvertible
 {
-    case initialization(newState: SomeStateBase)
-    case actualization(oldState: SomeStateBase, newState: SomeStateBase)
-    case transition(oldState: SomeStateBase, newState: SomeStateBase)
-    case deinitialization(oldState: SomeStateBase)
+    case initialization(newState: FeatureStateBase)
+    case actualization(oldState: FeatureStateBase, newState: FeatureStateBase)
+    case transition(oldState: FeatureStateBase, newState: FeatureStateBase)
+    case deinitialization(oldState: FeatureStateBase)
     
     /// No removal operation has been performed, because no such key has been found.
     case nothingToRemove(feature: SomeFeature.Type)

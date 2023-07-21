@@ -32,10 +32,10 @@ public
 struct ActualizationOf<F: SomeFeature>: MutationDecriptor
 {
     public
-    let oldState: SomeStateBase
+    let oldState: FeatureStateBase
     
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
     let timestamp: Date

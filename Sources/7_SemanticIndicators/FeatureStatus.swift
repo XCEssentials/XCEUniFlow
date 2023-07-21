@@ -49,7 +49,7 @@ struct FeatureStatus
     let subtitle: String
     
     public
-    let state: SomeStateBase?
+    let state: FeatureStateBase?
     
     public
     let indicator: StatusIndicator
@@ -64,7 +64,7 @@ struct FeatureStatus
     }
     
     public
-    init(with state: SomeStateBase)
+    init(with state: FeatureStateBase)
     {
         self.title = type(of: state).feature.displayName
         self.subtitle = .init(describing: type(of: state).self)

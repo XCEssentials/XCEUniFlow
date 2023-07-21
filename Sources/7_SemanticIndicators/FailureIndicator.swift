@@ -25,4 +25,4 @@
  */
 
 public
-protocol FailureIndicator: SomeStateBase {}
+protocol FailureIndicator: FeatureStateBase {}

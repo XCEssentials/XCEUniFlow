@@ -25,4 +25,4 @@
  */
 
 public
-protocol BusyIndicator: SomeStateBase {}
+protocol BusyIndicator: FeatureStateBase {}

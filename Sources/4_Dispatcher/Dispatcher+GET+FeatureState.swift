@@ -45,7 +45,7 @@ extension Dispatcher
         }
     }
     
-    func ensureHasAnyState(fromTheList whitelist: [SomeStateBase.Type]) throws
+    func ensureHasAnyState(fromTheList whitelist: [FeatureStateBase.Type]) throws
     {
         let allStatesTypes = allStates.map { type(of: $0) }
         

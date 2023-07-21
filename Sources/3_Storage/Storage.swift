@@ -32,7 +32,7 @@ public
 struct Storage
 {
     private
-    var data: [String: SomeStateBase] = [:]
+    var data: [String: FeatureStateBase] = [:]
     
     public private(set)
     var history: History = []
@@ -59,8 +59,8 @@ extension Storage
         
         case stateTypeMismatch(
             feature: SomeFeature.Type,
-            expected: SomeStateBase.Type,
-            actual: SomeStateBase
+            expected: FeatureStateBase.Type,
+            actual: FeatureStateBase
         )
     }
 }
@@ -70,7 +70,7 @@ extension Storage
 public
 extension Storage
 {
-    var allStates: [SomeStateBase]
+    var allStates: [FeatureStateBase]
     {
         .init(data.values)
     }
@@ -83,7 +83,7 @@ extension Storage
             }
     }
     
-    func fetchState(forFeature featureType: SomeFeature.Type) throws -> SomeStateBase
+    func fetchState(forFeature featureType: SomeFeature.Type) throws -> FeatureStateBase
     {
         if
             let result = data[featureType.name]
@@ -126,7 +126,7 @@ extension Storage
     @discardableResult
     mutating
     func store(
-        _ state: SomeStateBase,
+        _ state: FeatureStateBase,
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
         
@@ -199,7 +199,7 @@ extension Storage
     mutating
     func removeState(
         forFeature feature: SomeFeature.Type,
-        fromStateType: SomeStateBase.Type? = nil,
+        fromStateType: FeatureStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {
         

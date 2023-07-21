@@ -27,7 +27,7 @@
 public
 extension Storage
 {
-    subscript(_ feature: SomeFeature.Type) -> SomeStateBase?
+    subscript(_ feature: SomeFeature.Type) -> FeatureStateBase?
     {
         try? fetchState(forFeature: feature)
     }
@@ -44,7 +44,7 @@ public
 extension SomeFeature
 {
     static
-    func fetchState(from storage: Storage) throws -> SomeStateBase
+    func fetchState(from storage: Storage) throws -> FeatureStateBase
     {
         try storage.fetchState(forFeature: self)
     }

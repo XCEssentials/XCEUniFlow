@@ -32,7 +32,7 @@ public
 struct Initialization: MutationDecriptor
 {
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
     let feature: SomeFeature.Type

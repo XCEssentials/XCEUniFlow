@@ -59,7 +59,7 @@ extension SomeFeature
     static
     func fetch(
         from dispatcher: Dispatcher
-    ) throws -> SomeStateBase {
+    ) throws -> FeatureStateBase {
         
         try dispatcher.fetchState(
             forFeature: self

@@ -35,7 +35,7 @@ struct TransitionFrom<Old: FeatureState>: MutationDecriptor
     let oldState: Old
     
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
     let timestamp: Date

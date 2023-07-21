@@ -135,7 +135,7 @@ extension Storage
     mutating
     func deinitialize(
         _ feature: SomeFeature.Type,
-        fromStateType: SomeStateBase.Type?, // = nil,
+        fromStateType: FeatureStateBase.Type?, // = nil,
         strict: Bool // = true
     ) throws -> MutationAttemptOutcome {
         

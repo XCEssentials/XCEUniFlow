@@ -33,7 +33,7 @@ public
 struct AnySetting: MutationDecriptor
 {
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
     let feature: SomeFeature.Type

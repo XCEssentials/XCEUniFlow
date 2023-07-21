@@ -32,10 +32,10 @@ public
 struct AnyMutation: MutationDecriptor
 {
     public
-    let oldState: SomeStateBase?
+    let oldState: FeatureStateBase?
 
     public
-    let newState: SomeStateBase?
+    let newState: FeatureStateBase?
 
     public
     let feature: SomeFeature.Type

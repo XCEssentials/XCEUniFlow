@@ -32,7 +32,7 @@ public
 struct InitializationOf<F: SomeFeature>: MutationDecriptor
 {
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
     let timestamp: Date
