@@ -98,7 +98,7 @@ extension Storage
     
     func fetchState<S: SomeState>(ofType _: S.Type = S.self) throws -> S
     {
-        let someState = try fetchState(forFeature: S.Feature.self)
+        let someState = try fetchState(forFeature: S.ParentFeature.self)
         
         //---
         
@@ -110,7 +110,7 @@ extension Storage
         else
         {
             throw ReadDataError.stateTypeMismatch(
-                feature: S.Feature.self,
+                feature: S.ParentFeature.self,
                 expected: S.self,
                 actual: someState
             )

@@ -51,7 +51,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         with newState: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
@@ -67,7 +67,7 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         _: S.Type = S.self,
         via mutationHandler: (inout S) throws -> Void
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -82,7 +82,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         with newState: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -98,7 +98,7 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         from _: O, // for convenience - we can pass an instance, does not matter
         into newState: N
-    ) throws where O.Feature == Self, N.Feature == Self {
+    ) throws where O.ParentFeature == Self, N.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -114,7 +114,7 @@ extension SomeFeature where Self: FeatureBase
         location: Int = #line,
         from _: O.Type,
         into newState: N
-    ) throws where O.Feature == Self, N.Feature == Self {
+    ) throws where O.ParentFeature == Self, N.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -129,7 +129,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         into newState: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -159,7 +159,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         from _: S.Type
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -174,7 +174,7 @@ extension SomeFeature where Self: FeatureBase
         context: String = #function,
         location: Int = #line,
         from _: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try deinitialize(
             scope: scope,

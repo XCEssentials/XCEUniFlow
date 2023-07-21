@@ -73,12 +73,12 @@ extension IntBindingsTests
             
             struct One: SomeState
             {
-                typealias Feature = SUT
+                typealias ParentFeature = SUT
             }
             
             struct Two: SomeState
             {
-                typealias Feature = SUT
+                typealias ParentFeature = SUT
             }
             
             func start()
@@ -192,7 +192,7 @@ extension IntBindingsTests
             
             struct One: SomeState
             {
-                typealias Feature = SUT
+                typealias ParentFeature = SUT
             }
             
             func start()

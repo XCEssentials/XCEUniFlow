@@ -88,7 +88,7 @@ extension Storage
     func transition<O: SomeState, N: SomeState>(
         from _: O.Type,
         into newState: N
-    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
+    ) throws -> MutationAttemptOutcome where O.ParentFeature == N.ParentFeature /* NOTE: "O != N" is implied*/ {
         
         try store(
             newState,

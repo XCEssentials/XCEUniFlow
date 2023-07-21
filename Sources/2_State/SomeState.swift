@@ -27,7 +27,7 @@
 public
 protocol SomeState: SomeStateBase
 {
-    associatedtype Feature: SomeFeature
+    associatedtype ParentFeature: SomeFeature
 }
 
 // MARK: - Helpers
@@ -38,6 +38,6 @@ extension SomeState
     static
     var feature: SomeFeature.Type
     {
-        Feature.self
+        ParentFeature.self
     }
 }
