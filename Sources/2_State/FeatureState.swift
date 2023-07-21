@@ -25,7 +25,7 @@
  */
 
 public
-protocol SomeState: SomeStateBase
+protocol FeatureState: SomeStateBase
 {
     associatedtype ParentFeature: SomeFeature
 }
@@ -33,7 +33,7 @@ protocol SomeState: SomeStateBase
 // MARK: - Helpers
 
 public
-extension SomeState
+extension FeatureState
 {
     static
     var feature: SomeFeature.Type

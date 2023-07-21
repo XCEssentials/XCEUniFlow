@@ -100,7 +100,7 @@ extension FeatureBase
     }
     
     /// Fetch state `S` of any feature from `dispatcher`.
-    func fetchState<S: SomeState>(
+    func fetchState<S: FeatureState>(
         _: S.Type = S.self
     ) throws -> S {
         

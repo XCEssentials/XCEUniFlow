@@ -71,12 +71,12 @@ extension IntBindingsTests
             static
             var expectDeinitialization: XCTestExpectation!
             
-            struct One: SomeState
+            struct One: FeatureState
             {
                 typealias ParentFeature = SUT
             }
             
-            struct Two: SomeState
+            struct Two: FeatureState
             {
                 typealias ParentFeature = SUT
             }
@@ -190,7 +190,7 @@ extension IntBindingsTests
                 false
             }
             
-            struct One: SomeState
+            struct One: FeatureState
             {
                 typealias ParentFeature = SUT
             }

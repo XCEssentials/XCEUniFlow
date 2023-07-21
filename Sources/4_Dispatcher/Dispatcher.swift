@@ -250,7 +250,7 @@ extension Dispatcher
         try storage.fetchState(forFeature: featureType)
     }
     
-    func fetchState<S: SomeState>(
+    func fetchState<S: FeatureState>(
         ofType _: S.Type = S.self
     ) throws -> S {
         

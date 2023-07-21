@@ -27,7 +27,7 @@
 public
 extension Dispatcher
 {   
-    func hasState<S: SomeState>(
+    func hasState<S: FeatureState>(
         ofType _: S.Type
     ) -> Bool {
         
@@ -69,7 +69,7 @@ extension Dispatcher
 //---
 
 public
-extension SomeState
+extension FeatureState
 {
     static
     func fetch(

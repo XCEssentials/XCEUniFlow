@@ -46,7 +46,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to initialize `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func initialize<S: SomeState>(
+    func initialize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -61,7 +61,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to actualize `self` using given `mutationHandler` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func actualize<S: SomeState>(
+    func actualize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -77,7 +77,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to actualize `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func actualize<S: SomeState>(
+    func actualize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -92,7 +92,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func transition<O: SomeState, N: SomeState>(
+    func transition<O: FeatureState, N: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -108,7 +108,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func transition<O: SomeState, N: SomeState>(
+    func transition<O: FeatureState, N: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -124,7 +124,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func transition<S: SomeState>(
+    func transition<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -154,7 +154,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to deinitialize `self` from state `S` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func deinitialize<S: SomeState>(
+    func deinitialize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
@@ -169,7 +169,7 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to deinitialize `self` from state `S` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func deinitialize<S: SomeState>(
+    func deinitialize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,

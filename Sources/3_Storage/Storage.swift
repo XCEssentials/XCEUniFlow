@@ -96,7 +96,7 @@ extension Storage
         }
     }
     
-    func fetchState<S: SomeState>(ofType _: S.Type = S.self) throws -> S
+    func fetchState<S: FeatureState>(ofType _: S.Type = S.self) throws -> S
     {
         let someState = try fetchState(forFeature: S.ParentFeature.self)
         
