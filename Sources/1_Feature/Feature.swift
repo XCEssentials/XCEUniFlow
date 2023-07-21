@@ -28,13 +28,39 @@
 public
 protocol Feature
 {
+    init(with dispatcher: Dispatcher)
+}
+
+public
+extension Feature
+{
     /// `Storage` will use this as actual key.
     static
-    var name: String { get }
+    var name: String
+    {
+        // full type name, including enclosing types for nested declarations:
+        return .init(reflecting: Self.self)
+    }
     
     /// Convenience helper that determines user-friendly feature name.
     static
-    var displayName: String { get }
-    
-    init(with dispatcher: Dispatcher)
+    var displayName: String
+    {
+        if
+            let customizedSelf = Self.self as? WithCustomDisplayName.Type
+        {
+            return customizedSelf.customDisplayName
+        }
+        else
+        {
+            return Self
+                .name
+                .split(separator: ".")
+                .dropFirst() // drop app/module name
+                .joined(separator: ".")
+                .split(separator: ":")
+                .last
+                .map(String.init) ?? ""
+        }
+    }
 }
