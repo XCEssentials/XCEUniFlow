@@ -257,7 +257,7 @@ extension Dispatcher
         try storage.fetchState(ofType: S.self)
     }
     
-    func on<T: SomeMutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
+    func on<T: MutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
     {
         accessLog.onProcessed.perEachMutation.as(T.self)
     }

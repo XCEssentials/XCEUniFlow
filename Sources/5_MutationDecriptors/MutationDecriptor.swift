@@ -29,7 +29,7 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-protocol SomeMutationDecriptor
+protocol MutationDecriptor
 {
     var timestamp: Date { get }
     
@@ -39,7 +39,7 @@ protocol SomeMutationDecriptor
 }
 
 public
-extension SomeMutationDecriptor
+extension MutationDecriptor
 {
     /// Syntax sugar to look nicer in `when` statements.
     static

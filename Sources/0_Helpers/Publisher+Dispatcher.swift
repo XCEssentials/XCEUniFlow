@@ -105,7 +105,7 @@ extension Publisher where Output == Dispatcher.ProcessedActionReport, Failure ==
 public
 extension Publisher where Output == Storage.HistoryElement, Failure == Never
 {
-    func `as`<T: SomeMutationDecriptor>(
+    func `as`<T: MutationDecriptor>(
         _: T.Type
     ) -> AnyPublisher<T, Failure> {
         
