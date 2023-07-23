@@ -25,4 +25,19 @@
  */
 
 public
-protocol BusyIndicator: SomeStateBase {}
+protocol FeatureState: FeatureStateBase
+{
+    associatedtype ParentFeature: Feature
+}
+
+// MARK: - Helpers
+
+public
+extension FeatureState
+{
+    static
+    var feature: Feature.Type
+    {
+        ParentFeature.self
+    }
+}

@@ -29,38 +29,8 @@
 /// and allows to set it either during initialization or later
 /// via `configure` function.
 open
-class FeatureBase: SomeFeature
+class FeatureBase: Feature
 {
-    public
-    static
-    var name: String
-    {
-        // full type name, including enclosing types for nested declarations:
-        return .init(reflecting: Self.self)
-    }
-
-    public
-    static
-    var displayName: String
-    {
-        if
-            let customizedSelf = Self.self as? WithCustomDisplayName.Type
-        {
-            return customizedSelf.customDisplayName
-        }
-        else
-        {
-            return Self
-                .name
-                .split(separator: ".")
-                .dropFirst() // drop app/module name
-                .joined(separator: ".")
-                .split(separator: ":")
-                .last
-                .map(String.init) ?? ""
-        }
-    }
-    
     //internal
     let dispatcher: Dispatcher
     

@@ -32,7 +32,7 @@ public
 struct Storage
 {
     private
-    var data: [String: SomeStateBase] = [:]
+    var data: [String: FeatureStateBase] = [:]
     
     public private(set)
     var history: History = []
@@ -54,13 +54,13 @@ extension Storage
     enum ReadDataError: Error
     {
         case featureNotFound(
-            SomeFeature.Type
+            Feature.Type
         )
         
         case stateTypeMismatch(
-            feature: SomeFeature.Type,
-            expected: SomeStateBase.Type,
-            actual: SomeStateBase
+            feature: Feature.Type,
+            expected: FeatureStateBase.Type,
+            actual: FeatureStateBase
         )
     }
 }
@@ -70,12 +70,12 @@ extension Storage
 public
 extension Storage
 {
-    var allStates: [SomeStateBase]
+    var allStates: [FeatureStateBase]
     {
         .init(data.values)
     }
     
-    var allFeatures: [SomeFeature.Type]
+    var allFeatures: [Feature.Type]
     {
         allStates
             .map {
@@ -83,7 +83,7 @@ extension Storage
             }
     }
     
-    func fetchState(forFeature featureType: SomeFeature.Type) throws -> SomeStateBase
+    func fetchState(forFeature featureType: Feature.Type) throws -> FeatureStateBase
     {
         if
             let result = data[featureType.name]
@@ -96,9 +96,9 @@ extension Storage
         }
     }
     
-    func fetchState<S: SomeState>(ofType _: S.Type = S.self) throws -> S
+    func fetchState<S: FeatureState>(ofType _: S.Type = S.self) throws -> S
     {
-        let someState = try fetchState(forFeature: S.Feature.self)
+        let someState = try fetchState(forFeature: S.ParentFeature.self)
         
         //---
         
@@ -110,7 +110,7 @@ extension Storage
         else
         {
             throw ReadDataError.stateTypeMismatch(
-                feature: S.Feature.self,
+                feature: S.ParentFeature.self,
                 expected: S.self,
                 actual: someState
             )
@@ -126,7 +126,7 @@ extension Storage
     @discardableResult
     mutating
     func store(
-        _ state: SomeStateBase,
+        _ state: FeatureStateBase,
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
         
@@ -198,8 +198,8 @@ extension Storage
     @discardableResult
     mutating
     func removeState(
-        forFeature feature: SomeFeature.Type,
-        fromStateType: SomeStateBase.Type? = nil,
+        forFeature feature: Feature.Type,
+        fromStateType: FeatureStateBase.Type? = nil,
         strict: Bool = true
     ) throws -> MutationAttemptOutcome {
         

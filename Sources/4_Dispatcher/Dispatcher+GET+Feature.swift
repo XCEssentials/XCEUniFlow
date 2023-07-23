@@ -24,6 +24,55 @@
  
  */
 
-/// External bindings (observer specific, with access to observer instance).
+import Foundation
+import XCEPipeline
+
+//---
+
 public
-enum ExternalBindingBDD<S: SomeExternalObserver> {} // S - Source
+extension Dispatcher
+{
+    func hasFeatureInitialized(
+        _ featureType: Feature.Type
+    ) -> Bool {
+        
+        do
+        {
+            _ = try fetchState(
+                forFeature: featureType
+            )
+            
+            return true
+        }
+        catch
+        {
+            return false
+        }
+    }
+}
+
+//---
+
+public
+extension Feature
+{
+    static
+    func fetch(
+        from dispatcher: Dispatcher
+    ) throws -> FeatureStateBase {
+        
+        try dispatcher.fetchState(
+            forFeature: self
+        )
+    }
+    
+    static
+    func isPresent(
+        in dispatcher: Dispatcher
+    ) -> Bool {
+        
+        dispatcher.hasFeatureInitialized(
+            self
+        )
+    }
+}

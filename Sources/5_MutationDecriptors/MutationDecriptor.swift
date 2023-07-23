@@ -24,17 +24,27 @@
  
  */
 
-/// Semantic marker that represents a Feature.
+import Foundation /// for access to `Date` type
+
+//---
+
 public
-protocol SomeFeature: AnyObject
+protocol MutationDecriptor
 {
-    /// `Storage` will use this as actual key.
-    static
-    var name: String { get }
+    var timestamp: Date { get }
     
-    /// Convenience helper that determines user-friendly feature name.
+    init?(
+        from report: Storage.HistoryElement
+    )
+}
+
+public
+extension MutationDecriptor
+{
+    /// Syntax sugar to look nicer in `when` statements.
     static
-    var displayName: String { get }
-    
-    init(with dispatcher: Dispatcher)
+    var done: Self.Type
+    {
+        self
+    }
 }

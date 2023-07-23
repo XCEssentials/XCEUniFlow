@@ -60,7 +60,7 @@ extension IntBindingsTests
         // GIVEN
         
         final
-        class SUT: FeatureBase, SomeInternalObserver
+        class SUT: FeatureBase, InternalObserver
         {
             static
             var expectInitialization: XCTestExpectation!
@@ -71,14 +71,14 @@ extension IntBindingsTests
             static
             var expectDeinitialization: XCTestExpectation!
             
-            struct One: SomeState
+            struct One: FeatureState
             {
-                typealias Feature = SUT
+                typealias ParentFeature = SUT
             }
             
-            struct Two: SomeState
+            struct Two: FeatureState
             {
-                typealias Feature = SUT
+                typealias ParentFeature = SUT
             }
             
             func start()
@@ -152,7 +152,7 @@ extension IntBindingsTests
         // GIVEN
         
         final
-        class SUT: FeatureBase, SomeInternalObserver
+        class SUT: FeatureBase, InternalObserver
         {
             static
             func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<SUT>) -> Int?
@@ -190,9 +190,9 @@ extension IntBindingsTests
                 false
             }
             
-            struct One: SomeState
+            struct One: FeatureState
             {
-                typealias Feature = SUT
+                typealias ParentFeature = SUT
             }
             
             func start()

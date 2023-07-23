@@ -27,7 +27,7 @@
 public
 extension Dispatcher
 {   
-    func hasState<S: SomeState>(
+    func hasState<S: FeatureState>(
         ofType _: S.Type
     ) -> Bool {
         
@@ -45,7 +45,7 @@ extension Dispatcher
         }
     }
     
-    func ensureHasAnyState(fromTheList whitelist: [SomeStateBase.Type]) throws
+    func ensureHasAnyState(fromTheList whitelist: [FeatureStateBase.Type]) throws
     {
         let allStatesTypes = allStates.map { type(of: $0) }
         
@@ -69,7 +69,7 @@ extension Dispatcher
 //---
 
 public
-extension SomeState
+extension FeatureState
 {
     static
     func fetch(

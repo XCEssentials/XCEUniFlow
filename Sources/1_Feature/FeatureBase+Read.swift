@@ -32,14 +32,14 @@ import XCEPipeline
 public
 enum InitializationStatusCheckError: Error
 {
-    case alreadyInitialized(SomeFeature.Type)
-    case notInitializedYet(SomeFeature.Type)
+    case alreadyInitialized(Feature.Type)
+    case notInitializedYet(Feature.Type)
 }
 
 public
 enum CurrentStateCheckError: Error
 {
-    case currentStateIsNotInTheList([SomeStateBase.Type])
+    case currentStateIsNotInTheList([FeatureStateBase.Type])
 }
 
 //---
@@ -72,19 +72,19 @@ extension FeatureBase
     }
     
     @discardableResult
-    func ensureCurrentStateIs(_ desiredState: SomeStateBase.Type) throws -> SomeStateBase
+    func ensureCurrentStateIs(_ desiredState: FeatureStateBase.Type) throws -> FeatureStateBase
     {
         try ensureCurrentState(isInTheList: [desiredState])
     }
     
     @discardableResult
-    func ensureCurrentState(isOneOf whitelist: SomeStateBase.Type...) throws -> SomeStateBase
+    func ensureCurrentState(isOneOf whitelist: FeatureStateBase.Type...) throws -> FeatureStateBase
     {
         try ensureCurrentState(isInTheList: whitelist)
     }
     
     @discardableResult
-    func ensureCurrentState(isInTheList whitelist: [SomeStateBase.Type]) throws -> SomeStateBase
+    func ensureCurrentState(isInTheList whitelist: [FeatureStateBase.Type]) throws -> FeatureStateBase
     {
         let state = try fetchCurrentState()
         let typeOfCurrentState = type(of: state)
@@ -100,7 +100,7 @@ extension FeatureBase
     }
     
     /// Fetch state `S` of any feature from `dispatcher`.
-    func fetchState<S: SomeState>(
+    func fetchState<S: FeatureState>(
         _: S.Type = S.self
     ) throws -> S {
         
@@ -110,9 +110,9 @@ extension FeatureBase
     }
     
     /// Fetch any state of feature `F` from `dispatcher`.
-    func fetchState<F: SomeFeature>(
+    func fetchState<F: Feature>(
         for _: F.Type
-    ) throws -> SomeStateBase {
+    ) throws -> FeatureStateBase {
         
         try dispatcher.fetchState(
             forFeature: F.self
@@ -120,7 +120,7 @@ extension FeatureBase
     }
     
     /// Fetch current state of `Self` from `dispatcher`.
-    func fetchCurrentState() throws -> SomeStateBase {
+    func fetchCurrentState() throws -> FeatureStateBase {
         
         try dispatcher.fetchState(
             forFeature: Self.self

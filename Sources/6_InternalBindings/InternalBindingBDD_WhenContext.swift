@@ -48,7 +48,7 @@ extension InternalBindingBDD
         }
         
         public
-        func when<M: SomeMutationDecriptor>(
+        func when<M: MutationDecriptor>(
             _: M.Type = M.self
         ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
             

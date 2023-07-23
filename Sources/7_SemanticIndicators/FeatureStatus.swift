@@ -28,33 +28,58 @@ import Combine
 
 //---
 
-/// External observer of mutations that happen inside a given `Dispatcher`.
-///
-/// Instance of such type can be subscribed for updates via
-/// `subscribe` function of `Dispatcher` instance.
 public
-protocol SomeExternalObserver: AnyObject
+struct FeatureStatus
 {
-    func bindings() -> [ExternalBinding]
-}
+    public
+    enum StatusIndicator: String, Equatable, Codable
+    {
+        case ok = "🟢"
+        case busy = "🟠"
+        case failure = "🔴"
+        case missing = "⚠️"
+    }
 
-//---
-
-public
-extension SomeExternalObserver
-{
-    /// Begins binding declaration.
-    func scenario(
-        _ description: String = ""
-    ) -> ExternalBindingBDD<Self>.WhenContext {
-        
-        .init(description: description)
+    //---
+    
+    public
+    let title: String
+    
+    public
+    let subtitle: String
+    
+    public
+    let state: FeatureStateBase?
+    
+    public
+    let indicator: StatusIndicator
+    
+    public
+    init(missing feature: Feature.Type)
+    {
+        self.title = feature.displayName
+        self.subtitle = "<missing>"
+        self.state = nil
+        self.indicator = .missing
     }
     
-    /// Activates external bindings with given `dispatcher`.
-    func activateSubscriptions(
-        with dispatcher: Dispatcher
-    ) {
-        dispatcher.subscribe(self)
+    public
+    init(with state: FeatureStateBase)
+    {
+        self.title = type(of: state).feature.displayName
+        self.subtitle = .init(describing: type(of: state).self)
+        self.state = state
+        
+        switch state
+        {
+            case is FailureIndicator:
+                self.indicator = .failure
+                
+            case is BusyIndicator:
+                self.indicator = .busy
+                
+            default:
+                self.indicator = .ok
+        }
     }
 }

@@ -29,7 +29,7 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct DeinitializationFrom<Old: SomeState>: SomeMutationDecriptor
+struct DeinitializationFrom<Old: FeatureState>: MutationDecriptor
 {
     public
     let oldState: Old

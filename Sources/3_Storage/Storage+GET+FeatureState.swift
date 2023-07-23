@@ -24,26 +24,36 @@
  
  */
 
-import Combine
+public
+extension Storage
+{
+    subscript<S: FeatureState>(_: S.Type) -> S?
+    {
+        try? fetchState(ofType: S.self)
+    }
+    
+    func hasState<S: FeatureState>(ofType _: S.Type) -> Bool
+    {
+        self[S.self] != nil
+    }
+}
 
 //---
 
 public
-extension ExternalBindingBDD
+extension FeatureState
 {
-    struct WhenContext
+    static
+    func fetch(from storage: Storage) throws -> Self
     {
-        public
-        let description: String
-        
-        public
-        func when<M: SomeMutationDecriptor>(
-            _: M.Type = M.self
-        ) -> GivenOrThenContext<M> {
-            
-            .init(
-                description: description
-            )
-        }
+        try storage.fetchState(ofType: self)
+    }
+
+    //---
+
+    static
+    func isPresent(in storage: Storage) -> Bool
+    {
+        storage.hasState(ofType: self)
     }
 }

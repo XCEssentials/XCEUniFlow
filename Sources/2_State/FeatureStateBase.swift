@@ -25,4 +25,8 @@
  */
 
 public
-protocol FailureIndicator: SomeStateBase {}
+protocol FeatureStateBase
+{
+    static
+    var feature: Feature.Type { get }
+}

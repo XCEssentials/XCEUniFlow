@@ -25,7 +25,7 @@
  */
 
 public
-extension SomeFeature where Self: FeatureBase
+extension Feature where Self: FeatureBase
 {
     /// Save given state within `dispatcher` - either
     /// initialize, actuialize or transition into given `state`.
@@ -35,7 +35,7 @@ extension SomeFeature where Self: FeatureBase
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ state: SomeStateBase
+        _ state: FeatureStateBase
     ) throws {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
@@ -46,12 +46,12 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to initialize `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func initialize<S: SomeState>(
+    func initialize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         with newState: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
             
@@ -61,13 +61,13 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to actualize `self` using given `mutationHandler` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func actualize<S: SomeState>(
+    func actualize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         _: S.Type = S.self,
         via mutationHandler: (inout S) throws -> Void
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -77,12 +77,12 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to actualize `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func actualize<S: SomeState>(
+    func actualize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         with newState: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -92,13 +92,13 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func transition<O: SomeState, N: SomeState>(
+    func transition<O: FeatureState, N: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from _: O, // for convenience - we can pass an instance, does not matter
         into newState: N
-    ) throws where O.Feature == Self, N.Feature == Self {
+    ) throws where O.ParentFeature == Self, N.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -108,13 +108,13 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func transition<O: SomeState, N: SomeState>(
+    func transition<O: FeatureState, N: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from _: O.Type,
         into newState: N
-    ) throws where O.Feature == Self, N.Feature == Self {
+    ) throws where O.ParentFeature == Self, N.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -124,12 +124,12 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to transition `self` into given `newState` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func transition<S: SomeState>(
+    func transition<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         into newState: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -154,12 +154,12 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to deinitialize `self` from state `S` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func deinitialize<S: SomeState>(
+    func deinitialize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from _: S.Type
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try dispatcher.access(scope: scope, context: context, location: location) {
            
@@ -169,12 +169,12 @@ extension SomeFeature where Self: FeatureBase
     
     /// Attempts to deinitialize `self` from state `S` within `dispatcher`
     /// or fails otherwise by throwing `ExpectedMutation.SemanticError`.
-    func deinitialize<S: SomeState>(
+    func deinitialize<S: FeatureState>(
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
         from _: S
-    ) throws where S.Feature == Self {
+    ) throws where S.ParentFeature == Self {
         
         try deinitialize(
             scope: scope,

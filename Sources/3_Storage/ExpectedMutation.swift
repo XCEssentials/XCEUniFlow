@@ -30,6 +30,6 @@ enum ExpectedMutation
     case auto
     case initialization
     case actualization
-    case transition(fromStateType: SomeStateBase.Type?)
-    case deinitialization(fromStateType: SomeStateBase.Type?, strict: Bool)
+    case transition(fromStateType: FeatureStateBase.Type?)
+    case deinitialization(fromStateType: FeatureStateBase.Type?, strict: Bool)
 }
