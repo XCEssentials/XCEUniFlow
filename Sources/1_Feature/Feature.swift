@@ -28,7 +28,7 @@
 public
 protocol Feature
 {
-    init(with dispatcher: Dispatcher)
+//    init(with dispatcher: Dispatcher)
 }
 
 public

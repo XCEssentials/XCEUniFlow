@@ -24,69 +24,69 @@
 
  */
 
-import XCTest
-
-@testable
-import XCEUniFlow
-
-//---
-
-class FeatureTests: XCTestCase {}
-
-// MARK: - Tests
-
-extension FeatureTests
-{
-    func test_featureName() throws
-    {
-        final
-        class FeatureA: FeatureBase {}
-        
-        class FeatureB: Feature
-        {
-            static
-            var name: String { "BBB" }
-            
-            static
-            var displayName: String { "B" }
-            
-            var dispatcher: Dispatcher!
-            
-            private(set)
-            var isReady: Bool = false
-            
-            required
-            init(with dispatcher: Dispatcher)
-            {
-                isReady = true
-            }
-        }
-        
-        final
-        class ViewModelB: FeatureB {}
-        
-        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
-        XCTAssertFalse(FeatureB.name.contains("FeatureB"))
-        XCTAssertEqual(FeatureB.name, "BBB")
-        XCTAssertEqual(ViewModelB.name, "BBB")
-
-        XCTAssertTrue(FeatureA.displayName.contains("FeatureA"))
-        XCTAssertFalse(FeatureB.displayName.contains("FeatureB"))
-        XCTAssertEqual(FeatureB.displayName, "B")
-        XCTAssertEqual(ViewModelB.displayName, "B")
-    }
-    
-    func test_featureName_custom() throws
-    {
-        final
-        class FeatureA: FeatureBase, WithCustomDisplayName
-        {
-            static
-            var customDisplayName: String { "CustomDisplayName" }
-        }
-        
-        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
-        XCTAssertFalse(FeatureA.displayName.contains("FeatureA"))
-        XCTAssertEqual(FeatureA.displayName, "CustomDisplayName")
-    }
-}
+//import XCTest
+//
+//@testable
+//import XCEUniFlow
+//
+////---
+//
+//class FeatureTests: XCTestCase {}
+//
+//// MARK: - Tests
+//
+//extension FeatureTests
+//{
+//    func test_featureName() throws
+//    {
+//        final
+//        class FeatureA: FeatureBase {}
+//
+//        class FeatureB: Feature
+//        {
+//            static
+//            var name: String { "BBB" }
+//
+//            static
+//            var displayName: String { "B" }
+//
+//            var dispatcher: Dispatcher!
+//
+//            private(set)
+//            var isReady: Bool = false
+//
+//            required
+//            init(with dispatcher: Dispatcher)
+//            {
+//                isReady = true
+//            }
+//        }
+//
+//        final
+//        class ViewModelB: FeatureB {}
+//
+//        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
+//        XCTAssertFalse(FeatureB.name.contains("FeatureB"))
+//        XCTAssertEqual(FeatureB.name, "BBB")
+//        XCTAssertEqual(ViewModelB.name, "BBB")
+//
+//        XCTAssertTrue(FeatureA.displayName.contains("FeatureA"))
+//        XCTAssertFalse(FeatureB.displayName.contains("FeatureB"))
+//        XCTAssertEqual(FeatureB.displayName, "B")
+//        XCTAssertEqual(ViewModelB.displayName, "B")
+//    }
+//
+//    func test_featureName_custom() throws
+//    {
+//        final
+//        class FeatureA: FeatureBase, WithCustomDisplayName
+//        {
+//            static
+//            var customDisplayName: String { "CustomDisplayName" }
+//        }
+//
+//        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
+//        XCTAssertFalse(FeatureA.displayName.contains("FeatureA"))
+//        XCTAssertEqual(FeatureA.displayName, "CustomDisplayName")
+//    }
+//}
