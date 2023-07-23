@@ -31,7 +31,7 @@ extension Storage
 {
     @discardableResult
     mutating
-    func initialize<S: SomeState>(
+    func initialize<S: FeatureState>(
         with newState: S
     ) throws -> MutationAttemptOutcome {
         
@@ -49,7 +49,7 @@ extension Storage
 {
     @discardableResult
     mutating
-    func actualize<S: SomeState>(
+    func actualize<S: FeatureState>(
         _: S.Type = S.self,
         via mutationHandler: (inout S) throws -> Void
     ) throws -> MutationAttemptOutcome {
@@ -67,7 +67,7 @@ extension Storage
     
     @discardableResult
     mutating
-    func actualize<S: SomeState>(
+    func actualize<S: FeatureState>(
         with newState: S
     ) throws -> MutationAttemptOutcome {
         
@@ -85,10 +85,10 @@ extension Storage
 {
     @discardableResult
     mutating
-    func transition<O: SomeState, N: SomeState>(
+    func transition<O: FeatureState, N: FeatureState>(
         from _: O.Type,
         into newState: N
-    ) throws -> MutationAttemptOutcome where O.Feature == N.Feature /* NOTE: "O != N" is implied*/ {
+    ) throws -> MutationAttemptOutcome where O.ParentFeature == N.ParentFeature /* NOTE: "O != N" is implied*/ {
         
         try store(
             newState,
@@ -100,7 +100,7 @@ extension Storage
     /// so in best case scenario it is going to be actualization.
     @discardableResult
     mutating
-    func transition<S: SomeState>(
+    func transition<S: FeatureState>(
         from _: S.Type,
         into newState: S
     ) throws -> MutationAttemptOutcome {
@@ -115,7 +115,7 @@ extension Storage
     
     @discardableResult
     mutating
-    func transition<S: SomeState>(
+    func transition<S: FeatureState>(
         into newState: S
     ) throws -> MutationAttemptOutcome {
         
@@ -134,8 +134,8 @@ extension Storage
     @discardableResult
     mutating
     func deinitialize(
-        _ feature: SomeFeature.Type,
-        fromStateType: SomeStateBase.Type?, // = nil,
+        _ feature: Feature.Type,
+        fromStateType: FeatureStateBase.Type?, // = nil,
         strict: Bool // = true
     ) throws -> MutationAttemptOutcome {
         

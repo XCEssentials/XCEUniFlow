@@ -24,25 +24,27 @@
  
  */
 
+/// A feature that also has bindings and can observe/react on mutations
+/// that happen within `Dispatcher` where such feature is initialized.
 public
-protocol WithCleanupAction: SomeFeature
+protocol InternalObserver: Feature
 {
-    func cleanup()
+    static
+    var bindings: [InternalBinding] { get }
 }
 
 //---
 
 public
-protocol WithDefaultCleanupAction: WithCleanupAction {}
-
-public
-extension WithDefaultCleanupAction where Self: FeatureBase
+extension InternalObserver
 {
-    func cleanup()
-    {
-        should {
-            
-            try deinitialize()
-        }
+    typealias Itself = Self
+    
+    static
+    func scenario(
+        _ description: String = ""
+    ) -> InternalBindingBDD<Self>.WhenContext {
+        
+        .init(description: description)
     }
 }

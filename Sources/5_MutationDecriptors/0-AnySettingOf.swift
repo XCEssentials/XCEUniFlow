@@ -30,10 +30,10 @@ import Foundation /// for access to `Date` type
 
 /// Mutation that results feature `F` being present in the storage.
 public
-struct AnySettingOf<F: SomeFeature>: SomeMutationDecriptor
+struct AnySettingOf<F: Feature>: MutationDecriptor
 {
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
     let timestamp: Date

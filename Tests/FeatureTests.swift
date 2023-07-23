@@ -31,18 +31,18 @@ import XCEUniFlow
 
 //---
 
-class SomeFeatureTests: XCTestCase {}
+class FeatureTests: XCTestCase {}
 
 // MARK: - Tests
 
-extension SomeFeatureTests
+extension FeatureTests
 {
     func test_featureName() throws
     {
         final
         class FeatureA: FeatureBase {}
         
-        class FeatureB: SomeFeature
+        class FeatureB: Feature
         {
             static
             var name: String { "BBB" }

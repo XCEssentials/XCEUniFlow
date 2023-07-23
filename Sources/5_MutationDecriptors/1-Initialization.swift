@@ -29,13 +29,13 @@ import Foundation /// for access to `Date` type
 //---
 
 public
-struct Initialization: SomeMutationDecriptor
+struct Initialization: MutationDecriptor
 {
     public
-    let newState: SomeStateBase
+    let newState: FeatureStateBase
     
     public
-    let feature: SomeFeature.Type
+    let feature: Feature.Type
     
     public
     let timestamp: Date

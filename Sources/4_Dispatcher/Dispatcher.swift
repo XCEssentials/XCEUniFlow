@@ -65,9 +65,6 @@ class Dispatcher: ObservableObject
     private
     var internalBindings: [String: [AnyCancellable]] = [:]
     
-    private
-    var externalBindings: [ObjectIdentifier: ExternalSubscription] = [:]
-    
     fileprivate
     let _accessLog = PassthroughSubject<AccessReport, Never>()
     
@@ -89,9 +86,6 @@ class Dispatcher: ObservableObject
     private
     var statusSubscription: AnyCancellable?
     
-    private
-    var externalBindingsSubscription: AnyCancellable?
-    
     fileprivate
     let _internalBindingsStatusLog = PassthroughSubject<InternalBinding.Status, Never>()
     
@@ -99,15 +93,6 @@ class Dispatcher: ObservableObject
     var internalBindingsStatusLog: AnyPublisher<InternalBinding.Status, Never>
     {
         _internalBindingsStatusLog.eraseToAnyPublisher()
-    }
-    
-    fileprivate
-    let _externalBindingsStatusLog = PassthroughSubject<ExternalBinding.Status, Never>()
-    
-    public
-    var externalBindingsStatusLog: AnyPublisher<ExternalBinding.Status, Never>
-    {
-        _externalBindingsStatusLog.eraseToAnyPublisher()
     }
     
     //---
@@ -139,32 +124,6 @@ class Dispatcher: ObservableObject
             .statusReport
             .sink { [weak self] in
                 self?._status.send($0)
-            }
-        
-        self.externalBindingsSubscription = accessLog
-            .onProcessed
-            .perEachMutation
-            .sink { [weak self] mutation in
-                
-                guard let dispatcher = self else { return }
-                
-                //---
-                
-                dispatcher
-                    .externalBindings
-                    .values
-                    .compactMap {
-                        $0.observer
-                    }
-                    .flatMap {
-                        $0.bindings()
-                    }
-                    .forEach {
-                        $0.execute(
-                            with: dispatcher,
-                            mutation: mutation
-                        )
-                    }
             }
     }
 }
@@ -267,20 +226,6 @@ extension Dispatcher
         public
         let origin: AccessOrigin
     }
-    
-    fileprivate
-    struct ExternalSubscription
-    {
-        private(set)
-        weak
-        var observer: SomeExternalObserver?
-        
-        init(
-            with observer: SomeExternalObserver
-        ) {
-            self.observer = observer
-        }
-    }
 }
 
 // MARK: - Access data
@@ -288,31 +233,31 @@ extension Dispatcher
 public
 extension Dispatcher
 {
-    var allStates: [SomeStateBase]
+    var allStates: [FeatureStateBase]
     {
         storage.allStates
     }
     
-    var allFeatures: [SomeFeature.Type]
+    var allFeatures: [Feature.Type]
     {
         storage.allFeatures
     }
     
     func fetchState(
-        forFeature featureType: SomeFeature.Type
-    ) throws -> SomeStateBase {
+        forFeature featureType: Feature.Type
+    ) throws -> FeatureStateBase {
         
         try storage.fetchState(forFeature: featureType)
     }
     
-    func fetchState<S: SomeState>(
+    func fetchState<S: FeatureState>(
         ofType _: S.Type = S.self
     ) throws -> S {
         
         try storage.fetchState(ofType: S.self)
     }
     
-    func on<T: SomeMutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
+    func on<T: MutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
     {
         accessLog.onProcessed.perEachMutation.as(T.self)
     }
@@ -366,8 +311,6 @@ extension Dispatcher
         switch report.outcome
         {
             case .success(let mutationsToReport):
-                cleanupExternalBindings()
-                
                 installInternalBindings(
                     basedOn: mutationsToReport
                 )
@@ -550,7 +493,7 @@ extension Dispatcher
         reports
             .compactMap {
                 
-                report -> SomeFeature.Type? in
+                report -> Feature.Type? in
                 
                 //---
                 
@@ -564,7 +507,7 @@ extension Dispatcher
                 }
             }
             .compactMap {
-                $0 as? SomeInternalObserver.Type
+                $0 as? InternalObserver.Type
             }
             .map {(
                 observerType: $0,
@@ -586,7 +529,7 @@ extension Dispatcher
         reports
             .compactMap {
                 
-                report -> SomeFeature.Type? in
+                report -> Feature.Type? in
                 
                 //---
                 
@@ -603,37 +546,6 @@ extension Dispatcher
                 
                 self.internalBindings.removeValue(forKey: $0.name)
             }
-    }
-}
-
-// MARK: - External bindings management
-
-extension Dispatcher
-{
-    /// Registers `observer` for bindings execution
-    /// within `self` for as long as `observer` is
-    /// in memory, or until `unsubscribe` is called
-    /// for same `observer`.
-    public
-    func subscribe(_ observer: SomeExternalObserver)
-    {
-        let observerId = ObjectIdentifier(observer)
-        externalBindings[observerId] = ExternalSubscription(with: observer)
-    }
-    
-    /// Deactivates `observer` bindings within `self`.
-    public
-    func unsubscribe(_ observer: SomeExternalObserver)
-    {
-        let observerId = ObjectIdentifier(observer)
-        externalBindings[observerId] = nil
-    }
-    
-    /// Internal method to celanup
-    private
-    func cleanupExternalBindings()
-    {
-        externalBindings = externalBindings.filter { $0.value.observer != nil }
     }
 }
 
@@ -666,7 +578,7 @@ struct InternalBinding
     let scope: String
     
     public
-    let source: SomeFeature.Type
+    let source: Feature.Type
     
     public
     let location: Int
@@ -685,7 +597,7 @@ struct InternalBinding
     }
     
     //internal
-    init<S: SomeFeature, W: Publisher, G>(
+    init<S: Feature, W: Publisher, G>(
         source: S.Type,
         description: String,
         scope: String,
@@ -762,132 +674,6 @@ struct InternalBinding
                     }
                 )
                 .eraseToAnyPublisher()
-        }
-    }
-}
-
-/// Binding that is defined on instance level in an external observer and
-/// operates in context of a given storage + given observer instance.
-public
-struct ExternalBinding
-{
-    public
-    enum Status
-    {
-        case activated(ExternalBinding)
-        
-        /// After passing through `when` (and `given`,
-        /// if present) claus(es), right before `then`.
-        case triggered(ExternalBinding, input: Any, output: Any)
-        
-        /// After executing `then` clause.
-        case executed(ExternalBinding, input: Any)
-        
-        case cancelled(ExternalBinding)
-    }
-
-    public
-    let description: String
-    
-    public
-    let scope: String
-    
-    public
-    let source: SomeExternalObserver.Type
-    
-    public
-    let location: Int
-    
-    //---
-    
-    private
-    let body: (Storage.HistoryElement, Dispatcher, Self) -> Void
-    
-    //---
-    
-    //internal
-    func execute(with dispatcher: Dispatcher, mutation: Storage.HistoryElement)
-    {
-        body(mutation, dispatcher, self)
-    }
-    
-    //internal
-    init<S: SomeExternalObserver, W: SomeMutationDecriptor, G>(
-        description: String,
-        scope: String,
-        context: S.Type,
-        location: Int,
-        given: @escaping (Dispatcher, W) throws -> G?,
-        then: @escaping (Dispatcher, G) -> Void
-    ) {
-        self.description = description
-        self.scope = scope
-        self.source = S.self
-        self.location = location
-
-        self.body = { mutation, dispatcher, binding in
-            
-            Just(mutation)
-                .as(W.self)
-                .compactMap { [weak dispatcher] mutation in
-
-                    guard
-                        let dispatcher = dispatcher,
-                        let givenOutput = try? given(dispatcher, mutation)
-                    else
-                    {
-                        return nil
-                    }
-
-                    //---
-
-                    dispatcher
-                        ._externalBindingsStatusLog
-                        .send(
-                            .triggered(
-                                binding,
-                                input: mutation,
-                                output: givenOutput
-                            )
-                        )
-                    
-                    return givenOutput
-                }
-                .compactMap { [weak dispatcher] (givenOutput: G) -> Void? in
-
-                    guard let dispatcher = dispatcher else { return nil }
-
-                    //---
-
-                    return then(dispatcher, givenOutput) // map into `Void` to erase type info
-                }
-                .handleEvents(
-                    receiveSubscription: { [weak dispatcher] _ in
-
-                        dispatcher?
-                            ._externalBindingsStatusLog
-                            .send(
-                                .activated(binding)
-                            )
-                    },
-                    receiveOutput: { [weak dispatcher] in
-
-                        dispatcher?
-                            ._externalBindingsStatusLog
-                            .send(
-                                .executed(binding, input: $0)
-                            )
-                    },
-                    receiveCancel: { [weak dispatcher] in
-
-                        dispatcher?
-                            ._externalBindingsStatusLog
-                            .send(
-                                .cancelled(binding)
-                            )
-                    }
-                )
-                .executeNow()
         }
     }
 }

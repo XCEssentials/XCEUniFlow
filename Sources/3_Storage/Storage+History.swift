@@ -48,7 +48,7 @@ extension Storage
 public
 extension Storage.HistoryElement
 {
-    var feature: SomeFeature.Type
+    var feature: Feature.Type
     {
         switch self.operation
         {

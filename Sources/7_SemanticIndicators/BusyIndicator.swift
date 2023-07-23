@@ -25,35 +25,4 @@
  */
 
 public
-extension Storage
-{
-    subscript<S: SomeState>(_: S.Type) -> S?
-    {
-        try? fetchState(ofType: S.self)
-    }
-    
-    func hasState<S: SomeState>(ofType _: S.Type) -> Bool
-    {
-        self[S.self] != nil
-    }
-}
-
-//---
-
-public
-extension SomeState
-{
-    static
-    func fetch(from storage: Storage) throws -> Self
-    {
-        try storage.fetchState(ofType: self)
-    }
-
-    //---
-
-    static
-    func isPresent(in storage: Storage) -> Bool
-    {
-        storage.hasState(ofType: self)
-    }
-}
+protocol BusyIndicator: FeatureStateBase {}

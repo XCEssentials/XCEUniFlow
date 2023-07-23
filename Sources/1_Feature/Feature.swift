@@ -24,27 +24,43 @@
  
  */
 
-import Foundation /// for access to `Date` type
-
-//---
-
+/// Semantic marker that represents a Feature.
 public
-protocol SomeMutationDecriptor
+protocol Feature
 {
-    var timestamp: Date { get }
-    
-    init?(
-        from report: Storage.HistoryElement
-    )
+    init(with dispatcher: Dispatcher)
 }
 
 public
-extension SomeMutationDecriptor
+extension Feature
 {
-    /// Syntax sugar to look nicer in `when` statements.
+    /// `Storage` will use this as actual key.
     static
-    var done: Self.Type
+    var name: String
     {
-        self
+        // full type name, including enclosing types for nested declarations:
+        return .init(reflecting: Self.self)
+    }
+    
+    /// Convenience helper that determines user-friendly feature name.
+    static
+    var displayName: String
+    {
+        if
+            let customizedSelf = Self.self as? WithCustomDisplayName.Type
+        {
+            return customizedSelf.customDisplayName
+        }
+        else
+        {
+            return Self
+                .name
+                .split(separator: ".")
+                .dropFirst() // drop app/module name
+                .joined(separator: ".")
+                .split(separator: ":")
+                .last
+                .map(String.init) ?? ""
+        }
     }
 }
