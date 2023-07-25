@@ -24,12 +24,8 @@
  
  */
 
-/// Semantic marker that represents a Feature.
 public
-protocol Feature
-{
-//    init(with dispatcher: Dispatcher)
-}
+protocol Feature {}
 
 public
 extension Feature
@@ -47,7 +43,7 @@ extension Feature
     var displayName: String
     {
         if
-            let customizedSelf = Self.self as? WithCustomDisplayName.Type
+            let customizedSelf = Self.self as? any WithCustomDisplayName.Type
         {
             return customizedSelf.customDisplayName
         }
