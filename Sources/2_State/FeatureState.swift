@@ -29,15 +29,3 @@ protocol FeatureState
 {
     associatedtype ParentFeature: Feature
 }
-
-// MARK: - Helpers
-
-public
-extension FeatureState
-{
-    static
-    var feature: Feature.Type
-    {
-        ParentFeature.self
-    }
-}
