@@ -24,19 +24,19 @@
 
  */
 
-//import XCTest
-//
-//@testable
-//import XCEUniFlow
-//
-////---
-//
-//class FeatureTests: XCTestCase {}
-//
-//// MARK: - Tests
-//
-//extension FeatureTests
-//{
+import XCTest
+
+@testable
+import XCEUniFlow
+
+//---
+
+class FeatureTests: XCTestCase {}
+
+// MARK: - Tests
+
+extension FeatureTests
+{
 //    func test_featureName() throws
 //    {
 //        final
@@ -89,4 +89,4 @@
 //        XCTAssertFalse(FeatureA.displayName.contains("FeatureA"))
 //        XCTAssertEqual(FeatureA.displayName, "CustomDisplayName")
 //    }
-//}
+}
