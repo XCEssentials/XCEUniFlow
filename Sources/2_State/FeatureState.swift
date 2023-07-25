@@ -25,7 +25,7 @@
  */
 
 public
-protocol FeatureState: FeatureStateBase
+protocol FeatureState
 {
     associatedtype ParentFeature: Feature
 }
