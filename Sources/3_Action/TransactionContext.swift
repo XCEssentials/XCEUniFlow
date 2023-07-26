@@ -24,10 +24,9 @@
  
  */
 
-/// Special wrapper that provides WRITE access to storage inside transaction.
-///
-/// NOTE: it only allows to write states of feature `F`, also allows
-/// to read any state/feature directly from the `storage`.
+/// Special wrapper that allows mutations for feature `F` within transaction,
+/// as well as read-only access to in-transaction copy of `storage`
+/// from `Dispatcher`.
 @MainActor
 public
 struct TransactionContext<F: Feature>

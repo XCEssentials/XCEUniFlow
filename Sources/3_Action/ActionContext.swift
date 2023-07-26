@@ -26,6 +26,8 @@
 
 /// The context in which actions to be implemented
 /// for each particular feature.
+///
+/// It gives access to various transaction running helpers.
 @MainActor
 public
 struct ActionContext<F: Feature>
@@ -45,6 +47,8 @@ struct ActionContext<F: Feature>
 public
 extension ActionContext
 {
+    /// Transaction helper that re-throws any errors that happen
+    /// during transaction.
     @discardableResult
     func execute<T>(
         scope: String = #file,
@@ -100,7 +104,8 @@ extension ActionContext
     
     /// Transaction within `handler` may fail,
     /// but failure is an acceptable outcome,
-    /// so no errors will be reported.
+    /// so no errors will be thrown, but the
+    /// action will be rejected.
     @discardableResult
     func should<T>(
         scope: String = #file,
