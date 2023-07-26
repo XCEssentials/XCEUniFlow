@@ -81,6 +81,11 @@ extension StateStorage
     {
         self[S.self] != nil
     }
+    
+    subscript<R: FeatureState, V>(_ keyPath: KeyPath<R, V>) -> V?
+    {
+        self[R.self]?[keyPath: keyPath]
+    }
 }
 
 // MARK: - SET data
