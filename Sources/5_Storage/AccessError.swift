@@ -25,17 +25,17 @@
  */
 
 public
-protocol FeatureState
+enum AccessError: Error
 {
-    associatedtype ParentFeature: Feature
-}
-
-public
-extension FeatureState
-{
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
-    }
+    case unexpectedCurrentState(
+        expected: any FeatureState.Type,
+        actual: (any FeatureState.Type)?,
+        origin: AccessOrigin
+    )
+    
+    case semanticMismatch(
+        expectedMutation: ExpectedMutation,
+        proposedOutcome: MutationAttemptOutcome,
+        origin: AccessOrigin
+    )
 }

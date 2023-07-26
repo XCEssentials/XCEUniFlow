@@ -25,17 +25,11 @@
  */
 
 public
-protocol FeatureState
+enum ExpectedMutation
 {
-    associatedtype ParentFeature: Feature
-}
-
-public
-extension FeatureState
-{
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
-    }
+    case auto
+    case initialization
+    case actualization
+    case transition(fromStateType: (any FeatureState.Type)?)
+    case deinitialization(fromStateType: (any FeatureState.Type)?, strict: Bool)
 }
