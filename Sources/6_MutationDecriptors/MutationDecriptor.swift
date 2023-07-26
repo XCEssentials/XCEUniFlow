@@ -24,18 +24,27 @@
  
  */
 
+import Foundation /// for access to `Date` type
+
+//---
+
 public
-protocol FeatureState
+protocol MutationDecriptor
 {
-    associatedtype ParentFeature: Feature
+    var timestamp: Date { get }
+    
+    init?(
+        from report: StateStorage.History.Element
+    )
 }
 
 public
-extension FeatureState
+extension MutationDecriptor
 {
+    /// Syntax sugar to look nicer in `when` statements.
     static
-    var feature: any Feature.Type
+    var done: Self.Type
     {
-        ParentFeature.self
+        self
     }
 }

@@ -31,6 +31,29 @@ import XCEUniFlow
 
 //---
 
+enum FeatureA: Feature
+{
+    struct StateA1: FeatureState
+    {
+        typealias ParentFeature = FeatureA
+        
+        let val1: String
+    }
+}
+
+extension ActionContext where F == FeatureA
+{
+    func action1()
+    {
+        should {
+            
+            try $0.initialize(with: F.StateA1(val1: "111"))
+        }
+    }
+}
+
+//---
+
 class FeatureTests: XCTestCase {}
 
 // MARK: - Tests
@@ -39,54 +62,35 @@ extension FeatureTests
 {
     func test_featureName() throws
     {
-        final
-        class FeatureA: FeatureBase {}
-        
-        class FeatureB: Feature
+        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
+        XCTAssertTrue(FeatureA.displayName.contains("FeatureA"))
+    }
+
+    func test_featureDisplayName_custom() throws
+    {
+        enum FeatureB: Feature, WithCustomDisplayName
         {
             static
-            var name: String { "BBB" }
-            
-            static
-            var displayName: String { "B" }
-            
-            var dispatcher: Dispatcher!
-            
-            private(set)
-            var isReady: Bool = false
-            
-            required
-            init(with dispatcher: Dispatcher)
-            {
-                isReady = true
-            }
+            let customDisplayName = "CustomDisplayName"
         }
-        
-        final
-        class ViewModelB: FeatureB {}
-        
-        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
-        XCTAssertFalse(FeatureB.name.contains("FeatureB"))
-        XCTAssertEqual(FeatureB.name, "BBB")
-        XCTAssertEqual(ViewModelB.name, "BBB")
 
-        XCTAssertTrue(FeatureA.displayName.contains("FeatureA"))
-        XCTAssertFalse(FeatureB.displayName.contains("FeatureB"))
-        XCTAssertEqual(FeatureB.displayName, "B")
-        XCTAssertEqual(ViewModelB.displayName, "B")
+        XCTAssertTrue(FeatureB.name.contains("FeatureB"))
+        XCTAssertEqual(FeatureB.displayName, "CustomDisplayName")
     }
     
-    func test_featureName_custom() throws
+    @MainActor
+    func test_action()
     {
-        final
-        class FeatureA: FeatureBase, WithCustomDisplayName
-        {
-            static
-            var customDisplayName: String { "CustomDisplayName" }
-        }
+        let disp = Dispatcher()
         
-        XCTAssertTrue(FeatureA.name.contains("FeatureA"))
-        XCTAssertFalse(FeatureA.displayName.contains("FeatureA"))
-        XCTAssertEqual(FeatureA.displayName, "CustomDisplayName")
+        //---
+        
+        FeatureA.at(disp).action1()
+        let state = disp.storage[FeatureA.StateA1.self]!
+        
+        //---
+        
+        XCTAssertEqual(state.val1, "111")
+        XCTAssertEqual(disp.storage[\FeatureA.StateA1.val1], "111")
     }
 }

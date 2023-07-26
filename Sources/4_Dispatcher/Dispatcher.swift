@@ -24,43 +24,17 @@
  
  */
 
-import Foundation
 import Combine
-import XCEPipeline
 
 //---
 
+@MainActor
 public
 final
-class Dispatcher: ObservableObject
+class Dispatcher
 {
-    let executionQueue: DispatchQueue
-    
-    private
-    var _storage: Storage
-    
-    var storage: Storage
-    {
-        get
-        {
-            if
-                activeTransaction == nil
-            {
-                return executionQueue.sync {
-                    _storage
-                }
-            }
-            else
-            {
-                /// NOTE: we are in transaction and already must be
-                /// on correct queue
-                return _storage
-            }
-        }
-    }
-    
-    private
-    var activeTransaction: Transaction?
+    public private(set)
+    var storage: StateStorage
     
     private
     var internalBindings: [String: [AnyCancellable]] = [:]
@@ -76,7 +50,7 @@ class Dispatcher: ObservableObject
     
     fileprivate
     let _status = CurrentValueSubject<[FeatureStatus], Never>([])
-    
+
     public
     var status: AnyPublisher<[FeatureStatus], Never>
     {
@@ -95,27 +69,11 @@ class Dispatcher: ObservableObject
         _internalBindingsStatusLog.eraseToAnyPublisher()
     }
     
-    //---
-    
-    /// Initializes dispatcher.
-    ///
-    /// - Parameters:
-    ///     - `storage`: underslaying storage for features, empty by default;
-    ///     - `executionQueue`: the queue for read/write operations to storage.
     public
     init(
-        with storage: Storage = Storage(),
-        executionQueue: DispatchQueue? = nil
+        with storage: StateStorage? = nil
     ) {
-        let executionQueue = executionQueue ?? .init(
-            label: "com.xcessentials.Dispatcher.\(UUID().uuidString)",
-            attributes: .concurrent
-        )
-        
-        //---
-        
-        self.executionQueue = executionQueue
-        self._storage = storage
+        self.storage = storage ?? .init()
         
         //---
         
@@ -128,182 +86,60 @@ class Dispatcher: ObservableObject
     }
 }
 
-// MARK: - Nested types
-
-extension Dispatcher
-{
-    public
-    struct AccessReport
-    {
-        public
-        let timestamp = Date()
-        
-        /// Outcome of the access event (success/failure).
-        public
-        let outcome: Result<Storage.History, Error>
-        
-        /// Snapshot of the storage at the time of the event.
-        public
-        let storage: Storage
-        
-        /// Origin of the event.
-        public
-        let origin: AccessOrigin
-    }
-    
-    public
-    struct AccessOrigin
-    {
-        public
-        let file: String
-        
-        public
-        let function: String
-            
-        public
-        let line: Int
-    }
-    
-    public
-    enum AccessError: Error
-    {
-        case noActiveTransaction
-        
-        case anotherTransactionIsInProgress(
-            anotherTransaction: AccessOrigin
-        )
-        
-        case internalInconsistencyDetected(
-            anotherTransaction: AccessOrigin
-        )
-        
-        case failureDuringAccess(
-            line: Int,
-            cause: Error
-        )
-    }
-    
-    fileprivate
-    typealias Transaction = (
-        origin: AccessOrigin,
-        recoverySnapshot: Storage
-    )
-    
-    public
-    struct ProcessedActionReport
-    {
-        public
-        let timestamp: Date
-        
-        public
-        let mutations: Storage.History
-        
-        /// Snapshot of the storage at the time of the event
-        /// (including the mutations listed above).
-        public
-        let storage: Storage
-        
-        /// Origin of the event.
-        public
-        let origin: AccessOrigin
-    }
-    
-    public
-    struct RejectedActionReport: Error
-    {
-        public
-        let timestamp: Date
-        
-        public
-        let reason: Error
-        
-        /// Snapshot of the storage at the time of the event
-        /// (no mutations were applied as result of this event).
-        public
-        let storage: Storage
-        
-        /// Origin of the event.
-        public
-        let origin: AccessOrigin
-    }
-}
-
-// MARK: - Access data
-
-public
-extension Dispatcher
-{
-    var allStates: [FeatureStateBase]
-    {
-        storage.allStates
-    }
-    
-    var allFeatures: [Feature.Type]
-    {
-        storage.allFeatures
-    }
-    
-    func fetchState(
-        forFeature featureType: Feature.Type
-    ) throws -> FeatureStateBase {
-        
-        try storage.fetchState(forFeature: featureType)
-    }
-    
-    func fetchState<S: FeatureState>(
-        ofType _: S.Type = S.self
-    ) throws -> S {
-        
-        try storage.fetchState(ofType: S.self)
-    }
-    
-    func on<T: MutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
-    {
-        accessLog.onProcessed.perEachMutation.as(T.self)
-    }
-}
+// MARK: - Transactions support
 
 //internal
 extension Dispatcher
 {
     @discardableResult
-    func transact<T>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
-        _ handler: () throws -> T
+    func transact<F: Feature, T>(
+        scope s: String,
+        context c: String,
+        location l: Int,
+        _ handler: (inout TransactionContext<F>) throws -> T
     ) -> Result<T, Error> {
 
-        var report: AccessReport!
+        let report: AccessReport
+        let result: Result<T, Error>
+        var txContext = TransactionContext<F>(storage: storage)
         
-        /// ‼️ NOTE: use `barrier` for exclusive access during whole transaction
-        let result = executionQueue.sync(flags: .barrier) {
-            
-            try! (scope, context, location)
-                ./ startTransaction(scope:context:location:)
+        //---
 
+        do
+        {
+            let output = try handler(&txContext)
+            storage = txContext.storage
+            let mutationsToReport = storage.resetHistory()
+            
+            report = .init(
+                outcome: .success(mutationsToReport),
+                storage: storage,
+                origin: .init(
+                    file: s,
+                    function: c,
+                    line: l
+                )
+            )
+            
             //---
 
-            do
-            {
-                let output = try handler()
-                
-                report = try! (scope, context, location)
-                    ./ commitTransaction(scope:context:location:)
-                
-                //---
-
-                return output
-                    ./ Result<T, Error>.success(_:)
-            }
-            catch
-            {
-                report = try! (scope, context, location, error)
-                    ./ rejectTransaction(scope:context:location:reason:)
-                
-                return error
-                    ./ Result<T, Error>.failure(_:)
-            }
+            result = .success(output)
+        }
+        catch
+        {
+            report = .init(
+                outcome: .failure(
+                    error
+                ),
+                storage: storage,
+                origin: .init(
+                    file: s,
+                    function: c,
+                    line: l
+                )
+            )
+            
+            result = .failure(error)
         }
         
         //---
@@ -311,15 +147,9 @@ extension Dispatcher
         switch report.outcome
         {
             case .success(let mutationsToReport):
-                installInternalBindings(
-                    basedOn: mutationsToReport
-                )
-                
+                installInternalBindings(basedOn: mutationsToReport)
                 _accessLog.send(report)
-                
-                uninstallInternalBindings(
-                    basedOn: mutationsToReport
-                )
+                uninstallInternalBindings(basedOn: mutationsToReport)
                 
             case .failure:
                 _accessLog.send(report)
@@ -329,155 +159,18 @@ extension Dispatcher
         
         return result
     }
-    
-    func startTransaction(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line
-    ) throws {
-        
-        guard
-            activeTransaction == nil
-        else
-        {
-            throw AccessError.anotherTransactionIsInProgress(
-                anotherTransaction: activeTransaction!.origin
-            )
-        }
-        
-        //---
-        
-        activeTransaction = (
-            .init(file: s, function: c, line: l),
-            _storage
-        )
-    }
-    
-    func commitTransaction(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line
-    ) throws -> AccessReport {
-        
-        guard
-            let tr = self.activeTransaction
-        else
-        {
-            throw AccessError.noActiveTransaction
-        }
-        
-        guard
-            tr.recoverySnapshot.lastHistoryResetId == storage.lastHistoryResetId
-        else
-        {
-            throw AccessError.internalInconsistencyDetected(
-                anotherTransaction: tr.origin
-            )
-        }
-        
-        //---
-        
-        let mutationsToReport = _storage.resetHistory()
-        activeTransaction = nil
-        
-        //---
-        
-        return .init(
-            outcome: .success(
-                mutationsToReport
-            ),
-            storage: _storage,
-            origin: tr.origin
-        )
-    }
-    
-    func rejectTransaction(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
-        reason: Error
-    ) throws -> AccessReport {
-        
-        guard
-            let tr = self.activeTransaction
-        else
-        {
-            throw AccessError.noActiveTransaction
-        }
-        
-        //---
-        
-        _storage = tr.recoverySnapshot
-        self.activeTransaction = nil
-        
-        //---
-        
-        return .init(
-            outcome: .failure(
-                reason
-            ),
-            storage: _storage,
-            origin: tr.origin
-        )
-    }
-    
-    
-    
-    func access(
-        scope s: String,
-        context c: String,
-        location l: Int,
-        _ handler: (inout Storage) throws -> Void
-    ) throws {
-        
-        guard
-            self.activeTransaction != nil
-        else
-        {
-            throw AccessError.noActiveTransaction
-        }
-        
-        //---
+}
 
-        do
-        {
-            try handler(&_storage)
-        }
-        catch
-        {
-            throw AccessError.failureDuringAccess(
-                line: l,
-                cause: error
-            )
-        }
-    }
-    
-    func resetStorage(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line
-    ) {
-        
-        try! startTransaction(
-            scope: s,
-            context: c,
-            location: l
-        )
-        
-        //---
-        
-        try! access(scope: s, context: c, location: l) {
-           
-            try! $0.removeAll()
-        }
-        
-        //---
-        
-        _ = try! commitTransaction(
-            scope: s,
-            context: c,
-            location: l
-        )
+// MARK: - External mutations observation
+
+public
+extension Dispatcher
+{
+    /// Designeted convenience shortcut for observing all mutations
+    /// within scope of this dispatcher.
+    func on<T: MutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
+    {
+        accessLog.onProcessed.perEachMutation.as(T.self)
     }
 }
 
@@ -486,9 +179,9 @@ extension Dispatcher
 private
 extension Dispatcher
 {
-    /// This will install bindings for newly initialized keys.
+    /// Install bindings for newly initialized keys.
     func installInternalBindings(
-        basedOn reports: Storage.History
+        basedOn reports: StateStorage.History
     ) {
         reports
             .compactMap {
@@ -522,9 +215,9 @@ extension Dispatcher
             }
     }
     
-    /// This will uninstall bindings for recently deinitialized keys.
+    /// Uninstall bindings for recently deinitialized keys.
     func uninstallInternalBindings(
-        basedOn reports: Storage.History
+        basedOn reports: StateStorage.History
     ) {
         reports
             .compactMap {
@@ -553,6 +246,7 @@ extension Dispatcher
 
 /// Binding that is defined on type level in a feature and
 /// operates within given storage.
+@MainActor
 public
 struct InternalBinding
 {
@@ -602,7 +296,7 @@ struct InternalBinding
         description: String,
         scope: String,
         location: Int,
-        when: @escaping (AnyPublisher<Dispatcher.AccessReport, Never>) -> W,
+        when: @escaping (AnyPublisher<AccessReport, Never>) -> W,
         given: @escaping (Dispatcher, W.Output) throws -> G?,
         then: @escaping (Dispatcher, G) -> Void
     ) where W.Failure == Never {

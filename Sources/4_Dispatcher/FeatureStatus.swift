@@ -24,18 +24,62 @@
  
  */
 
-public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
+import Combine
+
+//---
 
 public
-extension FeatureState
+struct FeatureStatus
 {
-    static
-    var feature: any Feature.Type
+    public
+    enum StatusIndicator: String, Equatable, Codable
     {
-        ParentFeature.self
+        case ok = "🟢"
+        case busy = "🟠"
+        case failure = "🔴"
+        case missing = "⚠️"
+    }
+
+    //---
+    
+    public
+    let title: String
+    
+    public
+    let subtitle: String
+    
+    public
+    let state: (any FeatureState)?
+    
+    public
+    let indicator: StatusIndicator
+    
+    public
+    init(missing feature: Feature.Type)
+    {
+        self.title = feature.displayName
+        self.subtitle = "<missing>"
+        self.state = nil
+        self.indicator = .missing
+    }
+    
+    public
+    init(with state: any FeatureState)
+    {
+        self.title = type(of: state).feature.displayName
+        self.subtitle = .init(describing: type(of: state).self)
+        self.state = state
+        
+        switch state
+        {
+            case is any FailureIndicator:
+                self.indicator = .failure
+                
+            case is any BusyIndicator:
+                self.indicator = .busy
+                
+            default:
+                self.indicator = .ok
+        }
     }
 }

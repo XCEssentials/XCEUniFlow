@@ -25,17 +25,4 @@
  */
 
 public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
-
-public
-extension FeatureState
-{
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
-    }
-}
+protocol FailureIndicator: FeatureState {}

@@ -24,46 +24,74 @@
  
  */
 
-public
-protocol Feature {}
+import Foundation
+
+//---
 
 public
-extension Feature
+struct MutationAttempt
 {
-    /// `Storage` will use this as actual key.
-    static
-    var name: String
+    public
+    let timestamp: Date = .init()
+
+    public
+    let operation: MutationAttemptOutcome
+}
+
+//---
+
+public
+extension MutationAttempt
+{
+    var feature: Feature.Type
     {
-        // full type name, including enclosing types for nested declarations:
-        return .init(reflecting: Self.self)
+        switch self.operation
+        {
+            case
+                .initialization(let state),
+                .actualization(let state, _),
+                .transition(let state, _),
+                .deinitialization(let state):
+                
+                return type(of: state).feature
+                
+            case .nothingToRemove(let feature):
+                return feature
+        }
     }
     
-    /// Convenience helper that determines user-friendly feature name.
-    static
-    var displayName: String
+    var isAnyMutation: Bool
     {
-        if
-            let customizedSelf = Self.self as? any WithCustomDisplayName.Type
-        {
-            return customizedSelf.customDisplayName
-        }
-        else
-        {
-            return Self
-                .name
-                .split(separator: ".")
-                .dropFirst() // drop app/module name
-                .joined(separator: ".")
-                .split(separator: ":")
-                .last
-                .map(String.init) ?? ""
-        }
+        AnyMutation(from: self) != nil
     }
-    
-    @MainActor
-    static
-    func at(_ dispatcher: Dispatcher) -> ActionContext<Self>
+
+    var isAnySetting: Bool
     {
-        .init(with: dispatcher)
+        AnySetting(from: self) != nil
+    }
+
+    var isInitialization: Bool
+    {
+        Initialization(from: self) != nil
+    }
+
+    var isUpdate: Bool
+    {
+        AnyUpdate(from: self) != nil
+    }
+
+    var isActualization: Bool
+    {
+        Actualization(from: self) != nil
+    }
+
+    var isTransition: Bool
+    {
+        Transition(from: self) != nil
+    }
+
+    var isDeinitialization: Bool
+    {
+        Deinitialization(from: self) != nil
     }
 }

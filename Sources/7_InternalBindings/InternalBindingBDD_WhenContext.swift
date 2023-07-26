@@ -24,18 +24,43 @@
  
  */
 
-public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
+import Combine
+
+//---
 
 public
-extension FeatureState
+extension InternalBindingBDD
 {
-    static
-    var feature: any Feature.Type
+    @MainActor
+    struct WhenContext
     {
-        ParentFeature.self
+        public
+        let description: String
+        
+        public
+        func when<P: Publisher>(
+            _ when: @escaping (AnyPublisher<AccessReport, Never>) -> P
+        ) -> GivenOrThenContext<P> {
+            
+            .init(
+                description: description,
+                when: when
+            )
+        }
+        
+        public
+        func when<M: MutationDecriptor>(
+            _: M.Type = M.self
+        ) -> GivenOrThenContext<AnyPublisher<M, Never>> {
+            
+            .init(
+                description: description,
+                when: { $0.onProcessed
+                    .perEachMutation
+                    .as(M.self)
+                    .eraseToAnyPublisher()
+                }
+            )
+        }
     }
 }
