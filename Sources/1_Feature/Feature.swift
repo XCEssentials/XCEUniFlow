@@ -59,4 +59,11 @@ extension Feature
                 .map(String.init) ?? ""
         }
     }
+    
+    @MainActor
+    static
+    func at(_ dispatcher: Dispatcher) -> ActionContext<Self>
+    {
+        .init(with: dispatcher)
+    }
 }

@@ -35,7 +35,7 @@ struct ActionContext<F: Feature>
     private
     let dispatcher: Dispatcher
     
-    public
+    //internal
     init(with dispatcher: Dispatcher)
     {
         self.dispatcher = dispatcher
