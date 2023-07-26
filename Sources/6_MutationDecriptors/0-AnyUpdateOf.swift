@@ -24,74 +24,38 @@
  
  */
 
-import Foundation
+import Foundation /// for access to `Date` type
 
 //---
 
 public
-struct MutationAttempt
+struct AnyUpdateOf<F: Feature>: MutationDecriptor
 {
     public
-    let timestamp: Date = .init()
+    let oldState: any FeatureState
 
     public
-    let operation: MutationAttemptOutcome
-}
+    let newState: any FeatureState
 
-//---
+    public
+    let timestamp: Date
 
-public
-extension MutationAttempt
-{
-    var feature: Feature.Type
-    {
-        switch self.operation
+    public
+    init?(
+        from report: StateStorage.History.Element
+    ) {
+        guard
+            report.feature == F.self,
+            let anyUpdate = AnyUpdate(from: report)
+        else
         {
-            case
-                .initialization(let state),
-                .actualization(let state, _),
-                .transition(let state, _),
-                .deinitialization(let state):
-                
-                return type(of: state).feature
-                
-            case .nothingToRemove(let feature):
-                return feature
+            return nil
         }
-    }
-    
-    var isAnyMutation: Bool
-    {
-        AnyMutation(from: self) != nil
-    }
-
-    var isAnySetting: Bool
-    {
-        AnySetting(from: self) != nil
-    }
-
-    var isInitialization: Bool
-    {
-        Initialization(from: self) != nil
-    }
-
-    var isUpdate: Bool
-    {
-        AnyUpdate(from: self) != nil
-    }
-
-    var isActualization: Bool
-    {
-        Actualization(from: self) != nil
-    }
-
-    var isTransition: Bool
-    {
-        Transition(from: self) != nil
-    }
-
-    var isDeinitialization: Bool
-    {
-        Deinitialization(from: self) != nil
+        
+        //---
+        
+        self.oldState = anyUpdate.oldState
+        self.newState = anyUpdate.newState
+        self.timestamp = anyUpdate.timestamp
     }
 }

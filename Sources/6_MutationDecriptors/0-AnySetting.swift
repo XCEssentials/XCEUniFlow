@@ -24,74 +24,43 @@
  
  */
 
-import Foundation
+import Foundation /// for access to `Date` type
 
 //---
 
+/// Mutation that results with given feature being present in the storage.
 public
-struct MutationAttempt
+struct AnySetting: MutationDecriptor
 {
     public
-    let timestamp: Date = .init()
+    let newState: any FeatureState
+    
+    public
+    let feature: Feature.Type
+    
+    public
+    let timestamp: Date
 
     public
-    let operation: MutationAttemptOutcome
-}
-
-//---
-
-public
-extension MutationAttempt
-{
-    var feature: Feature.Type
-    {
-        switch self.operation
+    init?(
+        from report: StateStorage.History.Element
+    ) {
+        switch report.operation
         {
             case
-                .initialization(let state),
-                .actualization(let state, _),
-                .transition(let state, _),
-                .deinitialization(let state):
+                let .initialization(newState),
+                let .actualization(_, newState),
+                let .transition(_, newState):
                 
-                return type(of: state).feature
+                self.newState = newState
                 
-            case .nothingToRemove(let feature):
-                return feature
+            default:
+                return nil
         }
-    }
-    
-    var isAnyMutation: Bool
-    {
-        AnyMutation(from: self) != nil
-    }
-
-    var isAnySetting: Bool
-    {
-        AnySetting(from: self) != nil
-    }
-
-    var isInitialization: Bool
-    {
-        Initialization(from: self) != nil
-    }
-
-    var isUpdate: Bool
-    {
-        AnyUpdate(from: self) != nil
-    }
-
-    var isActualization: Bool
-    {
-        Actualization(from: self) != nil
-    }
-
-    var isTransition: Bool
-    {
-        Transition(from: self) != nil
-    }
-
-    var isDeinitialization: Bool
-    {
-        Deinitialization(from: self) != nil
+        
+        //---
+        
+        self.feature = report.feature
+        self.timestamp = report.timestamp
     }
 }

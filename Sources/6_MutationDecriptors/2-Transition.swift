@@ -24,74 +24,43 @@
  
  */
 
-import Foundation
+import Foundation /// for access to `Date` type
 
 //---
 
 public
-struct MutationAttempt
+struct Transition: MutationDecriptor
 {
     public
-    let timestamp: Date = .init()
+    let oldState: any FeatureState
 
     public
-    let operation: MutationAttemptOutcome
-}
+    let newState: any FeatureState
 
-//---
+    public
+    let feature: Feature.Type
 
-public
-extension MutationAttempt
-{
-    var feature: Feature.Type
-    {
-        switch self.operation
+    public
+    let timestamp: Date
+
+    public
+    init?(
+        from report: StateStorage.History.Element
+    ) {
+        switch report.operation
         {
-            case
-                .initialization(let state),
-                .actualization(let state, _),
-                .transition(let state, _),
-                .deinitialization(let state):
+            case let .transition(oldState, newState):
                 
-                return type(of: state).feature
+                self.oldState = oldState
+                self.newState = newState
                 
-            case .nothingToRemove(let feature):
-                return feature
+            default:
+                return nil
         }
-    }
-    
-    var isAnyMutation: Bool
-    {
-        AnyMutation(from: self) != nil
-    }
-
-    var isAnySetting: Bool
-    {
-        AnySetting(from: self) != nil
-    }
-
-    var isInitialization: Bool
-    {
-        Initialization(from: self) != nil
-    }
-
-    var isUpdate: Bool
-    {
-        AnyUpdate(from: self) != nil
-    }
-
-    var isActualization: Bool
-    {
-        Actualization(from: self) != nil
-    }
-
-    var isTransition: Bool
-    {
-        Transition(from: self) != nil
-    }
-
-    var isDeinitialization: Bool
-    {
-        Deinitialization(from: self) != nil
+        
+        //---
+        
+        self.feature = report.feature
+        self.timestamp = report.timestamp
     }
 }
