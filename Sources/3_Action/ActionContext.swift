@@ -28,7 +28,7 @@
 /// for each particular feature.
 @MainActor
 public
-struct ActionContext<T: Feature>
+struct ActionContext<F: Feature>
 {
     private
     let dispatcher: Dispatcher
@@ -45,21 +45,76 @@ struct ActionContext<T: Feature>
 public
 extension ActionContext
 {
-    // TODO: eliminate `access` on `dispatcher` - call transaction closure and inside do stuff directly on provided inout instance of Storage
-    
-    // semantic reads
-    // transactions (for writes)
-    
-    // Inside Storage??:
-        // semantic writes
-    
-    func should()
-    {
-        //
+    @discardableResult
+    func execute<T>(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: (inout TransactionContext<F>) throws -> T
+    ) throws -> T {
+        
+        try dispatcher
+            .transact(
+                scope: scope,
+                context: context,
+                location: location,
+                handler
+            )
+            .get()
     }
     
-    func must()
-    {
-        //
+    /// Transaction within `handler` must be successful,
+    /// or a critical error will be thrown (in `DEBUG` mode only).
+    @discardableResult
+    func must<T>(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: (inout TransactionContext<F>) throws -> T
+    ) -> Result<T, Error> {
+        
+        let result = dispatcher
+            .transact(
+                scope: scope,
+                context: context,
+                location: location,
+                handler
+            )
+        
+        //---
+        
+        #if DEBUG
+        
+        if
+            case .failure(let report) = result
+        {
+            assertionFailure("❌ [UniFlow] Transaction failed: \(report)")
+        }
+        
+        #endif
+        
+        //---
+        
+        return result
+    }
+    
+    /// Transaction within `handler` may fail,
+    /// but failure is an acceptable outcome,
+    /// so no errors will be reported.
+    @discardableResult
+    func should<T>(
+        scope: String = #file,
+        context: String = #function,
+        location: Int = #line,
+        _ handler: (inout TransactionContext<F>) throws -> T
+    ) -> Result<T, Error> {
+        
+        dispatcher
+            .transact(
+                scope: scope,
+                context: context,
+                location: location,
+                handler
+            )
     }
 }
