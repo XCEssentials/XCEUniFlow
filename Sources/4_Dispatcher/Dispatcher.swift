@@ -161,6 +161,19 @@ extension Dispatcher
     }
 }
 
+// MARK: - External mutations observation
+
+public
+extension Dispatcher
+{
+    /// Designeted convenience shortcut for observing all mutations
+    /// within scope of this dispatcher.
+    func on<T: MutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
+    {
+        accessLog.onProcessed.perEachMutation.as(T.self)
+    }
+}
+
 // MARK: - Internal bindings management
 
 private
