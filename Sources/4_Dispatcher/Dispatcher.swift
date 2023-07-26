@@ -33,7 +33,7 @@ public
 final
 class Dispatcher
 {
-    private(set)
+    public private(set)
     var storage: StateStorage
     
     private
