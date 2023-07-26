@@ -26,6 +26,7 @@
 
 /// A feature that also has bindings and can observe/react on mutations
 /// that happen within `Dispatcher` where such feature is initialized.
+@MainActor
 public
 protocol InternalObserver: Feature
 {

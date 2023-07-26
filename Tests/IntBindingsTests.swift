@@ -24,264 +24,274 @@
 
  */
 
-//import XCTest
-//
-//import XCEPipeline
-//import XCERequirement
-//
-//@testable
-//import XCEUniFlow
-//
-////---
-//
-//class IntBindingsTests: XCTestCase
-//{
-//    var dispatcher: Dispatcher!
-//
-//    override
-//    func setUp()
-//    {
-//        dispatcher = .init()
-//    }
-//
-//    override
-//    func tearDown()
-//    {
-//        dispatcher = nil
-//    }
-//}
-//
-//// MARK: - Tests
-//
-//extension IntBindingsTests
-//{
-//    func test_bindingsOrder()
-//    {
-//        // GIVEN
-//        
-//        final
-//        class SUT: FeatureBase, InternalObserver
-//        {
-//            static
-//            var expectInitialization: XCTestExpectation!
-//            
-//            static
-//            var expectTransition: XCTestExpectation!
-//            
-//            static
-//            var expectDeinitialization: XCTestExpectation!
-//            
-//            struct One: FeatureState
-//            {
-//                typealias ParentFeature = SUT
-//            }
-//            
-//            struct Two: FeatureState
-//            {
-//                typealias ParentFeature = SUT
-//            }
-//            
-//            func start()
-//            {
-//                must {
-//                    
-//                    try initialize(with: One())
-//                }
-//            }
-//            
-//            func proceed()
-//            {
-//                must {
-//                    
-//                    try transition(from: One.self, into: Two())
-//                }
-//            }
-//            
-//            func finish()
-//            {
-//                must {
-//                    
-//                    try deinitialize(from: Two.self)
-//                }
-//            }
-//            
-//            static
-//            var bindings: [InternalBinding]
-//            {[
-//                scenario()
-//                    .when(InitializationInto<One>.done)
-//                    .then { _ in expectInitialization.fulfill() },
-//                
-//                scenario()
-//                    .when(TransitionBetween<One, Two>.done)
-//                    .then { _ in expectTransition.fulfill() },
-//                
-//                scenario()
-//                    .when(DeinitializationFrom<Two>.done)
-//                    .then { _ in expectDeinitialization.fulfill() }
-//            ]}
-//        }
-//        
-//        SUT.expectInitialization = expectation(description: "Initialization")
-//        SUT.expectTransition = expectation(description: "Transition")
-//        SUT.expectDeinitialization = expectation(description: "Deinitialization")
-//        
-//        let sut = SUT(with: dispatcher)
-//        
-//        // WHEN
-//        
-//        sut.start()
-//        sut.proceed()
-//        sut.finish()
-//        
-//        // THEN
-//        
-//        wait(
-//            for: [
-//                SUT.expectInitialization,
-//                SUT.expectTransition,
-//                SUT.expectDeinitialization
-//            ],
-//            timeout: 1,
-//            enforceOrder: true
-//        )
-//    }
-//    
-//    func test_bindingsGivenOverloads()
-//    {
-//        // GIVEN
-//        
-//        final
-//        class SUT: FeatureBase, InternalObserver
-//        {
-//            static
-//            func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<SUT>) -> Int?
-//            {
-//                0
-//            }
-//            
-//            static
-//            func inMutationOutInt(_ mut: InitializationOf<SUT>) -> Int?
-//            {
-//                1
-//            }
-//            
-//            static
-//            func inDispatcherOutInt(_ disp: Dispatcher) -> Int?
-//            {
-//                2
-//            }
-//            
-//            static
-//            func inBothOutBool(_ disp: Dispatcher, _ mut: InitializationOf<SUT>) -> Bool
-//            {
-//                false
-//            }
-//            
-//            static
-//            func inMutationOutBool(_ mut: InitializationOf<SUT>) -> Bool
-//            {
-//                false
-//            }
-//            
-//            static
-//            func inDispatcherOutBool(_ disp: Dispatcher) -> Bool
-//            {
-//                false
-//            }
-//            
-//            struct One: FeatureState
-//            {
-//                typealias ParentFeature = SUT
-//            }
-//            
-//            func start()
-//            {
-//                must {
-//                    
-//                    try initialize(with: One())
-//                }
-//            }
-//            
-//            static
-//            var bindings: [InternalBinding]
-//            {[
-//                scenario("")
-//                    .when(
-//                        InitializationOf<SUT>.done
-//                    )
-//                    .given {
-//                        inBothOutInt($0, $1)
-//                    }
-//                    .then {
-//                        XCTAssertEqual($1, 0)
-//                    },
-//                
-//                scenario("")
-//                    .when(
-//                        InitializationOf<SUT>.done
-//                    )
-//                    .given {
-//                        inMutationOutInt($0)
-//                    }
-//                    .then {
-//                        XCTAssertEqual($1, 1)
-//                    },
-//                
-//                scenario("")
-//                    .when(
-//                        InitializationOf<SUT>.done
-//                    )
-//                    .given {
-//                        inDispatcherOutInt($0)
-//                    }
-//                    .then {
-//                        XCTAssertEqual($1, 2)
-//                    },
-//                
-//                scenario("")
-//                    .when(
-//                        InitializationOf<SUT>.done
-//                    )
-//                    .givenIf {
-//                        inBothOutBool($0, $1)
-//                    }
-//                    .then { _ in
-//                        XCTFail("Did not expect to reach this point!")
-//                    },
-//                
-//                scenario("")
-//                    .when(
-//                        InitializationOf<SUT>.done
-//                    )
-//                    .givenIf {
-//                        inMutationOutBool($0)
-//                    }
-//                    .then { _ in
-//                        XCTFail("Did not expect to reach this point!")
-//                    },
-//                
-//                scenario("")
-//                    .when(
-//                        InitializationOf<SUT>.done
-//                    )
-//                    .givenIf {
-//                        inDispatcherOutBool($0)
-//                    }
-//                    .then { _ in
-//                        XCTFail("Did not expect to reach this point!")
-//                    }
-//            ]}
-//        }
-//        
-//        let sut = SUT(with: dispatcher)
-//        
-//        // WHEN
-//        
-//        sut.start()
-//        
-//        // THEN
-//        
-//        // expect no failures...
-//    }
-//}
+import XCTest
+
+import XCEPipeline
+import XCERequirement
+
+@testable
+import XCEUniFlow
+
+//---
+
+enum SUT: Feature, InternalObserver
+{
+    static
+    var expectInitialization: XCTestExpectation!
+    
+    static
+    var expectTransition: XCTestExpectation!
+    
+    static
+    var expectDeinitialization: XCTestExpectation!
+    
+    struct One: FeatureState
+    {
+        typealias ParentFeature = SUT
+    }
+    
+    struct Two: FeatureState
+    {
+        typealias ParentFeature = SUT
+    }
+    
+    static
+    var bindings: [InternalBinding]
+    {[
+        scenario()
+            .when(InitializationInto<One>.done)
+            .then { _ in expectInitialization.fulfill() },
+        
+        scenario()
+            .when(TransitionBetween<One, Two>.done)
+            .then { _ in expectTransition.fulfill() },
+        
+        scenario()
+            .when(DeinitializationFrom<Two>.done)
+            .then { _ in expectDeinitialization.fulfill() }
+    ]}
+}
+
+extension ActionContext where F == SUT
+{
+    func start()
+    {
+        must {
+            
+            try $0.initialize(with: F.One())
+        }
+    }
+    
+    func proceed()
+    {
+        must {
+            
+            try $0.transition(from: F.One.self, into: F.Two())
+        }
+    }
+    
+    func finish()
+    {
+        must {
+            
+            try $0.deinitialize(from: F.Two.self)
+        }
+    }
+    
+}
+
+//---
+
+enum SUT2: Feature, InternalObserver
+{
+    static
+    func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<Self>) -> Int?
+    {
+        0
+    }
+
+    static
+    func inMutationOutInt(_ mut: InitializationOf<Self>) -> Int?
+    {
+        1
+    }
+
+    static
+    func inDispatcherOutInt(_ disp: Dispatcher) -> Int?
+    {
+        2
+    }
+
+    static
+    func inBothOutBool(_ disp: Dispatcher, _ mut: InitializationOf<Self>) -> Bool
+    {
+        false
+    }
+
+    static
+    func inMutationOutBool(_ mut: InitializationOf<Self>) -> Bool
+    {
+        false
+    }
+
+    static
+    func inDispatcherOutBool(_ disp: Dispatcher) -> Bool
+    {
+        false
+    }
+
+    struct One: FeatureState
+    {
+        typealias ParentFeature = SUT2
+    }
+
+    static
+    var bindings: [InternalBinding]
+    {[
+        scenario("")
+            .when(
+                InitializationOf<SUT2>.done
+            )
+            .given {
+                inBothOutInt($0, $1)
+            }
+            .then {
+                XCTAssertEqual($1, 0)
+            },
+
+        scenario("")
+            .when(
+                InitializationOf<SUT2>.done
+            )
+            .given {
+                inMutationOutInt($0)
+            }
+            .then {
+                XCTAssertEqual($1, 1)
+            },
+
+        scenario("")
+            .when(
+                InitializationOf<SUT2>.done
+            )
+            .given {
+                inDispatcherOutInt($0)
+            }
+            .then {
+                XCTAssertEqual($1, 2)
+            },
+
+        scenario("")
+            .when(
+                InitializationOf<SUT2>.done
+            )
+            .givenIf {
+                inBothOutBool($0, $1)
+            }
+            .then { _ in
+                XCTFail("Did not expect to reach this point!")
+            },
+
+        scenario("")
+            .when(
+                InitializationOf<SUT2>.done
+            )
+            .givenIf {
+                inMutationOutBool($0)
+            }
+            .then { _ in
+                XCTFail("Did not expect to reach this point!")
+            },
+
+        scenario("")
+            .when(
+                InitializationOf<SUT2>.done
+            )
+            .givenIf {
+                inDispatcherOutBool($0)
+            }
+            .then { _ in
+                XCTFail("Did not expect to reach this point!")
+            }
+    ]}
+}
+
+extension ActionContext where F == SUT2
+{
+    func start()
+    {
+        must {
+
+            try $0.initialize(with: F.One())
+        }
+    }
+}
+
+//---
+
+@MainActor
+class IntBindingsTests: XCTestCase
+{
+    var dispatcher: Dispatcher!
+
+    override
+    func setUp()
+    {
+        dispatcher = .init()
+    }
+
+    override
+    func tearDown()
+    {
+        dispatcher = nil
+    }
+}
+
+// MARK: - Tests
+
+extension IntBindingsTests
+{
+    func test_bindingsOrder()
+    {
+        // GIVEN
+
+        SUT.expectInitialization = expectation(description: "Initialization")
+        SUT.expectTransition = expectation(description: "Transition")
+        SUT.expectDeinitialization = expectation(description: "Deinitialization")
+
+        let sut = SUT.at(dispatcher)
+
+        // WHEN
+
+        sut.start()
+        sut.proceed()
+        sut.finish()
+
+        // THEN
+
+        wait(
+            for: [
+                SUT.expectInitialization,
+                SUT.expectTransition,
+                SUT.expectDeinitialization
+            ],
+            timeout: 1,
+            enforceOrder: true
+        )
+    }
+    
+    func test_bindingsGivenOverloads()
+    {
+        // GIVEN
+
+        let sut = SUT2.at(dispatcher)
+
+        // WHEN
+
+        sut.start()
+
+        // THEN
+
+        // expect no failures...
+    }
+}
