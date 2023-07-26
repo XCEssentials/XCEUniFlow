@@ -28,13 +28,13 @@
 ///
 /// NOTE: it only allows to write states of feature `F`, also allows
 /// to read any state/feature directly from the `storage`.
+@MainActor
 public
 struct TransactionContext<F: Feature>
 {
     public private(set)
     var storage: StateStorage
 }
-
 
 public
 extension TransactionContext

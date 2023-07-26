@@ -31,6 +31,7 @@ import Foundation
 public
 struct StateStorage
 {
+    public
     typealias History = [MutationAttempt]
     
     internal private(set)
@@ -38,9 +39,6 @@ struct StateStorage
     
     private
     var data: [String: any FeatureState] = [:]
-    
-    internal private(set)
-    var lastHistoryResetId: String = UUID().uuidString // TODO: remove??
     
     //---
     
@@ -344,7 +342,6 @@ extension StateStorage
     {
         let result = history
         history.removeAll()
-        lastHistoryResetId = UUID().uuidString // TODO: remove??
         
         //---
         
