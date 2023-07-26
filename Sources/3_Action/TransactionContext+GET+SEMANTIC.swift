@@ -1,0 +1,126 @@
+/*
+ 
+ MIT License
+ 
+ Copyright (c) 2016 Maxim Khatskevich (maxim@khatskevi.ch)
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ 
+ */
+
+public
+enum SemanticCheckError: Error
+{
+    case alreadyInitialized(Feature.Type)
+    
+    case notInitializedYet(Feature.Type)
+    
+    case unexpectedCurrentState(
+        expected: [any FeatureState.Type],
+        actual: any FeatureState.Type
+    )
+}
+
+//---
+
+public
+extension TransactionContext
+{
+    func ensureAwaitingInitialization() throws
+    {
+        guard
+            !storage.hasFeature(F.self)
+        else
+        {
+            throw SemanticCheckError.alreadyInitialized(F.self)
+        }
+    }
+    
+    func ensureAlreadyInitialized() throws
+    {
+        guard
+            storage.hasFeature(F.self)
+        else
+        {
+            throw SemanticCheckError.notInitializedYet(F.self)
+        }
+    }
+    
+    @discardableResult
+    func ensureCurrentState<S: FeatureState>(
+        is _: S.Type = S.self
+    ) throws -> S {
+        
+        let someState = try ensureCurrentState(isInTheList: [S.self])
+        
+        guard
+            let state = someState as? S
+        else
+        {
+            throw SemanticCheckError
+                .unexpectedCurrentState(
+                    expected: [S.self],
+                    actual: type(of: someState).self
+                )
+        }
+        
+        return state
+    }
+    
+    @discardableResult
+    func ensureCurrentState(
+        isOneOf whitelist: any FeatureState.Type...
+    ) throws -> any FeatureState {
+        
+        try ensureCurrentState(isInTheList: whitelist)
+    }
+    
+    @discardableResult
+    func ensureCurrentState(
+        isInTheList whitelist: [any FeatureState.Type]
+    ) throws -> any FeatureState {
+        
+        guard
+            let state = fetchCurrentState()
+        else
+        {
+            throw SemanticCheckError.notInitializedYet(F.self)
+        }
+        
+        let typeOfCurrentState = type(of: state)
+        
+        guard
+            whitelist.contains(where: { $0 == typeOfCurrentState })
+        else
+        {
+            throw SemanticCheckError
+                .unexpectedCurrentState(
+                    expected: whitelist,
+                    actual: typeOfCurrentState
+                )
+        }
+        
+        return state
+    }
+    
+    func fetchCurrentState() -> (any FeatureState)?
+    {
+        storage[F.self]
+    }
+}

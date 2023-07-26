@@ -25,17 +25,14 @@
  */
 
 public
-protocol FeatureState
+struct AccessOrigin
 {
-    associatedtype ParentFeature: Feature
-}
-
-public
-extension FeatureState
-{
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
-    }
+    public
+    let file: String
+    
+    public
+    let function: String
+        
+    public
+    let line: Int
 }

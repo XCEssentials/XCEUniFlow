@@ -24,18 +24,25 @@
  
  */
 
-public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
+import Foundation
+
+//---
 
 public
-extension FeatureState
+struct ProcessedActionReport
 {
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
-    }
+    public
+    let timestamp: Date
+    
+    public
+    let mutations: StateStorage.History
+    
+    /// Snapshot of the storage at the time of the event
+    /// (including the mutations listed above).
+    public
+    let storage: StateStorage
+    
+    /// Origin of the event.
+    public
+    let origin: AccessOrigin
 }

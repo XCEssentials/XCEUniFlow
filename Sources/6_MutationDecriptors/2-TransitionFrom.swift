@@ -24,18 +24,39 @@
  
  */
 
-public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
+import Foundation /// for access to `Date` type
+
+//---
 
 public
-extension FeatureState
+struct TransitionFrom<Old: FeatureState>: MutationDecriptor
 {
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
+    public
+    let oldState: Old
+    
+    public
+    let newState: any FeatureState
+    
+    public
+    let timestamp: Date
+
+    public
+    init?(
+        from report: StateStorage.History.Element
+    ) {
+        
+        guard
+            let transition = Transition(from: report),
+            let oldState = transition.oldState as? Old
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.oldState = oldState
+        self.newState = transition.newState
+        self.timestamp = report.timestamp
     }
 }

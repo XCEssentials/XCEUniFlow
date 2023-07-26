@@ -24,18 +24,28 @@
  
  */
 
+/// A feature that also has bindings and can observe/react on mutations
+/// that happen within `Dispatcher` where such feature is initialized.
+@MainActor
 public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
-
-public
-extension FeatureState
+protocol InternalObserver: Feature
 {
     static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
+    var bindings: [InternalBinding] { get }
+}
+
+//---
+
+public
+extension InternalObserver
+{
+    typealias Itself = Self
+    
+    static
+    func scenario(
+        _ description: String = ""
+    ) -> InternalBindingBDD<Self>.WhenContext {
+        
+        .init(description: description)
     }
 }

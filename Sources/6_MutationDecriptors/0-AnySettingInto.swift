@@ -24,18 +24,36 @@
  
  */
 
-public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
+import Foundation /// for access to `Date` type
 
+//---
+
+/// Mutation that results feature `F` being present in the storage.
 public
-extension FeatureState
+struct AnySettingInto<New: FeatureState>: MutationDecriptor
 {
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
+    public
+    let newState: New
+    
+    public
+    let timestamp: Date
+
+    public
+    init?(
+        from report: StateStorage.History.Element
+    ) {
+        
+        guard
+            let anySetting = AnySetting(from: report),
+            let newState = anySetting.newState as? New
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.newState = newState
+        self.timestamp = report.timestamp
     }
 }

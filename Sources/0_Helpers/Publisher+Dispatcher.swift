@@ -40,9 +40,9 @@ extension Publisher
 // MARK: - Access log - Processed vs. Rejected
 
 public
-extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
+extension Publisher where Output == AccessReport, Failure == Never
 {
-    var onProcessed: AnyPublisher<Dispatcher.ProcessedActionReport, Failure>
+    var onProcessed: AnyPublisher<ProcessedActionReport, Failure>
     {
         return self
             .compactMap {
@@ -66,7 +66,7 @@ extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
             .eraseToAnyPublisher()
     }
     
-    var onRejected: AnyPublisher<Dispatcher.RejectedActionReport, Failure>
+    var onRejected: AnyPublisher<RejectedActionReport, Failure>
     {
         return self
             .compactMap {
@@ -94,16 +94,16 @@ extension Publisher where Output == Dispatcher.AccessReport, Failure == Never
 // MARK: - Access log - Processed - get individual mutations
 
 public
-extension Publisher where Output == Dispatcher.ProcessedActionReport, Failure == Never
+extension Publisher where Output == ProcessedActionReport, Failure == Never
 {
-    var perEachMutation: AnyPublisher<Storage.HistoryElement, Failure>
+    var perEachMutation: AnyPublisher<StateStorage.History.Element, Failure>
     {
         flatMap(\.mutations.publisher).eraseToAnyPublisher()
     }
 }
 
 public
-extension Publisher where Output == Storage.HistoryElement, Failure == Never
+extension Publisher where Output == StateStorage.History.Element, Failure == Never
 {
     func `as`<T: MutationDecriptor>(
         _: T.Type
@@ -116,7 +116,7 @@ extension Publisher where Output == Storage.HistoryElement, Failure == Never
 // MARK: - Access log - Processed - get features statuses (dashboard)
 
 public
-extension Publisher where Output == Dispatcher.ProcessedActionReport, Failure == Never
+extension Publisher where Output == ProcessedActionReport, Failure == Never
 {
     var statusReport: AnyPublisher<[FeatureStatus], Failure>
     {

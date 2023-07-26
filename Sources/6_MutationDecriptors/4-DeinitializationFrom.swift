@@ -24,18 +24,35 @@
  
  */
 
-public
-protocol FeatureState
-{
-    associatedtype ParentFeature: Feature
-}
+import Foundation /// for access to `Date` type
+
+//---
 
 public
-extension FeatureState
+struct DeinitializationFrom<Old: FeatureState>: MutationDecriptor
 {
-    static
-    var feature: any Feature.Type
-    {
-        ParentFeature.self
+    public
+    let oldState: Old
+    
+    public
+    let timestamp: Date
+
+    public
+    init?(
+        from report: StateStorage.History.Element
+    ) {
+        
+        guard
+            let deinitialization = Deinitialization(from: report),
+            let oldState = deinitialization.oldState as? Old
+        else
+        {
+            return nil
+        }
+        
+        //---
+        
+        self.oldState = oldState
+        self.timestamp = report.timestamp
     }
 }

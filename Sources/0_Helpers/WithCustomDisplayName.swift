@@ -25,7 +25,7 @@
  */
 
 public
-protocol WithCustomDisplayName
+protocol WithCustomDisplayName: Feature
 {
     static
     var customDisplayName: String { get }
