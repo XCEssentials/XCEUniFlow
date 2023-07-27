@@ -97,21 +97,16 @@ extension Dispatcher
         context c: String,
         location l: Int,
         _ handler: (inout TransactionContext<F>) throws -> T
-    ) -> Result<T, Error> {
-
-        let report: AccessReport
-        let result: Result<T, Error>
-        var txContext = TransactionContext<F>(storage: storage)
-        
-        //---
+    ) rethrows -> T {
 
         do
         {
+            var txContext = TransactionContext<F>(storage: storage)
             let output = try handler(&txContext)
             storage = txContext.storage
             let mutationsToReport = storage.resetHistory()
             
-            report = .init(
+            let report = AccessReport(
                 outcome: .success(mutationsToReport),
                 storage: storage,
                 origin: .init(
@@ -121,13 +116,17 @@ extension Dispatcher
                 )
             )
             
+            installInternalBindings(basedOn: mutationsToReport)
+            _accessLog.send(report)
+            uninstallInternalBindings(basedOn: mutationsToReport)
+            
             //---
 
-            result = .success(output)
+            return output
         }
         catch
         {
-            report = .init(
+            let report = AccessReport(
                 outcome: .failure(
                     error
                 ),
@@ -139,25 +138,12 @@ extension Dispatcher
                 )
             )
             
-            result = .failure(error)
+            _accessLog.send(report)
+            
+            //---
+
+            throw error
         }
-        
-        //---
-        
-        switch report.outcome
-        {
-            case .success(let mutationsToReport):
-                installInternalBindings(basedOn: mutationsToReport)
-                _accessLog.send(report)
-                uninstallInternalBindings(basedOn: mutationsToReport)
-                
-            case .failure:
-                _accessLog.send(report)
-        }
-        
-        //---
-        
-        return result
     }
 }
 
