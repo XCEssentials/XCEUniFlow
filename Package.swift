@@ -19,17 +19,19 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/XCEssentials/XCERequirement",
-            .upToNextMinor(from: "2.6.0")),
+            .upToNextMinor(from: "2.6.0")
+        ),
         .package(
             url: "https://github.com/XCEssentials/XCEPipeline",
-            .upToNextMinor(from: "3.9.0")),
+            .upToNextMinor(from: "3.9.0")
+        ),
     ],
     targets: [
         .target(
             name: "XCEUniFlow",
             dependencies: [
-                "XCERequirement",
-                "XCEPipeline"
+                .product(name: "XCERequirement", package: "XCERequirement"),
+                .product(name: "XCEPipeline", package: "XCEPipeline")
             ],
             path: "Sources"
         ),
@@ -37,8 +39,8 @@ let package = Package(
             name: "XCEUniFlowTests",
             dependencies: [
                 "XCEUniFlow",
-                "XCERequirement",
-                "XCEPipeline"
+                .product(name: "XCERequirement", package: "XCERequirement"),
+                .product(name: "XCEPipeline", package: "XCEPipeline")
             ],
             path: "Tests"
         ),
