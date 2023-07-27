@@ -63,14 +63,6 @@ extension CurrentSessionTests
     {
         // GIVEN
         
-        let exp = expectation(description: "Initialization happened")
-        
-        dispatcher
-            .on(InitializationOf<CurrentSession>.done)
-            .map(\.newState)
-            .sink { _ in exp.fulfill() }
-            .store(in: &subs)
-        
         XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.self))
         XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
         
@@ -80,27 +72,16 @@ extension CurrentSessionTests
 
         // THEN
         
-        wait(for: [exp], timeout: 1)
         XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.self))
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
     }
     
-    func test_transition()
+    func test_transition() async
     {
         // GIVEN
         
-        let loggingIn = expectation(description: "LoggingIn")
-        let loggedIn = expectation(description: "LoggedIn")
-        
-        dispatcher
-            .on(TransitionBetween<CurrentSession.Anon, CurrentSession.LoggingIn>.done)
-            .sink { _ in loggingIn.fulfill() }
-            .store(in: &subs)
-        
-        dispatcher
+        let loggedIn = dispatcher
             .on(TransitionBetween<CurrentSession.LoggingIn, CurrentSession.LoggedIn>.done)
-            .sink { _ in loggedIn.fulfill() }
-            .store(in: &subs)
         
         XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.self))
         XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
@@ -112,13 +93,11 @@ extension CurrentSessionTests
 
         // THEN
         
-        wait(for: [loggingIn], timeout: 1)
-        
         XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.self))
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggingIn.self))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "joe")
         
-        wait(for: [loggedIn], timeout: 1)
+        for await _ in loggedIn.values { break }
         
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggedIn.self))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggedIn.sessionToken], "123")
