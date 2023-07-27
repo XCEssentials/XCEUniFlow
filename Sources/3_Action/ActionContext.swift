@@ -64,7 +64,6 @@ extension ActionContext
                 location: location,
                 handler
             )
-            .get()
     }
     
     /// Transaction within `handler` must be successful,
@@ -77,29 +76,28 @@ extension ActionContext
         _ handler: (inout TransactionContext<F>) throws -> T
     ) -> Result<T, Error> {
         
-        let result = dispatcher
-            .transact(
-                scope: scope,
-                context: context,
-                location: location,
-                handler
-            )
-        
-        //---
-        
-        #if DEBUG
-        
-        if
-            case .failure(let report) = result
+        do
         {
-            assertionFailure("❌ [UniFlow] Transaction failed: \(report)")
+            return try .success(
+                dispatcher
+                    .transact(
+                        scope: scope,
+                        context: context,
+                        location: location,
+                        handler
+                    )
+            )
         }
-        
-        #endif
-        
-        //---
-        
-        return result
+        catch
+        {
+            #if DEBUG
+
+            assertionFailure("❌ [UniFlow] Transaction failed: \(error)")
+
+            #endif
+            
+            return .failure(error)
+        }
     }
     
     /// Transaction within `handler` may fail,
@@ -114,12 +112,21 @@ extension ActionContext
         _ handler: (inout TransactionContext<F>) throws -> T
     ) -> Result<T, Error> {
         
-        dispatcher
-            .transact(
-                scope: scope,
-                context: context,
-                location: location,
-                handler
+        do
+        {
+            return try .success(
+                dispatcher
+                    .transact(
+                        scope: scope,
+                        context: context,
+                        location: location,
+                        handler
+                    )
             )
+        }
+        catch
+        {
+            return .failure(error)
+        }
     }
 }
