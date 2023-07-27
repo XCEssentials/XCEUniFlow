@@ -97,7 +97,7 @@ extension CurrentSessionTests
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggingIn.self))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "joe")
         
-        for await _ in loggedIn.values { break }
+        _ = await loggedIn.values.first { _ in true }
         
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggedIn.self))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggedIn.sessionToken], "123")
