@@ -6,7 +6,7 @@ let package = Package(
     name: "XCEUniFlow",
     platforms: [
         .macOS(.v10_15), // depends on Combine
-        .iOS(.v13)
+        .iOS(.v15)
     ],
     products: [
         .library(
