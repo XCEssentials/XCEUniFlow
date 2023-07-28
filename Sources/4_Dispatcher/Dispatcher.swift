@@ -33,7 +33,7 @@ public
 final
 class Dispatcher
 {
-    public private(set)
+    public internal(set)
     var storage: StateStorage
     
     private
@@ -99,11 +99,14 @@ extension Dispatcher
         _ handler: (inout TransactionContext<F>) throws -> T
     ) rethrows -> T {
 
+        let storageBefore = storage
+        
+        //---
+        
         do
         {
-            var txContext = TransactionContext<F>(storage: storage)
+            var txContext = TransactionContext<F>(dispatcher: self)
             let output = try handler(&txContext)
-            storage = txContext.storage
             let mutationsToReport = storage.resetHistory()
             
             let report = AccessReport(
@@ -126,6 +129,8 @@ extension Dispatcher
         }
         catch
         {
+            storage = storageBefore //rollback global state
+            
             let report = AccessReport(
                 outcome: .failure(
                     error

@@ -31,8 +31,14 @@
 public
 struct TransactionContext<F: Feature>
 {
-    public private(set)
+    //internal
+    let dispatcher: Dispatcher
+    
+    public
     var storage: StateStorage
+    {
+        dispatcher.storage
+    }
 }
 
 public
@@ -46,7 +52,8 @@ extension TransactionContext
         _ state: S
     ) throws where S.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .store(
                 scope: s,
                 context: c,
@@ -63,7 +70,8 @@ extension TransactionContext
         with newState: S
     ) throws where S.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .initialize(
                 scope: s,
                 context: c,
@@ -81,7 +89,8 @@ extension TransactionContext
         via mutationHandler: (inout S) throws -> Void
     ) throws where S.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .actualize(
                 scope: s,
                 context: c,
@@ -99,7 +108,8 @@ extension TransactionContext
         with newState: S
     ) throws where S.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .actualize(
                 scope: s,
                 context: c,
@@ -117,7 +127,8 @@ extension TransactionContext
         into newState: N
     ) throws where O.ParentFeature == F, N.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .transition(
                 scope: s,
                 context: c,
@@ -136,7 +147,8 @@ extension TransactionContext
         into newState: N
     ) throws where O.ParentFeature == F, N.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .transition(
                 scope: s,
                 context: c,
@@ -154,7 +166,8 @@ extension TransactionContext
         into newState: S
     ) throws where S.ParentFeature == F {
 
-        try storage
+        try dispatcher
+            .storage
             .transition(
                 scope: s,
                 context: c,
@@ -171,7 +184,8 @@ extension TransactionContext
         strict: Bool = true
     ) throws {
 
-        try storage
+        try dispatcher
+            .storage
             .deinitialize(
                 scope: s,
                 context: c,
@@ -190,7 +204,8 @@ extension TransactionContext
         from _: S.Type
     ) throws where S.ParentFeature == F {
         
-        try storage
+        try dispatcher
+            .storage
             .deinitialize(
                 scope: s,
                 context: c,
