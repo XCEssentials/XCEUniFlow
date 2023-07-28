@@ -2,7 +2,6 @@ import XCEUniFlow
 
 //---
 
-public
 enum CurrentSession: Feature
 {
     struct Anon: FeatureState
@@ -31,6 +30,8 @@ enum CurrentSession: Feature
         let sessionToken: String
     }
 }
+
+// MARK: - Actions
 
 extension ActionContext where F == CurrentSession
 {

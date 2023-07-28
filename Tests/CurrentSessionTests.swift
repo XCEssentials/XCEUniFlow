@@ -59,6 +59,26 @@ class CurrentSessionTests: XCTestCase
 
 extension CurrentSessionTests
 {
+    func test_nestedTransactions_correct()
+    {
+        sut.should {
+            
+            sut.prepare() // we initialize same feature here
+            try $0.transition(into: CurrentSession.LoggingIn(username: "user")) // ✅
+            XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "user")
+        }
+    }
+    
+    func test_nestedTransactions_incorrect()
+    {
+        sut.should {
+            
+            sut.prepare() // we initialize same feature here
+            try $0.initialize(with: CurrentSession.Anon()) // ❌
+            XCTFail("Must not reach this point!")
+        }
+    }
+    
     func test_initialization()
     {
         // GIVEN
