@@ -37,6 +37,9 @@ class Dispatcher
     var storage: StateStorage
     
     private
+    var currentTransaction: AccessOrigin?
+    
+    private
     var internalBindings: [String: [AnyCancellable]] = [:]
     
     fileprivate
@@ -86,25 +89,54 @@ class Dispatcher
     }
 }
 
+// MARK: - Nested errors
+
+public
+extension Dispatcher
+{
+    enum TransactonError: Error
+    {
+        case anotherTransactionIsActive(AccessOrigin)
+    }
+}
+
 // MARK: - Transactions support
 
 //internal
 extension Dispatcher
 {
+    /// Execute transaction represented by `handler`.
+    ///
+    /// It throws `TransactonError` and returns result
+    /// of the transaction execution.
     @discardableResult
     func transact<F: Feature, T>(
         scope s: String,
         context c: String,
         location l: Int,
         _ handler: (inout TransactionContext<F>) throws -> T
-    ) rethrows -> T {
-
+    ) throws -> Result<T, Error> {
+        
+        if
+            let tx = currentTransaction
+        {
+            throw TransactonError.anotherTransactionIsActive(tx)
+        }
+        
+        //---
+        
         let storageBefore = storage
         
         //---
         
         do
         {
+            currentTransaction = .init(
+                file: s,
+                function: c,
+                line: l
+            )
+            
             var txContext = TransactionContext<F>(dispatcher: self)
             let output = try handler(&txContext)
             let mutationsToReport = storage.resetHistory()
@@ -119,16 +151,20 @@ extension Dispatcher
                 )
             )
             
+            currentTransaction = nil
+            
             installInternalBindings(basedOn: mutationsToReport)
             _accessLog.send(report)
             uninstallInternalBindings(basedOn: mutationsToReport)
             
             //---
 
-            return output
+            return .success(output)
         }
         catch
         {
+            currentTransaction = nil
+            
             storage = storageBefore //rollback global state
             
             let report = AccessReport(
@@ -147,7 +183,7 @@ extension Dispatcher
             
             //---
 
-            throw error
+            return .failure(error)
         }
     }
 }

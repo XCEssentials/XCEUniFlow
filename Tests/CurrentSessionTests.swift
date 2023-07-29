@@ -63,17 +63,25 @@ extension CurrentSessionTests
     {
         sut.should {
             
-            sut.prepare() // we initialize same feature here
-            try $0.transition(into: CurrentSession.LoggingIn(username: "user")) // ✅
+            /// the below line would trigger `assertionFailure`,
+            /// because we are already inside a transaction:
+            // sut.prepare() // ❌
+            
+            try $0.initialize(with: CurrentSession.Anon())
+            try $0.transition(into: CurrentSession.LoggingIn(username: "user"))
             XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "user")
         }
     }
     
     func test_nestedTransactions_incorrect()
     {
+        XCTAssertNil(dispatcher.storage[CurrentSession.self])
+        
         sut.should {
-            
-            sut.prepare() // we initialize same feature here
+        
+            XCTAssertNil(dispatcher.storage[CurrentSession.self])
+            try $0.initialize(with: CurrentSession.Anon())
+            XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
             try $0.initialize(with: CurrentSession.Anon()) // ❌
             XCTFail("Must not reach this point!")
         }
@@ -100,8 +108,12 @@ extension CurrentSessionTests
     {
         // GIVEN
         
-        let loggedIn = dispatcher
+        let loggedIn = expectation(description: "LoggedIn")
+        
+        dispatcher
             .on(TransitionBetween<CurrentSession.LoggingIn, CurrentSession.LoggedIn>.done)
+            .sink { _ in loggedIn.fulfill() }
+            .store(in: &subs)
         
         XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.self))
         XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
@@ -117,7 +129,7 @@ extension CurrentSessionTests
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggingIn.self))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "joe")
         
-        _ = await loggedIn.values.first { _ in true }
+        await fulfillment(of: [loggedIn])
         
         XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggedIn.self))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggedIn.sessionToken], "123")

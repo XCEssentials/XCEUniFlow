@@ -48,7 +48,8 @@ public
 extension ActionContext
 {
     /// Transaction helper that re-throws any errors that happen
-    /// during transaction.
+    /// during `handler` execution, also `TransactonError` will
+    /// cause critical error in `DEBUG` mode only.
     @discardableResult
     func execute<T>(
         scope: String = #file,
@@ -57,13 +58,33 @@ extension ActionContext
         _ handler: (inout TransactionContext<F>) throws -> T
     ) throws -> T {
         
-        try dispatcher
-            .transact(
-                scope: scope,
-                context: context,
-                location: location,
-                handler
-            )
+        do
+        {
+            return try dispatcher
+                .transact(
+                    scope: scope,
+                    context: context,
+                    location: location,
+                    handler
+                )
+                .get()
+        }
+        catch let error as Dispatcher.TransactonError
+        {
+            /// only rise as critical `TransactonError`
+            
+            #if DEBUG
+
+            assertionFailure("❌ [UniFlow] Transaction failed: \(error)")
+
+            #endif
+            
+            throw error
+        }
+        catch
+        {
+            throw error
+        }
     }
     
     /// Transaction within `handler` must be successful,
@@ -86,9 +107,10 @@ extension ActionContext
                         location: location,
                         handler
                     )
+                    .get()
             )
         }
-        catch
+        catch /// catch and rise as critical any error
         {
             #if DEBUG
 
@@ -96,7 +118,7 @@ extension ActionContext
 
             #endif
             
-            return .failure(error)
+            return .failure(error) // just a fallback for non-DEBUG
         }
     }
     
@@ -114,18 +136,22 @@ extension ActionContext
         
         do
         {
-            return try .success(
-                dispatcher
-                    .transact(
-                        scope: scope,
-                        context: context,
-                        location: location,
-                        handler
-                    )
-            )
+            return try dispatcher
+                .transact(
+                    scope: scope,
+                    context: context,
+                    location: location,
+                    handler
+                )
         }
-        catch
+        catch /// only expect `TransactonError` here
         {
+            #if DEBUG
+
+            assertionFailure("❌ [UniFlow] Transaction failed: \(error)")
+
+            #endif
+            
             return .failure(error)
         }
     }
