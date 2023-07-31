@@ -66,9 +66,9 @@ extension FeatureBase
     /// cause critical error in `DEBUG` mode only.
     @discardableResult
     func execute<T>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         _ handler: (inout TransactionContext) throws -> T
     ) throws -> T {
         
@@ -76,9 +76,9 @@ extension FeatureBase
         {
             return try dispatcher
                 .transact(
-                    scope: scope,
-                    context: context,
-                    location: location,
+                    file: file,
+                    function: function,
+                    line: line,
                     handler
                 )
                 .get()
@@ -105,9 +105,9 @@ extension FeatureBase
     /// or a critical error will be thrown (in `DEBUG` mode only).
     @discardableResult
     func must<T>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         _ handler: (inout TransactionContext) throws -> T
     ) -> Result<T, Error> {
         
@@ -116,9 +116,9 @@ extension FeatureBase
             return try .success(
                 dispatcher
                     .transact(
-                        scope: scope,
-                        context: context,
-                        location: location,
+                        file: file,
+                        function: function,
+                        line: line,
                         handler
                     )
                     .get()
@@ -142,9 +142,9 @@ extension FeatureBase
     /// action will be rejected.
     @discardableResult
     func should<T>(
-        scope: String = #file,
-        context: String = #function,
-        location: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         _ handler: (inout TransactionContext) throws -> T
     ) -> Result<T, Error> {
         
@@ -152,9 +152,9 @@ extension FeatureBase
         {
             return try dispatcher
                 .transact(
-                    scope: scope,
-                    context: context,
-                    location: location,
+                    file: file,
+                    function: function,
+                    line: line,
                     handler
                 )
         }

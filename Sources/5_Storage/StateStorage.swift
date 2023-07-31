@@ -96,9 +96,9 @@ extension StateStorage
     @discardableResult
     mutating
     func store(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         _ state: any FeatureState,
         expectedMutation: ExpectedMutation = .auto
     ) throws -> MutationAttemptOutcome {
@@ -120,9 +120,9 @@ extension StateStorage
                     expected: expectedMutation,
                     proposed: proposedOutcome,
                     origin: .init(
-                        file: s,
-                        function: c,
-                        line: l
+                        file: file,
+                        function: function,
+                        line: line
                     )
                 )
                 
@@ -150,9 +150,9 @@ extension StateStorage
                     expected: expectedMutation,
                     proposed: proposedOutcome,
                     origin: .init(
-                        file: s,
-                        function: c,
-                        line: l
+                        file: file,
+                        function: function,
+                        line: line
                     )
                 )
                 
@@ -179,9 +179,9 @@ extension StateStorage
     @discardableResult
     mutating
     func removeState(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         forFeature feature: Feature.Type,
         fromStateType: (any FeatureState.Type)? = nil,
         strict: Bool = true
@@ -208,9 +208,9 @@ extension StateStorage
                     expected: implicitlyExpectedMutation,
                     proposed: proposedOutcome,
                     origin: .init(
-                        file: s,
-                        function: c,
-                        line: l
+                        file: file,
+                        function: function,
+                        line: line
                     )
                 )
                 
@@ -228,9 +228,9 @@ extension StateStorage
                     expected: implicitlyExpectedMutation,
                     proposed: proposedOutcome,
                     origin: .init(
-                        file: s,
-                        function: c,
-                        line: l
+                        file: file,
+                        function: function,
+                        line: line
                     )
                 )
         }
@@ -247,17 +247,17 @@ extension StateStorage
     @discardableResult
     mutating
     func removeAll(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line
     ) throws -> [MutationAttemptOutcome] {
         
         try allFeatures
             .map {
                 try removeState(
-                    scope: s,
-                    context: c,
-                    location: l,
+                    file: file,
+                    function: function,
+                    line: line,
                     forFeature: $0,
                     fromStateType: nil,
                     strict: false

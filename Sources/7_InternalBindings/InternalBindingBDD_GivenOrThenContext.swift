@@ -113,16 +113,16 @@ extension InternalBindingBDD
         
         public
         func then(
-            scope: String = #file,
-            location: Int = #line,
+            file: StaticString = #file,
+            line: UInt = #line,
             _ then: @escaping (Dispatcher, W.Output) -> Void
         ) -> InternalBinding {
             
             .init(
                 source: S.self,
                 description: description,
-                scope: scope,
-                location: location,
+                file: file,
+                line: line,
                 when: when,
                 given: { $1 }, /// just pass `when` clause output straight through as is
                 then: then
@@ -131,12 +131,12 @@ extension InternalBindingBDD
         
         public
         func then(
-            scope: String = #file,
-            location: Int = #line,
+            file: StaticString = #file,
+            line: UInt = #line,
             _ dispatcherOnlyHandler: @escaping (Dispatcher) -> Void
         ) -> InternalBinding {
             
-            then(scope: scope, location: location) { dispatcher, _ in
+            then(file: file, line: line) { dispatcher, _ in
                 
                 dispatcherOnlyHandler(dispatcher)
             }
