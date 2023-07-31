@@ -62,6 +62,40 @@ extension TransactionContext
         }
     }
     
+    func fetchCurrentState<F: Feature>(of _: F.Type) -> (any FeatureState)?
+    {
+        storage[F.self]
+    }
+    
+    @discardableResult
+    func ensureCurrentState<F: Feature>(
+        of _: F.Type,
+        isInTheList whitelist: [any FeatureState.Type]
+    ) throws -> any FeatureState {
+        
+        guard
+            let state = fetchCurrentState(of: F.self)
+        else
+        {
+            throw SemanticCheckError.notInitializedYet(F.self)
+        }
+        
+        let typeOfCurrentState = type(of: state)
+        
+        guard
+            whitelist.contains(where: { $0 == typeOfCurrentState })
+        else
+        {
+            throw SemanticCheckError
+                .unexpectedCurrentState(
+                    expected: whitelist,
+                    actual: typeOfCurrentState
+                )
+        }
+        
+        return state
+    }
+    
     @discardableResult
     func ensureCurrentState<S: FeatureState>(
         is _: S.Type = S.self
@@ -96,39 +130,5 @@ extension TransactionContext
             of: F.self,
             isInTheList: whitelist
         )
-    }
-    
-    @discardableResult
-    func ensureCurrentState<F: Feature>(
-        of _: F.Type,
-        isInTheList whitelist: [any FeatureState.Type]
-    ) throws -> any FeatureState {
-        
-        guard
-            let state = fetchCurrentState(of: F.self)
-        else
-        {
-            throw SemanticCheckError.notInitializedYet(F.self)
-        }
-        
-        let typeOfCurrentState = type(of: state)
-        
-        guard
-            whitelist.contains(where: { $0 == typeOfCurrentState })
-        else
-        {
-            throw SemanticCheckError
-                .unexpectedCurrentState(
-                    expected: whitelist,
-                    actual: typeOfCurrentState
-                )
-        }
-        
-        return state
-    }
-    
-    func fetchCurrentState<F: Feature>(of _: F.Type) -> (any FeatureState)?
-    {
-        storage[F.self]
     }
 }

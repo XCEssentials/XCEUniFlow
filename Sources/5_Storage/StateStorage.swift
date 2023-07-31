@@ -330,6 +330,7 @@ extension StateStorage
 //internal
 extension StateStorage
 {
+    private
     mutating
     func logHistoryEvent(
         outcome: MutationAttemptOutcome
