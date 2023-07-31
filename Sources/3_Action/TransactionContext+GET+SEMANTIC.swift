@@ -131,4 +131,11 @@ extension TransactionContext
             isInTheList: whitelist
         )
     }
+    
+    func ensureIsSet<R: FeatureState, V>(
+        _ keyPath: KeyPath<R, V>
+    ) throws -> V {
+        
+        try ensureCurrentState(is: R.state)[keyPath: keyPath]
+    }
 }
