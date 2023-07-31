@@ -94,9 +94,10 @@ class Dispatcher
 public
 extension Dispatcher
 {
-    enum TransactonError: Error
+    struct NestedTransactonError: Error
     {
-        case anotherTransactionIsActive(AccessOrigin)
+        public
+        let anotherTransactionOrigin: AccessOrigin
     }
 }
 
@@ -107,8 +108,10 @@ extension Dispatcher
 {
     /// Execute transaction represented by `handler`.
     ///
-    /// It throws `TransactonError` and returns result
-    /// of the transaction execution.
+    /// - Returns: outcome of the transaction `handler`.
+    ///
+    /// - Throws: `NestedTransactonError` if another active
+    ///     transaction has been already started.
     @discardableResult
     func transact<T>(
         file: StaticString,
@@ -120,7 +123,7 @@ extension Dispatcher
         if
             let tx = currentTransaction
         {
-            throw TransactonError.anotherTransactionIsActive(tx)
+            throw NestedTransactonError(anotherTransactionOrigin: tx)
         }
         
         //---

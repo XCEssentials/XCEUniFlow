@@ -24,6 +24,10 @@
  
  */
 
+import Foundation
+
+//---
+
 /// Generic feature implementation.
 @MainActor
 public
@@ -62,8 +66,8 @@ public
 extension FeatureBase
 {
     /// Transaction helper that re-throws any errors that happen
-    /// during `handler` execution, also `TransactonError` will
-    /// cause critical error in `DEBUG` mode only.
+    /// during `handler` execution, `NestedTransactonError` will
+    /// cause critical error and stop app execution.
     @discardableResult
     func execute<T>(
         file: StaticString = #file,
@@ -81,19 +85,15 @@ extension FeatureBase
                     line: line,
                     handler
                 )
-                .get()
+                .get() /// NOTE: throw `error` from received result
         }
-        catch let error as Dispatcher.TransactonError
+        catch let error as Dispatcher.NestedTransactonError
         {
-            /// only rise as critical `TransactonError`
-            
-            #if DEBUG
-
-            assertionFailure("❌ [UniFlow] Transaction failed: \(error)")
-
-            #endif
-            
-            throw error
+            fatalError(
+                "❌ [UniFlow] Nested transaction is detected: \(error)",
+                file: file,
+                line: line
+            )
         }
         catch
         {
@@ -102,7 +102,9 @@ extension FeatureBase
     }
     
     /// Transaction within `handler` must be successful,
-    /// or a critical error will be thrown (in `DEBUG` mode only).
+    /// any error will cause critical error in DEBUG mode,
+    /// `NestedTransactonError` will cause critical error
+    /// and stop app execution.
     @discardableResult
     func must<T>(
         file: StaticString = #file,
@@ -121,18 +123,26 @@ extension FeatureBase
                         line: line,
                         handler
                     )
-                    .get()
+                    .get() /// NOTE: throw `error` from received result
             )
         }
-        catch /// catch and rise as critical any error
+        catch let error as Dispatcher.NestedTransactonError
         {
-            #if DEBUG
-
-            assertionFailure("❌ [UniFlow] Transaction failed: \(error)")
-
-            #endif
+            fatalError(
+                "❌ [UniFlow] Nested transaction is detected: \(error)",
+                file: file,
+                line: line
+            )
+        }
+        catch
+        {
+            assertionFailure(
+                "❌ [UniFlow] Transaction has failed: \(error)",
+                file: file,
+                line: line
+            )
             
-            return .failure(error) // just a fallback for non-DEBUG
+            return .failure(error) // fallback for non-DEBUG
         }
     }
     
@@ -156,17 +166,15 @@ extension FeatureBase
                     function: function,
                     line: line,
                     handler
-                )
+                ) /// NOTE: non-transaction errors will be wrapped in `Result`
         }
-        catch /// only expect `TransactonError` here
+        catch /// we only expect `TransactonError` here
         {
-            #if DEBUG
-
-            assertionFailure("❌ [UniFlow] Transaction failed: \(error)")
-
-            #endif
-            
-            return .failure(error)
+            fatalError(
+                "❌ [UniFlow] Nested transaction is detected: \(error)",
+                file: file,
+                line: line
+            )
         }
     }
 }
