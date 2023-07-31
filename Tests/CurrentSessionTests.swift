@@ -37,7 +37,7 @@ import Combine
 class CurrentSessionTests: XCTestCase
 {
     var dispatcher: Dispatcher!
-    var sut: ActionContext<CurrentSession>!
+    var sut: CurrentSession!
     var subs: [AnyCancellable] = []
     
     override
@@ -75,13 +75,13 @@ extension CurrentSessionTests
     
     func test_nestedTransactions_incorrect()
     {
-        XCTAssertNil(dispatcher.storage[CurrentSession.self])
+        XCTAssertNil(dispatcher.storage[CurrentSession.feature])
         
         sut.should {
         
-            XCTAssertNil(dispatcher.storage[CurrentSession.self])
+            XCTAssertNil(dispatcher.storage[CurrentSession.feature])
             try $0.initialize(with: CurrentSession.Anon())
-            XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
+            XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
             try $0.initialize(with: CurrentSession.Anon()) // ❌
             XCTFail("Must not reach this point!")
         }
@@ -91,8 +91,8 @@ extension CurrentSessionTests
     {
         // GIVEN
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.self))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
+        XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.feature))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
         
         // WHEN
         
@@ -100,8 +100,8 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.self))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
+        XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.feature))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
     }
     
     func test_transition() async
@@ -115,8 +115,8 @@ extension CurrentSessionTests
             .sink { _ in loggedIn.fulfill() }
             .store(in: &subs)
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.self))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.self))
+        XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.feature))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
         
         // WHEN
         
@@ -125,13 +125,13 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.self))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggingIn.self))
+        XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.feature))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggingIn.state))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "joe")
         
         await fulfillment(of: [loggedIn])
         
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggedIn.self))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggedIn.state))
         XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggedIn.sessionToken], "123")
     }
 }

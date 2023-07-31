@@ -24,18 +24,32 @@
  
  */
 
-/// The context in which actions to be implemented
-/// for each particular feature.
-///
-/// It gives access to various transaction running helpers.
+/// Generic feature implementation.
 @MainActor
 public
-struct ActionContext<F: Feature>
+struct FeatureBase<F: Feature>
 {
+    /// Convenience helper to access associated feature type directly
+    /// (for more expressive and readable code at call site).
+    public
+    static
+    var feature: F.Type
+    {
+        F.self
+    }
+    
+    /// Convenience shortcut returning same as `feature`.
+    public
+    static
+    var ftr: F.Type
+    {
+        feature
+    }
+    
     private
     let dispatcher: Dispatcher
     
-    //internal
+    public
     init(with dispatcher: Dispatcher)
     {
         self.dispatcher = dispatcher
@@ -45,7 +59,7 @@ struct ActionContext<F: Feature>
 // MARK: - Transactions
 
 public
-extension ActionContext
+extension FeatureBase
 {
     /// Transaction helper that re-throws any errors that happen
     /// during `handler` execution, also `TransactonError` will

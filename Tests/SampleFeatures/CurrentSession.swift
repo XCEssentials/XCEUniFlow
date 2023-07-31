@@ -2,30 +2,35 @@ import XCEUniFlow
 
 //---
 
-enum CurrentSession: Feature
+enum CRS: Feature {} // short name a.k.a. feature "code" or "id"
+typealias CurrentSession = FeatureBase<CRS>
+
+// MARK: - States
+
+extension CurrentSession
 {
     struct Anon: FeatureState
     {
-        typealias ParentFeature = CurrentSession
+        typealias ParentFeature = CRS
     }
     
     struct LoggingIn: FeatureState
     {
-        typealias ParentFeature = CurrentSession
+        typealias ParentFeature = CRS
         
         let username: String
     }
     
     struct LoginFailed: FeatureState
     {
-        typealias ParentFeature = CurrentSession
+        typealias ParentFeature = CRS
         
         let reason: Error
     }
     
     struct LoggedIn: FeatureState
     {
-        typealias ParentFeature = CurrentSession
+        typealias ParentFeature = CRS
         
         let sessionToken: String
     }
@@ -33,13 +38,13 @@ enum CurrentSession: Feature
 
 // MARK: - Actions
 
-extension ActionContext where F == CurrentSession
+extension CurrentSession
 {
     func prepare()
     {
         should {
             
-            try $0.initialize(with: F.Anon())
+            try $0.initialize(with: Anon())
         }
     }
     
@@ -47,8 +52,8 @@ extension ActionContext where F == CurrentSession
     {
         must {
             
-            try $0.ensureCurrentState(is: F.Anon.self)
-            let loggingIn = F.LoggingIn(username: username)
+            try $0.ensureCurrentState(is: Anon.self)
+            let loggingIn = LoggingIn(username: username)
             
             //---
             
@@ -77,8 +82,8 @@ extension ActionContext where F == CurrentSession
         must {
             
             try $0.transition(
-                from: F.LoggingIn.self,
-                into: F.LoggedIn(sessionToken: sessionToken)
+                from: LoggingIn.self,
+                into: LoggedIn(sessionToken: sessionToken)
             )
         }
     }
@@ -89,8 +94,8 @@ extension ActionContext where F == CurrentSession
         must {
             
             try $0.transition(
-                from: F.LoggingIn.self,
-                into: F.LoginFailed(reason: reason)
+                from: LoggingIn.self,
+                into: LoginFailed(reason: reason)
             )
         }
     }
