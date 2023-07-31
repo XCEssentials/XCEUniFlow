@@ -33,6 +33,21 @@ protocol FeatureState
 public
 extension FeatureState
 {
+    /// Convenience helper to access state type directly
+    /// (for more expressive and readable code at call site).
+    static
+    var state: Self.Type
+    {
+        Self.self
+    }
+    
+    /// Convenience shortcut returning same as `state`.
+    static
+    var st: Self.Type
+    {
+        state
+    }
+    
     static
     var feature: any Feature.Type
     {
