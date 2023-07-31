@@ -36,8 +36,10 @@ import Combine
 @MainActor
 class CurrentSessionTests: XCTestCase
 {
+    typealias SUT = CurrentSession
+    
     var dispatcher: Dispatcher!
-    var sut: CurrentSession!
+    var sut: SUT!
     var subs: [AnyCancellable] = []
     
     override
@@ -59,40 +61,12 @@ class CurrentSessionTests: XCTestCase
 
 extension CurrentSessionTests
 {
-    func test_nestedTransactions_correct()
-    {
-        sut.should {
-            
-            /// the below line would trigger `assertionFailure`,
-            /// because we are already inside a transaction:
-            // sut.prepare() // ❌
-            
-            try $0.initialize(with: CurrentSession.Anon())
-            try $0.transition(into: CurrentSession.LoggingIn(username: "user"))
-            XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "user")
-        }
-    }
-    
-    func test_nestedTransactions_incorrect()
-    {
-        XCTAssertNil(dispatcher.storage[CurrentSession.feature])
-        
-        sut.should {
-        
-            XCTAssertNil(dispatcher.storage[CurrentSession.feature])
-            try $0.initialize(with: CurrentSession.Anon())
-            XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
-            try $0.initialize(with: CurrentSession.Anon()) // ❌
-            XCTFail("Must not reach this point!")
-        }
-    }
-    
-    func test_initialization()
+    func test_initialization_viaAction_OK()
     {
         // GIVEN
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.feature))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.state))
         
         // WHEN
         
@@ -100,8 +74,72 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.feature))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
+        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+    }
+    
+    func test_initialization_inline_OK()
+    {
+        // GIVEN
+        
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+        
+        // WHEN
+        
+        sut.should {
+            
+            try $0.initialize(with: SUT.Anon())
+        }
+
+        // THEN
+        
+        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+    }
+    
+    func test_initialization_FAILS_if_repeat()
+    {
+        // GIVEN
+        
+        /// the feature has NOT been initialized yet,
+        /// hence it's NOT present in the `storage`:
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
+        
+        // WHEN
+        
+        sut.should {
+
+            try $0.initialize(with: SUT.Anon())
+            
+            /// so far everythign is fine, the mutation above has affected
+            /// the `storage`, so it temporary HAS the feature/state:
+            XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+            
+            //---
+            
+            /// NOTE: the below line would trigger `fatalError`,
+            /// because nested transactions are NOT allowed as they lead to
+            /// abbigous behavior:
+            //sut.prepare() // ❌
+            
+            // this will interrupt execution and reject whole transaction:
+            try $0.initialize(with: SUT.Anon()) // ❌
+            
+            /// Execution does NOT proceed after the line above,
+            /// since it has thrown an error and whole transaction
+            /// is going to be rejected and any mutations that have
+            /// alredy been made will be reverted, the whole `storage`
+            /// in `dispatcher` will be reset to pre-transaction snapshot.
+            
+            XCTFail("Must not reach this point!")
+        }
+        
+        // THEN
+        
+        /// AFTER we exit transaction scope - the `storage` is intact,
+        /// same as it BEFORE the transaction has been started:
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
     }
     
     func test_transition() async
@@ -111,12 +149,12 @@ extension CurrentSessionTests
         let loggedIn = expectation(description: "LoggedIn")
         
         dispatcher
-            .on(TransitionBetween<CurrentSession.LoggingIn, CurrentSession.LoggedIn>.done)
+            .on(TransitionBetween<SUT.LoggingIn, SUT.LoggedIn>.done)
             .sink { _ in loggedIn.fulfill() }
             .store(in: &subs)
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(CurrentSession.feature))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: CurrentSession.Anon.state))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.state))
         
         // WHEN
         
@@ -125,13 +163,13 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(CurrentSession.feature))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggingIn.state))
-        XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggingIn.username], "joe")
+        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.LoggingIn.state))
+        XCTAssertEqual(dispatcher.storage[\SUT.LoggingIn.username], "joe")
         
         await fulfillment(of: [loggedIn])
         
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: CurrentSession.LoggedIn.state))
-        XCTAssertEqual(dispatcher.storage[\CurrentSession.LoggedIn.sessionToken], "123")
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.LoggedIn.state))
+        XCTAssertEqual(dispatcher.storage[\SUT.LoggedIn.sessionToken], "123")
     }
 }

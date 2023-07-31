@@ -94,9 +94,10 @@ class Dispatcher
 public
 extension Dispatcher
 {
-    enum TransactonError: Error
+    struct NestedTransactonError: Error
     {
-        case anotherTransactionIsActive(AccessOrigin)
+        public
+        let anotherTransactionOrigin: AccessOrigin
     }
 }
 
@@ -107,20 +108,22 @@ extension Dispatcher
 {
     /// Execute transaction represented by `handler`.
     ///
-    /// It throws `TransactonError` and returns result
-    /// of the transaction execution.
+    /// - Returns: outcome of the transaction `handler`.
+    ///
+    /// - Throws: `NestedTransactonError` if another active
+    ///     transaction has been already started.
     @discardableResult
     func transact<T>(
-        scope s: String,
-        context c: String,
-        location l: Int,
+        file: StaticString,
+        function: StaticString,
+        line: UInt,
         _ handler: (inout TransactionContext) throws -> T
     ) throws -> Result<T, Error> {
         
         if
             let tx = currentTransaction
         {
-            throw TransactonError.anotherTransactionIsActive(tx)
+            throw NestedTransactonError(anotherTransactionOrigin: tx)
         }
         
         //---
@@ -132,9 +135,9 @@ extension Dispatcher
         do
         {
             currentTransaction = .init(
-                file: s,
-                function: c,
-                line: l
+                file: file,
+                function: function,
+                line: line
             )
             
             var txContext = TransactionContext(dispatcher: self)
@@ -145,9 +148,9 @@ extension Dispatcher
                 outcome: .success(mutationsToReport),
                 storage: storage,
                 origin: .init(
-                    file: s,
-                    function: c,
-                    line: l
+                    file: file,
+                    function: function,
+                    line: line
                 )
             )
             
@@ -173,9 +176,9 @@ extension Dispatcher
                 ),
                 storage: storage,
                 origin: .init(
-                    file: s,
-                    function: c,
-                    line: l
+                    file: file,
+                    function: function,
+                    line: line
                 )
             )
             
@@ -296,13 +299,13 @@ struct InternalBinding
     let description: String
     
     public
-    let scope: String
+    let file: StaticString
     
     public
     let source: Feature.Type
     
     public
-    let location: Int
+    let line: UInt
     
     //---
     
@@ -321,8 +324,8 @@ struct InternalBinding
     init<S: Feature, W: Publisher, G>(
         source: S.Type,
         description: String,
-        scope: String,
-        location: Int,
+        file: StaticString,
+        line: UInt,
         when: @escaping (AnyPublisher<AccessReport, Never>) -> W,
         given: @escaping (Dispatcher, W.Output) throws -> G?,
         then: @escaping (Dispatcher, G) -> Void
@@ -330,8 +333,8 @@ struct InternalBinding
         
         self.source = S.self
         self.description = description
-        self.scope = scope
-        self.location = location
+        self.file = file
+        self.line = line
         
         self.body = { dispatcher, binding in
             

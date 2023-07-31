@@ -28,11 +28,11 @@ public
 struct AccessOrigin
 {
     public
-    let file: String
+    let file: StaticString
     
     public
-    let function: String
+    let function: StaticString
         
     public
-    let line: Int
+    let line: UInt
 }

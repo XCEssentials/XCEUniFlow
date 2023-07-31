@@ -45,16 +45,16 @@ extension InternalBindingBDD
         
         public
         func then(
-            scope: String = #file,
-            location: Int = #line,
+            file: StaticString = #file,
+            line: UInt = #line,
             _ then: @escaping (Dispatcher, G) -> Void
         ) -> InternalBinding {
             
             .init(
                 source: S.self,
                 description: description,
-                scope: scope,
-                location: location,
+                file: file,
+                line: line,
                 when: when,
                 given: given,
                 then: then
@@ -63,12 +63,12 @@ extension InternalBindingBDD
         
         public
         func then(
-            scope: String = #file,
-            location: Int = #line,
+            file: StaticString = #file,
+            line: UInt = #line,
             _ dispatcherOnlyHandler: @escaping (Dispatcher) -> Void
         ) -> InternalBinding where G == Void {
             
-            then(scope: scope, location: location) { dispatcher, _ in
+            then(file: file, line: line) { dispatcher, _ in
                 
                 dispatcherOnlyHandler(dispatcher)
             }
