@@ -29,18 +29,18 @@ extension TransactionContext
 {
     mutating
     func store<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         _ state: S
     ) throws {
 
         try dispatcher
             .storage
             .store(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 state
             )
     }
@@ -49,18 +49,18 @@ extension TransactionContext
 
     @discardableResult
     func initialize<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         with newState: S
     ) throws -> MutationAttemptOutcome {
 
         try dispatcher
             .storage
             .store(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 newState,
                 expectedMutation: .initialization
             )
@@ -70,18 +70,18 @@ extension TransactionContext
 
     @discardableResult
     func actualize<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         with newState: S
     ) throws -> MutationAttemptOutcome {
 
         try dispatcher
             .storage
             .store(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 newState,
                 expectedMutation: .actualization
             )
@@ -89,9 +89,9 @@ extension TransactionContext
 
     @discardableResult
     func actualize<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         _: S.Type = S.self,
         via mutationHandler: (inout S) throws -> Void
     ) throws -> MutationAttemptOutcome {
@@ -104,9 +104,9 @@ extension TransactionContext
                 expected: S.self,
                 actual: storage[S.ParentFeature.self].map { type(of: $0) },
                 origin: .init(
-                    file: s,
-                    function: c,
-                    line: l
+                    file: file,
+                    function: function,
+                    line: line
                 )
             )
         }
@@ -118,9 +118,9 @@ extension TransactionContext
         //---
         
         return try actualize(
-            scope: s,
-            context: c,
-            location: l,
+            file: file,
+            function: function,
+            line: line,
             with: state
         )
     }
@@ -129,9 +129,9 @@ extension TransactionContext
 
     @discardableResult
     func transition<O: FeatureState, N: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         from _: O, // for convenience - we can pass an instance, does not matter
         into newState: N
     ) throws -> MutationAttemptOutcome where O.ParentFeature == N.ParentFeature {
@@ -139,9 +139,9 @@ extension TransactionContext
         try dispatcher
             .storage
             .store(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 newState,
                 expectedMutation: .transition(fromStateType: O.self)
             )
@@ -149,9 +149,9 @@ extension TransactionContext
 
     @discardableResult
     func transition<O: FeatureState, N: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         from _: O.Type,
         into newState: N
     ) throws -> MutationAttemptOutcome where O.ParentFeature == N.ParentFeature {
@@ -159,9 +159,9 @@ extension TransactionContext
         try dispatcher
             .storage
             .store(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 newState,
                 expectedMutation: .transition(fromStateType: O.self)
             )
@@ -169,18 +169,18 @@ extension TransactionContext
 
     @discardableResult
     func transition<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         into newState: S
     ) throws -> MutationAttemptOutcome {
 
         try dispatcher
             .storage
             .store(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 newState,
                 expectedMutation: .transition(fromStateType: nil)
             )
@@ -190,9 +190,9 @@ extension TransactionContext
 
     @discardableResult
     func deinitialize<F: Feature>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         strict: Bool = true,
         _: F.Type
     ) throws -> MutationAttemptOutcome {
@@ -200,9 +200,9 @@ extension TransactionContext
         try dispatcher
             .storage
             .removeState(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 forFeature: F.self,
                 fromStateType: nil,
                 strict: strict
@@ -211,18 +211,18 @@ extension TransactionContext
     
     @discardableResult
     func deinitialize<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         from _: S.Type
     ) throws -> MutationAttemptOutcome {
         
         try dispatcher
             .storage
             .removeState(
-                scope: s,
-                context: c,
-                location: l,
+                file: file,
+                function: function,
+                line: line,
                 forFeature: S.ParentFeature.self,
                 fromStateType: S.self,
                 strict: true
@@ -231,16 +231,16 @@ extension TransactionContext
     
     @discardableResult
     func deinitialize<S: FeatureState>(
-        scope s: String = #file,
-        context c: String = #function,
-        location l: Int = #line,
+        file: StaticString = #file,
+        function: StaticString = #function,
+        line: UInt = #line,
         from _: S // we can receive instance for convenience
     ) throws -> MutationAttemptOutcome {
         
         try deinitialize(
-            scope: s,
-            context: c,
-            location: l,
+            file: file,
+            function: function,
+            line: line,
             from: S.self
         )
     }
