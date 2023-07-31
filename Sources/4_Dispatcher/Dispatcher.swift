@@ -110,11 +110,11 @@ extension Dispatcher
     /// It throws `TransactonError` and returns result
     /// of the transaction execution.
     @discardableResult
-    func transact<F: Feature, T>(
+    func transact<T>(
         scope s: String,
         context c: String,
         location l: Int,
-        _ handler: (inout TransactionContext<F>) throws -> T
+        _ handler: (inout TransactionContext) throws -> T
     ) throws -> Result<T, Error> {
         
         if
@@ -137,7 +137,7 @@ extension Dispatcher
                 line: l
             )
             
-            var txContext = TransactionContext<F>(dispatcher: self)
+            var txContext = TransactionContext(dispatcher: self)
             let output = try handler(&txContext)
             let mutationsToReport = storage.resetHistory()
             

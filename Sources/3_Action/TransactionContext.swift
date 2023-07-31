@@ -29,7 +29,7 @@
 /// from `Dispatcher`.
 @MainActor
 public
-struct TransactionContext<F: Feature>
+struct TransactionContext
 {
     //internal
     let dispatcher: Dispatcher
@@ -50,7 +50,7 @@ extension TransactionContext
         context c: String = #function,
         location l: Int = #line,
         _ state: S
-    ) throws where S.ParentFeature == F {
+    ) throws {
 
         try dispatcher
             .storage
@@ -68,7 +68,7 @@ extension TransactionContext
         context c: String = #function,
         location l: Int = #line,
         with newState: S
-    ) throws where S.ParentFeature == F {
+    ) throws {
 
         try dispatcher
             .storage
@@ -87,7 +87,7 @@ extension TransactionContext
         location l: Int = #line,
         _: S.Type = S.self,
         via mutationHandler: (inout S) throws -> Void
-    ) throws where S.ParentFeature == F {
+    ) throws {
 
         try dispatcher
             .storage
@@ -106,7 +106,7 @@ extension TransactionContext
         context c: String = #function,
         location l: Int = #line,
         with newState: S
-    ) throws where S.ParentFeature == F {
+    ) throws {
 
         try dispatcher
             .storage
@@ -125,7 +125,7 @@ extension TransactionContext
         location l: Int = #line,
         from _: O, // for convenience - we can pass an instance, does not matter
         into newState: N
-    ) throws where O.ParentFeature == F, N.ParentFeature == F {
+    ) throws where O.ParentFeature == N.ParentFeature {
 
         try dispatcher
             .storage
@@ -145,7 +145,7 @@ extension TransactionContext
         location l: Int = #line,
         from _: O.Type,
         into newState: N
-    ) throws where O.ParentFeature == F, N.ParentFeature == F {
+    ) throws where O.ParentFeature == N.ParentFeature {
 
         try dispatcher
             .storage
@@ -164,7 +164,7 @@ extension TransactionContext
         context c: String = #function,
         location l: Int = #line,
         into newState: S
-    ) throws where S.ParentFeature == F {
+    ) throws {
 
         try dispatcher
             .storage
@@ -177,11 +177,12 @@ extension TransactionContext
     }
 
     mutating
-    func deinitialize(
+    func deinitialize<F: Feature>(
         scope s: String = #file,
         context c: String = #function,
         location l: Int = #line,
-        strict: Bool = true
+        strict: Bool = true,
+        _: F.Type
     ) throws {
 
         try dispatcher
@@ -202,7 +203,7 @@ extension TransactionContext
         context c: String = #function,
         location l: Int = #line,
         from _: S.Type
-    ) throws where S.ParentFeature == F {
+    ) throws {
         
         try dispatcher
             .storage
@@ -210,7 +211,7 @@ extension TransactionContext
                 scope: s,
                 context: c,
                 location: l,
-                F.self,
+                S.ParentFeature.self,
                 fromStateType: S.self,
                 strict: true
             )
@@ -222,7 +223,7 @@ extension TransactionContext
         context c: String = #function,
         location l: Int = #line,
         from _: S
-    ) throws where S.ParentFeature == F {
+    ) throws {
         
         try deinitialize(
             scope: s,

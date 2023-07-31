@@ -69,7 +69,7 @@ extension FeatureBase
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: (inout TransactionContext<F>) throws -> T
+        _ handler: (inout TransactionContext) throws -> T
     ) throws -> T {
         
         do
@@ -108,7 +108,7 @@ extension FeatureBase
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: (inout TransactionContext<F>) throws -> T
+        _ handler: (inout TransactionContext) throws -> T
     ) -> Result<T, Error> {
         
         do
@@ -145,7 +145,7 @@ extension FeatureBase
         scope: String = #file,
         context: String = #function,
         location: Int = #line,
-        _ handler: (inout TransactionContext<F>) throws -> T
+        _ handler: (inout TransactionContext) throws -> T
     ) -> Result<T, Error> {
         
         do

@@ -42,7 +42,7 @@ extension FeatureBase where F: WithDefaultCleanupAction
     {
         should {
             
-            try $0.deinitialize()
+            try $0.deinitialize(F.self)
         }
     }
 }

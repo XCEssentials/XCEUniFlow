@@ -42,7 +42,7 @@ enum SemanticCheckError: Error
 public
 extension TransactionContext
 {
-    func ensureAwaitingInitialization() throws
+    func ensureAwaitingInitialization<F: Feature>(_: F.Type) throws
     {
         guard
             !storage.hasFeature(F.self)
@@ -52,7 +52,7 @@ extension TransactionContext
         }
     }
     
-    func ensureAlreadyInitialized() throws
+    func ensureAlreadyInitialized<F: Feature>(_: F.Type) throws
     {
         guard
             storage.hasFeature(F.self)
@@ -67,7 +67,10 @@ extension TransactionContext
         is _: S.Type = S.self
     ) throws -> S {
         
-        let someState = try ensureCurrentState(isInTheList: [S.self])
+        let someState = try ensureCurrentState(
+            of: S.ParentFeature.self,
+            isInTheList: [S.self]
+        )
         
         guard
             let state = someState as? S
@@ -84,20 +87,25 @@ extension TransactionContext
     }
     
     @discardableResult
-    func ensureCurrentState(
+    func ensureCurrentState<F: Feature>(
+        of _: F.Type,
         isOneOf whitelist: any FeatureState.Type...
     ) throws -> any FeatureState {
         
-        try ensureCurrentState(isInTheList: whitelist)
+        try ensureCurrentState(
+            of: F.self,
+            isInTheList: whitelist
+        )
     }
     
     @discardableResult
-    func ensureCurrentState(
+    func ensureCurrentState<F: Feature>(
+        of _: F.Type,
         isInTheList whitelist: [any FeatureState.Type]
     ) throws -> any FeatureState {
         
         guard
-            let state = fetchCurrentState()
+            let state = fetchCurrentState(of: F.self)
         else
         {
             throw SemanticCheckError.notInitializedYet(F.self)
@@ -119,7 +127,7 @@ extension TransactionContext
         return state
     }
     
-    func fetchCurrentState() -> (any FeatureState)?
+    func fetchCurrentState<F: Feature>(of _: F.Type) -> (any FeatureState)?
     {
         storage[F.self]
     }
