@@ -41,7 +41,7 @@ enum FeatureA: Feature
     }
 }
 
-extension ActionContext where F == FeatureA
+extension FeatureBase where F == FeatureA
 {
     func action1()
     {

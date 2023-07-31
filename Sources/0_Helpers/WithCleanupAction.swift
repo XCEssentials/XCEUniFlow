@@ -36,13 +36,13 @@ public
 protocol WithDefaultCleanupAction: WithCleanupAction {}
 
 public
-extension ActionContext where F: WithDefaultCleanupAction
+extension FeatureBase where F: WithDefaultCleanupAction
 {
     func cleanup()
     {
         should {
             
-            try $0.deinitialize()
+            try $0.deinitialize(F.self)
         }
     }
 }

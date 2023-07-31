@@ -62,7 +62,7 @@ extension Feature
     
     @MainActor
     static
-    func at(_ dispatcher: Dispatcher) -> ActionContext<Self>
+    func at(_ dispatcher: Dispatcher) -> FeatureBase<Self>
     {
         .init(with: dispatcher)
     }

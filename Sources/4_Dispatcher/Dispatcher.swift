@@ -33,8 +33,11 @@ public
 final
 class Dispatcher
 {
-    public private(set)
+    public internal(set)
     var storage: StateStorage
+    
+    private
+    var currentTransaction: AccessOrigin?
     
     private
     var internalBindings: [String: [AnyCancellable]] = [:]
@@ -86,24 +89,56 @@ class Dispatcher
     }
 }
 
+// MARK: - Nested errors
+
+public
+extension Dispatcher
+{
+    enum TransactonError: Error
+    {
+        case anotherTransactionIsActive(AccessOrigin)
+    }
+}
+
 // MARK: - Transactions support
 
 //internal
 extension Dispatcher
 {
+    /// Execute transaction represented by `handler`.
+    ///
+    /// It throws `TransactonError` and returns result
+    /// of the transaction execution.
     @discardableResult
-    func transact<F: Feature, T>(
+    func transact<T>(
         scope s: String,
         context c: String,
         location l: Int,
-        _ handler: (inout TransactionContext<F>) throws -> T
-    ) rethrows -> T {
-
+        _ handler: (inout TransactionContext) throws -> T
+    ) throws -> Result<T, Error> {
+        
+        if
+            let tx = currentTransaction
+        {
+            throw TransactonError.anotherTransactionIsActive(tx)
+        }
+        
+        //---
+        
+        let storageBefore = storage
+        
+        //---
+        
         do
         {
-            var txContext = TransactionContext<F>(storage: storage)
+            currentTransaction = .init(
+                file: s,
+                function: c,
+                line: l
+            )
+            
+            var txContext = TransactionContext(dispatcher: self)
             let output = try handler(&txContext)
-            storage = txContext.storage
             let mutationsToReport = storage.resetHistory()
             
             let report = AccessReport(
@@ -116,16 +151,22 @@ extension Dispatcher
                 )
             )
             
+            currentTransaction = nil
+            
             installInternalBindings(basedOn: mutationsToReport)
             _accessLog.send(report)
             uninstallInternalBindings(basedOn: mutationsToReport)
             
             //---
 
-            return output
+            return .success(output)
         }
         catch
         {
+            currentTransaction = nil
+            
+            storage = storageBefore //rollback global state
+            
             let report = AccessReport(
                 outcome: .failure(
                     error
@@ -142,7 +183,7 @@ extension Dispatcher
             
             //---
 
-            throw error
+            return .failure(error)
         }
     }
 }

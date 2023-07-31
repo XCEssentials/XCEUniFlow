@@ -72,7 +72,7 @@ enum SUT: Feature, InternalObserver
     ]}
 }
 
-extension ActionContext where F == SUT
+extension FeatureBase where F == SUT
 {
     func start()
     {
@@ -216,7 +216,7 @@ enum SUT2: Feature, InternalObserver
     ]}
 }
 
-extension ActionContext where F == SUT2
+extension FeatureBase where F == SUT2
 {
     func start()
     {
