@@ -34,7 +34,8 @@ import XCEUniFlow
 
 //---
 
-enum SUT: Feature, InternalObserver
+final
+class SUT: Feature, InternalObserver
 {
     static
     var expectInitialization: XCTestExpectation!
@@ -70,15 +71,12 @@ enum SUT: Feature, InternalObserver
             .when(DeinitializationFrom<Two>.done)
             .then { _ in expectDeinitialization.fulfill() }
     ]}
-}
 
-extension FeatureBase where F == SUT
-{
     func start()
     {
         must {
             
-            try $0.initialize(with: F.One())
+            try $0.initialize(with: One())
         }
     }
     
@@ -86,7 +84,7 @@ extension FeatureBase where F == SUT
     {
         must {
             
-            try $0.transition(from: F.One.self, into: F.Two())
+            try $0.transition(from: One.self, into: Two())
         }
     }
     
@@ -94,7 +92,7 @@ extension FeatureBase where F == SUT
     {
         must {
             
-            try $0.deinitialize(from: F.Two.self)
+            try $0.deinitialize(from: Two.self)
         }
     }
     
@@ -102,16 +100,17 @@ extension FeatureBase where F == SUT
 
 //---
 
-enum SUT2: Feature, InternalObserver
+final
+class SUT2: Feature, InternalObserver
 {
     static
-    func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<Self>) -> Int?
+    func inBothOutInt(_ disp: Dispatcher, _ mut: InitializationOf<SUT2>) -> Int?
     {
         0
     }
 
     static
-    func inMutationOutInt(_ mut: InitializationOf<Self>) -> Int?
+    func inMutationOutInt(_ mut: InitializationOf<SUT2>) -> Int?
     {
         1
     }
@@ -123,13 +122,13 @@ enum SUT2: Feature, InternalObserver
     }
 
     static
-    func inBothOutBool(_ disp: Dispatcher, _ mut: InitializationOf<Self>) -> Bool
+    func inBothOutBool(_ disp: Dispatcher, _ mut: InitializationOf<SUT2>) -> Bool
     {
         false
     }
 
     static
-    func inMutationOutBool(_ mut: InitializationOf<Self>) -> Bool
+    func inMutationOutBool(_ mut: InitializationOf<SUT2>) -> Bool
     {
         false
     }
@@ -214,15 +213,12 @@ enum SUT2: Feature, InternalObserver
                 XCTFail("Did not expect to reach this point!")
             }
     ]}
-}
 
-extension FeatureBase where F == SUT2
-{
     func start()
     {
         must {
 
-            try $0.initialize(with: F.One())
+            try $0.initialize(with: One())
         }
     }
 }
@@ -259,7 +255,7 @@ extension IntBindingsTests
         SUT.expectTransition = expectation(description: "Transition")
         SUT.expectDeinitialization = expectation(description: "Deinitialization")
 
-        let sut = SUT.at(dispatcher)
+        let sut = SUT(with: dispatcher)
 
         // WHEN
 
@@ -284,7 +280,7 @@ extension IntBindingsTests
     {
         // GIVEN
 
-        let sut = SUT2.at(dispatcher)
+        let sut = SUT2(with: dispatcher)
 
         // WHEN
 

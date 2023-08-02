@@ -2,8 +2,8 @@ import XCEUniFlow
 
 //---
 
-enum CRS: Feature {} // short name a.k.a. feature "code" or "id"
-typealias CurrentSession = FeatureBase<CRS>
+final
+class CurrentSession: Feature {}
 
 // MARK: - States
 
@@ -11,26 +11,26 @@ extension CurrentSession
 {
     struct Anon: FeatureState
     {
-        typealias ParentFeature = CRS
+        typealias ParentFeature = CurrentSession
     }
     
     struct LoggingIn: FeatureState
     {
-        typealias ParentFeature = CRS
+        typealias ParentFeature = CurrentSession
         
         let username: String
     }
     
     struct LoginFailed: FeatureState
     {
-        typealias ParentFeature = CRS
+        typealias ParentFeature = CurrentSession
         
         let reason: Error
     }
     
     struct LoggedIn: FeatureState
     {
-        typealias ParentFeature = CRS
+        typealias ParentFeature = CurrentSession
         
         let sessionToken: String
     }

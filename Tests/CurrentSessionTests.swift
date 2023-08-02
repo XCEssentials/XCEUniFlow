@@ -65,8 +65,8 @@ extension CurrentSessionTests
     {
         // GIVEN
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.self))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.self))
         
         // WHEN
         
@@ -74,16 +74,16 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.feature))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.self))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.self))
     }
     
     func test_initialization_inline_OK()
     {
         // GIVEN
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.self))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.self))
         
         // WHEN
         
@@ -94,8 +94,8 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.feature))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.self))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.self))
     }
     
     func test_initialization_FAILS_if_repeat()
@@ -104,7 +104,7 @@ extension CurrentSessionTests
         
         /// the feature has NOT been initialized yet,
         /// hence it's NOT present in the `storage`:
-        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.self))
         
         // WHEN
         
@@ -114,7 +114,7 @@ extension CurrentSessionTests
             
             /// so far everythign is fine, the mutation above has affected
             /// the `storage`, so it temporary HAS the feature/state:
-            XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+            XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.Anon.self))
             
             //---
             
@@ -139,7 +139,7 @@ extension CurrentSessionTests
         
         /// AFTER we exit transaction scope - the `storage` is intact,
         /// same as it BEFORE the transaction has been started:
-        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.self))
     }
     
     func test_transition() async
@@ -153,8 +153,8 @@ extension CurrentSessionTests
             .sink { _ in loggedIn.fulfill() }
             .store(in: &subs)
         
-        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.feature))
-        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.state))
+        XCTAssertFalse(dispatcher.storage.hasFeature(SUT.self))
+        XCTAssertFalse(dispatcher.storage.hasState(ofType: SUT.Anon.self))
         
         // WHEN
         
@@ -163,13 +163,13 @@ extension CurrentSessionTests
 
         // THEN
         
-        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.feature))
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.LoggingIn.state))
+        XCTAssertTrue(dispatcher.storage.hasFeature(SUT.self))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.LoggingIn.self))
         XCTAssertEqual(dispatcher.storage[\SUT.LoggingIn.username], "joe")
         
         await fulfillment(of: [loggedIn])
         
-        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.LoggedIn.state))
+        XCTAssertTrue(dispatcher.storage.hasState(ofType: SUT.LoggedIn.self))
         XCTAssertEqual(dispatcher.storage[\SUT.LoggedIn.sessionToken], "123")
     }
 }

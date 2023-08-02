@@ -31,7 +31,8 @@ import XCEUniFlow
 
 //---
 
-enum FeatureA: Feature
+final
+class FeatureA: Feature
 {
     struct StateA1: FeatureState
     {
@@ -39,15 +40,12 @@ enum FeatureA: Feature
         
         let val1: String
     }
-}
 
-extension FeatureBase where F == FeatureA
-{
     func action1()
     {
         should {
             
-            try $0.initialize(with: F.StateA1(val1: "111"))
+            try $0.initialize(with: StateA1(val1: "111"))
         }
     }
 }
@@ -68,7 +66,8 @@ extension FeatureTests
 
     func test_featureDisplayName_custom() throws
     {
-        enum FeatureB: Feature, WithCustomDisplayName
+        final
+        class FeatureB: Feature, WithCustomDisplayName
         {
             static
             let customDisplayName = "CustomDisplayName"
@@ -85,7 +84,7 @@ extension FeatureTests
         
         //---
         
-        FeatureA.at(disp).action1()
+        FeatureA(with: disp).action1()
         let state = disp.storage[FeatureA.StateA1.self]!
         
         //---
