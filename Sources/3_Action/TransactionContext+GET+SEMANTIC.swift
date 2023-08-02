@@ -136,6 +136,6 @@ extension TransactionContext
         _ keyPath: KeyPath<R, V>
     ) throws -> V {
         
-        try ensureCurrentState(is: R.state)[keyPath: keyPath]
+        try ensureCurrentState(is: R.self)[keyPath: keyPath]
     }
 }

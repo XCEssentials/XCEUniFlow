@@ -56,25 +56,25 @@ extension StateStorage
         .init(data.values)
     }
     
-    var allFeatures: [any Feature.Type]
+    var allFeatures: [Feature.Type]
     {
         allStates
             .map { type(of: $0).feature }
     }
     
-    subscript(_ feature: any Feature.Type) -> (any FeatureState)?
+    subscript(_ feature: Feature.Type) -> (any FeatureState)?
     {
         data[feature.name]
     }
     
-    func hasFeature(_ feature: any Feature.Type) -> Bool
+    func hasFeature(_ feature: Feature.Type) -> Bool
     {
         self[feature] != nil
     }
     
     subscript<S: FeatureState>(_: S.Type) -> S?
     {
-        data[S.ParentFeature.name] as? S
+        data[S.feature.name] as? S
     }
     
     func hasState<S: FeatureState>(ofType _: S.Type) -> Bool
