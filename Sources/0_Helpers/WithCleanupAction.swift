@@ -24,6 +24,7 @@
  
  */
 
+@MainActor
 public
 protocol WithCleanupAction: Feature
 {
@@ -32,17 +33,18 @@ protocol WithCleanupAction: Feature
 
 //---
 
+@MainActor
 public
 protocol WithDefaultCleanupAction: WithCleanupAction {}
 
 public
-extension FeatureBase where F: WithDefaultCleanupAction
+extension WithDefaultCleanupAction where Self: Feature
 {
     func cleanup()
     {
         should {
             
-            try $0.deinitialize(F.self)
+            try $0.deinitialize(Self.self)
         }
     }
 }

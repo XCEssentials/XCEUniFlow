@@ -34,7 +34,7 @@ enum MutationAttemptOutcome: CustomStringConvertible
     
     /// Removal has been attempted, but no removal has been performed, because
     /// no such key has been found, and it did not cause a failure either.
-    case nothingToRemove(feature: any Feature.Type)
+    case nothingToRemove(feature: Feature.Type)
     
     public
     var description: String
