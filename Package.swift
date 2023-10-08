@@ -32,8 +32,7 @@ let package = Package(
             dependencies: [
                 .product(name: "XCERequirement", package: "XCERequirement"),
                 .product(name: "XCEPipeline", package: "XCEPipeline")
-            ],
-            path: "Sources"
+            ]
         ),
         .testTarget(
             name: "XCEUniFlowTests",
@@ -41,8 +40,7 @@ let package = Package(
                 "XCEUniFlow",
                 .product(name: "XCERequirement", package: "XCERequirement"),
                 .product(name: "XCEPipeline", package: "XCEPipeline")
-            ],
-            path: "Tests"
+            ]
         ),
     ]
 )
