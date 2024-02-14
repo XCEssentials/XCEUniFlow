@@ -1,6 +1,8 @@
 @startuml
 title Unidirectional Data Flow (UFL)
 
+autonumber
+
 actor User
 participant UI
 participant Dispatcher
