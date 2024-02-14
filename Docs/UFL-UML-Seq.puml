@@ -1,0 +1,29 @@
+@startuml
+title Unidirectional Data Flow (UFL)
+
+autonumber
+
+actor User
+participant UI
+participant Dispatcher
+participant Store
+
+User -> UI : Input
+UI -> Dispatcher : Initiate Action
+Dispatcher -> Dispatcher : Check Preconditions
+
+alt ✅ Preconditions OK
+    Dispatcher -> Store : Mutate State
+    alt ✅ Successful Case
+        Store --> Dispatcher : Mutation Succeeded
+    else ❌ Failure Case
+        Store --> Dispatcher : Mutation Failed
+    end
+else ❌ Preconditions Failed
+    Dispatcher -> Dispatcher : Abort Action
+end
+
+Dispatcher --> UI : Observe Changes
+UI --> User : Display Feedback
+
+@enduml
