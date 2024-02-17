@@ -102,17 +102,6 @@ extension Publisher where Output == ProcessedActionReport, Failure == Never
     }
 }
 
-public
-extension Publisher where Output == StateStorage.History.Element, Failure == Never
-{
-    func `as`<T: MutationDecriptor>(
-        _: T.Type
-    ) -> AnyPublisher<T, Failure> {
-        
-        compactMap(T.init(from:)).eraseToAnyPublisher()
-    }
-}
-
 // MARK: - Access log - Processed - get features statuses (dashboard)
 
 public
