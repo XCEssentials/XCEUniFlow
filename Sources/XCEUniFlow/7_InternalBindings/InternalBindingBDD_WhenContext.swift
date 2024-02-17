@@ -57,7 +57,7 @@ extension InternalBindingBDD
                 description: description,
                 when: { $0.onProcessed
                     .perEachMutation
-                    .as(M.self)
+                    .compactMap(M.init(from:))
                     .eraseToAnyPublisher()
                 }
             )

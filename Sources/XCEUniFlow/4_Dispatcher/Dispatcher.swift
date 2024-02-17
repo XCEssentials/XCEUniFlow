@@ -200,7 +200,11 @@ extension Dispatcher
     /// within scope of this dispatcher.
     func on<T: MutationDecriptor>( _: T.Type) -> AnyPublisher<T, Never>
     {
-        accessLog.onProcessed.perEachMutation.as(T.self)
+        accessLog
+            .onProcessed
+            .perEachMutation
+            .compactMap(T.init(from:))
+            .eraseToAnyPublisher()
     }
 }
 
