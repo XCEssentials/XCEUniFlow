@@ -206,6 +206,16 @@ extension Dispatcher
             .compactMap(T.init(from:))
             .eraseToAnyPublisher()
     }
+    
+    /// Designeted convenience shortcut for observing all mutations
+    /// within scope of this dispatcher.
+    @available(macOS 12.0, *)
+    func when<T: MutationDecriptor>( _: T.Type) async -> T?
+    {
+        await on(T.self) // filter for certain mutation type
+            .values
+            .first { _ in true } // no further filtering is necessary
+    }
 }
 
 // MARK: - Internal bindings management
