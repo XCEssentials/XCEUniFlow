@@ -243,7 +243,7 @@ extension Dispatcher
     @available(macOS 12.0, *)
     func when<M: MutationDecriptor, R>(
         _: M.Type,
-        given: ((M) throws -> R?)? = nil
+        given: (M) throws -> R?
     ) async throws -> R {
         
         var resultMaybe: Result<R, Error>? = nil
@@ -262,7 +262,7 @@ extension Dispatcher
                     do
                     {
                         if
-                            let output = try given?(mutation)
+                            let output = try given(mutation)
                         {
                             resultMaybe = .success(output)
                         }
