@@ -207,14 +207,89 @@ extension Dispatcher
             .eraseToAnyPublisher()
     }
     
+    enum MutationObservingError: Error
+    {
+        /// It is expected that observation awaiting will last indefinitely,
+        /// until expected mutation happens, so if it returns `nil` then
+        /// something unexpected happened with corresponding underlaying
+        /// notification stream - then we throw this error.
+        case asyncObservationEndedUnexpectedly
+    }
+    
     /// Designeted convenience shortcut for observing all mutations
     /// within scope of this dispatcher.
     @available(macOS 12.0, *)
-    func when<T: MutationDecriptor>( _: T.Type) async -> T?
-    {
-        await on(T.self) // filter for certain mutation type
-            .values
-            .first { _ in true } // no further filtering is necessary
+    func when<M: MutationDecriptor>(
+        _: M.Type
+    ) async throws -> M {
+        
+        guard
+            let mutation = await on(M.self) // filter for certain mutation type
+                .values
+                .first(where: { _ in true }) // no further filtering is necessary
+        else
+        {
+            throw MutationObservingError
+                .asyncObservationEndedUnexpectedly
+        }
+        
+        return mutation
+    }
+    
+    /// Designeted convenience shortcut for observing all mutations
+    /// within scope of this dispatcher, with additional custom
+    /// `given` clause for precise filtering and simultanious value
+    /// extraction.
+    @available(macOS 12.0, *)
+    func when<M: MutationDecriptor, R>(
+        _: M.Type,
+        given: ((M) throws -> R?)? = nil
+    ) async throws -> R {
+        
+        var resultMaybe: Result<R, Error>? = nil
+        
+        //---
+        
+        guard
+            let _ = await on(M.self) // filter for certain mutation type
+                .values
+                .first(where: {
+                    
+                    mutation in
+                    
+                    //---
+                    
+                    do
+                    {
+                        if
+                            let output = try given?(mutation)
+                        {
+                            resultMaybe = .success(output)
+                        }
+                    }
+                    catch
+                    {
+                        resultMaybe = .failure(error)
+                    }
+                    
+                    //---
+                    
+                    /// Return `true` if we received a result,
+                    /// which means we are done waiting and can
+                    /// end this awaiting.
+                    
+                    return resultMaybe != nil
+                }),
+            let result = resultMaybe
+        else
+        {
+            throw MutationObservingError
+                .asyncObservationEndedUnexpectedly
+        }
+        
+        //---
+        
+        return try result.get()
     }
 }
 
